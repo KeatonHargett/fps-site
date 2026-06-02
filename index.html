@@ -387,6 +387,7 @@
 <script>
   let GAMES = [];
   let TEAMS = [];
+  let MAX_SEASON = new Date().getFullYear();
   let state = {
     team1: 'Oklahoma',
     team2: 'Oklahoma St.',
@@ -409,6 +410,7 @@
     .then(data => {
       GAMES = data;
       TEAMS = [...new Set(data.flatMap(g => [g.team_a, g.team_b]))].sort();
+      MAX_SEASON = data.reduce((m, g) => Math.max(m, g.season || 0), 0) || new Date().getFullYear();
       initUI();
       render();
     })
@@ -455,7 +457,7 @@
       games = games.filter(g => g.era === state.era);
     }
     if (state.window !== 'all') {
-      const cutoff = 2024 - parseInt(state.window);
+      const cutoff = MAX_SEASON - parseInt(state.window);
       games = games.filter(g => g.season > cutoff);
     }
     return games;
