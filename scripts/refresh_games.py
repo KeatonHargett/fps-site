@@ -18,6 +18,7 @@ import json
 import os
 import sys
 import time
+import unicodedata
 import datetime as dt
 from pathlib import Path
 
@@ -78,6 +79,8 @@ TEAM_REMAP = {
 def normalize(name: str) -> str:
     if not name: return ""
     n = str(name).strip()
+    # Fold to ASCII so San José -> San Jose, matching the cleaned dataset.
+    n = unicodedata.normalize("NFKD", n).encode("ascii", "ignore").decode("ascii")
     if n in TEAM_REMAP: return TEAM_REMAP[n]
     if n.endswith(" State"): return n[:-6] + " St."
     return n

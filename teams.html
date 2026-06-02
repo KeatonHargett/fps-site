@@ -415,18 +415,25 @@
   const LOGO_URL = id => `https://a.espncdn.com/i/teamlogos/ncaa/500/${id}.png`;
 
   let TEAMS = [];
+  let FBS_NAMES = new Set();
   let view = 'az';
   let searchTerm = '';
 
-  fetch('front_porch_games.json')
-    .then(r => r.json())
-    .then(data => {
-      TEAMS = [...new Set(data.flatMap(g => [g.team_a, g.team_b]))].sort();
-      render();
-    })
-    .catch(err => {
-      document.getElementById('content').innerHTML = `<div class="no-results">Failed to load: ${err.message}</div>`;
-    });
+  Promise.all([
+    fetch('front_porch_games.json').then(r => r.json()),
+    fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] }))
+  ])
+  .then(([data, fbsData]) => {
+    FBS_NAMES = new Set((fbsData.teams || []).map(t => (t.name || '').trim()));
+    const allTeams = [...new Set(data.flatMap(g => [g.team_a, g.team_b]))];
+    // Filter to FBS-only when the FBS list loaded successfully; otherwise
+    // fall back to the unfiltered list so the page never goes empty.
+    TEAMS = (FBS_NAMES.size > 0 ? allTeams.filter(t => FBS_NAMES.has(t)) : allTeams).sort();
+    render();
+  })
+  .catch(err => {
+    document.getElementById('content').innerHTML = `<div class="no-results">Failed to load: ${err.message}</div>`;
+  });
 
   function teamItem(t) {
     const meta = TEAM_META[t];

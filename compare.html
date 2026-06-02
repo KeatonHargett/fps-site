@@ -555,11 +555,17 @@
   if (params.get('team1')) state.team1 = params.get('team1');
   if (params.get('team2')) state.team2 = params.get('team2');
 
-  fetch('front_porch_games.json')
-    .then(r => r.json())
-    .then(data => {
+  let FBS_NAMES = new Set();
+  Promise.all([
+    fetch('front_porch_games.json').then(r => r.json()),
+    fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] }))
+  ])
+    .then(([data, fbsData]) => {
       GAMES = data;
-      TEAMS = [...new Set(data.flatMap(g => [g.team_a, g.team_b]))].sort();
+      FBS_NAMES = new Set((fbsData.teams || []).map(t => (t.name || '').trim()));
+      const allTeams = [...new Set(data.flatMap(g => [g.team_a, g.team_b]))];
+      // Dropdown shows FBS-only when fbs_teams.json loaded; otherwise full list.
+      TEAMS = (FBS_NAMES.size > 0 ? allTeams.filter(t => FBS_NAMES.has(t)) : allTeams).sort();
       applyMaxSeasonFromData(data);
       initDropdown('dd1', 'team1');
       initDropdown('dd2', 'team2');

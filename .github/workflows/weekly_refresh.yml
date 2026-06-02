@@ -62,13 +62,21 @@ jobs:
         run: |
           python scripts/refresh_games.py
 
+      - name: Refresh FBS team list from ESPN
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          python scripts/refresh_fbs_teams.py
+
       - name: Commit refreshed data
         if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.event.inputs.dry_run != 'true'
         run: |
-          if [ -n "$(git status --porcelain front_porch_games.json)" ]; then
+          CHANGED=""
+          if [ -n "$(git status --porcelain front_porch_games.json)" ]; then CHANGED="$CHANGED front_porch_games.json"; fi
+          if [ -n "$(git status --porcelain fbs_teams.json)"        ]; then CHANGED="$CHANGED fbs_teams.json"; fi
+          if [ -n "$CHANGED" ]; then
             git config user.name  "fps-refresh-bot"
             git config user.email "fps-refresh-bot@users.noreply.github.com"
-            git add front_porch_games.json
+            git add $CHANGED
             git commit -m "chore(data): weekly ESPN refresh $(date -u +'%Y-%m-%dT%H:%MZ')"
             git push
           else

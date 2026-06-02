@@ -99,6 +99,27 @@
   .h2h-record.even { color: var(--gray); }
   .h2h-compare-link { text-align: right; }
   .h2h-compare-link a { color: var(--orange); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; text-decoration: none; }
+
+  /* FCS / Inactive Opponents — secondary section, muted treatment */
+  .fcs-card { background: #fbfbfc; border: 1px solid var(--border); }
+  .fcs-head { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.04em; color: var(--dark); margin: 0; }
+  .fcs-head .fcs-count { font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; color: var(--gray); margin-left: 0.5rem; letter-spacing: 0.06em; }
+  .fcs-sub { font-size: 0.78rem; color: var(--gray); margin: 0.25rem 0 0.85rem; }
+  .fcs-sortbar { display: flex; gap: 0.4rem; margin-bottom: 0.75rem; }
+  .fcs-sortbtn { background: white; border: 1px solid var(--border); padding: 0.35rem 0.85rem; cursor: pointer; font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.05em; color: var(--dark); border-radius: 6px; font-size: 0.82rem; }
+  .fcs-sortbtn:hover { border-color: var(--gray); }
+  .fcs-sortbtn.active { background: var(--dark); color: white; border-color: var(--dark); }
+  .fcs-table { width: 100%; border-collapse: collapse; }
+  .fcs-table td { padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .fcs-table tr:last-child td { border-bottom: 0; }
+  .fcs-row { display: flex; align-items: center; gap: 0.7rem; }
+  .fcs-icon { width: 32px; height: 32px; border-radius: 50%; background: var(--gray); color: white; display: inline-flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 0.78rem; letter-spacing: 0.04em; flex-shrink: 0; }
+  .fcs-name { font-weight: 500; color: var(--dark); }
+  .fcs-record-cell { text-align: right; white-space: nowrap; }
+  @media (max-width: 640px) {
+    .fcs-name { font-size: 0.92rem; }
+    .fcs-table td { padding: 0.4rem 0.4rem; }
+  }
   .chart-box { margin-top: 0.5rem; }
   .loading { text-align: center; padding: 3rem; color: var(--gray); font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
   .spinner { display: inline-block; width: 40px; height: 40px; border: 4px solid var(--light); border-top-color: var(--orange); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 1rem; }
@@ -465,14 +486,22 @@
   const TEAM = params.get('team') || 'Oklahoma';
 
   let GAMES = [];
+  let FBS_NAMES = new Set();      // set of canonical FBS team names from fbs_teams.json
+  let fcsState = { sort: 'name', dir: 'asc', records: {} };
   let winChart = null;
 
-  fetch('front_porch_games.json')
-    .then(r => r.json())
-    .then(data => { GAMES = data; renderTeam(); })
-    .catch(err => {
-      document.getElementById('content').innerHTML = `<div class="loading">Failed to load: ${err.message}</div>`;
-    });
+  Promise.all([
+    fetch('front_porch_games.json').then(r => r.json()),
+    fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] }))
+  ])
+  .then(([gamesData, fbsData]) => {
+    GAMES = gamesData;
+    FBS_NAMES = new Set((fbsData.teams || []).map(t => (t.name || '').trim()));
+    renderTeam();
+  })
+  .catch(err => {
+    document.getElementById('content').innerHTML = `<div class="loading">Failed to load: ${err.message}</div>`;
+  });
 
   function teamLogo(t, cls='') {
     const m = TEAM_META[t];
@@ -517,6 +546,18 @@
       else r.l++;
     });
 
+    // Split opponents into FBS (existing H2H card) and non-FBS (FCS /
+    // Inactive section). If fbs_teams.json failed to load, FBS_NAMES is
+    // empty and we keep the legacy behavior (all opponents in H2H card).
+    const useSplit = FBS_NAMES.size > 0;
+    const fbsRecords = {}, fcsRecords = {};
+    Object.keys(oppRecords).forEach(opp => {
+      if (!useSplit || FBS_NAMES.has(opp)) fbsRecords[opp] = oppRecords[opp];
+      else fcsRecords[opp] = oppRecords[opp];
+    });
+    fcsState.records = fcsRecords;
+    const fcsCount = Object.keys(fcsRecords).length;
+
     const confLogoHtml = CONF_LOGOS[conf]
       ? `<img src="${CONF_LOGOS[conf]}" alt="${conf}" onerror="this.style.display='none'">` : '';
 
@@ -556,11 +597,74 @@
         </div>
         <div id="h2h-groups"></div>
       </div>
+
+      ${useSplit && fcsCount > 0 ? `
+      <div class="card fcs-card">
+        <h2 class="fcs-head">FCS / Inactive Opponents <span class="fcs-count">(${fcsCount} TEAM${fcsCount===1?'':'S'})</span></h2>
+        <div class="fcs-sub">Programs that are not current FBS members. All-time record from this dataset.</div>
+        <div class="fcs-sortbar">
+          <button class="fcs-sortbtn active" data-sort="name">Team</button>
+          <button class="fcs-sortbtn" data-sort="record">Record</button>
+        </div>
+        <table class="fcs-table"><tbody id="fcs-rows"></tbody></table>
+      </div>
+      ` : ''}
     `;
 
     drawWinChart(teamGames, tColor);
-    renderH2H(oppRecords, '');
-    document.getElementById('h2h-search').oninput = e => renderH2H(oppRecords, e.target.value);
+    renderH2H(fbsRecords, '');
+    document.getElementById('h2h-search').oninput = e => renderH2H(fbsRecords, e.target.value);
+
+    if (useSplit && fcsCount > 0) {
+      renderFCS();
+      document.querySelectorAll('.fcs-sortbtn').forEach(btn => {
+        btn.onclick = () => {
+          const newSort = btn.dataset.sort;
+          if (newSort === fcsState.sort) {
+            fcsState.dir = fcsState.dir === 'asc' ? 'desc' : 'asc';
+          } else {
+            fcsState.sort = newSort;
+            fcsState.dir = newSort === 'record' ? 'desc' : 'asc';
+          }
+          document.querySelectorAll('.fcs-sortbtn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderFCS();
+        };
+      });
+    }
+  }
+
+  function renderFCS() {
+    const box = document.getElementById('fcs-rows');
+    if (!box) return;
+    const names = Object.keys(fcsState.records);
+    if (names.length === 0) {
+      box.innerHTML = '<tr><td style="padding:1rem;color:var(--gray)">No FCS or inactive opponents.</td></tr>';
+      return;
+    }
+    names.sort((a, b) => {
+      if (fcsState.sort === 'name') {
+        return fcsState.dir === 'asc' ? a.localeCompare(b) : b.localeCompare(a);
+      }
+      const ra = fcsState.records[a], rb = fcsState.records[b];
+      const ga = ra.w + ra.l + ra.t, gb = rb.w + rb.l + rb.t;
+      const pa = ga ? (ra.w + ra.t * 0.5) / ga : 0;
+      const pb = gb ? (rb.w + rb.t * 0.5) / gb : 0;
+      if (pa !== pb) return fcsState.dir === 'desc' ? pb - pa : pa - pb;
+      return fcsState.dir === 'desc' ? gb - ga : ga - gb;
+    });
+    box.innerHTML = names.map(opp => {
+      const r = fcsState.records[opp];
+      const games = r.w + r.l + r.t;
+      const wpct = games ? ((r.w + r.t * 0.5) / games).toFixed(3).replace(/^0/, '') : '.000';
+      const cls = r.w > r.l ? 'lead' : r.l > r.w ? 'trail' : 'even';
+      const initials = (opp.replace(/[()]/g, '').split(/\s+/).filter(Boolean)
+                          .slice(0, 2).map(p => p[0]).join('') || '?').toUpperCase().slice(0, 2);
+      return `<tr>
+        <td><div class="fcs-row"><span class="fcs-icon" aria-hidden="true">${initials}</span><span class="fcs-name">${opp}</span></div></td>
+        <td class="fcs-record-cell"><span class="h2h-record ${cls}">${r.w}-${r.l}${r.t?'-'+r.t:''} <span class="wpct">(${wpct})</span></span></td>
+      </tr>`;
+    }).join('');
   }
 
   function renderH2H(oppRecords, filter) {
