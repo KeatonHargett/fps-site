@@ -1,0 +1,44 @@
+name: One off team name rename
+
+# Run manually from the Actions tab. Mutates front_porch_games.json in place to
+# replace legacy team names with the canonical ones used in TEAM_META, commits
+# the result, and lets the existing weekly_refresh.yml workflow deploy.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fps-data-rename
+  cancel-in-progress: false
+
+jobs:
+  rename:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run rename script
+        run: python scripts/rename_team_data.py
+      - name: Commit if changed
+        run: |
+          if [ -n "$(git status --porcelain front_porch_games.json)" ]; then
+            git config user.name  "fps-refresh-bot"
+            git config user.email "fps-refresh-bot@users.noreply.github.com"
+            git add front_porch_games.json
+            git commit -m "data: canonical team name rename (Mississippi to Ole Miss, Southern Mississippi to Southern Miss, San Jose St. to San Jose St. with accent)"
+            git push
+            echo "Pushed rename commit. Downstream weekly_refresh workflow will deploy."
+          else
+            echo "No changes to commit."
+          fi
