@@ -1,0 +1,71 @@
+name: Weekly games refresh
+
+# Runs once a week during the CFB season (Aug to Jan) at 12:00 UTC on Tuesday.
+# Can also be triggered manually from the Actions tab.
+on:
+  schedule:
+    - cron: "0 12 * 8-12 2"   # Aug-Dec, Tue 12:00 UTC
+    - cron: "0 12 * 1 2"      # Jan, Tue 12:00 UTC
+  workflow_dispatch:
+    inputs:
+      season:
+        description: "Override season year (optional)"
+        required: false
+        type: string
+      dry_run:
+        description: "Dry run (no commit)"
+        required: false
+        default: "false"
+        type: choice
+        options: ["false", "true"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fps-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r scripts/requirements.txt
+
+      - name: Run refresh script
+        env:
+          CFBD_API_KEY:       ${{ secrets.CFBD_API_KEY }}
+          FPS_CURRENT_SEASON: ${{ github.event.inputs.season }}
+          FPS_DRY_RUN:        ${{ github.event.inputs.dry_run == 'true' && '1' || '' }}
+        run: |
+          python scripts/refresh_games.py
+
+      - name: Commit and push if changed
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          if [ -n "$(git status --porcelain front_porch_games.json)" ]; then
+            git config user.name  "fps-refresh-bot"
+            git config user.email "fps-refresh-bot@users.noreply.github.com"
+            git add front_porch_games.json
+            git commit -m "chore(data): weekly CFBD refresh $(date -u +'%Y-%m-%dT%H:%MZ')"
+            git push
+          else
+            echo "No changes to commit."
+          fi

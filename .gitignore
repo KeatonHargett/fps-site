@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Node
+node_modules/
+
+# Secrets and local config
+.env
+.env.local
+*.key
+*.pem
+secrets/
+*.secret
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build / dist outputs
+dist/
+build/
+.netlify/
+
+# Logs
+*.log
+
+# CFBD scratch
+.cfbd_cache/
+*.tmp.json
