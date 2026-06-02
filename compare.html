@@ -510,12 +510,37 @@
 };
   const COMPARE_START_MODE = 'default';
   const LOGO_URL = id => `https://a.espncdn.com/i/teamlogos/ncaa/500/${id}.png`;
-  const MIN_YEAR = 1887, MAX_YEAR = 2024;
-  const PRESETS = {
-    all:{start:1887,end:2024}, past5:{start:2020,end:2024}, past10:{start:2015,end:2024},
-    past20:{start:2005,end:2024}, cfp:{start:2014,end:2024}, bcs:{start:1998,end:2013},
-    modern:{start:1969,end:1997}, premodern:{start:1887,end:1968}
-  };
+  const MIN_YEAR = 1887;
+  let MAX_YEAR = 2024;  // updated from JSON max season after fetch
+  let PRESETS = {};
+  function rebuildPresets() {
+    PRESETS = {
+      all:      {start: MIN_YEAR,   end: MAX_YEAR},
+      past5:    {start: MAX_YEAR-4, end: MAX_YEAR},
+      past10:   {start: MAX_YEAR-9, end: MAX_YEAR},
+      past20:   {start: MAX_YEAR-19,end: MAX_YEAR},
+      cfp:      {start: 2014,       end: MAX_YEAR},
+      bcs:      {start: 1998,       end: 2013},
+      modern:   {start: 1969,       end: 1997},
+      premodern:{start: MIN_YEAR,   end: 1968}
+    };
+  }
+  rebuildPresets();
+  function applyMaxSeasonFromData(data) {
+    let maxSeason = 0;
+    for (const g of data) { if ((g.season|0) > maxSeason) maxSeason = g.season|0; }
+    if (maxSeason > MAX_YEAR) {
+      MAX_YEAR = maxSeason;
+      rebuildPresets();
+      const ss = document.getElementById('start-slider');
+      const es = document.getElementById('end-slider');
+      if (ss) ss.max = MAX_YEAR;
+      if (es) { es.max = MAX_YEAR; if (parseInt(es.value) <= maxSeason) es.value = MAX_YEAR; }
+      const de = document.getElementById('display-end');
+      if (de) de.textContent = MAX_YEAR;
+      state.endYear = MAX_YEAR;
+    }
+  }
   let GAMES = [], TEAMS = [];
   let charts = { margin: null, lead: null };
   // START_MODE is set by the page: 'empty' (homepage) or 'default' (compare page)
@@ -535,6 +560,7 @@
     .then(data => {
       GAMES = data;
       TEAMS = [...new Set(data.flatMap(g => [g.team_a, g.team_b]))].sort();
+      applyMaxSeasonFromData(data);
       initDropdown('dd1', 'team1');
       initDropdown('dd2', 'team2');
       initControls();

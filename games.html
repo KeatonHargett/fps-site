@@ -288,7 +288,9 @@
   const TEAM1 = params.get('team1');
   const TEAM2 = params.get('team2');
   const START = parseInt(params.get('start')) || 1869;
-  const END = parseInt(params.get('end')) || 2024;
+  const endParam = parseInt(params.get('end'));
+  // END is finalized after data load if not in URL params; placeholder for now.
+  let END = isNaN(endParam) ? null : endParam;
 
   function teamLogo(t, cls='') {
     const m = TEAM_META[t];
@@ -302,7 +304,14 @@
       `compare.html?team1=${encodeURIComponent(TEAM1)}&team2=${encodeURIComponent(TEAM2)}`;
     fetch('front_porch_games.json')
       .then(r => r.json())
-      .then(data => renderGames(data))
+      .then(data => {
+        if (END === null) {
+          let maxSeason = 0;
+          for (const g of data) { if ((g.season|0) > maxSeason) maxSeason = g.season|0; }
+          END = maxSeason || new Date().getFullYear();
+        }
+        renderGames(data);
+      })
       .catch(err => {
         document.getElementById('content').innerHTML = `<div class="loading">Failed to load: ${err.message}</div>`;
       });
