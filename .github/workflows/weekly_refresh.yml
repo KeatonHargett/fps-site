@@ -1,11 +1,15 @@
-﻿name: Weekly games refresh (keyless, ESPN)
+name: Deploy + weekly refresh (Netlify API, keyless)
 
-# Runs once a week during the CFB season (Aug-Jan) at 12:00 UTC on Tuesday.
-# Can also be triggered manually from the Actions tab. No API key required.
+# - Any push to main deploys current files to Netlify (no Netlify clone needed).
+# - Weekly cron Aug-Jan pulls completed games from ESPN, replaces current
+#   season rows, commits, then deploys.
+# - Manual dispatch lets you force-deploy or dry-run the refresh.
 on:
+  push:
+    branches: [main]
   schedule:
-    - cron: "0 12 * 8-12 2"   # Aug-Dec, Tue 12:00 UTC
-    - cron: "0 12 * 1 2"      # Jan, Tue 12:00 UTC
+    - cron: "0 12 * 8-12 2"
+    - cron: "0 12 * 1 2"
   workflow_dispatch:
     inputs:
       season:
@@ -13,7 +17,7 @@ on:
         required: false
         type: string
       dry_run:
-        description: "Dry run (no commit)"
+        description: "Dry run refresh (skip commit)"
         required: false
         default: "false"
         type: choice
@@ -23,34 +27,43 @@ permissions:
   contents: write
 
 concurrency:
-  group: fps-refresh
+  group: fps-deploy
   cancel-in-progress: false
 
 jobs:
-  refresh:
+  refresh-and-deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           persist-credentials: true
-      - uses: actions/setup-python@v5
+
+      - name: Set up Python
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: "pip"
-      - name: Install deps
+
+      - name: Install Python deps
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: |
           python -m pip install --upgrade pip
           pip install -r scripts/requirements.txt
-      - name: Run refresh
+
+      - name: Refresh games from ESPN
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         env:
           FPS_CURRENT_SEASON: ${{ github.event.inputs.season }}
           FPS_DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && '1' || '' }}
         run: |
           python scripts/refresh_games.py
-      - name: Commit and push if changed
-        if: ${{ github.event.inputs.dry_run != 'true' }}
+
+      - name: Commit refreshed data
+        if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.event.inputs.dry_run != 'true'
         run: |
           if [ -n "$(git status --porcelain front_porch_games.json)" ]; then
             git config user.name  "fps-refresh-bot"
@@ -59,5 +72,22 @@ jobs:
             git commit -m "chore(data): weekly ESPN refresh $(date -u +'%Y-%m-%dT%H:%MZ')"
             git push
           else
-            echo "No changes to commit."
+            echo "No data changes to commit."
           fi
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Deploy to Netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          npx -y netlify-cli@latest deploy \
+            --prod \
+            --dir . \
+            --message "GitHub Actions deploy ${{ github.sha }}" \
+            --site "$NETLIFY_SITE_ID" \
+            --auth "$NETLIFY_AUTH_TOKEN"
