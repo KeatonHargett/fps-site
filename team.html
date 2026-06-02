@@ -486,9 +486,17 @@
   const TEAM = params.get('team') || 'Oklahoma';
 
   let GAMES = [];
-  let FBS_NAMES = new Set();      // set of canonical FBS team names from fbs_teams.json
+  let FBS_NAMES = new Set();      // accent-folded, lowercased keys
   let fcsState = { sort: 'name', dir: 'asc', records: {} };
   let winChart = null;
+
+  // Fold accents and case so "San José St." == "San Jose St."
+  function fpsKey(s) {
+    return (s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
+  }
+  function isFBS(team) {
+    return FBS_NAMES.has(fpsKey(team));
+  }
 
   Promise.all([
     fetch('front_porch_games.json').then(r => r.json()),
@@ -496,7 +504,7 @@
   ])
   .then(([gamesData, fbsData]) => {
     GAMES = gamesData;
-    FBS_NAMES = new Set((fbsData.teams || []).map(t => (t.name || '').trim()));
+    FBS_NAMES = new Set((fbsData.teams || []).map(t => fpsKey(t.name)));
     renderTeam();
   })
   .catch(err => {
@@ -552,7 +560,7 @@
     const useSplit = FBS_NAMES.size > 0;
     const fbsRecords = {}, fcsRecords = {};
     Object.keys(oppRecords).forEach(opp => {
-      if (!useSplit || FBS_NAMES.has(opp)) fbsRecords[opp] = oppRecords[opp];
+      if (!useSplit || isFBS(opp)) fbsRecords[opp] = oppRecords[opp];
       else fcsRecords[opp] = oppRecords[opp];
     });
     fcsState.records = fcsRecords;

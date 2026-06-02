@@ -178,12 +178,31 @@ def fetch_all_fbs_teams() -> dict:
     return all_teams
 
 
+# Historical / alternate name spellings that point to the same FBS program.
+# Each entry duplicates the canonical record under the alias name so the
+# JS filter recognizes both spellings without modifying front_porch_games.json.
+TEAM_ALIASES = [
+    ("Southern Miss", "Southern Mississippi"),     # xlsx uses the long form
+    ("San Jose St.",  "San Jose St."),             # already canonical, no-op
+]
+
+
 def main() -> int:
     repo_root = Path(os.environ.get("FPS_REPO_ROOT", Path(__file__).resolve().parent.parent))
     out_path = repo_root / "fbs_teams.json"
 
     print("==> Pulling FBS team rosters by conference...", flush=True)
     teams = fetch_all_fbs_teams()
+
+    # Add alias entries so legacy spellings in the dataset still match.
+    for canonical, alias in TEAM_ALIASES:
+        if canonical in teams and alias not in teams:
+            base = dict(teams[canonical])
+            base["name"] = alias
+            base["alias_for"] = canonical
+            teams[alias] = base
+            print(f"    alias: {alias!r} -> {canonical!r}", flush=True)
+
     team_list = sorted(teams.values(), key=lambda t: t["name"].lower())
 
     payload = {

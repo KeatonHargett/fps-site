@@ -419,16 +419,20 @@
   let view = 'az';
   let searchTerm = '';
 
+  function fpsKey(s) {
+    return (s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
+  }
+
   Promise.all([
     fetch('front_porch_games.json').then(r => r.json()),
     fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] }))
   ])
   .then(([data, fbsData]) => {
-    FBS_NAMES = new Set((fbsData.teams || []).map(t => (t.name || '').trim()));
+    FBS_NAMES = new Set((fbsData.teams || []).map(t => fpsKey(t.name)));
     const allTeams = [...new Set(data.flatMap(g => [g.team_a, g.team_b]))];
     // Filter to FBS-only when the FBS list loaded successfully; otherwise
     // fall back to the unfiltered list so the page never goes empty.
-    TEAMS = (FBS_NAMES.size > 0 ? allTeams.filter(t => FBS_NAMES.has(t)) : allTeams).sort();
+    TEAMS = (FBS_NAMES.size > 0 ? allTeams.filter(t => FBS_NAMES.has(fpsKey(t))) : allTeams).sort();
     render();
   })
   .catch(err => {
