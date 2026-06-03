@@ -111,6 +111,15 @@
   .range-labels { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.05em; }
   .filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); }
   .filter-label { font-size: 0.85rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.05em; align-self: center; margin-right: 0.5rem; }
+  /* Tweak 1 (v26): preset row is now a single dropdown */
+  .preset-row { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; padding-top: 1.25rem; margin-bottom: 1.5rem; border-top: 1px solid var(--border); }
+  .preset-label-v26 { font-size: 0.85rem; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; letter-spacing: 0.08em; }
+  .preset-select { flex: 1; min-width: 240px; padding: 0.7rem 2.5rem 0.7rem 0.85rem; border: 2px solid var(--border); border-radius: 8px; background: white; font-size: 1rem; font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.04em; color: var(--dark); cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'><path stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/></svg>"); background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 18px; }
+  .preset-select:focus { outline: none; border-color: var(--orange); }
+  .preset-select:hover { border-color: var(--orange); }
+  @media (max-width: 480px) {
+    .preset-select { font-size: 1.05rem; min-width: 100%; }
+  }
   .chip { background: var(--light); border: 2px solid transparent; padding: 0.5rem 1rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.15s; color: var(--dark); font-family: inherit; }
   .chip:hover { background: #e5e7eb; }
   .chip.active { background: var(--blue); color: white; border-color: var(--blue); }
@@ -127,7 +136,14 @@
   .team-label img { width: 52px; height: 52px; }
   .team-label .team-info { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; line-height: 1.1; }
   .team-label.right .team-info { text-align: right; }
+  /* Tweak 3 (v26): win number matches the Total Meetings 4rem Bebas Neue */
+  .team-label .team-info { display: flex; flex-direction: column; gap: 0.25rem; }
   .team-label .wins-count { font-family: 'Inter'; font-size: 0.85rem; color: var(--gray); font-weight: 500; }
+  .team-label .wins-count .win-num { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; line-height: 0.95; color: var(--dark); display: block; }
+  .team-label .wins-count .win-word { display: block; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.75rem; }
+  @media (max-width: 640px) {
+    .team-label .wins-count .win-num { font-size: 2.75rem; }
+  }
   .h2h-bar { position: relative; height: 52px; background: var(--light); border-radius: 6px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
   /* Tweak 2: converging animation — team1 grows from the left edge, team2 from the right edge, tie segment grows outward from the proportional split point */
   .h2h-bar-segment { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; color: white; font-family: 'Bebas Neue', sans-serif; font-size: 1.75rem; text-shadow: 0 1px 2px rgba(0,0,0,0.3); min-width: 0; overflow: hidden; white-space: nowrap; transition: width 1s cubic-bezier(0.42, 0, 0.58, 1), left 1s cubic-bezier(0.42, 0, 0.58, 1); }
@@ -202,20 +218,26 @@
   .sel-team-placeholder { width: 110px; height: 110px; border: 2px dashed var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gray); font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 0.05em; }
   .sel-team-vs { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--orange); padding-bottom: 0.5rem; align-self: center; }
 
-  /* Tweak 5: stat comparison cards grid */
+  /* Tweak 4 (v26): Winsipedia style stat cards — split team color halves, distinct gaps */
   .stat-comparison-section { margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--border); }
   .stat-comparison-section .chart-title { margin-bottom: 0.25rem; }
-  .stat-comparison-sub { text-align: center; color: var(--gray); font-size: 0.85rem; margin: -0.25rem 0 1.25rem; }
-  .stat-comparison-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-  .stat-card-compare { background: white; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
-  .stat-card-compare .scc-title { background: var(--dark); color: white; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; text-align: center; padding: 0.55rem 0.5rem; letter-spacing: 0.04em; line-height: 1.15; min-height: 2.4rem; display: flex; align-items: center; justify-content: center; }
+  .stat-comparison-sub { text-align: center; color: var(--gray); font-size: 0.85rem; margin: -0.25rem 0 1.5rem; }
+  .stat-comparison-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.1rem; }
+  .stat-card-compare { background: transparent; border: none; border-radius: 10px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.12); display: flex; flex-direction: column; }
+  .stat-card-compare .scc-title { background: var(--dark); color: white; font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; text-align: center; padding: 0.6rem 0.5rem; letter-spacing: 0.05em; line-height: 1.15; min-height: 2.6rem; display: flex; align-items: center; justify-content: center; }
   .stat-card-compare .scc-body { display: grid; grid-template-columns: 1fr 1fr; flex: 1; }
-  .stat-card-compare .scc-side { padding: 0.85rem 0.5rem; text-align: center; }
-  .stat-card-compare .scc-side.left { border-right: 1px solid var(--border); }
-  .stat-card-compare .scc-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.85rem; line-height: 1; }
-  .stat-card-compare .scc-rank { font-size: 0.72rem; color: var(--gray); margin-top: 0.35rem; letter-spacing: 0.04em; font-weight: 600; }
-  @media (max-width: 900px) { .stat-comparison-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 480px) { .stat-comparison-grid { grid-template-columns: 1fr; } }
+  .stat-card-compare .scc-side { padding: 1.1rem 0.5rem 1.2rem; text-align: center; color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.45); }
+  .stat-card-compare .scc-side.left { border-right: none; }
+  .stat-card-compare .scc-value { font-family: 'Bebas Neue', sans-serif; font-size: 2.6rem; line-height: 1; letter-spacing: 0.02em; }
+  .stat-card-compare .scc-rank-ord { font-family: 'Bebas Neue', sans-serif; font-size: 1.55rem; line-height: 1; margin-top: 0.65rem; letter-spacing: 0.04em; }
+  .stat-card-compare .scc-rank-of { font-family: 'Inter', sans-serif; font-size: 0.72rem; margin-top: 0.25rem; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.88; }
+  .stat-card-compare .scc-na { font-family: 'Bebas Neue', sans-serif; font-size: 2.6rem; line-height: 1; opacity: 0.6; }
+  @media (max-width: 900px) { .stat-comparison-grid { grid-template-columns: repeat(2, 1fr); gap: 0.85rem; } }
+  @media (max-width: 480px) {
+    .stat-comparison-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+    .stat-card-compare .scc-value { font-size: 2.4rem; }
+    .stat-card-compare .scc-rank-ord { font-size: 1.4rem; }
+  }
   @media (max-width: 700px) {
     .sel-team-logo, .sel-team-placeholder { width: 78px; height: 78px; }
     .sel-team-name { font-size: 1.45rem; }
@@ -322,18 +344,22 @@
       </div>
       <div class="range-labels"><span>Start Year</span><span>End Year</span></div>
     </div>
-    <div class="filters">
-      <span class="filter-label">Presets</span>
-      <button class="chip active" data-preset="all">All-Time</button>
-      <button class="chip" data-preset="last5">Last 5 Matchups</button>
-      <button class="chip" data-preset="last10">Last 10 Matchups</button>
-      <button class="chip" data-preset="past5">Past 5yrs</button>
-      <button class="chip" data-preset="past10">Past 10yrs</button>
-      <button class="chip" data-preset="past20">Past 20yrs</button>
-      <button class="chip" data-preset="cfp">CFP Era (2014+)</button>
-      <button class="chip" data-preset="bcs">BCS Era (1998-2013)</button>
-      <button class="chip" data-preset="modern">Modern (1969-1997)</button>
-      <button class="chip" data-preset="premodern">Pre-Modern (&lt;1969)</button>
+    <!-- Tweak 1 (v26): single dropdown replaces the preset chip row -->
+    <div class="preset-row">
+      <label class="preset-label-v26" for="preset-select">Time Period</label>
+      <select id="preset-select" class="preset-select" data-preset-select="">
+        <option value="" hidden disabled>Custom range</option>
+        <option value="all" selected>All-Time</option>
+        <option value="last5">Last 5 Matchups</option>
+        <option value="last10">Last 10 Matchups</option>
+        <option value="past5">Past 5yrs</option>
+        <option value="past10">Past 10yrs</option>
+        <option value="past20">Past 20yrs</option>
+        <option value="cfp">CFP Era (2014+)</option>
+        <option value="bcs">BCS Era (1998-2013)</option>
+        <option value="modern">Modern (1969-1997)</option>
+        <option value="premodern">Pre-Modern (&lt;1969)</option>
+      </select>
     </div>
     <div class="results" id="results">
       <div class="loading"><div class="spinner"></div><div>Loading game data&hellip;</div></div>
@@ -876,9 +902,11 @@
     document.getElementById('display-end').textContent = end;
     updateRangeFill();
     if (!fromPreset) {
-      document.querySelectorAll('.chip[data-preset]').forEach(b => b.classList.remove('active'));
+      // Tweak 1 (v26): manual slider drag drops out of any preset — reset the dropdown
+      const ps = document.getElementById('preset-select');
+      if (ps) ps.value = '';
       state.activePreset = null;
-      state.lastN = null;  // Tweak 4: manual slider drag drops out of the Last N preset
+      state.lastN = null;
     }
     render();
   }
@@ -923,14 +951,12 @@
       state.activePreset = null;
       setSliders(state.startYear, end, false);
     });
-    document.querySelectorAll('.chip[data-preset]').forEach(btn => {
-      btn.onclick = () => {
-        document.querySelectorAll('.chip[data-preset]').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const preset = btn.dataset.preset;
+    // Tweak 1 (v26): dropdown drives presets
+    const presetSelect = document.getElementById('preset-select');
+    if (presetSelect) {
+      presetSelect.addEventListener('change', () => {
+        const preset = presetSelect.value;
         state.activePreset = preset;
-        // Tweak 4: last5 / last10 don't map to a fixed year range — derive the slider span
-        // from the actual most recent N matchups between the two teams.
         if (preset === 'last5' || preset === 'last10') {
           const n = preset === 'last5' ? 5 : 10;
           state.lastN = n;
@@ -946,8 +972,8 @@
         state.lastN = null;
         const p = PRESETS[preset];
         setSliders(p.start, p.end, true);
-      };
-    });
+      });
+    }
   }
 
 
@@ -1140,14 +1166,18 @@
       })()}
       <div class="h2h-bar-container">
         <div class="h2h-teams-row">
-          <div class="team-label">${teamLogo(state.team1,true)}<div class="team-info">${state.team1}<br><span class="wins-count">${t1Wins} wins</span></div></div>
-          <div class="team-label right">${teamLogo(state.team2,true)}<div class="team-info">${state.team2}<br><span class="wins-count">${t2Wins} wins</span></div></div>
+          <div class="team-label">${teamLogo(state.team1,true)}<div class="team-info"><span class="team-name-row">${state.team1}</span><span class="wins-count"><span class="win-num">${t1Wins}</span><span class="win-word">wins</span></span></div></div>
+          <div class="team-label right">${teamLogo(state.team2,true)}<div class="team-info"><span class="team-name-row">${state.team2}</span><span class="wins-count"><span class="win-num">${t2Wins}</span><span class="win-word">wins</span></span></div></div>
         </div>
         <div class="h2h-bar">
           ${t1Pct>0?`<div class="h2h-bar-segment t1" data-target-width="${t1Pct}" style="background:${t1Color};width:0%">${t1Pct>=8?t1Wins:''}</div>`:''}
           ${tiePct>0?`<div class="h2h-bar-segment ties" data-target-left="${t1Pct}" data-target-width="${tiePct}" title="${ties} tie${ties===1?'':'s'}" style="left:${(t1Pct + tiePct/2).toFixed(2)}%;width:0%">${tiePct>=6?ties+(ties===1?' TIE':' TIES'):tiePct>=3?ties:''}</div>`:''}
           ${t2Pct>0?`<div class="h2h-bar-segment t2" data-target-width="${t2Pct}" style="background:${t2Color};width:0%">${t2Pct>=8?t2Wins:''}</div>`:''}
         </div>
+      </div>
+      <!-- Tweak 2 (v26): Full Games List sits directly below the H2H bar -->
+      <div class="games-toggle">
+        <a class="btn btn-secondary" id="games-link" href="#">Full Games List &rarr;</a>
       </div>
     `;
 
@@ -1191,10 +1221,6 @@
       </div>
 
       ${renderStatComparison(t1Color, t2Color)}
-
-      <div class="games-toggle">
-        <a class="btn btn-secondary" id="games-link" href="#">Full Games List &rarr;</a>
-      </div>
 
       ${(() => {
         const sugg = getSuggestedMatchups();
@@ -1258,7 +1284,7 @@
     drawCharts(games);
   }
 
-  // ===== Tweak 5: Winsipedia-style program comparison cards =====
+  // ===== Tweak 4 (v26): Winsipedia split-color stat cards with rank ordinal + denominator =====
   function renderStatComparison(t1Color, t2Color) {
     const t1 = state.team1, t2 = state.team2;
     const s1 = TEAM_STATS[t1] || {};
@@ -1269,47 +1295,51 @@
     const w1 = wr.rank[t1], w2 = wr.rank[t2];
     const p1 = pr.rank[t1], p2 = pr.rank[t2];
 
-    const fmt = v => (v == null ? '&mdash;' : v);
-    const fmtPct = v => (v == null ? '&mdash;' : (v * 100).toFixed(1) + '%');
-    const rank = (r, total) => (r == null ? '&mdash;' : rankLabel(r, total));
+    const fmtPct = v => (v == null ? '—' : (v * 100).toFixed(1) + '%');
+    // value cell: returns either a big number or a faded em-dash placeholder
+    const valHtml = v => (v == null ? '<div class="scc-na">—</div>' : `<div class="scc-value">${v}</div>`);
+    const rankHtml = (r, total) => {
+      if (r == null) return '';
+      return `<div class="scc-rank-ord">${ordinal(r)}</div><div class="scc-rank-of">of ${total}</div>`;
+    };
 
     const rows = [
       { title: 'All-Time Win %',
-        v1: p1 ? fmtPct(p1.value) : '&mdash;', r1: p1 ? rank(p1.rank, pr.total) : '&mdash;',
-        v2: p2 ? fmtPct(p2.value) : '&mdash;', r2: p2 ? rank(p2.rank, pr.total) : '&mdash;' },
+        v1: p1 ? fmtPct(p1.value) : null, r1: p1 ? p1.rank : null, t1Total: pr.total,
+        v2: p2 ? fmtPct(p2.value) : null, r2: p2 ? p2.rank : null, t2Total: pr.total },
       { title: 'Total Wins',
-        v1: w1 ? w1.value : '&mdash;', r1: w1 ? rank(w1.rank, wr.total) : '&mdash;',
-        v2: w2 ? w2.value : '&mdash;', r2: w2 ? rank(w2.rank, wr.total) : '&mdash;' },
+        v1: w1 ? w1.value : null, r1: w1 ? w1.rank : null, t1Total: wr.total,
+        v2: w2 ? w2.value : null, r2: w2 ? w2.rank : null, t2Total: wr.total },
       { title: 'National Championships (Claimed)',
-        v1: fmt(s1.ncClaimed),    r1: rank(s1.ncClaimedRank, TOTAL_FBS),
-        v2: fmt(s2.ncClaimed),    r2: rank(s2.ncClaimedRank, TOTAL_FBS) },
+        v1: s1.ncClaimed,    r1: s1.ncClaimedRank,    t1Total: TOTAL_FBS,
+        v2: s2.ncClaimed,    r2: s2.ncClaimedRank,    t2Total: TOTAL_FBS },
       { title: 'National Championships (Recognized)',
-        v1: fmt(s1.ncRecognized), r1: rank(s1.ncRecognizedRank, TOTAL_FBS),
-        v2: fmt(s2.ncRecognized), r2: rank(s2.ncRecognizedRank, TOTAL_FBS) },
+        v1: s1.ncRecognized, r1: s1.ncRecognizedRank, t1Total: TOTAL_FBS,
+        v2: s2.ncRecognized, r2: s2.ncRecognizedRank, t2Total: TOTAL_FBS },
       { title: 'Conference Championships',
-        v1: fmt(s1.confChamps),   r1: rank(s1.confChampsRank, TOTAL_FBS),
-        v2: fmt(s2.confChamps),   r2: rank(s2.confChampsRank, TOTAL_FBS) },
+        v1: s1.confChamps,   r1: s1.confChampsRank,   t1Total: TOTAL_FBS,
+        v2: s2.confChamps,   r2: s2.confChampsRank,   t2Total: TOTAL_FBS },
       { title: 'Bowl Games',
-        v1: fmt(s1.bowlGames),    r1: rank(s1.bowlGamesRank, TOTAL_FBS),
-        v2: fmt(s2.bowlGames),    r2: rank(s2.bowlGamesRank, TOTAL_FBS) },
+        v1: s1.bowlGames,    r1: s1.bowlGamesRank,    t1Total: TOTAL_FBS,
+        v2: s2.bowlGames,    r2: s2.bowlGamesRank,    t2Total: TOTAL_FBS },
       { title: 'Consensus All-Americans',
-        v1: fmt(s1.allAmericans), r1: rank(s1.allAmericansRank, TOTAL_FBS),
-        v2: fmt(s2.allAmericans), r2: rank(s2.allAmericansRank, TOTAL_FBS) },
+        v1: s1.allAmericans, r1: s1.allAmericansRank, t1Total: TOTAL_FBS,
+        v2: s2.allAmericans, r2: s2.allAmericansRank, t2Total: TOTAL_FBS },
       { title: 'Heisman Winners',
-        v1: fmt(s1.heismans),     r1: rank(s1.heismansRank, TOTAL_FBS),
-        v2: fmt(s2.heismans),     r2: rank(s2.heismansRank, TOTAL_FBS) },
+        v1: s1.heismans,     r1: s1.heismansRank,     t1Total: TOTAL_FBS,
+        v2: s2.heismans,     r2: s2.heismansRank,     t2Total: TOTAL_FBS },
       { title: 'NFL Draft Picks',
-        v1: fmt(s1.nflPicks),     r1: rank(s1.nflPicksRank, TOTAL_FBS),
-        v2: fmt(s2.nflPicks),     r2: rank(s2.nflPicksRank, TOTAL_FBS) },
+        v1: s1.nflPicks,     r1: s1.nflPicksRank,     t1Total: TOTAL_FBS,
+        v2: s2.nflPicks,     r2: s2.nflPicksRank,     t2Total: TOTAL_FBS },
       { title: 'First Round Draft Picks',
-        v1: fmt(s1.firstRound),   r1: rank(s1.firstRoundRank, TOTAL_FBS),
-        v2: fmt(s2.firstRound),   r2: rank(s2.firstRoundRank, TOTAL_FBS) },
+        v1: s1.firstRound,   r1: s1.firstRoundRank,   t1Total: TOTAL_FBS,
+        v2: s2.firstRound,   r2: s2.firstRoundRank,   t2Total: TOTAL_FBS },
       { title: 'Weeks in AP Poll',
-        v1: fmt(s1.weeksInAP),    r1: rank(s1.weeksInAPRank, TOTAL_FBS),
-        v2: fmt(s2.weeksInAP),    r2: rank(s2.weeksInAPRank, TOTAL_FBS) },
+        v1: s1.weeksInAP,    r1: s1.weeksInAPRank,    t1Total: TOTAL_FBS,
+        v2: s2.weeksInAP,    r2: s2.weeksInAPRank,    t2Total: TOTAL_FBS },
       { title: 'Weeks at #1',
-        v1: fmt(s1.weeksAtNo1),   r1: rank(s1.weeksAtNo1Rank, TOTAL_FBS),
-        v2: fmt(s2.weeksAtNo1),   r2: rank(s2.weeksAtNo1Rank, TOTAL_FBS) }
+        v1: s1.weeksAtNo1,   r1: s1.weeksAtNo1Rank,   t1Total: TOTAL_FBS,
+        v2: s2.weeksAtNo1,   r2: s2.weeksAtNo1Rank,   t2Total: TOTAL_FBS }
     ];
 
     return `<div class="stat-comparison-section">
@@ -1319,13 +1349,13 @@
         ${rows.map(s => `<div class="stat-card-compare">
           <div class="scc-title">${s.title}</div>
           <div class="scc-body">
-            <div class="scc-side left">
-              <div class="scc-value" style="color:${t1Color}">${s.v1}</div>
-              <div class="scc-rank">${s.r1}</div>
+            <div class="scc-side left" style="background:${t1Color}">
+              ${valHtml(s.v1)}
+              ${rankHtml(s.r1, s.t1Total)}
             </div>
-            <div class="scc-side">
-              <div class="scc-value" style="color:${t2Color}">${s.v2}</div>
-              <div class="scc-rank">${s.r2}</div>
+            <div class="scc-side" style="background:${t2Color}">
+              ${valHtml(s.v2)}
+              ${rankHtml(s.r2, s.t2Total)}
             </div>
           </div>
         </div>`).join('')}
