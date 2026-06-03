@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:title" content="Category Rankings · Front Porch Sports">
+<meta property="og:description" content="All-time program rankings by individual category.">
+<meta property="og:image" content="https://frontporchsports.com/og-image.png">
+<meta property="og:url" content="https://frontporchsports.com/rankings">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Front Porch Sports">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Category Rankings · Front Porch Sports">
+<meta name="twitter:description" content="All-time program rankings by individual category.">
+<meta name="twitter:image" content="https://frontporchsports.com/og-image.png">
+<meta name="description" content="All-time program rankings by individual category.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Category Rankings — Front Porch Sports</title>
+<style>
+  :root {
+    --orange: #fe5c00;
+    --blue: #003594;
+    --dark: #0d1117;
+    --gray: #6b7280;
+    --light: #f3f4f6;
+    --border: #e5e7eb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #fafafa; color: var(--dark); line-height: 1.5; }
+  a { color: inherit; }
+
+  /* Navbar */
+  .navbar { background: var(--blue); padding: 0.75rem 1.5rem; border-bottom: 4px solid var(--orange); }
+  .navbar-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .navbar-links { display: flex; gap: 0.5rem; align-items: center; }
+  .navbar-links a {
+    color: white; text-decoration: none; font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.35rem; letter-spacing: 0.05em; padding: 0.4rem 1rem; border-radius: 6px;
+    transition: background 0.15s;
+  }
+  .navbar-links a:hover { background: rgba(255,255,255,0.12); }
+  .navbar-links a.active { background: var(--orange); }
+  .navbar-social { display: flex; gap: 0.4rem; align-items: center; margin-left: auto; }
+  .navbar-social .nav-soc { width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; text-decoration: none; transition: color 0.15s ease, background 0.15s ease; }
+  .navbar-social .nav-soc:hover { color: var(--orange); background: rgba(255,255,255,0.08); }
+  .navbar-social .nav-soc svg { width: 20px; height: 20px; }
+
+  main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  /* Hero */
+  .rk-hero { background: var(--blue); color: white; padding: 2.5rem 1.5rem 3rem; text-align: center; }
+  .rk-hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: 3.25rem; letter-spacing: 0.04em; line-height: 1; }
+  .rk-hero h1 .accent { color: var(--orange); }
+  .rk-hero p { max-width: 720px; margin: 0.85rem auto 0; color: #cbd5e1; font-size: 1rem; }
+  @media (max-width: 640px) { .rk-hero h1 { font-size: 2.2rem; } }
+
+  /* Category switcher */
+  .cat-row { background: white; border-radius: 12px; padding: 1.25rem 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin: -2rem 0 1.5rem; display: flex; align-items: center; gap: 0.85rem; flex-wrap: wrap; position: relative; z-index: 2; }
+  .cat-row label { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.07em; color: var(--gray); }
+  .cat-select { flex: 1; min-width: 260px; padding: 0.7rem 2.5rem 0.7rem 0.85rem; border: 2px solid var(--border); border-radius: 8px; background: white; font-size: 1rem; font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.04em; color: var(--dark); cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'><path stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/></svg>"); background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 18px; }
+  .cat-select:focus, .cat-select:hover { outline: none; border-color: var(--orange); }
+  .back-rk { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--orange); text-decoration: none; letter-spacing: 0.06em; }
+  .back-rk:hover { text-decoration: underline; }
+
+  .cat-blurb { font-size: 0.92rem; color: var(--gray); margin: 0 0 1.5rem; }
+
+  /* Bar chart */
+  .chart-card { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-bottom: 1.5rem; }
+  .chart-card h2 { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 0.04em; margin-bottom: 0.25rem; }
+  .chart-card .chart-sub { font-size: 0.85rem; color: var(--gray); margin-bottom: 1rem; }
+  .chart-scroll { overflow-x: auto; padding: 0.25rem 0 0.75rem; -webkit-overflow-scrolling: touch; }
+  .bar-row { display: flex; align-items: flex-end; gap: 0.6rem; min-height: 320px; padding: 1.5rem 0 0; }
+  .bar-col { display: flex; flex-direction: column; align-items: center; min-width: 56px; gap: 0.45rem; flex: 0 0 auto; }
+  .bar-logo { width: 36px; height: 36px; object-fit: contain; flex-shrink: 0; }
+  .bar-value { font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; line-height: 1; color: var(--dark); }
+  .bar { width: 36px; background: var(--blue); border-radius: 4px 4px 0 0; min-height: 4px; transition: height 0.6s cubic-bezier(0.22,0.61,0.36,1); position: relative; }
+  .bar-team { font-family: 'Inter', sans-serif; font-size: 0.7rem; color: var(--gray); margin-top: 0.3rem; text-align: center; max-width: 60px; line-height: 1.15; word-break: keep-all; }
+  .bar-rank { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; color: var(--orange); margin-top: 0.2rem; }
+
+  /* Table */
+  .table-card { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .table-card h2 { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 0.04em; margin-bottom: 1rem; }
+  .table-controls { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
+  .table-search { flex: 1; min-width: 220px; padding: 0.6rem 0.85rem; border: 2px solid var(--border); border-radius: 8px; font-size: 0.95rem; font-family: inherit; }
+  .table-search:focus { outline: none; border-color: var(--orange); }
+  .table-count { font-size: 0.85rem; color: var(--gray); }
+  .rk-tab { width: 100%; border-collapse: collapse; }
+  .rk-tab th { background: var(--dark); color: white; text-align: left; padding: 0.7rem 0.85rem; font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; letter-spacing: 0.06em; cursor: pointer; user-select: none; white-space: nowrap; }
+  .rk-tab th .arrow { opacity: 0.5; margin-left: 0.25rem; font-size: 0.8rem; }
+  .rk-tab th.sorted { background: #1f2937; }
+  .rk-tab th.sorted .arrow { opacity: 1; color: var(--orange); }
+  .rk-tab td { padding: 0; border-bottom: 1px solid var(--border); }
+  .rk-row { display: grid; grid-template-columns: 70px 56px 1fr 140px; align-items: center; gap: 0.85rem; padding: 0.6rem 0.85rem; text-decoration: none; color: inherit; transition: background 0.12s; border-left: 6px solid transparent; }
+  .rk-row:hover { background: var(--light); }
+  .rk-row .rk-rank { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; line-height: 1; color: var(--gray); }
+  .rk-row .rk-rank.top { color: var(--orange); }
+  .rk-row .rk-logo { width: 40px; height: 40px; object-fit: contain; }
+  .rk-row .rk-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; line-height: 1.1; letter-spacing: 0.02em; }
+  .rk-row .rk-conf { font-size: 0.72rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.15rem; font-weight: 600; }
+  .rk-row .rk-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; line-height: 1; text-align: right; letter-spacing: 0.02em; }
+  .rk-row[data-team="Oklahoma St."] { border-left-color: var(--orange); background: rgba(254,92,0,0.05); }
+  .rk-row[data-team="Oklahoma St."] .rk-name { color: var(--orange); }
+  .rk-empty { padding: 2rem; text-align: center; color: var(--gray); }
+
+  /* Footer */
+  footer { background: var(--dark); color: #9ca3af; padding: 2.5rem 1.5rem; margin-top: 4rem; text-align: center; font-size: 0.85rem; }
+  footer a { color: var(--orange); text-decoration: none; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; }
+  .footer-social { display: flex; justify-content: center; gap: 0.85rem; margin-bottom: 1.1rem; }
+  .footer-social .fs-icon { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.08); color: #cbd5e1; transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease; }
+  .footer-social .fs-icon:hover { background: var(--orange); color: #fff; transform: translateY(-2px); }
+  .footer-credit { font-size: 0.9rem; color: #9ca3af; }
+  .footer-credit a { font-weight: 700; }
+  .footer-credit a:hover { text-decoration: underline; }
+  .footer-copy { margin-top: 0.4rem; font-size: 0.8rem; color: #6b7280; }
+
+  @media (max-width: 640px) {
+    .navbar-inner { flex-direction: column; }
+    .navbar-links a { font-size: 1.1rem; padding: 0.35rem 0.7rem; }
+    .navbar-social { gap: 0.25rem; }
+    .navbar-social .nav-soc { width: 32px; height: 32px; }
+    .rk-row { grid-template-columns: 50px 40px 1fr 90px; gap: 0.5rem; padding: 0.55rem 0.65rem; }
+    .rk-row .rk-name { font-size: 1.05rem; }
+    .rk-row .rk-value { font-size: 1.2rem; }
+    .rk-row .rk-rank { font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="navbar-links">
+      <a href='/'>Home</a>
+      <a class='active' href='/rankings'>Rankings</a>
+      <a href='/teams'>Teams</a>
+      <a href='/compare'>Compare</a>
+    </div>
+    <div class="navbar-social">
+      <a href="https://x.com/FrontPorchU" target="_blank" rel="noopener" aria-label="X" class="nav-soc"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a href="https://www.instagram.com/frontporchsports/" target="_blank" rel="noopener" aria-label="Instagram" class="nav-soc"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zm0 1.62c-3.15 0-3.5.01-4.74.07-2.5.11-3.6 1.23-3.71 3.71-.06 1.23-.07 1.6-.07 4.74s.01 3.5.07 4.74c.11 2.48 1.21 3.6 3.71 3.71 1.23.06 1.6.07 4.74.07s3.5-.01 4.74-.07c2.5-.11 3.6-1.23 3.71-3.71.06-1.23.07-1.6.07-4.74s-.01-3.5-.07-4.74c-.11-2.48-1.21-3.6-3.71-3.71-1.23-.06-1.6-.07-4.74-.07zm0 4.32a3.9 3.9 0 110 7.8 3.9 3.9 0 010-7.8zm0 6.43a2.53 2.53 0 100-5.06 2.53 2.53 0 000 5.06zm4.96-6.6a.91.91 0 11-1.82 0 .91.91 0 011.82 0z"/></svg></a>
+      <a href="https://www.facebook.com/p/Front-Porch-Sports-61575902150695/" target="_blank" rel="noopener" aria-label="Facebook" class="nav-soc"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.03 4.39 11.03 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.49 0-1.95.93-1.95 1.89v2.26h3.32l-.53 3.49h-2.79v8.44C19.61 23.1 24 18.1 24 12.07z"/></svg></a>
+    </div>
+  </div>
+</nav>
+
+<section class="rk-hero">
+  <h1 id="hero-title">CATEGORY <span class="accent">RANKINGS</span></h1>
+  <p id="hero-sub">All-time program rankings by individual category.</p>
+</section>
+
+<main>
+  <div class="cat-row">
+    <label for="cat-select">Category</label>
+    <select id="cat-select" class="cat-select"></select>
+    <a class="back-rk" href="rankings.html">&larr; All Rankings</a>
+  </div>
+
+  <p class="cat-blurb" id="cat-blurb"></p>
+
+  <div class="chart-card">
+    <h2 id="chart-title">Top Programs</h2>
+    <div class="chart-sub" id="chart-sub"></div>
+    <div class="chart-scroll"><div class="bar-row" id="bar-row"></div></div>
+  </div>
+
+  <div class="table-card">
+    <h2>Full Rankings</h2>
+    <div class="table-controls">
+      <input id="table-search" class="table-search" type="text" placeholder="Search teams...">
+      <span class="table-count" id="table-count"></span>
+    </div>
+    <table class="rk-tab">
+      <thead><tr>
+        <th id="th-rank" data-key="rank" class="sorted">Rank<span class="arrow">▲</span></th>
+        <th id="th-team" data-key="team">Team<span class="arrow">▲</span></th>
+        <th id="th-value" data-key="value" style="text-align:right">Value<span class="arrow">▲</span></th>
+      </tr></thead>
+      <tbody id="rk-tbody"></tbody>
+    </table>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-social">
+      <a href="https://x.com/FrontPorchU" target="_blank" rel="noopener" aria-label="X" class="fs-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a href="https://www.instagram.com/frontporchsports/" target="_blank" rel="noopener" aria-label="Instagram" class="fs-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zm0 1.62c-3.15 0-3.5.01-4.74.07-2.5.11-3.6 1.23-3.71 3.71-.06 1.23-.07 1.6-.07 4.74s.01 3.5.07 4.74c.11 2.48 1.21 3.6 3.71 3.71 1.23.06 1.6.07 4.74.07s3.5-.01 4.74-.07c2.5-.11 3.6-1.23 3.71-3.71.06-1.23.07-1.6.07-4.74s-.01-3.5-.07-4.74c-.11-2.48-1.21-3.6-3.71-3.71-1.23-.06-1.6-.07-4.74-.07zm0 4.32a3.9 3.9 0 110 7.8 3.9 3.9 0 010-7.8zm0 6.43a2.53 2.53 0 100-5.06 2.53 2.53 0 000 5.06zm4.96-6.6a.91.91 0 11-1.82 0 .91.91 0 011.82 0z"/></svg></a>
+      <a href="https://www.facebook.com/p/Front-Porch-Sports-61575902150695/" target="_blank" rel="noopener" aria-label="Facebook" class="fs-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.03 4.39 11.03 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.49 0-1.95.93-1.95 1.89v2.26h3.32l-.53 3.49h-2.79v8.44C19.61 23.1 24 18.1 24 12.07z"/></svg></a>
+    </div>
+    <p class="footer-credit">Website Built By <a href="https://keatonhargett.com" target="_blank" rel="noopener">Keaton Hargett</a></p>
+    <p class="footer-copy">&copy; 2025 Front Porch Sports</p>
+  </div>
+</footer>
+
+<script>
+const TEAM_STATS = {
+    'Alabama':       { ncClaimed:18, ncClaimedRank:1,  ncRecognized:13, ncRecognizedRank:1,  confChamps:33, confChampsRank:2, bowlGames:79, bowlGamesRank:1,  allAmericans:117, allAmericansRank:2,  heismans:4, heismansRank:5, nflPicks:386, nflPicksRank:3, firstRound:71, firstRoundRank:1,  weeksInAP:907, weeksInAPRank:1,  weeksAtNo1:128, weeksAtNo1Rank:2 },
+    'Auburn':        { ncClaimed:2,  ncClaimedRank:33, ncRecognized:2,  ncRecognizedRank:24, confChamps:15, confChampsRank:24,bowlGames:48, bowlGamesRank:11, allAmericans:55,  allAmericansRank:21, heismans:3, heismansRank:9, nflPicks:298, nflPicksRank:12,firstRound:38, firstRoundRank:13, weeksInAP:610, weeksInAPRank:13, weeksAtNo1:20,  weeksAtNo1Rank:15 },
+    'Arkansas':      { ncClaimed:1,  ncClaimedRank:46, ncRecognized:1,  ncRecognizedRank:38, confChamps:13, confChampsRank:35,bowlGames:45, bowlGamesRank:15, allAmericans:42,  allAmericansRank:36, heismans:0, heismansRank:46,nflPicks:250, nflPicksRank:23,firstRound:24, firstRoundRank:36, weeksInAP:471, weeksInAPRank:24, weeksAtNo1:1,   weeksAtNo1Rank:32 },
+    'Baylor':        { ncClaimed:0,  ncClaimedRank:74, ncRecognized:0,  ncRecognizedRank:53, confChamps:9,  confChampsRank:55,bowlGames:32, bowlGamesRank:33, allAmericans:18,  allAmericansRank:67, heismans:1, heismansRank:23,nflPicks:152, nflPicksRank:54,firstRound:11, firstRoundRank:66, weeksInAP:182, weeksInAPRank:55, weeksAtNo1:0,   weeksAtNo1Rank:39 },
+    'BYU':           { ncClaimed:1,  ncClaimedRank:46, ncRecognized:1,  ncRecognizedRank:38, confChamps:25, confChampsRank:7, bowlGames:43, bowlGamesRank:17, allAmericans:27,  allAmericansRank:50, heismans:1, heismansRank:23,nflPicks:148, nflPicksRank:56,firstRound:6,  firstRoundRank:84, weeksInAP:336, weeksInAPRank:35, weeksAtNo1:1,   weeksAtNo1Rank:32 },
+    'Clemson':       { ncClaimed:3,  ncClaimedRank:21, ncRecognized:3,  ncRecognizedRank:14, confChamps:28, confChampsRank:4, bowlGames:50, bowlGamesRank:9,  allAmericans:50,  allAmericansRank:25, heismans:1, heismansRank:23,nflPicks:299, nflPicksRank:11,firstRound:50, firstRoundRank:5,  weeksInAP:597, weeksInAPRank:14, weeksAtNo1:36,  weeksAtNo1Rank:10 },
+    'Colorado':      { ncClaimed:1,  ncClaimedRank:46, ncRecognized:1,  ncRecognizedRank:38, confChamps:27, confChampsRank:5, bowlGames:30, bowlGamesRank:35, allAmericans:46,  allAmericansRank:30, heismans:1, heismansRank:23,nflPicks:240, nflPicksRank:25,firstRound:23, firstRoundRank:39, weeksInAP:381, weeksInAPRank:29, weeksAtNo1:3,   weeksAtNo1Rank:28 },
+    'Florida':       { ncClaimed:3,  ncClaimedRank:21, ncRecognized:3,  ncRecognizedRank:14, confChamps:8,  confChampsRank:60,bowlGames:48, bowlGamesRank:11, allAmericans:64,  allAmericansRank:15, heismans:3, heismansRank:9, nflPicks:329, nflPicksRank:7, firstRound:45, firstRoundRank:8,  weeksInAP:704, weeksInAPRank:6,  weeksAtNo1:35,  weeksAtNo1Rank:11 },
+    'Florida St.':   { ncClaimed:3,  ncClaimedRank:21, ncRecognized:3,  ncRecognizedRank:14, confChamps:18, confChampsRank:18,bowlGames:46, bowlGamesRank:13, allAmericans:62,  allAmericansRank:17, heismans:3, heismansRank:9, nflPicks:298, nflPicksRank:12,firstRound:39, firstRoundRank:11, weeksInAP:619, weeksInAPRank:12, weeksAtNo1:62,  weeksAtNo1Rank:5 },
+    'Georgia':       { ncClaimed:4,  ncClaimedRank:13, ncRecognized:4,  ncRecognizedRank:10, confChamps:16, confChampsRank:21,bowlGames:60, bowlGamesRank:3,  allAmericans:68,  allAmericansRank:12, heismans:2, heismansRank:13,nflPicks:336, nflPicksRank:5, firstRound:47, firstRoundRank:6,  weeksInAP:702, weeksInAPRank:7,  weeksAtNo1:54,  weeksAtNo1Rank:7 },
+    'Georgia Tech':  { ncClaimed:4,  ncClaimedRank:13, ncRecognized:4,  ncRecognizedRank:10, confChamps:16, confChampsRank:21,bowlGames:43, bowlGamesRank:17, allAmericans:51,  allAmericansRank:23, heismans:0, heismansRank:46,nflPicks:225, nflPicksRank:30,firstRound:21, firstRoundRank:45, weeksInAP:336, weeksInAPRank:35, weeksAtNo1:11,  weeksAtNo1Rank:21 },
+    'Houston':       { ncClaimed:0,  ncClaimedRank:74, ncRecognized:0,  ncRecognizedRank:53, confChamps:13, confChampsRank:35,bowlGames:28, bowlGamesRank:39, allAmericans:18,  allAmericansRank:67, heismans:1, heismansRank:23,nflPicks:130, nflPicksRank:62,firstRound:11, firstRoundRank:66, weeksInAP:171, weeksInAPRank:58, weeksAtNo1:0,   weeksAtNo1Rank:39 },
+    'Iowa':          { ncClaimed:1,  ncClaimedRank:46, ncRecognized:1,  ncRecognizedRank:38, confChamps:13, confChampsRank:35,bowlGames:32, bowlGamesRank:33, allAmericans:43,  allAmericansRank:34, heismans:1, heismansRank:23,nflPicks:255, nflPicksRank:21,firstRound:25, firstRoundRank:32, weeksInAP:367, weeksInAPRank:32, weeksAtNo1:6,   weeksAtNo1Rank:25 },
+    'Iowa St.':      { ncClaimed:0,  ncClaimedRank:74, ncRecognized:0,  ncRecognizedRank:53, confChamps:2,  confChampsRank:88,bowlGames:18, bowlGamesRank:59, allAmericans:11,  allAmericansRank:85, heismans:0, heismansRank:46,nflPicks:131, nflPicksRank:61,firstRound:7,  firstRoundRank:80, weeksInAP:118, weeksInAPRank:67, weeksAtNo1:0,   weeksAtNo1Rank:39 },
+    'Kansas':        { ncClaimed:0,  ncClaimedRank:74, ncRecognized:0,  ncRecognizedRank:53, confChamps:5,  confChampsRank:71,bowlGames:14, bowlGamesRank:70, allAmericans:21,  allAmericansRank:60, heismans:0, heismansRank:46,nflPicks:150, nflPicksRank:55,firstRound:12, firstRoundRank:62, weeksInAP:120, weeksInAPRank:66, weeksAtNo1:0,   weeksAtNo1Rank:39 },
+    'Kansas St.':    { ncClaimed:0,  ncClaimedRank:74, ncRecognized:0,  ncRecognizedRank:53, confChamps:5,  confChampsRank:71,bowlGames:21, bowlGamesRank:51, allAmericans:18,  allAmericansRank:67, heismans:0, heismansRank:46,nflPicks:121, nflPicksRank:69,firstRound:7,  firstRoundRank:80, weeksInAP:194, weeksInAPRank:52, weeksAtNo1:0,   weeksAtNo1Rank:39 },
+    'LSU':           { ncClaimed:4,  ncClaimedRank:13, ncRecognized:4,  ncRecognizedRank:10, confChamps:16, confChampsRank:21,bowlGames:57, bowlGamesRank:5,  allAmericans:58,  allAmericansRank:19, heismans:2, heismansRank:13,nflPicks:330, nflPicksRank:6, firstRound:51, firstRoundRank:4,  weeksInAP:579, weeksInAPRank:15, weeksAtNo1:23,  weeksAtNo1Rank:14 },
+    'Miami (FL)':    { ncClaimed:5,  ncClaimedRank:10, ncRecognized:5,  ncRecognizedRank:7,  confChamps:11, confChampsRank:46,bowlGames:43, bowlGamesRank:17, allAmericans:48,  allAmericansRank:28, heismans:2, heismansRank:13,nflPicks:333, nflPicksRank:6, firstRound:65, firstRoundRank:2,  weeksInAP:486, weeksInAPRank:23, weeksAtNo1:64,  weeksAtNo1Rank:4 },
+    'Michigan':      { ncClaimed:12, ncClaimedRank:2,  ncRecognized:11, ncRecognizedRank:2,  confChamps:45, confChampsRank:1, bowlGames:55, bowlGamesRank:7,  allAmericans:107, allAmericansRank:5,  heismans:3, heismansRank:9, nflPicks:368, nflPicksRank:4, firstRound:54, firstRoundRank:3,  weeksInAP:875, weeksInAPRank:2,  weeksAtNo1:43,  weeksAtNo1Rank:9 },
+    'Michigan St.':  { ncClaimed:6,  ncClaimedRank:8,  ncRecognized:6,  ncRecognizedRank:5,  confChamps:14, confChampsRank:30,bowlGames:33, bowlGamesRank:31, allAmericans:53,  allAmericansRank:22, heismans:0, heismansRank:46,nflPicks:281, nflPicksRank:15,firstRound:32, firstRoundRank:18, weeksInAP:454, weeksInAPRank:25, weeksAtNo1:14,  weeksAtNo1Rank:19 },
+    'Minnesota':     { ncClaimed:7,  ncClaimedRank:6,  ncRecognized:5,  ncRecognizedRank:7,  confChamps:18, confChampsRank:18,bowlGames:21, bowlGamesRank:51, allAmericans:42,  allAmericansRank:36, heismans:1, heismansRank:23,nflPicks:227, nflPicksRank:29,firstRound:30, firstRoundRank:20, weeksInAP:201, weeksInAPRank:50, weeksAtNo1:6,   weeksAtNo1Rank:25 },
+    'Ole Miss':      { ncClaimed:3,  ncClaimedRank:21, ncRecognized:1,  ncRecognizedRank:38, confChamps:6,  confChampsRank:65,bowlGames:46, bowlGamesRank:13, allAmericans:40,  allAmericansRank:39, heismans:0, heismansRank:46,nflPicks:215, nflPicksRank:33,firstRound:19, firstRoundRank:47, weeksInAP:307, weeksInAPRank:40, weeksAtNo1:0,   weeksAtNo1Rank:39 },
+    'Mississippi St.':{ ncClaimed:0, ncClaimedRank:74, ncRecognized:0,  ncRecognizedRank:53, confChamps:1,  confChampsRank:104,bowlGames:25,bowlGamesRank:42,allAmericans:18,  allAmericansRank:67, heismans:0, heismansRank:46,nflPicks:163, nflPicksRank:51,firstRound:14, firstRoundRank:55, weeksInAP:175, weeksInAPRank:57, weeksAtNo1:1,   weeksAtNo1Rank:32 },
+    'Missouri':      { ncClaimed:0,  ncClaimedRank:74, ncRecognized:0,  ncRecognizedRank:53, confChamps:15, confChampsRank:24,bowlGames:32, bowlGamesRank:33, allAmericans:25,  allAmericansRank:52, heismans:0, heismansRank:46,nflPicks:201, nflPicksRank:38,firstRound:14, firstRoundRank:55, weeksInAP:283, weeksInAPRank:44, weeksAtNo1:1,   weeksAtNo1Rank:32 },
+    'Nebraska':      { ncClaimed:5,  ncClaimedRank:10, ncRecognized:5,  ncRecognizedRank:7,  confChamps:46, confChampsRank:1, bowlGames:53, bowlGamesRank:8,  allAmericans:91,  allAmericansRank:8,  heismans:3, heismansRank:9, nflPicks:344, nflPicksRank:5, firstRound:31, firstRoundRank:19, weeksInAP:721, weeksInAPRank:5,  weeksAtNo1:70,  weeksAtNo1Rank:3 },
+    'North Carolina':{ ncClaimed:0,  ncClaimedRank:74, ncRecognized:0,  ncRecognizedRank:53, confChamps:5,  confChampsRank:71,bowlGames:36, bowlGamesRank:25, allAmericans:42,  allAmericansRank:36, heismans:0, heismansRank:46,nflPicks:223, nflPicksRank:31,firstRound:23, firstRoundRank:39, weeksInAP:209, weeksInAPRank:48, weeksAtNo1:0,   weeksAtNo1Rank:39 },
+    'Notre Dame':    { ncClaimed:11, ncClaimedRank:3,  ncRecognized:11, ncRecognizedRank:2,  confChamps:0,  confChampsRank:120,bowlGames:38,bowlGamesRank:23,allAmericans:114, allAmericansRank:3,  heismans:7, heismansRank:1, nflPicks:524, nflPicksRank:1, firstRound:64, firstRoundRank:3,  weeksInAP:909, weeksInAPRank:1,  weeksAtNo1:99,  weeksAtNo1Rank:3 },
+    'Ohio St.':      { ncClaimed:8,  ncClaimedRank:5,  ncRecognized:8,  ncRecognizedRank:4,  confChamps:41, confChampsRank:2, bowlGames:55, bowlGamesRank:7,  allAmericans:148, allAmericansRank:1,  heismans:7, heismansRank:1, nflPicks:480, nflPicksRank:2, firstRound:88, firstRoundRank:1,  weeksInAP:914, weeksInAPRank:1,  weeksAtNo1:115, weeksAtNo1Rank:2 },
+    'Oklahoma':      { ncClaimed:7,  ncClaimedRank:6,  ncRecognized:7,  ncRecognizedRank:4,  confChamps:51, confChampsRank:1, bowlGames:57, bowlGamesRank:4,  allAmericans:92,  allAmericansRank:7,  heismans:7, heismansRank:1, nflPicks:351, nflPicksRank:4, firstRound:46, firstRoundRank:7,  weeksInAP:879, weeksInAPRank:2,  weeksAtNo1:101, weeksAtNo1Rank:2 },
+    'Oklahoma St.':  { ncClaimed:1,  ncClaimedRank:46, ncRecognized:0,  ncRecognizedRank:53, confChamps:11, confChampsRank:46,bowlGames:33, bowlGamesRank:31, allAmericans:24,  allAmericansRank:54, heismans:1, heismansRank:23,nflPicks:218, nflPicksRank:32,firstRound:15, firstRoundRank:53, weeksInAP:386, weeksInAPRank:28, weeksAtNo1:0,   weeksAtNo1Rank:39 },
+    'Oregon':        { ncClaimed:0,  ncClaimedRank:74, ncRecognized:0,  ncRecognizedRank:53, confChamps:14, confChampsRank:30,bowlGames:38, bowlGamesRank:23, allAmericans:34,  allAmericansRank:43, heismans:1, heismansRank:23,nflPicks:225, nflPicksRank:30,firstRound:21, firstRoundRank:45, weeksInAP:441, weeksInAPRank:26, weeksAtNo1:13,  weeksAtNo1Rank:20 },
+    'Penn St.':      { ncClaimed:2,  ncClaimedRank:33, ncRecognized:2,  ncRecognizedRank:24, confChamps:6,  confChampsRank:65,bowlGames:55, bowlGamesRank:7,  allAmericans:69,  allAmericansRank:11, heismans:1, heismansRank:23,nflPicks:412, nflPicksRank:3, firstRound:43, firstRoundRank:9,  weeksInAP:778, weeksInAPRank:4,  weeksAtNo1:24,  weeksAtNo1Rank:13 },
+    'Pittsburgh':    { ncClaimed:9,  ncClaimedRank:4,  ncRecognized:9,  ncRecognizedRank:3,  confChamps:21, confChampsRank:9, bowlGames:39, bowlGamesRank:22, allAmericans:81,  allAmericansRank:9,  heismans:2, heismansRank:13,nflPicks:281, nflPicksRank:15,firstRound:39, firstRoundRank:11, weeksInAP:296, weeksInAPRank:41, weeksAtNo1:9,   weeksAtNo1Rank:23 },
+    'Purdue':        { ncClaimed:0,  ncClaimedRank:74, ncRecognized:0,  ncRecognizedRank:53, confChamps:8,  confChampsRank:60,bowlGames:21, bowlGamesRank:51, allAmericans:33,  allAmericansRank:44, heismans:0, heismansRank:46,nflPicks:240, nflPicksRank:25,firstRound:23, firstRoundRank:39, weeksInAP:142, weeksInAPRank:62, weeksAtNo1:0,   weeksAtNo1Rank:39 },
+    'South Carolina':{ ncClaimed:0,  ncClaimedRank:74, ncRecognized:0,  ncRecognizedRank:53, confChamps:1,  confChampsRank:104,bowlGames:24,bowlGamesRank:45,allAmericans:23,  allAmericansRank:57, heismans:1, heismansRank:23,nflPicks:225, nflPicksRank:30,firstRound:14, firstRoundRank:55, weeksInAP:127, weeksInAPRank:64, weeksAtNo1:0,   weeksAtNo1Rank:39 },
+    'Stanford':      { ncClaimed:3,  ncClaimedRank:21, ncRecognized:2,  ncRecognizedRank:24, confChamps:15, confChampsRank:24,bowlGames:32, bowlGamesRank:33, allAmericans:91,  allAmericansRank:8,  heismans:3, heismansRank:9, nflPicks:280, nflPicksRank:16,firstRound:38, firstRoundRank:13, weeksInAP:339, weeksInAPRank:34, weeksAtNo1:5,   weeksAtNo1Rank:26 },
+    'Syracuse':      { ncClaimed:1,  ncClaimedRank:46, ncRecognized:1,  ncRecognizedRank:38, confChamps:5,  confChampsRank:71,bowlGames:30, bowlGamesRank:35, allAmericans:31,  allAmericansRank:46, heismans:1, heismansRank:23,nflPicks:209, nflPicksRank:36,firstRound:18, firstRoundRank:49, weeksInAP:154, weeksInAPRank:60, weeksAtNo1:2,   weeksAtNo1Rank:30 },
+    'TCU':           { ncClaimed:2,  ncClaimedRank:33, ncRecognized:2,  ncRecognizedRank:24, confChamps:16, confChampsRank:21,bowlGames:36, bowlGamesRank:25, allAmericans:35,  allAmericansRank:42, heismans:2, heismansRank:13,nflPicks:182, nflPicksRank:44,firstRound:16, firstRoundRank:51, weeksInAP:233, weeksInAPRank:46, weeksAtNo1:2,   weeksAtNo1Rank:30 },
+    'Tennessee':     { ncClaimed:6,  ncClaimedRank:8,  ncRecognized:6,  ncRecognizedRank:5,  confChamps:16, confChampsRank:21,bowlGames:55, bowlGamesRank:7,  allAmericans:75,  allAmericansRank:10, heismans:0, heismansRank:46,nflPicks:362, nflPicksRank:4, firstRound:44, firstRoundRank:8,  weeksInAP:741, weeksInAPRank:5,  weeksAtNo1:31,  weeksAtNo1Rank:12 },
+    'Texas':         { ncClaimed:4,  ncClaimedRank:13, ncRecognized:4,  ncRecognizedRank:10, confChamps:33, confChampsRank:2, bowlGames:60, bowlGamesRank:3,  allAmericans:111, allAmericansRank:4,  heismans:2, heismansRank:13,nflPicks:399, nflPicksRank:3, firstRound:54, firstRoundRank:3,  weeksInAP:781, weeksInAPRank:4,  weeksAtNo1:55,  weeksAtNo1Rank:6 },
+    'Texas A&M':     { ncClaimed:3,  ncClaimedRank:21, ncRecognized:1,  ncRecognizedRank:38, confChamps:18, confChampsRank:18,bowlGames:43, bowlGamesRank:17, allAmericans:43,  allAmericansRank:34, heismans:1, heismansRank:23,nflPicks:268, nflPicksRank:18,firstRound:30, firstRoundRank:20, weeksInAP:464, weeksInAPRank:24, weeksAtNo1:14,  weeksAtNo1Rank:19 },
+    'Texas Tech':    { ncClaimed:0,  ncClaimedRank:74, ncRecognized:0,  ncRecognizedRank:53, confChamps:4,  confChampsRank:80,bowlGames:40, bowlGamesRank:21, allAmericans:14,  allAmericansRank:75, heismans:1, heismansRank:23,nflPicks:152, nflPicksRank:54,firstRound:8,  firstRoundRank:75, weeksInAP:184, weeksInAPRank:54, weeksAtNo1:0,   weeksAtNo1Rank:39 },
+    'UCLA':          { ncClaimed:1,  ncClaimedRank:46, ncRecognized:1,  ncRecognizedRank:38, confChamps:17, confChampsRank:20,bowlGames:38, bowlGamesRank:23, allAmericans:58,  allAmericansRank:19, heismans:1, heismansRank:23,nflPicks:308, nflPicksRank:9, firstRound:33, firstRoundRank:17, weeksInAP:451, weeksInAPRank:25, weeksAtNo1:9,   weeksAtNo1Rank:23 },
+    'USC':           { ncClaimed:11, ncClaimedRank:3,  ncRecognized:11, ncRecognizedRank:2,  confChamps:39, confChampsRank:3, bowlGames:57, bowlGamesRank:4,  allAmericans:155, allAmericansRank:1,  heismans:7, heismansRank:1, nflPicks:526, nflPicksRank:1, firstRound:84, firstRoundRank:1,  weeksInAP:843, weeksInAPRank:3,  weeksAtNo1:90,  weeksAtNo1Rank:3 },
+    'Utah':          { ncClaimed:0,  ncClaimedRank:74, ncRecognized:0,  ncRecognizedRank:53, confChamps:25, confChampsRank:7, bowlGames:27, bowlGamesRank:40, allAmericans:25,  allAmericansRank:52, heismans:0, heismansRank:46,nflPicks:170, nflPicksRank:48,firstRound:9,  firstRoundRank:73, weeksInAP:147, weeksInAPRank:61, weeksAtNo1:0,   weeksAtNo1Rank:39 },
+    'Virginia':      { ncClaimed:0,  ncClaimedRank:74, ncRecognized:0,  ncRecognizedRank:53, confChamps:1,  confChampsRank:104,bowlGames:21,bowlGamesRank:51,allAmericans:25,  allAmericansRank:52, heismans:0, heismansRank:46,nflPicks:200, nflPicksRank:39,firstRound:18, firstRoundRank:49, weeksInAP:96,  weeksInAPRank:74, weeksAtNo1:0,   weeksAtNo1Rank:39 },
+    'Virginia Tech': { ncClaimed:0,  ncClaimedRank:74, ncRecognized:0,  ncRecognizedRank:53, confChamps:8,  confChampsRank:60,bowlGames:34, bowlGamesRank:29, allAmericans:24,  allAmericansRank:54, heismans:0, heismansRank:46,nflPicks:259, nflPicksRank:20,firstRound:20, firstRoundRank:46, weeksInAP:312, weeksInAPRank:39, weeksAtNo1:0,   weeksAtNo1Rank:39 },
+    'Washington':    { ncClaimed:2,  ncClaimedRank:33, ncRecognized:2,  ncRecognizedRank:24, confChamps:19, confChampsRank:15,bowlGames:37, bowlGamesRank:24, allAmericans:65,  allAmericansRank:14, heismans:0, heismansRank:46,nflPicks:296, nflPicksRank:13,firstRound:39, firstRoundRank:11, weeksInAP:430, weeksInAPRank:27, weeksAtNo1:11,  weeksAtNo1Rank:21 },
+    'West Virginia': { ncClaimed:0,  ncClaimedRank:74, ncRecognized:0,  ncRecognizedRank:53, confChamps:17, confChampsRank:20,bowlGames:36, bowlGamesRank:25, allAmericans:32,  allAmericansRank:45, heismans:1, heismansRank:23,nflPicks:222, nflPicksRank:32,firstRound:17, firstRoundRank:50, weeksInAP:325, weeksInAPRank:37, weeksAtNo1:0,   weeksAtNo1Rank:39 },
+    'Wisconsin':     { ncClaimed:1,  ncClaimedRank:46, ncRecognized:1,  ncRecognizedRank:38, confChamps:15, confChampsRank:24,bowlGames:37, bowlGamesRank:24, allAmericans:43,  allAmericansRank:34, heismans:1, heismansRank:23,nflPicks:215, nflPicksRank:33,firstRound:21, firstRoundRank:45, weeksInAP:351, weeksInAPRank:33, weeksAtNo1:1,   weeksAtNo1Rank:32 }
+  };
+
+
+  // Category catalog. Each maps a URL slug to a stat extractor and presentation hints.
+  const CATEGORIES = {
+    'all-time-record':                   { label: 'All-Time Record',                     short: 'Win %',                source: 'winPct',     fmt: 'pct3', live: true,  desc: 'Career winning percentage including ties (.500 weight). Minimum 50 games.' },
+    'claimed-national-championships':    { label: 'Claimed National Championships',      short: 'Claimed NC',           source: 'ncClaimed',                              desc: 'National championships claimed by each program.' },
+    'recognized-national-championships': { label: 'Recognized National Championships',   short: 'Recognized NC',        source: 'ncRecognized',                           desc: 'National championships recognized by the NCAA or major selectors.' },
+    'conference-championships':          { label: 'Conference Championships',            short: 'Conf Championships',   source: 'confChamps',                             desc: 'All-time conference titles won.' },
+    'bowl-games':                        { label: 'Bowl Games',                          short: 'Bowl Games',           source: 'bowlGames',                              desc: 'All-time bowl game appearances.' },
+    'all-time-wins':                     { label: 'All-Time Wins',                       short: 'Wins',                 source: 'wins',       live: true,                desc: 'Total career wins from the historical game record.' },
+    'all-americans':                     { label: 'Consensus All-Americans',             short: 'All-Americans',        source: 'allAmericans',                           desc: 'Players selected as consensus All-Americans.' },
+    'heisman-winners':                   { label: 'Heisman Winners',                     short: 'Heismans',             source: 'heismans',                               desc: 'Heisman Trophy winners by program.' },
+    'nfl-draft-picks':                   { label: 'NFL Draft Picks',                     short: 'Draft Picks',          source: 'nflPicks',                               desc: 'All-time NFL Draft selections.' },
+    'first-round-nfl-draft-picks':       { label: 'First Round NFL Draft Picks',         short: 'First Rounders',       source: 'firstRound',                             desc: 'All-time first-round NFL Draft selections.' },
+    'weeks-in-poll':                     { label: 'Weeks in AP Poll',                    short: 'AP Weeks',             source: 'weeksInAP',                              desc: 'Total weeks ranked in the Associated Press top 25.' },
+    'weeks-at-ap-number-one':            { label: 'Weeks at AP #1',                      short: 'Weeks at #1',          source: 'weeksAtNo1',                             desc: 'Total weeks ranked #1 in the AP poll.' }
+  };
+
+
+  const LOGO_URL = id => id ? `https://a.espncdn.com/i/teamlogos/ncaa/500/${id}.png` : '';
+  const params = new URLSearchParams(location.search);
+  let currentCatSlug = params.get('cat') && CATEGORIES[params.get('cat')] ? params.get('cat') : 'all-time-record';
+  let GAMES = [];
+  let META = {};            // name -> { id, color, conference }
+  let TEAMS_LIVE = [];      // canonical FBS team list from fbs_teams.json
+  let sortKey = 'rank';
+  let sortAsc = true;
+  let searchTerm = '';
+
+  // ===== Populate the dropdown =====
+  const sel = document.getElementById('cat-select');
+  Object.entries(CATEGORIES).forEach(([slug, c]) => {
+    const opt = document.createElement('option');
+    opt.value = slug; opt.textContent = c.label;
+    if (slug === currentCatSlug) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  sel.addEventListener('change', () => {
+    currentCatSlug = sel.value;
+    const url = new URL(location.href);
+    url.searchParams.set('cat', currentCatSlug);
+    history.replaceState(null, '', url);
+    renderAll();
+  });
+
+  // ===== Data fetch =====
+  Promise.all([
+    fetch('front_porch_games.json').then(r => r.json()),
+    fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] }))
+  ]).then(([games, fbs]) => {
+    GAMES = games;
+    (fbs.teams || []).forEach(t => {
+      META[t.name] = { id: t.espn_id, color: t.color ? ('#' + t.color) : '#003594', conference: t.conference || '' };
+    });
+    TEAMS_LIVE = (fbs.teams || []).map(t => t.name);
+    renderAll();
+  }).catch(err => {
+    document.getElementById('bar-row').innerHTML = `<div class="rk-empty">Failed to load data: ${err.message}</div>`;
+  });
+
+  // ===== Live stat calculations =====
+  let _winsCache = null;
+  function liveWins() {
+    if (_winsCache) return _winsCache;
+    const c = {};
+    GAMES.forEach(g => { if (!g.is_tie) c[g.winner] = (c[g.winner] || 0) + 1; });
+    _winsCache = c;
+    return c;
+  }
+  let _winPctCache = null;
+  function liveWinPct() {
+    if (_winPctCache) return _winPctCache;
+    const recs = {};
+    GAMES.forEach(g => {
+      [g.team_a, g.team_b].forEach(t => { if (!recs[t]) recs[t] = { w:0, l:0, t:0 }; });
+      if (g.is_tie) { recs[g.team_a].t++; recs[g.team_b].t++; }
+      else if (g.winner === g.team_a) { recs[g.team_a].w++; recs[g.team_b].l++; }
+      else if (g.winner === g.team_b) { recs[g.team_b].w++; recs[g.team_a].l++; }
+    });
+    const out = {};
+    Object.entries(recs).forEach(([team, r]) => {
+      const tot = r.w + r.l + r.t;
+      if (tot >= 50) out[team] = { pct: (r.w + 0.5 * r.t) / tot, games: tot, w: r.w, l: r.l, t: r.t };
+    });
+    _winPctCache = out;
+    return out;
+  }
+
+  function ordinal(n) {
+    if (n == null || isNaN(n)) return '';
+    const s = ['th','st','nd','rd'], v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  }
+
+  function formatValue(v, fmt) {
+    if (v == null || isNaN(v)) return '—';
+    if (fmt === 'pct3') return '.' + Math.round(v * 1000).toString().padStart(3, '0');
+    if (fmt === 'pct1') return (v * 100).toFixed(1) + '%';
+    return v.toLocaleString();
+  }
+
+  // ===== Build the ranked rows for the current category =====
+  function buildRows() {
+    const cat = CATEGORIES[currentCatSlug];
+    let pairs = [];
+    if (cat.live && cat.source === 'wins') {
+      const w = liveWins();
+      Object.entries(w).forEach(([team, value]) => pairs.push({ team, value }));
+    } else if (cat.live && cat.source === 'winPct') {
+      const wp = liveWinPct();
+      Object.entries(wp).forEach(([team, info]) => pairs.push({ team, value: info.pct, sub: `${info.w}-${info.l}${info.t?'-'+info.t:''}` }));
+    } else {
+      Object.entries(TEAM_STATS).forEach(([team, s]) => {
+        const value = s[cat.source];
+        if (value == null) return;
+        pairs.push({ team, value });
+      });
+    }
+    // Only include FBS teams when we know who's FBS (fall back to all if no FBS list)
+    if (TEAMS_LIVE.length > 0) {
+      const fbsSet = new Set(TEAMS_LIVE);
+      pairs = pairs.filter(p => fbsSet.has(p.team));
+    }
+    // Sort descending by value (higher = better)
+    pairs.sort((a, b) => b.value - a.value);
+    // Assign ranks with tie-handling (1, 1, 1, 4, 5...)
+    let prevVal = null, prevRank = 0;
+    pairs.forEach((p, i) => {
+      if (p.value === prevVal) { p.rank = prevRank; }
+      else { p.rank = i + 1; prevRank = p.rank; prevVal = p.value; }
+    });
+    return pairs;
+  }
+
+  // ===== Render hero + dropdown blurb =====
+  function renderHeader() {
+    const cat = CATEGORIES[currentCatSlug];
+    document.title = `${cat.label} — Front Porch Sports`;
+    document.getElementById('hero-title').innerHTML = `${cat.label.split(' ').slice(0,-1).join(' ')} <span class="accent">${cat.label.split(' ').slice(-1)[0]}</span>`;
+    document.getElementById('hero-sub').textContent = cat.desc;
+    document.getElementById('cat-blurb').textContent = cat.desc;
+  }
+
+  // ===== Render bar chart =====
+  function renderChart(rows) {
+    const cat = CATEGORIES[currentCatSlug];
+    const top = rows.slice(0, 30);
+    document.getElementById('chart-title').textContent = `Top ${top.length} Programs`;
+    document.getElementById('chart-sub').textContent = `Bar height shows relative ${cat.short.toLowerCase()}. Scroll horizontally to see more.`;
+    if (top.length === 0) {
+      document.getElementById('bar-row').innerHTML = '<div class="rk-empty">No data for this category.</div>';
+      return;
+    }
+    const maxVal = top[0].value;
+    const html = top.map(p => {
+      const m = META[p.team] || {};
+      const color = m.color || '#003594';
+      const heightPct = Math.max(4, (p.value / maxVal) * 240);
+      const logo = LOGO_URL(m.id);
+      return `<div class="bar-col">
+        ${logo ? `<img class="bar-logo" src="${logo}" alt="" onerror="this.style.visibility='hidden'">` : '<div class="bar-logo"></div>'}
+        <div class="bar-value">${formatValue(p.value, cat.fmt)}</div>
+        <div class="bar" style="height:${heightPct}px;background:${color}"></div>
+        <div class="bar-team">${p.team}</div>
+        <div class="bar-rank">${ordinal(p.rank)}</div>
+      </div>`;
+    }).join('');
+    document.getElementById('bar-row').innerHTML = html;
+  }
+
+  // ===== Render full table =====
+  function renderTable(rows) {
+    const cat = CATEGORIES[currentCatSlug];
+    document.getElementById('th-value').firstChild.textContent = cat.short;
+    const filtered = searchTerm ? rows.filter(r => r.team.toLowerCase().includes(searchTerm.toLowerCase())) : rows;
+    document.getElementById('table-count').textContent = `${filtered.length} of ${rows.length} programs`;
+    // Sort
+    const sorted = [...filtered].sort((a, b) => {
+      let av, bv;
+      if (sortKey === 'rank') { av = a.rank; bv = b.rank; }
+      else if (sortKey === 'team') { av = a.team; bv = b.team; }
+      else { av = a.value; bv = b.value; }
+      if (typeof av === 'string') return sortAsc ? av.localeCompare(bv) : bv.localeCompare(av);
+      return sortAsc ? av - bv : bv - av;
+    });
+    const tbody = document.getElementById('rk-tbody');
+    if (sorted.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="3"><div class="rk-empty">No teams match your search.</div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = sorted.map(p => {
+      const m = META[p.team] || {};
+      const color = m.color || '#6b7280';
+      const logo = LOGO_URL(m.id);
+      const conf = m.conference || '';
+      return `<tr><td colspan="3"><a class="rk-row" data-team="${p.team}" href="team.html?team=${encodeURIComponent(p.team)}" style="border-left-color:${color}">
+        <div class="rk-rank ${p.rank<=3?'top':''}">${ordinal(p.rank)}</div>
+        ${logo ? `<img class="rk-logo" src="${logo}" alt="" onerror="this.style.visibility='hidden'">` : '<div class="rk-logo"></div>'}
+        <div>
+          <div class="rk-name" style="color:${color}">${p.team}</div>
+          ${conf ? `<div class="rk-conf">${conf}</div>` : ''}
+        </div>
+        <div class="rk-value" style="color:${color}">${formatValue(p.value, cat.fmt)}</div>
+      </a></td></tr>`;
+    }).join('');
+  }
+
+  function renderAll() {
+    if (!GAMES.length) return;
+    _winsCache = null; _winPctCache = null;
+    const rows = buildRows();
+    renderHeader();
+    renderChart(rows);
+    renderTable(rows);
+  }
+
+  // Search + sort wiring
+  document.getElementById('table-search').addEventListener('input', e => { searchTerm = e.target.value; const r = buildRows(); renderTable(r); });
+  document.querySelectorAll('.rk-tab th[data-key]').forEach(th => {
+    th.addEventListener('click', () => {
+      const key = th.dataset.key;
+      if (sortKey === key) sortAsc = !sortAsc;
+      else { sortKey = key; sortAsc = (key !== 'team'); }
+      document.querySelectorAll('.rk-tab th').forEach(t => t.classList.remove('sorted'));
+      th.classList.add('sorted');
+      const r = buildRows();
+      renderTable(r);
+    });
+  });
+</script>
+</body>
+</html>
