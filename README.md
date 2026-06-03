@@ -42,7 +42,7 @@ The workflow uses two GitHub repo secrets:
 | FPS_CURRENT_SEASON | optional override | If unset, the script derives the season from the system date. |
 
 Add secrets at GitHub -> repo -> Settings -> Secrets and variables -> Actions -> New repository secret.
-
+ <!-- v25 deploy nudge -->
 ## Refresh behavior
 
 - The script pulls current season games from CFBD where completed = true.
@@ -69,3 +69,5 @@ The HTML, CSS, and JavaScript in index.html are locked. Only front_porch_games.j
 All rights reserved. Dataset compiled by Kyle Umlang. Site built by Keaton Hargett (https://keatonhargett.com).
 <!-- pipe-check 2026-06-02T06:32:21Z -->
 
+
+<!-- v25 deploy trigger: re-publish after server side dataset rename -->
