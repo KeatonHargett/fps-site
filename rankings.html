@@ -201,6 +201,10 @@
   }
   .cat-section-title .accent { color: var(--orange); }
   .cat-section-sub { text-align: center; color: var(--gray); font-size: 0.95rem; margin: 0.4rem 0 1.75rem; }
+  /* v27: link to the dedicated Heisman page */
+  .cat-cta-row { display: flex; justify-content: center; margin: 1.25rem 0 0; }
+  .cat-cta { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.5rem; border-radius: 999px; border: 2px solid var(--orange); color: var(--orange); text-decoration: none; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.06em; background: white; transition: background 0.15s, color 0.15s, transform 0.12s; }
+  .cat-cta:hover { background: var(--orange); color: white; transform: translateY(-1px); }
   .cat-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.1rem;
     align-items: stretch;
@@ -278,6 +282,10 @@
       <h2 class="cat-section-title">CATEGORY <span class="accent">LEADERS</span></h2>
       <p class="cat-section-sub">The top 5 programs in each of the 13 ranking categories.</p>
       <div class="cat-grid" id="rk-cat-grid"></div>
+      <!-- v27: dedicated Heisman page CTA -->
+      <div class="cat-cta-row">
+        <a class="cat-cta" href="heisman.html">View Full Heisman History &rarr;</a>
+      </div>
     </div>
 
     <div class="rk-table-block">

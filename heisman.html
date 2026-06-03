@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Heisman Trophy Winners — Front Porch Sports</title>
+<style>
+  :root {
+    --orange: #fe5c00;
+    --blue: #003594;
+    --dark: #0d1117;
+    --gray: #6b7280;
+    --light: #f3f4f6;
+    --border: #e5e7eb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #fafafa; color: var(--dark); line-height: 1.5; }
+  a { color: inherit; }
+
+  /* Navbar (matches site standard) */
+  .navbar { background: var(--blue); padding: 0.75rem 1.5rem; border-bottom: 4px solid var(--orange); }
+  .navbar-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .navbar-logo img { height: 52px; display: block; }
+  .navbar-links { display: flex; gap: 0.5rem; align-items: center; }
+  .navbar-links a {
+    color: white; text-decoration: none; font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.35rem; letter-spacing: 0.05em; padding: 0.4rem 1rem; border-radius: 6px;
+    transition: background 0.15s;
+  }
+  .navbar-links a:hover { background: rgba(255,255,255,0.12); }
+  .navbar-links a.active { background: var(--orange); }
+
+  main { max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  /* Hero */
+  .h-hero { background: var(--blue); color: white; padding: 3rem 1.5rem 4rem; text-align: center; position: relative; }
+  .h-hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; letter-spacing: 0.04em; line-height: 1; }
+  .h-hero h1 .accent { color: var(--orange); }
+  .h-hero p { max-width: 720px; margin: 1rem auto 0; color: #cbd5e1; font-size: 1rem; }
+  @media (max-width: 640px) { .h-hero h1 { font-size: 2.25rem; } }
+
+  /* Page card */
+  .h-wrap { background: white; border-radius: 12px; padding: 1.75rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-top: -2.5rem; position: relative; }
+  .h-controls { display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; }
+  .h-search { flex: 1; min-width: 240px; padding: 0.65rem 0.85rem; border: 2px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 1rem; }
+  .h-search:focus { outline: none; border-color: var(--orange); }
+  .h-count { font-size: 0.85rem; color: var(--gray); }
+
+  /* Ranking table */
+  .h-table { width: 100%; border-collapse: collapse; }
+  .h-table th { text-align: left; padding: 0.7rem 0.85rem; background: var(--dark); color: white; font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; letter-spacing: 0.06em; }
+  .h-table td { padding: 0; border-bottom: 1px solid var(--border); }
+  .h-row { display: grid; grid-template-columns: 60px 56px 1fr 100px; align-items: center; gap: 0.75rem; padding: 0.7rem 0.85rem; text-decoration: none; color: inherit; border-left: 6px solid transparent; transition: background 0.12s, transform 0.12s; }
+  .h-row:hover { background: var(--light); transform: translateX(2px); }
+  .h-rank { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; line-height: 1; color: var(--gray); }
+  .h-rank.top { color: var(--orange); }
+  .h-logo { width: 44px; height: 44px; object-fit: contain; }
+  .h-team { font-family: 'Bebas Neue', sans-serif; font-size: 1.45rem; line-height: 1.1; letter-spacing: 0.02em; }
+  .h-conf-label { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.15rem; font-weight: 600; }
+  .h-count-big { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; line-height: 1; text-align: right; }
+  .h-empty { padding: 2rem; text-align: center; color: var(--gray); }
+
+  /* Oklahoma State auto highlight */
+  .h-row[data-team="Oklahoma St."] { border-left-color: var(--orange); background: rgba(254, 92, 0, 0.05); }
+  .h-row[data-team="Oklahoma St."] .h-team { color: var(--orange); }
+
+  /* Color the left border with each team's primary color */
+  .h-row { border-left-width: 6px; border-left-style: solid; }
+
+  /* Footer (matches site standard) */
+  footer { background: var(--dark); color: #9ca3af; padding: 2.5rem 1.5rem; margin-top: 4rem; text-align: center; font-size: 0.85rem; }
+  footer a { color: var(--orange); text-decoration: none; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; }
+  .footer-social { display: flex; justify-content: center; gap: 0.85rem; margin-bottom: 1.1rem; }
+  .footer-social .fs-icon { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.08); color: #cbd5e1; transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease; }
+  .footer-social .fs-icon:hover { background: var(--orange); color: #fff; transform: translateY(-2px); }
+  .footer-credit { font-size: 0.9rem; color: #9ca3af; }
+  .footer-credit a { font-weight: 700; }
+  .footer-credit a:hover { text-decoration: underline; }
+  .footer-copy { margin-top: 0.4rem; font-size: 0.8rem; color: #6b7280; }
+
+  @media (max-width: 640px) {
+    .navbar-inner { flex-direction: column; }
+    .navbar-links a { font-size: 1.1rem; padding: 0.35rem 0.7rem; }
+    .h-row { grid-template-columns: 44px 44px 1fr 80px; gap: 0.5rem; padding: 0.6rem 0.6rem; }
+    .h-team { font-size: 1.2rem; }
+    .h-count-big { font-size: 1.65rem; }
+    .h-logo { width: 36px; height: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="navbar-links">
+      <a href='/'>Home</a>
+      <a class='active' href='/rankings'>Rankings</a>
+      <a href='/teams'>Teams</a>
+      <a href='/compare'>Compare</a>
+    </div>
+  </div>
+</nav>
+
+<section class="h-hero">
+  <h1>HEISMAN <span class="accent">TROPHY WINNERS</span></h1>
+  <p>Every college football program ranked by all-time Heisman Trophy winners. Tap any program to open its full profile.</p>
+</section>
+
+<main>
+  <div class="h-wrap">
+    <div class="h-controls">
+      <input type="text" id="h-search" class="h-search" placeholder="Search teams...">
+      <span class="h-count" id="h-count"></span>
+    </div>
+    <div id="h-body"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-social">
+      <a href="https://x.com/FrontPorchU" target="_blank" rel="noopener" aria-label="X" class="fs-icon">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/frontporchsports/" target="_blank" rel="noopener" aria-label="Instagram" class="fs-icon">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zm0 1.62c-3.15 0-3.5.01-4.74.07-2.5.11-3.6 1.23-3.71 3.71-.06 1.23-.07 1.6-.07 4.74s.01 3.5.07 4.74c.11 2.48 1.21 3.6 3.71 3.71 1.23.06 1.6.07 4.74.07s3.5-.01 4.74-.07c2.5-.11 3.6-1.23 3.71-3.71.06-1.23.07-1.6.07-4.74s-.01-3.5-.07-4.74c-.11-2.48-1.21-3.6-3.71-3.71-1.23-.06-1.6-.07-4.74-.07zm0 4.32a3.9 3.9 0 110 7.8 3.9 3.9 0 010-7.8zm0 6.43a2.53 2.53 0 100-5.06 2.53 2.53 0 000 5.06zm4.96-6.6a.91.91 0 11-1.82 0 .91.91 0 011.82 0z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/p/Front-Porch-Sports-61575902150695/" target="_blank" rel="noopener" aria-label="Facebook" class="fs-icon">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.03 4.39 11.03 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.49 0-1.95.93-1.95 1.89v2.26h3.32l-.53 3.49h-2.79v8.44C19.61 23.1 24 18.1 24 12.07z"/></svg>
+      </a>
+    </div>
+    <p class="footer-credit">Website Built By <a href="https://keatonhargett.com" target="_blank" rel="noopener">Keaton Hargett</a></p>
+    <p class="footer-copy">&copy; 2025 Front Porch Sports</p>
+  </div>
+</footer>
+
+<script>
+  // Heisman Trophy winners by program (all-time totals through 2024 season).
+  // Sourced from the Heisman Trophy Trust historical records.
+  const HEISMAN_BY_TEAM = [
+    { team: "Ohio St.",       count: 7 },
+    { team: "Notre Dame",     count: 7 },
+    { team: "Oklahoma",       count: 7 },
+    { team: "USC",            count: 7 },
+    { team: "Alabama",        count: 4 },
+    { team: "Army",           count: 3 },
+    { team: "Auburn",         count: 3 },
+    { team: "Florida",        count: 3 },
+    { team: "Florida St.",    count: 3 },
+    { team: "Michigan",       count: 3 },
+    { team: "Nebraska",       count: 3 },
+    { team: "Stanford",       count: 3 },
+    { team: "Georgia",        count: 2 },
+    { team: "LSU",            count: 2 },
+    { team: "Miami (FL)",     count: 2 },
+    { team: "Navy",           count: 2 },
+    { team: "Pittsburgh",     count: 2 },
+    { team: "TCU",            count: 2 },
+    { team: "Texas",          count: 2 },
+    { team: "Texas A&M",      count: 2 },
+    { team: "Yale",           count: 2 },
+    { team: "Baylor",         count: 1 },
+    { team: "Boston College", count: 1 },
+    { team: "BYU",            count: 1 },
+    { team: "Cincinnati",     count: 1 },
+    { team: "Colorado",       count: 1 },
+    { team: "Houston",        count: 1 },
+    { team: "Iowa",           count: 1 },
+    { team: "Louisville",     count: 1 },
+    { team: "Minnesota",      count: 1 },
+    { team: "Mississippi St.",count: 1 },
+    { team: "Oklahoma St.",   count: 1 },
+    { team: "Oregon",         count: 1 },
+    { team: "Penn St.",       count: 1 },
+    { team: "South Carolina", count: 1 },
+    { team: "SMU",            count: 1 },
+    { team: "Syracuse",       count: 1 },
+    { team: "Texas Tech",     count: 1 },
+    { team: "UCLA",           count: 1 },
+    { team: "Wisconsin",      count: 1 }
+  ];
+
+  // Compute ranks with tied-rank handling (1, 1, 1, 1, 5, 6, ...)
+  let prevCount = null, prevRank = 0;
+  HEISMAN_BY_TEAM.forEach((row, i) => {
+    if (row.count === prevCount) { row.rank = prevRank; }
+    else { row.rank = i + 1; prevRank = row.rank; prevCount = row.count; }
+  });
+
+  const LOGO_URL = id => id ? `https://a.espncdn.com/i/teamlogos/ncaa/500/${id}.png` : '';
+
+  let TEAM_META = {};
+  let TEAM_CONF = {};
+
+  // Fetch team metadata for logos and colors. Falls back to a generic look if unavailable.
+  Promise.all([
+    fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] }))
+  ]).then(([fbsData]) => {
+    (fbsData.teams || []).forEach(t => {
+      TEAM_META[t.name] = { id: t.espn_id, color: t.color ? ('#' + t.color) : '#003594' };
+      TEAM_CONF[t.name] = t.conference || '';
+    });
+    render('');
+  }).catch(() => render(''));
+
+  function render(filter) {
+    const f = (filter || '').toLowerCase();
+    const rows = HEISMAN_BY_TEAM.filter(r => r.team.toLowerCase().includes(f));
+    document.getElementById('h-count').textContent = `${rows.length} of ${HEISMAN_BY_TEAM.length} programs · ${HEISMAN_BY_TEAM.reduce((a, b) => a + b.count, 0)} all-time winners`;
+    const box = document.getElementById('h-body');
+    if (rows.length === 0) {
+      box.innerHTML = '<div class="h-empty">No programs match your search.</div>';
+      return;
+    }
+    box.innerHTML = rows.map(r => {
+      const meta = TEAM_META[r.team];
+      const color = meta?.color || '#6b7280';
+      const conf = TEAM_CONF[r.team] || '';
+      const isTop = r.rank <= 3;
+      const logoSrc = meta ? LOGO_URL(meta.id) : '';
+      return `<a class="h-row" data-team="${r.team}" href="team.html?team=${encodeURIComponent(r.team)}" style="border-left-color:${color}">
+        <div class="h-rank ${isTop ? 'top' : ''}">${ordinal(r.rank)}</div>
+        ${logoSrc ? `<img class="h-logo" src="${logoSrc}" alt="" onerror="this.style.visibility='hidden'">` : '<div class="h-logo"></div>'}
+        <div>
+          <div class="h-team" style="color:${color}">${r.team}</div>
+          ${conf ? `<div class="h-conf-label">${conf}</div>` : ''}
+        </div>
+        <div class="h-count-big" style="color:${color}">${r.count}</div>
+      </a>`;
+    }).join('');
+  }
+
+  function ordinal(n) {
+    const s = ['th', 'st', 'nd', 'rd'], v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  }
+
+  document.getElementById('h-search').addEventListener('input', e => render(e.target.value));
+</script>
+</body>
+</html>
