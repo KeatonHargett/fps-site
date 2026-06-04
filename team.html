@@ -762,14 +762,19 @@
       document.getElementById('content').innerHTML = `<div class="loading">No data for "${TEAM}"</div>`;
       return;
     }
+    // v30: H2H-derived defaults; overridden by PROGRAM_STATS below if available
     let w=0, l=0, t=0;
     teamGames.forEach(g => {
       if (g.is_tie) t++;
       else if (g.winner === TEAM) w++;
       else l++;
     });
+    if (PROGRAM_STATS && PROGRAM_STATS[TEAM]) {
+      const r = PROGRAM_STATS[TEAM].record;
+      w = r.wins; l = r.losses; t = r.ties;
+    }
     const total = w+l+t;
-    const wpct = ((w + t*0.5) / total).toFixed(3).replace(/^0/,'');
+    const wpct = total ? ((w + t*0.5) / total).toFixed(3).replace(/^0/,'') : '.000';
     const seasons = [...new Set(teamGames.map(g=>g.season))];
     let biggestWin = {margin:0};
     teamGames.forEach(g => {
