@@ -291,6 +291,8 @@
   }
 
 
+  /* v29 Tweak 1A fix: legacy hidden dropdown stub elements must stay hidden */
+  #dd1-logo, #dd2-logo, #dd1-label, #dd2-label { display: none !important; }
   /* v29 Tweak 1A: wide selector bar with SCHOOL + mascot text */
   .selector-bar { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.75rem; align-items: stretch; margin: 0 0 1.5rem; }
   .sb-side { position: relative; }
@@ -1264,7 +1266,7 @@
     const logo = document.getElementById(`${slot}-logo`);
     const name = document.getElementById(`${slot}-name`);
     const placeholder = document.getElementById(`${slot}-placeholder`);
-    if (!card) return;
+    // v29 fix: do NOT early-return when card is missing; we removed sel-team-card markup in v29
     // v29: update the new selector-bar text (SCHOOL + mascot)
     const sbSchool = document.getElementById(`${ddId}-school`);
     const sbMascot = document.getElementById(`${ddId}-mascot`);
