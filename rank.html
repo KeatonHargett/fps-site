@@ -314,10 +314,14 @@ const TEAM_STATS = {
   });
 
   // ===== Data fetch =====
+  // v30: complete program records (CFBD + Wikipedia accolades)
+  let PROGRAM_STATS = null;
   Promise.all([
     fetch('front_porch_games.json').then(r => r.json()),
-    fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] }))
-  ]).then(([games, fbs]) => {
+    fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] })),
+    fetch('program_stats.json').then(r => r.ok ? r.json() : null).catch(() => null)
+  ]).then(([games, fbs, programStats]) => {
+    PROGRAM_STATS = programStats;
     GAMES = games;
     (fbs.teams || []).forEach(t => {
       META[t.name] = { id: t.espn_id, color: t.color ? ('#' + t.color) : '#003594', conference: t.conference || '' };
@@ -370,10 +374,36 @@ const TEAM_STATS = {
   }
 
   // ===== Build the ranked rows for the current category =====
+  // v30: prefer PROGRAM_STATS (complete CFBD + accolades) over legacy TEAM_STATS
+  // Map our category source keys to PROGRAM_STATS field names
+  const PS_KEY_MAP = {
+    winPct: 'winPct',
+    wins: 'wins',
+    ncClaimed: 'claimedNatChamps',
+    ncRecognized: 'recognizedNatChamps',
+    confChamps: 'confChamps',
+    bowlGames: 'bowlAppearances',
+    allAmericans: 'allAmericans',
+    heismans: 'heismanWinners',
+    nflPicks: 'nflDraftPicks',
+    firstRound: 'firstRoundPicks',
+    weeksInAP: 'weeksInPoll',
+    weeksAtNo1: 'weeksAtOne'
+  };
   function buildRows() {
     const cat = CATEGORIES[currentCatSlug];
     let pairs = [];
-    if (cat.live && cat.source === 'wins') {
+    const usePS = PROGRAM_STATS && PS_KEY_MAP[cat.source];
+    if (usePS) {
+      const psKey = PS_KEY_MAP[cat.source];
+      Object.entries(PROGRAM_STATS).forEach(([team, ps]) => {
+        let v;
+        if (psKey === 'wins') v = ps.record.wins;
+        else v = ps[psKey];
+        if (v == null) return;
+        pairs.push({ team, value: v });
+      });
+    } else if (cat.live && cat.source === 'wins') {
       const w = liveWins();
       Object.entries(w).forEach(([team, value]) => pairs.push({ team, value }));
     } else if (cat.live && cat.source === 'winPct') {
@@ -386,14 +416,11 @@ const TEAM_STATS = {
         pairs.push({ team, value });
       });
     }
-    // Only include FBS teams when we know who's FBS (fall back to all if no FBS list)
     if (TEAMS_LIVE.length > 0) {
       const fbsSet = new Set(TEAMS_LIVE);
       pairs = pairs.filter(p => fbsSet.has(p.team));
     }
-    // Sort descending by value (higher = better)
     pairs.sort((a, b) => b.value - a.value);
-    // Assign ranks with tie-handling (1, 1, 1, 4, 5...)
     let prevVal = null, prevRank = 0;
     pairs.forEach((p, i) => {
       if (p.value === prevVal) { p.rank = prevRank; }

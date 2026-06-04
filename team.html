@@ -646,16 +646,17 @@
 
   // Build the 10-card national rank grid for the current TEAM
   function renderNationalStatCards(tColor) {
-    const s = TEAM_STATS[TEAM] || {};
+    // v30: pull from PROGRAM_STATS when available (complete CFBD + Wikipedia data)
+    const ps = (PROGRAM_STATS && PROGRAM_STATS[TEAM]) || null;
+    const sLegacy = TEAM_STATS[TEAM] || {};
     const wr = buildWinsRank();
     const pr = buildWinPctRank();
-    const wEntry = wr.rank[TEAM];
-    const pEntry = pr.rank[TEAM];
+    const TOTAL = ps ? Object.keys(PROGRAM_STATS).length : TOTAL_FBS;
     const fmtPct = v => '.' + Math.round(v * 1000).toString().padStart(3, '0');
     const card = (title, value, sub, rank, total) => {
       const valHtml = (value == null || value === undefined || value === '') ? '<div class="nsc-na">&mdash;</div>' : `<div class="nsc-value">${value}</div>`;
       const subHtml = sub ? `<div class="nsc-value-sub">${sub}</div>` : '';
-      const rankHtml = (rank == null) ? '<div class="nsc-na">&mdash;</div>' : `<div class="nsc-rank-ord">${ordinal(rank)}</div><div class="nsc-rank-of">of ${total}</div>`;
+      const rankHtml = (rank == null || rank === 0) ? '<div class="nsc-na">&mdash;</div>' : `<div class="nsc-rank-ord">${ordinal(rank)}</div><div class="nsc-rank-of">of ${total}</div>`;
       return `<div class="nat-stat-card">
         <div class="nsc-head">${title}</div>
         <div class="nsc-body">
@@ -664,17 +665,37 @@
         </div>
       </div>`;
     };
+    const get = (psKey, legacyKey, legacyRankKey) => {
+      if (ps && ps[psKey] !== undefined && ps[psKey] !== null) {
+        return { value: ps[psKey], rank: ps.ranks ? ps.ranks[psKey] : null, total: TOTAL };
+      }
+      return { value: sLegacy[legacyKey], rank: sLegacy[legacyRankKey], total: TOTAL_FBS };
+    };
+    let winsVal, winsRank, winsTotal;
+    if (ps) { winsVal = ps.record.wins; winsRank = ps.ranks.wins; winsTotal = TOTAL; }
+    else { const e = wr.rank[TEAM]; winsVal = e?e.value:null; winsRank = e?e.rank:null; winsTotal = wr.total; }
+    let wpVal, wpRank, wpTotal;
+    if (ps) { wpVal = fmtPct(ps.winPct); wpRank = ps.ranks.winPct; wpTotal = TOTAL; }
+    else { const e = pr.rank[TEAM]; wpVal = e?fmtPct(e.value):null; wpRank = e?e.rank:null; wpTotal = pr.total; }
+    const nc1 = get('claimedNatChamps', 'ncClaimed', 'ncClaimedRank');
+    const nc2 = get('recognizedNatChamps', 'ncRecognized', 'ncRecognizedRank');
+    const cc  = get('confChamps', 'confChamps', 'confChampsRank');
+    const bg  = get('bowlAppearances', 'bowlGames', 'bowlGamesRank');
+    const aa  = get('allAmericans', 'allAmericans', 'allAmericansRank');
+    const hw  = get('heismanWinners', 'heismans', 'heismansRank');
+    const np_ = get('nflDraftPicks', 'nflPicks', 'nflPicksRank');
+    const wip = get('weeksInPoll', 'weeksInAP', 'weeksInAPRank');
     const rows = [
-      card('All-Time Win %',                  pEntry ? fmtPct(pEntry.value) : null, '',          pEntry ? pEntry.rank : null, pr.total),
-      card('National Championships (Claimed)',    s.ncClaimed,    '',          s.ncClaimedRank,    TOTAL_FBS),
-      card('National Championships (Recognized)', s.ncRecognized, '',          s.ncRecognizedRank, TOTAL_FBS),
-      card('Conference Championships',            s.confChamps,   '',          s.confChampsRank,   TOTAL_FBS),
-      card('Total Wins',                          wEntry ? wEntry.value : null, '',          wEntry ? wEntry.rank : null, wr.total),
-      card('Bowl Games',                          s.bowlGames,    '',          s.bowlGamesRank,    TOTAL_FBS),
-      card('Consensus All-Americans',             s.allAmericans, '',          s.allAmericansRank, TOTAL_FBS),
-      card('Heisman Winners',                     s.heismans,     '',          s.heismansRank,     TOTAL_FBS),
-      card('NFL Draft Picks',                     s.nflPicks,     '',          s.nflPicksRank,     TOTAL_FBS),
-      card('Weeks in AP Poll',                    s.weeksInAP,    '',          s.weeksInAPRank,    TOTAL_FBS)
+      card('All-Time Win %',                      wpVal,     '', wpRank,    wpTotal),
+      card('National Championships (Claimed)',    nc1.value, '', nc1.rank,  nc1.total),
+      card('National Championships (Recognized)', nc2.value, '', nc2.rank,  nc2.total),
+      card('Conference Championships',            cc.value,  '', cc.rank,   cc.total),
+      card('Total Wins',                          winsVal,   '', winsRank,  winsTotal),
+      card('Bowl Games',                          bg.value,  '', bg.rank,   bg.total),
+      card('Consensus All-Americans',             aa.value,  '', aa.rank,   aa.total),
+      card('Heisman Winners',                     hw.value,  '', hw.rank,   hw.total),
+      card('NFL Draft Picks',                     np_.value, '', np_.rank,  np_.total),
+      card('Weeks in AP Poll',                    wip.value, '', wip.rank,  wip.total)
     ];
     return `<div class="nat-stats-section">
       <div class="nat-stats-grid">${rows.join('')}</div>
@@ -705,6 +726,10 @@
   let winChart = null;
 
   // Fold accents and case so "San José St." == "San Jose St."
+  // v30: complete program records (CFBD + Wikipedia accolades, includes FCS/NAIA opponents)
+  let PROGRAM_STATS = null;
+  let _psPromise = fetch('program_stats.json').then(r => r.ok ? r.json() : null).then(d => { PROGRAM_STATS = d; }).catch(() => { PROGRAM_STATS = null; });
+
   function fpsKey(s) {
     return (s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
   }
@@ -714,7 +739,8 @@
 
   Promise.all([
     fetch('front_porch_games.json').then(r => r.json()),
-    fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] }))
+    fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] })),
+    _psPromise
   ])
   .then(([gamesData, fbsData]) => {
     GAMES = gamesData;

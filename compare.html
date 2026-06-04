@@ -1033,6 +1033,10 @@
     }
   };
 
+  // v30: complete program records (CFBD + Wikipedia accolades)
+  let PROGRAM_STATS = null;
+  fetch('program_stats.json').then(r => r.ok ? r.json() : null).then(d => { PROGRAM_STATS = d; if (typeof render === 'function' && state.team1 && state.team2) render(); }).catch(() => {});
+
   const TEAM_META = {
   'Air Force': {id:'2005',color:'#003594',alt:'#ffffff',abbr:'AF'},
   'Akron': {id:'2006',color:'#041e42',alt:'#c5b783',abbr:'AKR'},
@@ -1976,62 +1980,74 @@
     drawCharts(games);
   }
 
-  // ===== Tweak 4 (v26): Winsipedia split-color stat cards with rank ordinal + denominator =====
+  // v30: use PROGRAM_STATS for complete program-level stats; fall back to legacy TEAM_STATS
   function renderStatComparison(t1Color, t2Color) {
     const t1 = state.team1, t2 = state.team2;
+    const ps1 = (PROGRAM_STATS && PROGRAM_STATS[t1]) || null;
+    const ps2 = (PROGRAM_STATS && PROGRAM_STATS[t2]) || null;
     const s1 = TEAM_STATS[t1] || {};
     const s2 = TEAM_STATS[t2] || {};
-
+    const TOTAL = PROGRAM_STATS ? Object.keys(PROGRAM_STATS).length : TOTAL_FBS;
     const wr = buildWinsRank();
     const pr = buildWinPctRank();
-    const w1 = wr.rank[t1], w2 = wr.rank[t2];
-    const p1 = pr.rank[t1], p2 = pr.rank[t2];
 
-    const fmtPct = v => (v == null ? '—' : (v * 100).toFixed(1) + '%');
-    // value cell: returns either a big number or a faded em-dash placeholder
-    const valHtml = v => (v == null ? '<div class="scc-na">—</div>' : `<div class="scc-value">${v}</div>`);
-    const rankHtml = (r, total) => {
-      if (r == null) return '';
-      return `<div class="scc-rank-ord">${ordinal(r)}</div><div class="scc-rank-of">of ${total}</div>`;
+    const fmtPct = v => '.' + Math.round(v * 1000).toString().padStart(3, '0');
+    const valHtml = v => (v == null || v === undefined ? '<div class="scc-na">&mdash;</div>' : `<div class="scc-value">${v}</div>`);
+    const rankHtml = (r, total) => (r == null || r === 0) ? '' : `<div class="scc-rank-ord">${ordinal(r)}</div><div class="scc-rank-of">of ${total}</div>`;
+
+    const pick = (ps, sLegacy, psKey, legacyKey, legacyRankKey) => {
+      if (ps && ps[psKey] !== undefined && ps[psKey] !== null) {
+        return { v: ps[psKey], r: ps.ranks ? ps.ranks[psKey] : null, total: TOTAL };
+      }
+      return { v: sLegacy[legacyKey], r: sLegacy[legacyRankKey], total: TOTAL_FBS };
+    };
+
+    const winsOf = (team, ps) => {
+      if (ps) return { v: ps.record.wins.toLocaleString(), r: ps.ranks.wins, total: TOTAL };
+      const e = wr.rank[team];
+      return { v: e ? e.value : null, r: e ? e.rank : null, total: wr.total };
+    };
+    const pctOf = (team, ps) => {
+      if (ps) return { v: fmtPct(ps.winPct), r: ps.ranks.winPct, total: TOTAL };
+      const e = pr.rank[team];
+      return { v: e ? fmtPct(e.value) : null, r: e ? e.rank : null, total: pr.total };
     };
 
     const rows = [
       { title: 'All-Time Win %',
-        v1: p1 ? fmtPct(p1.value) : null, r1: p1 ? p1.rank : null, t1Total: pr.total,
-        v2: p2 ? fmtPct(p2.value) : null, r2: p2 ? p2.rank : null, t2Total: pr.total },
+        a: pctOf(t1, ps1), b: pctOf(t2, ps2) },
       { title: 'Total Wins',
-        v1: w1 ? w1.value : null, r1: w1 ? w1.rank : null, t1Total: wr.total,
-        v2: w2 ? w2.value : null, r2: w2 ? w2.rank : null, t2Total: wr.total },
+        a: winsOf(t1, ps1), b: winsOf(t2, ps2) },
       { title: 'National Championships (Claimed)',
-        v1: s1.ncClaimed,    r1: s1.ncClaimedRank,    t1Total: TOTAL_FBS,
-        v2: s2.ncClaimed,    r2: s2.ncClaimedRank,    t2Total: TOTAL_FBS },
+        a: pick(ps1, s1, 'claimedNatChamps', 'ncClaimed', 'ncClaimedRank'),
+        b: pick(ps2, s2, 'claimedNatChamps', 'ncClaimed', 'ncClaimedRank') },
       { title: 'National Championships (Recognized)',
-        v1: s1.ncRecognized, r1: s1.ncRecognizedRank, t1Total: TOTAL_FBS,
-        v2: s2.ncRecognized, r2: s2.ncRecognizedRank, t2Total: TOTAL_FBS },
+        a: pick(ps1, s1, 'recognizedNatChamps', 'ncRecognized', 'ncRecognizedRank'),
+        b: pick(ps2, s2, 'recognizedNatChamps', 'ncRecognized', 'ncRecognizedRank') },
       { title: 'Conference Championships',
-        v1: s1.confChamps,   r1: s1.confChampsRank,   t1Total: TOTAL_FBS,
-        v2: s2.confChamps,   r2: s2.confChampsRank,   t2Total: TOTAL_FBS },
+        a: pick(ps1, s1, 'confChamps', 'confChamps', 'confChampsRank'),
+        b: pick(ps2, s2, 'confChamps', 'confChamps', 'confChampsRank') },
       { title: 'Bowl Games',
-        v1: s1.bowlGames,    r1: s1.bowlGamesRank,    t1Total: TOTAL_FBS,
-        v2: s2.bowlGames,    r2: s2.bowlGamesRank,    t2Total: TOTAL_FBS },
+        a: pick(ps1, s1, 'bowlAppearances', 'bowlGames', 'bowlGamesRank'),
+        b: pick(ps2, s2, 'bowlAppearances', 'bowlGames', 'bowlGamesRank') },
       { title: 'Consensus All-Americans',
-        v1: s1.allAmericans, r1: s1.allAmericansRank, t1Total: TOTAL_FBS,
-        v2: s2.allAmericans, r2: s2.allAmericansRank, t2Total: TOTAL_FBS },
+        a: pick(ps1, s1, 'allAmericans', 'allAmericans', 'allAmericansRank'),
+        b: pick(ps2, s2, 'allAmericans', 'allAmericans', 'allAmericansRank') },
       { title: 'Heisman Winners',
-        v1: s1.heismans,     r1: s1.heismansRank,     t1Total: TOTAL_FBS,
-        v2: s2.heismans,     r2: s2.heismansRank,     t2Total: TOTAL_FBS },
+        a: pick(ps1, s1, 'heismanWinners', 'heismans', 'heismansRank'),
+        b: pick(ps2, s2, 'heismanWinners', 'heismans', 'heismansRank') },
       { title: 'NFL Draft Picks',
-        v1: s1.nflPicks,     r1: s1.nflPicksRank,     t1Total: TOTAL_FBS,
-        v2: s2.nflPicks,     r2: s2.nflPicksRank,     t2Total: TOTAL_FBS },
+        a: pick(ps1, s1, 'nflDraftPicks', 'nflPicks', 'nflPicksRank'),
+        b: pick(ps2, s2, 'nflDraftPicks', 'nflPicks', 'nflPicksRank') },
       { title: 'First Round Draft Picks',
-        v1: s1.firstRound,   r1: s1.firstRoundRank,   t1Total: TOTAL_FBS,
-        v2: s2.firstRound,   r2: s2.firstRoundRank,   t2Total: TOTAL_FBS },
+        a: pick(ps1, s1, 'firstRoundPicks', 'firstRound', 'firstRoundRank'),
+        b: pick(ps2, s2, 'firstRoundPicks', 'firstRound', 'firstRoundRank') },
       { title: 'Weeks in AP Poll',
-        v1: s1.weeksInAP,    r1: s1.weeksInAPRank,    t1Total: TOTAL_FBS,
-        v2: s2.weeksInAP,    r2: s2.weeksInAPRank,    t2Total: TOTAL_FBS },
+        a: pick(ps1, s1, 'weeksInPoll', 'weeksInAP', 'weeksInAPRank'),
+        b: pick(ps2, s2, 'weeksInPoll', 'weeksInAP', 'weeksInAPRank') },
       { title: 'Weeks at #1',
-        v1: s1.weeksAtNo1,   r1: s1.weeksAtNo1Rank,   t1Total: TOTAL_FBS,
-        v2: s2.weeksAtNo1,   r2: s2.weeksAtNo1Rank,   t2Total: TOTAL_FBS }
+        a: pick(ps1, s1, 'weeksAtOne', 'weeksAtNo1', 'weeksAtNo1Rank'),
+        b: pick(ps2, s2, 'weeksAtOne', 'weeksAtNo1', 'weeksAtNo1Rank') }
     ];
 
     return `<div class="stat-comparison-section">
@@ -2042,12 +2058,12 @@
           <div class="scc-title">${s.title}</div>
           <div class="scc-body">
             <div class="scc-side left" style="background:${t1Color}">
-              ${valHtml(s.v1)}
-              ${rankHtml(s.r1, s.t1Total)}
+              ${valHtml(s.a.v)}
+              ${rankHtml(s.a.r, s.a.total)}
             </div>
             <div class="scc-side" style="background:${t2Color}">
-              ${valHtml(s.v2)}
-              ${rankHtml(s.r2, s.t2Total)}
+              ${valHtml(s.b.v)}
+              ${rankHtml(s.b.r, s.b.total)}
             </div>
           </div>
         </div>`).join('')}
