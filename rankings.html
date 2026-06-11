@@ -43,13 +43,14 @@
   .navbar-links a.active { background: var(--orange); }
   /* v29 Tweak 3: nav layout — logo + social on left, nav-links on right */
   .navbar-inner { justify-content: flex-start; }
-  .navbar-brand { display: flex; align-items: center; gap: 0.85rem; }
+  .navbar-brand { display: flex; align-items: center; gap: 0.6rem; margin-right: 0.6rem; }
   .navbar-brand .nb-logo { height: 44px; width: auto; display: block; }
-  .navbar-social { display: flex; gap: 0.35rem; align-items: center; margin-left: 0; }
+  /* v34: navbar — logo + social on left, links right, even gaps */
+  .navbar-social { display: flex; gap: 0.5rem; align-items: center; margin-left: 0; }
   .navbar-links { margin-left: auto; }
   @media (max-width: 700px) {
     .navbar-brand .nb-logo { height: 36px; }
-    .navbar-social { gap: 0.2rem; }
+    .navbar-social { gap: 0.4rem; }
     .navbar-social .nav-soc { width: 30px; height: 30px; }
     .navbar-social .nav-soc svg { width: 16px; height: 16px; }
   }
@@ -60,8 +61,8 @@
     .navbar-links a { font-size: 1rem; padding: 0.3rem 0.55rem; }
   }
 
-  /* v28 Fix 4: nav social icons */
-  .navbar-social { display: flex; gap: 0.4rem; align-items: center; margin-left: auto; }
+  /* v34: keep social cluster adjacent to logo (was forcing it to the right edge) */
+  .navbar-social { display: flex; gap: 0.5rem; align-items: center; margin-left: 0; }
   .navbar-social .nav-soc { width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; text-decoration: none; transition: color 0.15s ease, background 0.15s ease; }
   .navbar-social .nav-soc:hover { color: var(--orange); background: rgba(255,255,255,0.08); }
   .navbar-social .nav-soc svg { width: 20px; height: 20px; }
@@ -73,7 +74,7 @@
   .cl-row { cursor: pointer; }
 
   @media (max-width: 640px) {
-    .navbar-social { gap: 0.25rem; }
+    .navbar-social { gap: 0.35rem; }
     .navbar-social .nav-soc { width: 32px; height: 32px; }
   }
 

@@ -43,13 +43,14 @@
   .navbar-links a.active { background: var(--orange); }
   /* v29 Tweak 3: nav layout — logo + social on left, nav-links on right */
   .navbar-inner { justify-content: flex-start; }
-  .navbar-brand { display: flex; align-items: center; gap: 0.85rem; }
+  .navbar-brand { display: flex; align-items: center; gap: 0.6rem; margin-right: 0.6rem; }
   .navbar-brand .nb-logo { height: 44px; width: auto; display: block; }
-  .navbar-social { display: flex; gap: 0.35rem; align-items: center; margin-left: 0; }
+  /* v34: navbar — logo + social on left, links right, even gaps */
+  .navbar-social { display: flex; gap: 0.5rem; align-items: center; margin-left: 0; }
   .navbar-links { margin-left: auto; }
   @media (max-width: 700px) {
     .navbar-brand .nb-logo { height: 36px; }
-    .navbar-social { gap: 0.2rem; }
+    .navbar-social { gap: 0.4rem; }
     .navbar-social .nav-soc { width: 30px; height: 30px; }
     .navbar-social .nav-soc svg { width: 16px; height: 16px; }
   }
@@ -60,13 +61,13 @@
     .navbar-links a { font-size: 1rem; padding: 0.3rem 0.55rem; }
   }
 
-  /* v28 Fix 4: nav social icons */
-  .navbar-social { display: flex; gap: 0.4rem; align-items: center; margin-left: auto; }
+  /* v34: keep social cluster adjacent to logo (was forcing it to the right edge) */
+  .navbar-social { display: flex; gap: 0.5rem; align-items: center; margin-left: 0; }
   .navbar-social .nav-soc { width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; text-decoration: none; transition: color 0.15s ease, background 0.15s ease; }
   .navbar-social .nav-soc:hover { color: var(--orange); background: rgba(255,255,255,0.08); }
   .navbar-social .nav-soc svg { width: 20px; height: 20px; }
   @media (max-width: 640px) {
-    .navbar-social { gap: 0.25rem; }
+    .navbar-social { gap: 0.35rem; }
     .navbar-social .nav-soc { width: 32px; height: 32px; }
   }
 
@@ -118,18 +119,53 @@
 
   /* Mobile: stacked cards */
   .games-cards { display: none; }
-  .game-card { background: white; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 1rem; margin-bottom: 0.75rem; }
-  .game-card .gc-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.6rem; }
-  .game-card .gc-season { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--dark); }
-  .game-card .gc-date { font-size: 0.8rem; color: var(--gray); }
-  .game-card .gc-score { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
-  .game-card .gc-score .gc-team { display: flex; align-items: center; gap: 0.4rem; flex: 1; }
-  .game-card .gc-score img { width: 26px; height: 26px; }
-  .game-card .gc-score .gc-tname { font-weight: 600; font-size: 0.92rem; }
-  .game-card .gc-score .gc-pts { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; min-width: 2rem; text-align: right; }
-  .game-card .gc-score.win .gc-pts { color: var(--win-green); }
-  .game-card .gc-score.win .gc-tname { color: var(--win-green); }
-  .game-card .gc-loc { font-size: 0.8rem; color: var(--gray); border-top: 1px solid var(--border); padding-top: 0.5rem; }
+  /* v34: mobile compact Winsipedia table — slim row per game, aligned columns via grid on container */
+  .games-cards {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    overflow: hidden;
+    grid-template-columns: 10px minmax(70px, auto) minmax(0, 1fr) auto auto;
+    column-gap: 0.45rem;
+  }
+  .games-row { display: contents; }
+  .games-row > div {
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--border);
+    align-self: center;
+  }
+  .games-row > div:first-child { padding-left: 0.5rem; }
+  .games-row > div:last-child { padding-right: 0.5rem; }
+  .games-row .gr-chip { width: 8px; height: 22px; border-radius: 2px; padding: 0; align-self: center; margin-left: 0; margin-right: 0; }
+  .games-row > .gr-chip { padding: 0; height: 22px; align-self: center; }
+  .games-row .gr-date { font-size: 0.74rem; color: var(--dark); white-space: nowrap; font-family: 'Inter', sans-serif; }
+  .games-row .gr-loc { font-size: 0.72rem; color: var(--gray); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .games-row .gr-t1, .games-row .gr-t2 { display: flex; align-items: center; gap: 0.3rem; }
+  .games-row img { width: 20px; height: 20px; object-fit: contain; }
+  .games-row .gr-pts { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; min-width: 1.5rem; text-align: right; color: var(--dark); letter-spacing: 0.02em; }
+  .games-row .win .gr-pts { color: var(--win-green); }
+  .games-row .gr-tname { display: none; }
+  .games-row-head > div {
+    background: var(--light);
+    border-bottom: 2px solid var(--border);
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .games-row-head .gr-date, .games-row-head .gr-loc {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    color: var(--dark);
+    text-transform: uppercase;
+  }
+  .games-row-head .gr-t1, .games-row-head .gr-t2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    color: var(--dark);
+  }
+  .games-row-head .gr-tname { display: inline; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .games-row-head .gr-pts { display: none; }
   .summary-bar { background: white; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 1rem 1.25rem; margin-bottom: 1.25rem; font-size: 0.95rem; }
   .summary-bar strong { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; }
   .loading { text-align: center; padding: 3rem; color: var(--gray); font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
@@ -138,8 +174,11 @@
 
   @media (max-width: 680px) {
     .games-table { display: none; }
-    .games-cards { display: block; }
+    .games-cards { display: grid; }
     .page-head h1 { font-size: 2rem; }
+    .page-head .matchup .tname { font-size: 1.05rem; }
+    .summary-bar { padding: 0.75rem 1rem; font-size: 0.85rem; text-align: center; }
+    .summary-bar strong { font-size: 1.1rem; letter-spacing: 0.04em; }
   }
 </style>
 <title>Full Games List — Front Porch Sports</title>
@@ -404,45 +443,14 @@
       </tr>`;
     }).join('');
 
-    // Mobile cards
-    const cards = games.map(g => {
-      const t1Score = g.team_a===TEAM1 ? g.team_a_score : g.team_b_score;
-      const t2Score = g.team_a===TEAM1 ? g.team_b_score : g.team_a_score;
-      const t1Win = g.winner===TEAM1, t2Win = g.winner===TEAM2;
-      const loc = g.city ? `${g.city}${g.state?', '+g.state:''}` : 'Location unknown';
-      return `<div class="game-card">
-        <div class="gc-top"><span class="gc-season">${g.season}</span><span class="gc-date">${g.game_date}</span></div>
-        <div class="gc-score ${t1Win?'win':''}">
-          <span class="gc-team">${teamLogo(TEAM1)}<span class="gc-tname">${TEAM1}</span></span>
-          <span class="gc-pts">${t1Score??'-'}</span>
-        </div>
-        <div class="gc-score ${t2Win?'win':''}">
-          <span class="gc-team">${teamLogo(TEAM2)}<span class="gc-tname">${TEAM2}</span></span>
-          <span class="gc-pts">${t2Score??'-'}</span>
-        </div>
-        <div class="gc-loc">${g.is_tie?'Tie game &middot; ':''}${loc}</div>
-      </div>`;
-    }).join('');
-
-    document.getElementById('content').innerHTML = `
-      <div class="page-head">
-        <h1>FULL GAMES LIST</h1>
-        <div class="matchup">
-          ${teamLogo(TEAM1)}<span class="tname">${TEAM1}</span>
-          <span class="vs">VS</span>
-          ${teamLogo(TEAM2)}<span class="tname">${TEAM2}</span>
-        </div>
-        <div class="sub">${games.length} meetings &middot; ${START}\u2013${END}</div>
-      </div>
-      <div class="summary-bar"><strong>${recStr}</strong></div>
-      <table class="games-table">
-        <thead><tr><th>Season</th><th>Date</th><th>${TEAM1}</th><th>${TEAM2}</th><th>Winner</th><th>Location</th></tr></thead>
-        <tbody>${tableRows}</tbody>
-      </table>
-      <div class="games-cards">${cards}</div>
-    `;
-  }
-</script>
-
-</body>
-</html>
+    // v34: Mobile compact rows (Winsipedia style table)
+    const t1Color = TEAM_META[TEAM1]?.color || '#003594';
+    const t2Color = TEAM_META[TEAM2]?.color || '#003594';
+    const headerRow = `<div class="games-row games-row-head">
+      <div class="gr-chip"></div>
+      <div class="gr-date">Date</div>
+      <div class="gr-loc">Location</div>
+      <div class="gr-t1">${teamLogo(TEAM1)}<span class="gr-tname">${TEAM1}</span></div>
+      <div class="gr-t2">${teamLogo(TEAM2)}<span class="gr-tname">${TEAM2}</span></div>
+    </div>`;
+    const c
