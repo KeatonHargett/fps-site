@@ -1,0 +1,139 @@
+{
+  "_meta": {
+    "source": "ESPN scoreboard (keyless)",
+    "fetchedAt": "2026-06-11T07:57:00.814494Z",
+    "matches": 13
+  },
+  "matchups": {
+    "North Carolina|TCU": {
+      "date": "2026-08-29",
+      "home": "TCU",
+      "away": "North Carolina",
+      "details": "TCU -6.5",
+      "spread": -6.5,
+      "overUnder": 49.5,
+      "favoredAbbr": "TCU",
+      "lineValue": -6.5
+    },
+    "San Jose St.|USC": {
+      "date": "2026-08-29",
+      "home": "USC",
+      "away": "San Jose St.",
+      "details": "USC -35.5",
+      "spread": -35.5,
+      "overUnder": null,
+      "favoredAbbr": "USC",
+      "lineValue": -35.5
+    },
+    "North Carolina St.|Virginia": {
+      "date": "2026-08-29",
+      "home": "Virginia",
+      "away": "North Carolina St.",
+      "details": "UVA -4.5",
+      "spread": -4.5,
+      "overUnder": 54.5,
+      "favoredAbbr": "UVA",
+      "lineValue": -4.5
+    },
+    "Hawai'i|Stanford": {
+      "date": "2026-08-29",
+      "home": "Stanford",
+      "away": "Hawai'i",
+      "details": "STAN -3.5",
+      "spread": -3.5,
+      "overUnder": null,
+      "favoredAbbr": "STAN",
+      "lineValue": -3.5
+    },
+    "Florida St.|New Mexico St.": {
+      "date": "2026-08-29",
+      "home": "Florida St.",
+      "away": "New Mexico St.",
+      "details": "FSU -29.5",
+      "spread": -29.5,
+      "overUnder": null,
+      "favoredAbbr": "FSU",
+      "lineValue": -29.5
+    },
+    "Memphis|UNLV": {
+      "date": "2026-08-30",
+      "home": "UNLV",
+      "away": "Memphis",
+      "details": "UNLV -3.5",
+      "spread": -3.5,
+      "overUnder": null,
+      "favoredAbbr": "UNLV",
+      "lineValue": -3.5
+    },
+    "Rutgers|UMass": {
+      "date": "2026-09-03",
+      "home": "Rutgers",
+      "away": "UMass",
+      "details": "RUTG -30.5",
+      "spread": -30.5,
+      "overUnder": null,
+      "favoredAbbr": "RUTG",
+      "lineValue": -30.5
+    },
+    "Akron|Wake Forest": {
+      "date": "2026-09-03",
+      "home": "Wake Forest",
+      "away": "Akron",
+      "details": "WAKE -22.5",
+      "spread": -22.5,
+      "overUnder": null,
+      "favoredAbbr": "WAKE",
+      "lineValue": -22.5
+    },
+    "Colorado|Georgia Tech": {
+      "date": "2026-09-04",
+      "home": "Georgia Tech",
+      "away": "Colorado",
+      "details": "GT -7",
+      "spread": -7.0,
+      "overUnder": null,
+      "favoredAbbr": "GT",
+      "lineValue": -7.0
+    },
+    "Illinois|UAB": {
+      "date": "2026-09-04",
+      "home": "Illinois",
+      "away": "UAB",
+      "details": "ILL -27.5",
+      "spread": -27.5,
+      "overUnder": null,
+      "favoredAbbr": "ILL",
+      "lineValue": -27.5
+    },
+    "Eastern Michigan|San Jose St.": {
+      "date": "2026-09-04",
+      "home": "Eastern Michigan",
+      "away": "San Jose St.",
+      "details": "EMU -3.5",
+      "spread": -3.5,
+      "overUnder": null,
+      "favoredAbbr": "EMU",
+      "lineValue": -3.5
+    },
+    "Michigan St.|Toledo": {
+      "date": "2026-09-05",
+      "home": "Michigan St.",
+      "away": "Toledo",
+      "details": "MSU -10.5",
+      "spread": -10.5,
+      "overUnder": null,
+      "favoredAbbr": "MSU",
+      "lineValue": -10.5
+    },
+    "Miami|Stanford": {
+      "date": "2026-09-05",
+      "home": "Stanford",
+      "away": "Miami",
+      "details": "MIA -21.5",
+      "spread": 21.5,
+      "overUnder": null,
+      "favoredAbbr": "MIA",
+      "lineValue": -21.5
+    }
+  }
+}

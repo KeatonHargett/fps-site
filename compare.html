@@ -149,6 +149,32 @@
   .chart-reveal-row .rev-meta { font-size: 0.82rem; color: var(--dark); }
   .chart-reveal-row .rev-meta .rev-pct { color: var(--gray); margin-left: 0.3rem; font-weight: 600; }
   .chart-reveal-row .rev-pill { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 999px; color: white; font-size: 0.75rem; letter-spacing: 0.04em; font-weight: 600; }
+
+  /* v37: Vs Ranked Opponents rows - no auto-highlight, white card with team color value text */
+  .stat-card-compare.ranked-row .scc-side.left .scc-value { color: var(--t1c, var(--dark)) !important; }
+  .stat-card-compare.ranked-row .scc-side.right .scc-value { color: var(--t2c, var(--dark)) !important; }
+  .stat-card-compare.ranked-row .scc-side { background: white !important; color: var(--dark) !important; text-shadow: none !important; }
+  .stat-card-compare.ranked-row .scc-record { font-size: 2.3rem; letter-spacing: 0.02em; }
+  @media (max-width: 700px) {
+    .stat-card-compare.ranked-row .scc-side { background: var(--light) !important; }
+    .stat-card-compare.ranked-row .scc-record { font-size: 1.1rem; }
+    .stat-card-compare.ranked-row .scc-rank-of { display: block; font-size: 0.62rem; }
+  }
+  .stat-comparison-footnote { text-align: center; color: var(--gray); font-size: 0.78rem; margin: 1rem 0 0; letter-spacing: 0.02em; padding: 0 0.5rem; }
+
+  /* v37: Upcoming Matchup spread block (only visible when ESPN has a scheduled spread) */
+  .upcoming-matchup { text-align: center; margin: 0.25rem 0 1.25rem; padding: 0.75rem 1rem; background: var(--light); border-radius: 10px; border: 1px solid var(--border); }
+  .upcoming-matchup .um-label { font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 0.12em; color: var(--gray); }
+  .upcoming-matchup .um-row { display: flex; justify-content: center; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-top: 0.35rem; }
+  .upcoming-matchup .um-date { font-family: 'Inter', sans-serif; font-size: 0.85rem; color: var(--dark); }
+  .upcoming-matchup .um-spread { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--orange); letter-spacing: 0.04em; }
+  .upcoming-matchup .um-ou { font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; color: var(--dark); letter-spacing: 0.04em; }
+  .upcoming-matchup .um-asof { font-family: 'Inter', sans-serif; font-size: 0.7rem; color: var(--gray); margin-top: 0.35rem; }
+  @media (max-width: 700px) {
+    .upcoming-matchup { padding: 0.6rem 0.75rem; margin: 0.25rem 0 1rem; }
+    .upcoming-matchup .um-spread { font-size: 1.35rem; }
+    .upcoming-matchup .um-row { gap: 0.65rem; }
+  }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -660,7 +686,8 @@
 
 </style>
 <title>Compare Teams — Front Porch Sports</title>
-</head>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
+     crossorigin="anonymous"></script></head>
 <body>
 <nav class="navbar">
   <div class="navbar-inner">
@@ -1327,6 +1354,8 @@
 
   // v30: complete program records (CFBD + Wikipedia accolades)
   let PROGRAM_STATS = null;
+  let UPCOMING_LINES = null;  // v37: ESPN upcoming spreads, keyed by sorted team pair
+  let _ulPromise = fetch('upcoming_lines.json').then(r => r.ok ? r.json() : null).then(d => { UPCOMING_LINES = d; }).catch(() => { UPCOMING_LINES = null; });
   fetch('program_stats.json').then(r => r.ok ? r.json() : null).then(d => { PROGRAM_STATS = d; if (typeof render === 'function' && state.team1 && state.team2) render(); }).catch(() => {});
 
   const TEAM_META = {
@@ -1763,7 +1792,8 @@
   }
   Promise.all([
     fetch('front_porch_games.json').then(r => r.json()),
-    fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] }))
+    fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] })),
+    _ulPromise
   ])
     .then(([data, fbsData]) => {
       GAMES = data;
@@ -2223,6 +2253,37 @@
           <div class="streak-value" style="color:${sColor}">${streak.count} &middot; ${sDisp} (${yr})</div>
         </div>`;
       })()}
+      ${(() => {
+        // v37: Upcoming Matchup spread (only shown when ESPN has a future game between the two selected teams)
+        if (!UPCOMING_LINES || !UPCOMING_LINES.matchups) return '';
+        const key = [state.team1, state.team2].sort().join('|');
+        const m = UPCOMING_LINES.matchups[key];
+        if (!m || (m.spread == null && !m.details)) return '';
+        const fav = m.favoredAbbr || '';
+        // map ESPN abbr to our preferred display abbr if possible
+        let favTeam = null;
+        if (m.home && (TEAM_META[m.home]?.abbr === fav || getTeamAbbr(m.home) === fav)) favTeam = m.home;
+        else if (m.away && (TEAM_META[m.away]?.abbr === fav || getTeamAbbr(m.away) === fav)) favTeam = m.away;
+        else {
+          // best-effort: look at spread sign (home favored if negative)
+          if (typeof m.spread === 'number') favTeam = m.spread < 0 ? m.home : m.away;
+        }
+        const favDisp = favTeam ? getTeamAbbr(favTeam) : fav;
+        const line = (typeof m.lineValue === 'number') ? m.lineValue : (typeof m.spread === 'number' ? -Math.abs(m.spread) : null);
+        const spreadStr = (favDisp && line != null) ? `${favDisp} ${line}` : (m.details || '');
+        const ouStr = (typeof m.overUnder === 'number') ? `O/U ${m.overUnder}` : '';
+        const dateStr = m.date || '';
+        const asOf = (UPCOMING_LINES._meta && UPCOMING_LINES._meta.fetchedAt) ? UPCOMING_LINES._meta.fetchedAt.slice(0, 10) : '';
+        return `<div class="upcoming-matchup">
+          <div class="um-label">Upcoming Matchup</div>
+          <div class="um-row">
+            <div class="um-date">${dateStr}</div>
+            <div class="um-spread">${spreadStr}</div>
+            ${ouStr ? `<div class="um-ou">${ouStr}</div>` : ''}
+          </div>
+          ${asOf ? `<div class="um-asof">Current line as of ${asOf}</div>` : ''}
+        </div>`;
+      })()}
     `;
 
     // ===== BOTTOM container: charts, stat grid, program comparison, games link, suggested matchups =====
@@ -2364,6 +2425,27 @@
         b: pick(ps2, s2, 'weeksAtOne', 'weeksAtNo1', 'weeksAtNo1Rank') }
     ];
 
+    // v37: Vs Ranked Opponents rows (AP poll era, since 1936)
+    const recRow = (label, key) => {
+      const recOf = ps => {
+        if (!ps || !ps.rankedRecords || !ps.rankedRecords[key]) return null;
+        const r = ps.rankedRecords[key];
+        const tot = r.w + r.l + r.t;
+        const recStr = `${r.w}-${r.l}${r.t ? '-' + r.t : ''}`;
+        const pct = tot ? (r.w + r.t * 0.5) / tot : null;
+        return { rec: recStr, pct };
+      };
+      return {
+        title: label,
+        isRecord: true,
+        a: { recObj: recOf(ps1) },
+        b: { recObj: recOf(ps2) }
+      };
+    };
+    rows.push(recRow('Vs Top 25 Ranked', 'top25'));
+    rows.push(recRow('Vs Top 10 Ranked', 'top10'));
+    rows.push(recRow('Vs Top 5 Ranked', 'top5'));
+
     // v33: compute numeric value for each side so we can highlight the better one on mobile
     const numFor = v => {
       if (v == null) return null;
@@ -2382,20 +2464,34 @@
       <div class="chart-title">Program Comparison</div>
       <p class="stat-comparison-sub">All-time program totals with national rank</p>
       <div class="stat-comparison-grid">
-        ${rows.map(s => `<div class="stat-card-compare${winnerClass(s.a.v, s.b.v)}" style="--t1c:${t1Color};--t2c:${t2Color}">
-          <div class="scc-title">${s.title}</div>
-          <div class="scc-body">
-            <div class="scc-side left" style="background:${t1Color}">
-              ${valHtml(s.a.v)}
-              ${rankHtml(s.a.r, s.a.total)}
+        ${rows.map(s => {
+          if (s.isRecord) {
+            // v37: record-style row (Vs Top N) - no auto-highlight; show W-L-T + pct
+            const fmtRec = obj => obj ? `<div class="scc-value scc-record">${obj.rec}</div><div class="scc-rank-of">${obj.pct == null ? '' : '.' + (obj.pct * 1000).toFixed(0).padStart(3,'0') + ' WIN%'}</div>` : '<div class="scc-na">&mdash;</div>';
+            return `<div class="stat-card-compare ranked-row" style="--t1c:${t1Color};--t2c:${t2Color}">
+              <div class="scc-title">${s.title}</div>
+              <div class="scc-body">
+                <div class="scc-side left">${fmtRec(s.a.recObj)}</div>
+                <div class="scc-side right">${fmtRec(s.b.recObj)}</div>
+              </div>
+            </div>`;
+          }
+          return `<div class="stat-card-compare${winnerClass(s.a.v, s.b.v)}" style="--t1c:${t1Color};--t2c:${t2Color}">
+            <div class="scc-title">${s.title}</div>
+            <div class="scc-body">
+              <div class="scc-side left" style="background:${t1Color}">
+                ${valHtml(s.a.v)}
+                ${rankHtml(s.a.r, s.a.total)}
+              </div>
+              <div class="scc-side right" style="background:${t2Color}">
+                ${valHtml(s.b.v)}
+                ${rankHtml(s.b.r, s.b.total)}
+              </div>
             </div>
-            <div class="scc-side right" style="background:${t2Color}">
-              ${valHtml(s.b.v)}
-              ${rankHtml(s.b.r, s.b.total)}
-            </div>
-          </div>
-        </div>`).join('')}
+          </div>`;
+        }).join('')}
       </div>
+      <p class="stat-comparison-footnote">Vs Ranked Opponents: AP poll era records, since 1936. Computed from CFBD games + rankings.</p>
     </div>`;
   }
 

@@ -97,6 +97,16 @@
   /* v36: nav — logo top-left, tabs left-aligned right next to logo, no socials in nav */
   .navbar-social { display: none !important; }
   .navbar-links { margin-left: 0 !important; }
+
+  /* v37: Vs Ranked Opponents section on team profile - uses same polished nat-stat-card styling */
+  .ranked-section { margin: 2rem 0 1.5rem; }
+  .ranked-section .rs-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.04em; text-align: center; margin-bottom: 0.25rem; }
+  .ranked-section .rs-sub { text-align: center; color: var(--gray); font-size: 0.85rem; margin-bottom: 1rem; }
+  .ranked-section .nat-stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  @media (max-width: 700px) {
+    .ranked-section .nat-stat-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+    .ranked-section .rs-title { font-size: 1.5rem; }
+  }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -302,7 +312,8 @@
   }
 </style>
 <title>Team Profile — Front Porch Sports</title>
-</head>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
+     crossorigin="anonymous"></script></head>
 <body>
 
 <nav class="navbar">
@@ -725,6 +736,54 @@
   }
 
   // Build the 10-card national rank grid for the current TEAM
+  // v37: render Vs Ranked Opponents section (AP poll era, since 1936)
+  function renderRankedRecords(tColor) {
+    const ps = (typeof PROGRAM_STATS !== 'undefined' && PROGRAM_STATS) ? PROGRAM_STATS[TEAM] : null;
+    if (!ps || !ps.rankedRecords) return '';
+    const rr = ps.rankedRecords;
+    const fmt = key => {
+      const r = rr[key];
+      if (!r) return null;
+      const tot = r.w + r.l + r.t;
+      const rec = `${r.w}-${r.l}${r.t ? '-' + r.t : ''}`;
+      const pct = tot ? (r.w + r.t * 0.5) / tot : null;
+      const pctStr = pct == null ? '' : '.' + (pct * 1000).toFixed(0).padStart(3, '0');
+      return { rec, pctStr, total: tot };
+    };
+    const card = (label, key) => {
+      const x = fmt(key);
+      if (!x) return `<div class="nat-stat-card" style="--team-color:${tColor}">
+        <div class="nsc-head">${label}</div>
+        <div class="nsc-body">
+          <div class="nsc-value-side"><div class="nsc-na">&mdash;</div></div>
+          <div class="nsc-rank-side"><div class="nsc-na">&mdash;</div></div>
+        </div>
+      </div>`;
+      return `<div class="nat-stat-card" style="--team-color:${tColor}">
+        <div class="nsc-head">${label}</div>
+        <div class="nsc-body">
+          <div class="nsc-value-side">
+            <div class="nsc-value">${x.rec}</div>
+            <div class="nsc-value-sub">Record</div>
+          </div>
+          <div class="nsc-rank-side">
+            <div class="nsc-rank-ord">${x.pctStr}</div>
+            <div class="nsc-rank-of">Win %</div>
+          </div>
+        </div>
+      </div>`;
+    };
+    return `<div class="ranked-section">
+      <h2 class="rs-title">Vs Ranked Opponents</h2>
+      <p class="rs-sub">AP poll era records, since 1936</p>
+      <div class="nat-stat-grid">
+        ${card('Vs Top 25', 'top25')}
+        ${card('Vs Top 10', 'top10')}
+        ${card('Vs Top 5', 'top5')}
+      </div>
+    </div>`;
+  }
+
   function renderNationalStatCards(tColor) {
     // v30: pull from PROGRAM_STATS when available (complete CFBD + Wikipedia data)
     const ps = (PROGRAM_STATS && PROGRAM_STATS[TEAM]) || null;
@@ -914,6 +973,7 @@
       </div>
       <!-- Improvement 1B (v27): national rank stat cards -->
       ${renderNationalStatCards(tColor)}
+      ${renderRankedRecords(tColor)}
       <!-- Program Snapshot (kept, lower priority below the national stats) -->
       <div class="card">
         <h2>Program Snapshot</h2>
