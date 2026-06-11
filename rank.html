@@ -94,7 +94,8 @@
   .bar-logo { width: 36px; height: 36px; object-fit: contain; flex-shrink: 0; }
   .bar-value { font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; line-height: 1; color: var(--dark); }
   .bar { width: 36px; background: var(--blue); border-radius: 4px 4px 0 0; min-height: 4px; transition: height 0.6s cubic-bezier(0.22,0.61,0.36,1); position: relative; }
-  .bar-team { font-family: 'Inter', sans-serif; font-size: 0.7rem; color: var(--gray); margin-top: 0.3rem; text-align: center; max-width: 60px; line-height: 1.15; word-break: keep-all; }
+  /* v35: abbreviated team labels - single line, no wrapping */
+  .bar-team { font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 0.03em; color: var(--dark); margin-top: 0.3rem; text-align: center; white-space: nowrap; line-height: 1.1; }
   .bar-rank { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; color: var(--orange); margin-top: 0.2rem; }
 
   /* Table */
@@ -439,6 +440,157 @@ const TEAM_STATS = {
     document.getElementById('cat-blurb').textContent = cat.desc;
   }
 
+  // v35: Team abbreviations + override map (Oklahoma St -> OSU, Ohio St -> OHST)
+  const ABBR_OVERRIDES = {
+    'Oklahoma St.': 'OSU',
+    'Ohio St.': 'OHST'
+  };
+  // v35: team abbreviations (sourced from TEAM_META in other pages)
+  const TEAM_ABBR = {
+    'Air Force': 'AF',
+    'Akron': 'AKR',
+    'Alabama': 'ALA',
+    'Appalachian St.': 'APP',
+    'Arizona': 'ARIZ',
+    'Arizona St.': 'ASU',
+    'Arkansas': 'ARK',
+    'Arkansas St.': 'ARST',
+    'Army': 'ARMY',
+    'Auburn': 'AUB',
+    'BYU': 'BYU',
+    'Ball St.': 'BALL',
+    'Baylor': 'BAY',
+    'Boise St.': 'BOIS',
+    'Boston College': 'BC',
+    'Bowling Green': 'BGSU',
+    'Buffalo': 'BUF',
+    'California': 'CAL',
+    'Central Michigan': 'CMU',
+    'Charlotte': 'CLT',
+    'Cincinnati': 'CIN',
+    'Clemson': 'CLEM',
+    'Coastal Carolina': 'CCU',
+    'Colorado': 'COLO',
+    'Colorado St.': 'CSU',
+    'Connecticut': 'CONN',
+    'Duke': 'DUKE',
+    'Delaware': 'DEL',
+    'East Carolina': 'ECU',
+    'Eastern Michigan': 'EMU',
+    'FIU': 'FIU',
+    'Florida': 'FLA',
+    'FAU': 'FAU',
+    'Florida St.': 'FSU',
+    'Fresno St.': 'FRES',
+    'Georgia': 'UGA',
+    'Georgia Southern': 'GASO',
+    'Georgia St.': 'GAST',
+    'Georgia Tech': 'GT',
+    'Hawaii': 'HAW',
+    'Houston': 'HOU',
+    'Illinois': 'ILL',
+    'Indiana': 'IU',
+    'Iowa': 'IOWA',
+    'Iowa St.': 'ISU',
+    'Jacksonville St.': 'JXST',
+    'James Madison': 'JMU',
+    'Kansas': 'KU',
+    'Kansas St.': 'KSU',
+    'Kennesaw St.': 'KENN',
+    'Kent St.': 'KENT',
+    'Kentucky': 'UK',
+    'LSU': 'LSU',
+    'Liberty': 'LIB',
+    'Louisiana Lafayette': 'UL',
+    'Louisiana Monroe': 'ULM',
+    'Louisiana Tech': 'LT',
+    'Louisville': 'LOU',
+    'Marshall': 'MRSH',
+    'Maryland': 'MD',
+    'UMass': 'MASS',
+    'Memphis': 'MEM',
+    'Miami': 'MIA',
+    'Miami (OH)': 'M-OH',
+    'Michigan': 'MICH',
+    'Michigan St.': 'MSU',
+    'Middle Tennessee': 'MTSU',
+    'Minnesota': 'MINN',
+    'Mississippi St.': 'MSST',
+    'Missouri': 'MIZ',
+    'Missouri St.': 'MOST',
+    'Navy': 'NAVY',
+    'Nebraska': 'NEB',
+    'Nevada': 'NEV',
+    'New Mexico': 'UNM',
+    'New Mexico St.': 'NMSU',
+    'North Carolina': 'UNC',
+    'North Carolina St.': 'NCSU',
+    'North Texas': 'UNT',
+    'Northern Illinois': 'NIU',
+    'Northwestern': 'NU',
+    'Notre Dame': 'ND',
+    'Ohio': 'OHIO',
+    'Ohio St.': 'OSU',
+    'Oklahoma': 'OU',
+    'Oklahoma St.': 'OKST',
+    'Old Dominion': 'ODU',
+    'Ole Miss': 'MISS',
+    'Oregon': 'ORE',
+    'Oregon St.': 'ORST',
+    'Penn St.': 'PSU',
+    'Pittsburgh': 'PITT',
+    'Purdue': 'PUR',
+    'Rice': 'RICE',
+    'Rutgers': 'RUTG',
+    'SMU': 'SMU',
+    'Sam Houston St.': 'SHSU',
+    'San Diego St.': 'SDSU',
+    'San José St.': 'SJSU',
+    'South Alabama': 'USA',
+    'South Carolina': 'SC',
+    'South Florida': 'USF',
+    'Southern Miss': 'USM',
+    'Stanford': 'STAN',
+    'Syracuse': 'SYR',
+    'TCU': 'TCU',
+    'Temple': 'TEM',
+    'Tennessee': 'TENN',
+    'Texas': 'TEX',
+    'Texas A&M': 'TA&M',
+    'Texas St.': 'TXST',
+    'Texas Tech': 'TTU',
+    'The Citadel': 'CIT',
+    'Toledo': 'TOL',
+    'Troy': 'TROY',
+    'Tulane': 'TULN',
+    'Tulsa': 'TLSA',
+    'UAB': 'UAB',
+    'UCF': 'UCF',
+    'UCLA': 'UCLA',
+    'UNLV': 'UNLV',
+    'USC': 'USC',
+    'UTEP': 'UTEP',
+    'UTSA': 'UTSA',
+    'Utah': 'UTAH',
+    'Utah St.': 'USU',
+    'Vanderbilt': 'VAN',
+    'Virginia': 'UVA',
+    'Virginia Tech': 'VT',
+    'Wake Forest': 'WAKE',
+    'Washington': 'WASH',
+    'Washington St.': 'WSU',
+    'West Virginia': 'WVU',
+    'Western Kentucky': 'WKU',
+    'Western Michigan': 'WMU',
+    'Wisconsin': 'WIS',
+    'Wyoming': 'WYO',
+  };
+  function getTeamAbbr(team) {
+    if (ABBR_OVERRIDES[team]) return ABBR_OVERRIDES[team];
+    if (TEAM_ABBR[team]) return TEAM_ABBR[team];
+    return (team || '').toUpperCase();
+  }
+
   // ===== Render bar chart =====
   function renderChart(rows) {
     const cat = CATEGORIES[currentCatSlug];
@@ -459,7 +611,7 @@ const TEAM_STATS = {
         ${logo ? `<img class="bar-logo" src="${logo}" alt="" onerror="this.style.visibility='hidden'">` : '<div class="bar-logo"></div>'}
         <div class="bar-value">${formatValue(p.value, cat.fmt)}</div>
         <div class="bar" style="height:${heightPct}px;background:${color}"></div>
-        <div class="bar-team">${p.team}</div>
+        <div class="bar-team">${getTeamAbbr(p.team)}</div>
         <div class="bar-rank">${ordinal(p.rank)}</div>
       </div>`;
     }).join('');

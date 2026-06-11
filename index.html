@@ -103,6 +103,71 @@
   .selector label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray); text-transform: uppercase; margin-bottom: 0.4rem; letter-spacing: 0.05em; }
   .vs { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--orange); padding: 0 1rem; padding-bottom: 0.6rem; }
 
+  /* v35: clean abbreviated selector bar — [ABBR] VS [ABBR] with team color underline, all viewports */
+  .selector-bar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0.6rem;
+    align-items: end;
+    margin: 1rem 0 1.5rem;
+  }
+  .sb-side { position: relative; }
+  .sb-side .sb-btn {
+    width: 100%;
+    padding: 0.4rem 0.5rem 0.6rem;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    border-bottom: 3px solid var(--team-color, var(--border));
+    cursor: pointer;
+    font-family: inherit;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    text-align: center;
+    transition: border-color 0.15s;
+    min-height: 0;
+  }
+  .sb-btn:hover, .sb-btn.open { border-color: var(--team-color, var(--orange)); }
+  .sb-abbr {
+    display: inline-block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    color: var(--dark);
+    white-space: nowrap;
+  }
+  .sb-caret {
+    width: 18px;
+    height: 18px;
+    margin-left: 0.25rem;
+    color: var(--gray);
+    pointer-events: none;
+    position: static;
+    transform: none;
+  }
+  .sb-vs {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    color: var(--orange);
+    padding: 0 0.3rem 0.45rem;
+  }
+  .sb-side .dd-panel { left: 0; right: 0; }
+  @media (max-width: 700px) {
+    .sb-abbr { font-size: 1.9rem; }
+    .sb-caret { width: 14px; height: 14px; margin-left: 0.15rem; }
+    .sb-vs { font-size: 1.4rem; padding: 0 0.2rem 0.45rem; }
+    .selector-bar { gap: 0.4rem; margin: 1rem 0 1.25rem; }
+    .sb-side .dd-panel { width: calc(100vw - 2rem); max-width: 360px; left: 0; right: auto; }
+    .sb-side.right .dd-panel { right: 0; left: auto; }
+  }
+
   /* Custom dropdown */
   .dd { position: relative; }
   .dd-toggle { width: 100%; padding: 0.7rem 2.5rem 0.7rem 0.7rem; border: 2px solid var(--border); border-radius: 8px; background: white; font-size: 1rem; font-weight: 500; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 0.6rem; min-height: 52px; text-align: left; }
@@ -298,32 +363,31 @@
   </div>
   <div class="compare-card">
     <h2>COMPARE TEAMS</h2>
-    <div class="selectors">
-      <div class="selector">
-        <label>Team 1</label>
-        <div class="dd" id="dd1">
-          <button class="dd-toggle" id="dd1-toggle" type="button">
-            <img id="dd1-logo" alt=""><span id="dd1-label">Select team</span>
-            <svg class="dd-caret" viewBox="0 0 20 20" fill="none"><path stroke="#6b7280" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m6 8 4 4 4-4"/></svg>
-          </button>
-          <div class="dd-panel" id="dd1-panel">
-            <input class="dd-search" id="dd1-search" placeholder="Search teams..." autocomplete="off">
-            <div id="dd1-options"></div>
-          </div>
+    <!-- v35: home selector bar matches compare page -->
+    <div class="selector-bar">
+      <div class="sb-side dd" id="dd1">
+        <button class="dd-toggle sb-btn" id="dd1-toggle" type="button">
+          <img id="dd1-logo" alt="" style="display:none">
+          <span class="sb-abbr" id="dd1-abbr">Select team</span>
+          <span id="dd1-label" style="display:none"></span>
+          <svg class="sb-caret" viewBox="0 0 20 20" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m6 8 4 4 4-4"/></svg>
+        </button>
+        <div class="dd-panel" id="dd1-panel">
+          <input class="dd-search" id="dd1-search" placeholder="Search teams..." autocomplete="off">
+          <div id="dd1-options"></div>
         </div>
       </div>
-      <div class="vs">VS</div>
-      <div class="selector">
-        <label>Team 2</label>
-        <div class="dd" id="dd2">
-          <button class="dd-toggle" id="dd2-toggle" type="button">
-            <img id="dd2-logo" alt=""><span id="dd2-label">Select team</span>
-            <svg class="dd-caret" viewBox="0 0 20 20" fill="none"><path stroke="#6b7280" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m6 8 4 4 4-4"/></svg>
-          </button>
-          <div class="dd-panel" id="dd2-panel">
-            <input class="dd-search" id="dd2-search" placeholder="Search teams..." autocomplete="off">
-            <div id="dd2-options"></div>
-          </div>
+      <div class="sb-vs">VS</div>
+      <div class="sb-side right dd" id="dd2">
+        <button class="dd-toggle sb-btn" id="dd2-toggle" type="button">
+          <img id="dd2-logo" alt="" style="display:none">
+          <span class="sb-abbr" id="dd2-abbr">Select team</span>
+          <span id="dd2-label" style="display:none"></span>
+          <svg class="sb-caret" viewBox="0 0 20 20" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m6 8 4 4 4-4"/></svg>
+        </button>
+        <div class="dd-panel" id="dd2-panel">
+          <input class="dd-search" id="dd2-search" placeholder="Search teams..." autocomplete="off">
+          <div id="dd2-options"></div>
         </div>
       </div>
     </div>
@@ -631,6 +695,157 @@
   };
 
   const params = new URLSearchParams(location.search);
+  // v35: Team abbreviations + override map (Oklahoma St -> OSU, Ohio St -> OHST)
+  const ABBR_OVERRIDES = {
+    'Oklahoma St.': 'OSU',
+    'Ohio St.': 'OHST'
+  };
+  // v35: team abbreviations (sourced from TEAM_META in other pages)
+  const TEAM_ABBR = {
+    'Air Force': 'AF',
+    'Akron': 'AKR',
+    'Alabama': 'ALA',
+    'Appalachian St.': 'APP',
+    'Arizona': 'ARIZ',
+    'Arizona St.': 'ASU',
+    'Arkansas': 'ARK',
+    'Arkansas St.': 'ARST',
+    'Army': 'ARMY',
+    'Auburn': 'AUB',
+    'BYU': 'BYU',
+    'Ball St.': 'BALL',
+    'Baylor': 'BAY',
+    'Boise St.': 'BOIS',
+    'Boston College': 'BC',
+    'Bowling Green': 'BGSU',
+    'Buffalo': 'BUF',
+    'California': 'CAL',
+    'Central Michigan': 'CMU',
+    'Charlotte': 'CLT',
+    'Cincinnati': 'CIN',
+    'Clemson': 'CLEM',
+    'Coastal Carolina': 'CCU',
+    'Colorado': 'COLO',
+    'Colorado St.': 'CSU',
+    'Connecticut': 'CONN',
+    'Duke': 'DUKE',
+    'Delaware': 'DEL',
+    'East Carolina': 'ECU',
+    'Eastern Michigan': 'EMU',
+    'FIU': 'FIU',
+    'Florida': 'FLA',
+    'FAU': 'FAU',
+    'Florida St.': 'FSU',
+    'Fresno St.': 'FRES',
+    'Georgia': 'UGA',
+    'Georgia Southern': 'GASO',
+    'Georgia St.': 'GAST',
+    'Georgia Tech': 'GT',
+    'Hawaii': 'HAW',
+    'Houston': 'HOU',
+    'Illinois': 'ILL',
+    'Indiana': 'IU',
+    'Iowa': 'IOWA',
+    'Iowa St.': 'ISU',
+    'Jacksonville St.': 'JXST',
+    'James Madison': 'JMU',
+    'Kansas': 'KU',
+    'Kansas St.': 'KSU',
+    'Kennesaw St.': 'KENN',
+    'Kent St.': 'KENT',
+    'Kentucky': 'UK',
+    'LSU': 'LSU',
+    'Liberty': 'LIB',
+    'Louisiana Lafayette': 'UL',
+    'Louisiana Monroe': 'ULM',
+    'Louisiana Tech': 'LT',
+    'Louisville': 'LOU',
+    'Marshall': 'MRSH',
+    'Maryland': 'MD',
+    'UMass': 'MASS',
+    'Memphis': 'MEM',
+    'Miami': 'MIA',
+    'Miami (OH)': 'M-OH',
+    'Michigan': 'MICH',
+    'Michigan St.': 'MSU',
+    'Middle Tennessee': 'MTSU',
+    'Minnesota': 'MINN',
+    'Mississippi St.': 'MSST',
+    'Missouri': 'MIZ',
+    'Missouri St.': 'MOST',
+    'Navy': 'NAVY',
+    'Nebraska': 'NEB',
+    'Nevada': 'NEV',
+    'New Mexico': 'UNM',
+    'New Mexico St.': 'NMSU',
+    'North Carolina': 'UNC',
+    'North Carolina St.': 'NCSU',
+    'North Texas': 'UNT',
+    'Northern Illinois': 'NIU',
+    'Northwestern': 'NU',
+    'Notre Dame': 'ND',
+    'Ohio': 'OHIO',
+    'Ohio St.': 'OSU',
+    'Oklahoma': 'OU',
+    'Oklahoma St.': 'OKST',
+    'Old Dominion': 'ODU',
+    'Ole Miss': 'MISS',
+    'Oregon': 'ORE',
+    'Oregon St.': 'ORST',
+    'Penn St.': 'PSU',
+    'Pittsburgh': 'PITT',
+    'Purdue': 'PUR',
+    'Rice': 'RICE',
+    'Rutgers': 'RUTG',
+    'SMU': 'SMU',
+    'Sam Houston St.': 'SHSU',
+    'San Diego St.': 'SDSU',
+    'San José St.': 'SJSU',
+    'South Alabama': 'USA',
+    'South Carolina': 'SC',
+    'South Florida': 'USF',
+    'Southern Miss': 'USM',
+    'Stanford': 'STAN',
+    'Syracuse': 'SYR',
+    'TCU': 'TCU',
+    'Temple': 'TEM',
+    'Tennessee': 'TENN',
+    'Texas': 'TEX',
+    'Texas A&M': 'TA&M',
+    'Texas St.': 'TXST',
+    'Texas Tech': 'TTU',
+    'The Citadel': 'CIT',
+    'Toledo': 'TOL',
+    'Troy': 'TROY',
+    'Tulane': 'TULN',
+    'Tulsa': 'TLSA',
+    'UAB': 'UAB',
+    'UCF': 'UCF',
+    'UCLA': 'UCLA',
+    'UNLV': 'UNLV',
+    'USC': 'USC',
+    'UTEP': 'UTEP',
+    'UTSA': 'UTSA',
+    'Utah': 'UTAH',
+    'Utah St.': 'USU',
+    'Vanderbilt': 'VAN',
+    'Virginia': 'UVA',
+    'Virginia Tech': 'VT',
+    'Wake Forest': 'WAKE',
+    'Washington': 'WASH',
+    'Washington St.': 'WSU',
+    'West Virginia': 'WVU',
+    'Western Kentucky': 'WKU',
+    'Western Michigan': 'WMU',
+    'Wisconsin': 'WIS',
+    'Wyoming': 'WYO',
+  };
+  function getTeamAbbr(team) {
+    if (ABBR_OVERRIDES[team]) return ABBR_OVERRIDES[team];
+    if (TEAM_ABBR[team]) return TEAM_ABBR[team];
+    return (team || '').toUpperCase();
+  }
+
   if (params.get('team1')) state.team1 = params.get('team1');
   if (params.get('team2')) state.team2 = params.get('team2');
 
@@ -705,15 +920,20 @@
     function updateToggle() {
       const team = state[stateKey];
       const img = document.getElementById(`${ddId}-logo`);
+      const abbr = document.getElementById(`${ddId}-abbr`);
+      const btn = document.getElementById(`${ddId}-toggle`);
       if (!team) {
-        document.getElementById(`${ddId}-label`).textContent = 'Select team';
-        img.style.display = 'none';
+        if (abbr) abbr.textContent = 'Select team';
+        if (btn) btn.style.removeProperty('--team-color');
+        if (img) img.style.display = 'none';
         return;
       }
       const meta = TEAM_META[team];
-      document.getElementById(`${ddId}-label`).textContent = team;
-      if (meta) { img.src = LOGO_URL(meta.id); img.style.display = ''; }
-      else img.style.display = 'none';
+      if (abbr) abbr.textContent = getTeamAbbr(team);
+      if (btn && meta) btn.style.setProperty('--team-color', meta.color || 'var(--orange)');
+      const label = document.getElementById(`${ddId}-label`);
+      if (label) label.textContent = team;
+      if (img) img.style.display = 'none';
     }
 
     function openPanel() {

@@ -352,66 +352,69 @@
 
   /* v29 Tweak 1A fix: legacy hidden dropdown stub elements must stay hidden */
   #dd1-logo, #dd2-logo, #dd1-label, #dd2-label { display: none !important; }
-  /* v29 Tweak 1A: wide selector bar with SCHOOL + mascot text */
-  .selector-bar { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.75rem; align-items: stretch; margin: 0 0 1.5rem; }
+  /* v35: clean abbreviated selector bar — [ABBR] VS [ABBR] with team color underline, at ALL viewports */
+  .selector-bar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0.6rem;
+    align-items: end;
+    margin: 0 0 1.5rem;
+  }
   .sb-side { position: relative; }
-  .sb-btn { width: 100%; padding: 1rem 1.25rem; background: white; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; font-family: inherit; text-align: left; display: flex; flex-direction: column; align-items: flex-start; gap: 0.15rem; position: relative; transition: border-color 0.15s, transform 0.12s; }
-  .sb-side.right .sb-btn { text-align: right; align-items: flex-end; }
-  .sb-btn:hover, .sb-btn.open { border-color: var(--orange); }
-  .sb-school { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; line-height: 1; letter-spacing: 0.03em; color: var(--dark); }
-  .sb-mascot { font-family: 'Inter', sans-serif; font-size: 0.85rem; color: var(--gray); font-weight: 500; }
-  .sb-abbr { display: none; }
-  .sb-caret { width: 18px; height: 18px; position: absolute; right: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; }
-  .sb-side.right .sb-caret { left: 0.85rem; right: auto; }
+  .sb-side .sb-btn {
+    width: 100%;
+    padding: 0.4rem 0.5rem 0.6rem;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    border-bottom: 3px solid var(--team-color, var(--border));
+    cursor: pointer;
+    font-family: inherit;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    text-align: center;
+    transition: border-color 0.15s;
+  }
+  .sb-side.right .sb-btn { justify-content: center; align-items: center; text-align: center; }
+  .sb-btn:hover, .sb-btn.open { border-color: var(--team-color, var(--orange)); }
+  .sb-school, .sb-mascot { display: none; }
+  .sb-abbr {
+    display: inline-block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    color: var(--dark);
+  }
+  .sb-caret {
+    position: static;
+    transform: none;
+    width: 18px;
+    height: 18px;
+    margin-left: 0.25rem;
+    color: var(--gray);
+    pointer-events: none;
+  }
+  .sb-side.right .sb-caret { left: auto; right: auto; }
   .sb-side .dd-panel { left: 0; right: 0; }
-  .sb-vs { display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 2.25rem; color: var(--orange); padding: 0 0.4rem; }
+  .sb-vs {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    color: var(--orange);
+    padding: 0 0.3rem 0.45rem;
+  }
   @media (max-width: 700px) {
-    /* v32: compact Winsipedia style selectors -> [ABBR] VS [ABBR] on one row with team color underlines */
-    .selector-bar {
-      grid-template-columns: 1fr auto 1fr;
-      gap: 0.5rem;
-      align-items: end;
-      margin: 0 0 1.25rem;
-    }
-    .sb-side .sb-btn {
-      width: 100%;
-      padding: 0.35rem 0.4rem 0.5rem;
-      border: none;
-      background: transparent;
-      border-radius: 0;
-      border-bottom: 3px solid var(--team-color, var(--border));
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      gap: 0.25rem;
-      text-align: center;
-    }
-    .sb-side.right .sb-btn { justify-content: center; align-items: center; text-align: center; }
-    .sb-btn:hover, .sb-btn.open { border-color: var(--team-color, var(--orange)); }
-    .sb-school, .sb-mascot { display: none; }
-    .sb-abbr {
-      display: inline-block;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.9rem;
-      line-height: 1;
-      letter-spacing: 0.04em;
-      color: var(--dark);
-    }
-    .sb-caret {
-      position: static;
-      transform: none;
-      width: 14px;
-      height: 14px;
-      margin-left: 0.15rem;
-    }
-    .sb-side.right .sb-caret { left: auto; right: auto; }
-    .sb-vs {
-      padding: 0 0.2rem 0.45rem;
-      font-size: 1.4rem;
-      color: var(--orange);
-      align-self: end;
-    }
-    /* v32: widen dropdown panel so team names don't cramp under the compact selector */
+    .sb-abbr { font-size: 1.9rem; }
+    .sb-caret { width: 14px; height: 14px; margin-left: 0.15rem; }
+    .sb-vs { font-size: 1.4rem; padding: 0 0.2rem 0.45rem; }
+    .selector-bar { gap: 0.4rem; margin: 0 0 1.25rem; }
+    /* widen dropdown panel so team names don't cramp under the compact selector */
     .sb-side .dd-panel { width: calc(100vw - 2rem); max-width: 360px; left: 0; right: auto; }
     .sb-side.right .dd-panel { right: 0; left: auto; }
   }

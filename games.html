@@ -111,6 +111,9 @@
   .games-table td { padding: 0.7rem 0.85rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
   .games-table tr:last-child td { border-bottom: none; }
   .games-table tr:hover { background: #fafafa; }
+  /* v35: desktop winner color indicator column */
+  .games-table th.th-indicator { width: 8px; padding: 0; background: var(--dark); }
+  .games-table td.row-indicator { width: 8px; padding: 0; border-bottom: 1px solid var(--border); }
   .games-table .score-win { font-weight: 700; }
   .winner-cell { font-weight: 600; }
   .winner-cell img { width: 20px; height: 20px; vertical-align: -5px; margin-right: 0.3rem; }
@@ -119,24 +122,32 @@
 
   /* Mobile: stacked cards */
   .games-cards { display: none; }
-  /* v34: mobile compact Winsipedia table - slim row per game, aligned columns via grid on container */
+  /* v35: mobile compact Winsipedia table - continuous header bar + enlarged winner indicator */
   .games-cards {
     background: white;
     border-radius: 10px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
     overflow: hidden;
-    grid-template-columns: 10px minmax(70px, auto) minmax(0, 1fr) auto auto;
-    column-gap: 0.45rem;
+    grid-template-columns: 12px minmax(70px, auto) minmax(0, 1fr) auto auto;
+    column-gap: 0;
   }
   .games-row { display: contents; }
   .games-row > div {
-    padding: 0.55rem 0;
+    padding: 0.6rem 0.3rem;
     border-bottom: 1px solid var(--border);
-    align-self: center;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
   }
-  .games-row > div:first-child { padding-left: 0.5rem; }
-  .games-row > div:last-child { padding-right: 0.5rem; }
-  .games-row .gr-chip { width: 8px; height: 22px; border-radius: 2px; padding: 0; align-self: center; }
+  .games-row > div:first-child { padding-left: 0; padding-right: 0; }
+  .games-row > div:nth-child(2) { padding-left: 0.55rem; }
+  .games-row > div:last-child { padding-right: 0.55rem; }
+  .games-row .gr-chip {
+    padding: 0;
+    align-self: stretch;
+    border-radius: 0;
+    width: 12px;
+  }
   .games-row .gr-date { font-size: 0.74rem; color: var(--dark); white-space: nowrap; font-family: 'Inter', sans-serif; }
   .games-row .gr-loc { font-size: 0.72rem; color: var(--gray); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .games-row .gr-t1, .games-row .gr-t2 { display: flex; align-items: center; gap: 0.3rem; }
@@ -378,6 +389,157 @@
   // END is finalized after data load if not in URL params; placeholder for now.
   let END = isNaN(endParam) ? null : endParam;
 
+  // v35: Team abbreviations + override map (Oklahoma St -> OSU, Ohio St -> OHST)
+  const ABBR_OVERRIDES = {
+    'Oklahoma St.': 'OSU',
+    'Ohio St.': 'OHST'
+  };
+  // v35: team abbreviations (sourced from TEAM_META in other pages)
+  const TEAM_ABBR = {
+    'Air Force': 'AF',
+    'Akron': 'AKR',
+    'Alabama': 'ALA',
+    'Appalachian St.': 'APP',
+    'Arizona': 'ARIZ',
+    'Arizona St.': 'ASU',
+    'Arkansas': 'ARK',
+    'Arkansas St.': 'ARST',
+    'Army': 'ARMY',
+    'Auburn': 'AUB',
+    'BYU': 'BYU',
+    'Ball St.': 'BALL',
+    'Baylor': 'BAY',
+    'Boise St.': 'BOIS',
+    'Boston College': 'BC',
+    'Bowling Green': 'BGSU',
+    'Buffalo': 'BUF',
+    'California': 'CAL',
+    'Central Michigan': 'CMU',
+    'Charlotte': 'CLT',
+    'Cincinnati': 'CIN',
+    'Clemson': 'CLEM',
+    'Coastal Carolina': 'CCU',
+    'Colorado': 'COLO',
+    'Colorado St.': 'CSU',
+    'Connecticut': 'CONN',
+    'Duke': 'DUKE',
+    'Delaware': 'DEL',
+    'East Carolina': 'ECU',
+    'Eastern Michigan': 'EMU',
+    'FIU': 'FIU',
+    'Florida': 'FLA',
+    'FAU': 'FAU',
+    'Florida St.': 'FSU',
+    'Fresno St.': 'FRES',
+    'Georgia': 'UGA',
+    'Georgia Southern': 'GASO',
+    'Georgia St.': 'GAST',
+    'Georgia Tech': 'GT',
+    'Hawaii': 'HAW',
+    'Houston': 'HOU',
+    'Illinois': 'ILL',
+    'Indiana': 'IU',
+    'Iowa': 'IOWA',
+    'Iowa St.': 'ISU',
+    'Jacksonville St.': 'JXST',
+    'James Madison': 'JMU',
+    'Kansas': 'KU',
+    'Kansas St.': 'KSU',
+    'Kennesaw St.': 'KENN',
+    'Kent St.': 'KENT',
+    'Kentucky': 'UK',
+    'LSU': 'LSU',
+    'Liberty': 'LIB',
+    'Louisiana Lafayette': 'UL',
+    'Louisiana Monroe': 'ULM',
+    'Louisiana Tech': 'LT',
+    'Louisville': 'LOU',
+    'Marshall': 'MRSH',
+    'Maryland': 'MD',
+    'UMass': 'MASS',
+    'Memphis': 'MEM',
+    'Miami': 'MIA',
+    'Miami (OH)': 'M-OH',
+    'Michigan': 'MICH',
+    'Michigan St.': 'MSU',
+    'Middle Tennessee': 'MTSU',
+    'Minnesota': 'MINN',
+    'Mississippi St.': 'MSST',
+    'Missouri': 'MIZ',
+    'Missouri St.': 'MOST',
+    'Navy': 'NAVY',
+    'Nebraska': 'NEB',
+    'Nevada': 'NEV',
+    'New Mexico': 'UNM',
+    'New Mexico St.': 'NMSU',
+    'North Carolina': 'UNC',
+    'North Carolina St.': 'NCSU',
+    'North Texas': 'UNT',
+    'Northern Illinois': 'NIU',
+    'Northwestern': 'NU',
+    'Notre Dame': 'ND',
+    'Ohio': 'OHIO',
+    'Ohio St.': 'OSU',
+    'Oklahoma': 'OU',
+    'Oklahoma St.': 'OKST',
+    'Old Dominion': 'ODU',
+    'Ole Miss': 'MISS',
+    'Oregon': 'ORE',
+    'Oregon St.': 'ORST',
+    'Penn St.': 'PSU',
+    'Pittsburgh': 'PITT',
+    'Purdue': 'PUR',
+    'Rice': 'RICE',
+    'Rutgers': 'RUTG',
+    'SMU': 'SMU',
+    'Sam Houston St.': 'SHSU',
+    'San Diego St.': 'SDSU',
+    'San José St.': 'SJSU',
+    'South Alabama': 'USA',
+    'South Carolina': 'SC',
+    'South Florida': 'USF',
+    'Southern Miss': 'USM',
+    'Stanford': 'STAN',
+    'Syracuse': 'SYR',
+    'TCU': 'TCU',
+    'Temple': 'TEM',
+    'Tennessee': 'TENN',
+    'Texas': 'TEX',
+    'Texas A&M': 'TA&M',
+    'Texas St.': 'TXST',
+    'Texas Tech': 'TTU',
+    'The Citadel': 'CIT',
+    'Toledo': 'TOL',
+    'Troy': 'TROY',
+    'Tulane': 'TULN',
+    'Tulsa': 'TLSA',
+    'UAB': 'UAB',
+    'UCF': 'UCF',
+    'UCLA': 'UCLA',
+    'UNLV': 'UNLV',
+    'USC': 'USC',
+    'UTEP': 'UTEP',
+    'UTSA': 'UTSA',
+    'Utah': 'UTAH',
+    'Utah St.': 'USU',
+    'Vanderbilt': 'VAN',
+    'Virginia': 'UVA',
+    'Virginia Tech': 'VT',
+    'Wake Forest': 'WAKE',
+    'Washington': 'WASH',
+    'Washington St.': 'WSU',
+    'West Virginia': 'WVU',
+    'Western Kentucky': 'WKU',
+    'Western Michigan': 'WMU',
+    'Wisconsin': 'WIS',
+    'Wyoming': 'WYO',
+  };
+  function getTeamAbbr(team) {
+    if (ABBR_OVERRIDES[team]) return ABBR_OVERRIDES[team];
+    if (TEAM_ABBR[team]) return TEAM_ABBR[team];
+    return (team || '').toUpperCase();
+  }
+
   function teamLogo(t, cls='') {
     const m = TEAM_META[t];
     return m ? `<img class="${cls}" src="${LOGO_URL(m.id)}" alt="${t}" onerror="this.style.display='none'">` : '';
@@ -432,7 +594,12 @@
         ? '<span class="tie-cell">Tie</span>'
         : `<span class="winner-cell">${teamLogo(g.winner)}<span class="wname">${g.winner}</span></span>`;
       const loc = g.city ? `${g.city}${g.state?', '+g.state:''}` : '\u2014';
+      // v35: winner color indicator on the left
+      const tblT1Color = TEAM_META[TEAM1]?.color || '#003594';
+      const tblT2Color = TEAM_META[TEAM2]?.color || '#003594';
+      const indColor = g.is_tie ? 'var(--gray)' : (t1Win ? tblT1Color : tblT2Color);
       return `<tr>
+        <td class="row-indicator" style="background:${indColor}"></td>
         <td>${g.season}</td>
         <td>${g.game_date}</td>
         <td class="${t1Win?'score-win':''}">${t1Score??'-'}</td>
@@ -449,8 +616,8 @@
       <div class="gr-chip"></div>
       <div class="gr-date">Date</div>
       <div class="gr-loc">Location</div>
-      <div class="gr-t1">${teamLogo(TEAM1)}<span class="gr-tname">${TEAM1}</span></div>
-      <div class="gr-t2">${teamLogo(TEAM2)}<span class="gr-tname">${TEAM2}</span></div>
+      <div class="gr-t1">${teamLogo(TEAM1)}<span class="gr-tname">${getTeamAbbr(TEAM1)}</span></div>
+      <div class="gr-t2">${teamLogo(TEAM2)}<span class="gr-tname">${getTeamAbbr(TEAM2)}</span></div>
     </div>`;
     const cards = headerRow + games.map(g => {
       const t1Score = g.team_a===TEAM1 ? g.team_a_score : g.team_b_score;
@@ -479,7 +646,7 @@
       </div>
       <div class="summary-bar"><strong>${recStr}</strong></div>
       <table class="games-table">
-        <thead><tr><th>Season</th><th>Date</th><th>${TEAM1}</th><th>${TEAM2}</th><th>Winner</th><th>Location</th></tr></thead>
+        <thead><tr><th class="th-indicator"></th><th>Season</th><th>Date</th><th>${TEAM1}</th><th>${TEAM2}</th><th>Winner</th><th>Location</th></tr></thead>
         <tbody>${tableRows}</tbody>
       </table>
       <div class="games-cards">${cards}</div>
