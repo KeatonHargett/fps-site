@@ -272,7 +272,9 @@
   .fcs-table td { padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
   .fcs-table tr:last-child td { border-bottom: 0; }
   .fcs-row { display: flex; align-items: center; gap: 0.7rem; }
-  .fcs-icon { width: 32px; height: 32px; border-radius: 50%; background: var(--gray); color: white; display: inline-flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 0.78rem; letter-spacing: 0.04em; flex-shrink: 0; }
+    /* v42: real ESPN logo when matched; reserved blank column when not */
+  .fcs-logo { width: 32px; height: 32px; object-fit: contain; flex-shrink: 0; display: block; }
+  .fcs-logo-placeholder { width: 32px; height: 32px; flex-shrink: 0; display: block; }
   .fcs-name { font-weight: 500; color: var(--dark); }
   .fcs-record-cell { text-align: right; white-space: nowrap; }
   @media (max-width: 640px) {
@@ -862,7 +864,7 @@
 
   let GAMES = [];
   let FBS_NAMES = new Set();      // accent-folded, lowercased keys
-  let fcsState = { sort: 'name', dir: 'asc', records: {} };
+  let fcsState = { sort: 'name', dir: 'asc', records: {}, logos: {} };
   let winChart = null;
 
   // Fold accents and case so "San José St." == "San Jose St."
@@ -952,17 +954,18 @@
       if (!useSplit || isFBS(opp)) fbsRecords[opp] = oppRecords[opp];
       else fcsRecords[opp] = oppRecords[opp];
     });
-    // v41: complete FCS/inactive opponent list from CFBD historical data (supplements Kyle H2H)
+    // v41/v42: FCS/inactive list with logoUrl from CFBD historical + ESPN logo match
     const histRows = (HISTORICAL_OPPS && HISTORICAL_OPPS.teams && HISTORICAL_OPPS.teams[TEAM]) || [];
     const fcsHistRecords = {};
+    const fcsLogos = {};
     histRows.forEach(r => {
-      // Skip any opp that's already counted in Kyle FBS data (shouldn't happen since spec excludes FBS, but safe)
       if (fbsRecords[r.opp]) return;
       fcsHistRecords[r.opp] = { w: r.w, l: r.l, t: r.t };
+      fcsLogos[r.opp] = r.logoUrl || null;
     });
-    // Merge any H2H-derived FCS records (rare since Kyle is FBS-only) - prefer historical if both exist
     Object.keys(fcsRecords).forEach(k => { if (!fcsHistRecords[k]) fcsHistRecords[k] = fcsRecords[k]; });
     fcsState.records = fcsHistRecords;
+    fcsState.logos = fcsLogos;
     const fcsCount = Object.keys(fcsHistRecords).length;
 
     const confLogoHtml = CONF_LOGOS[conf]
@@ -1074,10 +1077,12 @@
       const games = r.w + r.l + r.t;
       const wpct = games ? ((r.w + r.t * 0.5) / games).toFixed(3).replace(/^0/, '') : '.000';
       const cls = r.w > r.l ? 'lead' : r.l > r.w ? 'trail' : 'even';
-      const initials = (opp.replace(/[()]/g, '').split(/\s+/).filter(Boolean)
-                          .slice(0, 2).map(p => p[0]).join('') || '?').toUpperCase().slice(0, 2);
+      const logoUrl = (fcsState.logos && fcsState.logos[opp]) || null;
+      const logoCell = logoUrl
+        ? `<img class="fcs-logo" src="${logoUrl}" alt="" onerror="this.outerHTML='<span class=&quot;fcs-logo-placeholder&quot;></span>'">`
+        : `<span class="fcs-logo-placeholder" aria-hidden="true"></span>`;
       return `<tr>
-        <td><div class="fcs-row"><span class="fcs-icon" aria-hidden="true">${initials}</span><span class="fcs-name">${opp}</span></div></td>
+        <td><div class="fcs-row">${logoCell}<span class="fcs-name">${opp}</span></div></td>
         <td class="fcs-record-cell"><span class="h2h-record ${cls}">${r.w}-${r.l}${r.t?'-'+r.t:''} <span class="wpct">(${wpct})</span></span></td>
       </tr>`;
     }).join('');
