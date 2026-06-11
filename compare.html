@@ -273,10 +273,68 @@
   .stat-card-compare .scc-rank-of { font-family: 'Inter', sans-serif; font-size: 0.72rem; margin-top: 0.25rem; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.88; }
   .stat-card-compare .scc-na { font-family: 'Bebas Neue', sans-serif; font-size: 2.6rem; line-height: 1; opacity: 0.6; }
   @media (max-width: 900px) { .stat-comparison-grid { grid-template-columns: repeat(2, 1fr); gap: 0.85rem; } }
-  @media (max-width: 480px) {
-    .stat-comparison-grid { grid-template-columns: 1fr; gap: 0.75rem; }
-    .stat-card-compare .scc-value { font-size: 2.4rem; }
-    .stat-card-compare .scc-rank-ord { font-size: 1.4rem; }
+  @media (max-width: 700px) {
+    /* v33: mobile Winsipedia row layout — slim rows, better side highlighted in team color */
+    .stat-comparison-section { margin-top: 1.75rem; padding-top: 1.25rem; }
+    .stat-comparison-sub { margin-bottom: 0.85rem; }
+    .stat-comparison-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stat-card-compare {
+      box-shadow: none;
+      border-radius: 0;
+      border-bottom: 1px solid var(--border);
+      background: transparent;
+      overflow: visible;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr 1fr;
+      grid-template-areas: "left title right";
+      align-items: stretch;
+    }
+    .stat-card-compare:last-child { border-bottom: none; }
+    .stat-card-compare .scc-title {
+      grid-area: title;
+      background: var(--light);
+      color: var(--dark);
+      padding: 0.55rem 0.3rem;
+      min-height: 0;
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      line-height: 1.15;
+    }
+    .stat-card-compare .scc-body { display: contents; }
+    .stat-card-compare .scc-side {
+      padding: 0.5rem 0.35rem;
+      background: var(--light) !important;
+      color: var(--dark);
+      text-shadow: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.05rem;
+    }
+    .stat-card-compare .scc-side.left { grid-area: left; border-right: none; }
+    .stat-card-compare .scc-side.right { grid-area: right; }
+    .stat-card-compare.a-wins .scc-side.left {
+      background: var(--t1c, var(--orange)) !important;
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.45);
+    }
+    .stat-card-compare.b-wins .scc-side.right {
+      background: var(--t2c, #da291c) !important;
+      color: #fff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.45);
+    }
+    .stat-card-compare .scc-value { font-size: 1.35rem; line-height: 1; order: 2; }
+    .stat-card-compare .scc-rank-ord { font-size: 0.85rem; line-height: 1; margin-top: 0; order: 1; letter-spacing: 0.03em; }
+    .stat-card-compare .scc-rank-of { display: none; }
+    .stat-card-compare .scc-na { font-size: 1.35rem; }
   }
   @media (max-width: 700px) {
     .sel-team-logo, .sel-team-placeholder { width: 78px; height: 78px; }
@@ -444,9 +502,11 @@
   .controls-row .time-period-cell { display: flex; justify-content: flex-end; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
   .controls-row .time-period-cell label { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; color: var(--gray); letter-spacing: 0.07em; }
   .controls-row .time-period-cell select { min-width: 200px; padding: 0.55rem 2.25rem 0.55rem 0.8rem; }
-  @media (max-width: 640px) {
+  @media (max-width: 700px) {
+    /* v33: stack — Time Period dropdown on top, Full Games List button beneath */
     .controls-row { grid-template-columns: 1fr; }
-    .controls-row .games-btn-cell, .controls-row .time-period-cell { justify-content: center; }
+    .controls-row .time-period-cell { order: 1; justify-content: center; }
+    .controls-row .games-btn-cell { order: 2; justify-content: center; }
   }
 
   /* Suggested matchups */
@@ -1405,7 +1465,7 @@
       sbSchool.style.color = meta ? (meta.color || '') : '';
     }
     if (sbMascot) { sbMascot.textContent = disp.mascot; }
-    if (sbAbbr) { sbAbbr.textContent = (meta && meta.abbr) ? meta.abbr : team.toUpperCase(); }
+    if (sbAbbr) { sbAbbr.textContent = getTeamAbbr(team); }
     if (sbBtn) { sbBtn.style.setProperty('--team-color', meta && meta.color ? meta.color : 'var(--orange)'); }
   }
 
@@ -1468,6 +1528,19 @@
     'Wisconsin':     { ncClaimed:1,  ncClaimedRank:46, ncRecognized:1,  ncRecognizedRank:38, confChamps:15, confChampsRank:24,bowlGames:37, bowlGamesRank:24, allAmericans:43,  allAmericansRank:34, heismans:1, heismansRank:23,nflPicks:215, nflPicksRank:33,firstRound:21, firstRoundRank:45, weeksInAP:351, weeksInAPRank:33, weeksAtNo1:1,   weeksAtNo1Rank:32 }
   };
   const TOTAL_FBS = 135;
+
+  // v33: Manual abbreviation overrides — layered on top of TEAM_META.abbr.
+  // Extend by adding more entries (display label only — no data is altered).
+  const ABBR_OVERRIDES = {
+    'Oklahoma St.': 'OSU',
+    'Ohio St.': 'OHST'
+  };
+  function getTeamAbbr(team) {
+    if (ABBR_OVERRIDES[team]) return ABBR_OVERRIDES[team];
+    const m = TEAM_META[team];
+    if (m && m.abbr) return m.abbr;
+    return (team || '').toUpperCase();
+  }
 
   // Live rank caches over the entire GAMES dataset
   let _winsRankCache = null;
@@ -2154,18 +2227,32 @@
         b: pick(ps2, s2, 'weeksAtOne', 'weeksAtNo1', 'weeksAtNo1Rank') }
     ];
 
+    // v33: compute numeric value for each side so we can highlight the better one on mobile
+    const numFor = v => {
+      if (v == null) return null;
+      const n = parseFloat(String(v).replace(/,/g, ''));
+      return isFinite(n) ? n : null;
+    };
+    const winnerClass = (av, bv) => {
+      const an = numFor(av), bn = numFor(bv);
+      if (an == null || bn == null) return '';
+      if (an > bn) return ' a-wins';
+      if (bn > an) return ' b-wins';
+      return ''; // tie -> highlight neither
+    };
+
     return `<div class="stat-comparison-section">
       <div class="chart-title">Program Comparison</div>
       <p class="stat-comparison-sub">All-time program totals with national rank</p>
       <div class="stat-comparison-grid">
-        ${rows.map(s => `<div class="stat-card-compare">
+        ${rows.map(s => `<div class="stat-card-compare${winnerClass(s.a.v, s.b.v)}" style="--t1c:${t1Color};--t2c:${t2Color}">
           <div class="scc-title">${s.title}</div>
           <div class="scc-body">
             <div class="scc-side left" style="background:${t1Color}">
               ${valHtml(s.a.v)}
               ${rankHtml(s.a.r, s.a.total)}
             </div>
-            <div class="scc-side" style="background:${t2Color}">
+            <div class="scc-side right" style="background:${t2Color}">
               ${valHtml(s.b.v)}
               ${rankHtml(s.b.r, s.b.total)}
             </div>
