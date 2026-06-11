@@ -301,15 +301,60 @@
   .sb-btn:hover, .sb-btn.open { border-color: var(--orange); }
   .sb-school { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; line-height: 1; letter-spacing: 0.03em; color: var(--dark); }
   .sb-mascot { font-family: 'Inter', sans-serif; font-size: 0.85rem; color: var(--gray); font-weight: 500; }
+  .sb-abbr { display: none; }
   .sb-caret { width: 18px; height: 18px; position: absolute; right: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--gray); pointer-events: none; }
   .sb-side.right .sb-caret { left: 0.85rem; right: auto; }
   .sb-side .dd-panel { left: 0; right: 0; }
   .sb-vs { display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 2.25rem; color: var(--orange); padding: 0 0.4rem; }
   @media (max-width: 700px) {
-    .selector-bar { grid-template-columns: 1fr; }
-    .sb-vs { padding: 0.2rem 0; font-size: 1.6rem; }
-    .sb-side.right .sb-btn { text-align: left; align-items: flex-start; }
-    .sb-side.right .sb-caret { left: auto; right: 0.85rem; }
+    /* v32: compact Winsipedia style selectors -> [ABBR] VS [ABBR] on one row with team color underlines */
+    .selector-bar {
+      grid-template-columns: 1fr auto 1fr;
+      gap: 0.5rem;
+      align-items: end;
+      margin: 0 0 1.25rem;
+    }
+    .sb-side .sb-btn {
+      width: 100%;
+      padding: 0.35rem 0.4rem 0.5rem;
+      border: none;
+      background: transparent;
+      border-radius: 0;
+      border-bottom: 3px solid var(--team-color, var(--border));
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      text-align: center;
+    }
+    .sb-side.right .sb-btn { justify-content: center; align-items: center; text-align: center; }
+    .sb-btn:hover, .sb-btn.open { border-color: var(--team-color, var(--orange)); }
+    .sb-school, .sb-mascot { display: none; }
+    .sb-abbr {
+      display: inline-block;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.9rem;
+      line-height: 1;
+      letter-spacing: 0.04em;
+      color: var(--dark);
+    }
+    .sb-caret {
+      position: static;
+      transform: none;
+      width: 14px;
+      height: 14px;
+      margin-left: 0.15rem;
+    }
+    .sb-side.right .sb-caret { left: auto; right: auto; }
+    .sb-vs {
+      padding: 0 0.2rem 0.45rem;
+      font-size: 1.4rem;
+      color: var(--orange);
+      align-self: end;
+    }
+    /* v32: widen dropdown panel so team names don't cramp under the compact selector */
+    .sb-side .dd-panel { width: calc(100vw - 2rem); max-width: 360px; left: 0; right: auto; }
+    .sb-side.right .dd-panel { right: 0; left: auto; }
   }
 
   /* v29 Tweak 1B: hero H2H bar with logos on ends, big WINS+games next to logos */
@@ -453,6 +498,7 @@
         <button class="sb-btn dd-toggle" id="dd1-toggle" type="button">
           <span class="sb-school" id="dd1-school">Pick a team</span>
           <span class="sb-mascot" id="dd1-mascot"></span>
+          <span class="sb-abbr" id="dd1-abbr"></span>
           <svg class="sb-caret" viewBox="0 0 20 20" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m6 8 4 4 4-4"/></svg>
         </button>
         <div class="dd-panel" id="dd1-panel">
@@ -466,6 +512,7 @@
         <button class="sb-btn dd-toggle" id="dd2-toggle" type="button">
           <span class="sb-school" id="dd2-school">Pick a team</span>
           <span class="sb-mascot" id="dd2-mascot"></span>
+          <span class="sb-abbr" id="dd2-abbr"></span>
           <svg class="sb-caret" viewBox="0 0 20 20" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m6 8 4 4 4-4"/></svg>
         </button>
         <div class="dd-panel" id="dd2-panel">
@@ -1324,6 +1371,9 @@
     // v29: update the new selector-bar text (SCHOOL + mascot)
     const sbSchool = document.getElementById(`${ddId}-school`);
     const sbMascot = document.getElementById(`${ddId}-mascot`);
+    // v32: mobile compact selector — abbreviation + team-color underline
+    const sbAbbr = document.getElementById(`${ddId}-abbr`);
+    const sbBtn = document.getElementById(`${ddId}-toggle`);
     if (!team) {
       if (card) { card.classList.add('empty'); }
       if (placeholder) placeholder.style.display = '';
@@ -1331,6 +1381,8 @@
       if (name) { name.textContent = ''; name.style.color = ''; }
       if (sbSchool) { sbSchool.textContent = 'Pick a team'; sbSchool.style.color = ''; }
       if (sbMascot) { sbMascot.textContent = ''; }
+      if (sbAbbr) { sbAbbr.textContent = '—'; }
+      if (sbBtn) { sbBtn.style.removeProperty('--team-color'); }
       return;
     }
     const meta = TEAM_META[team];
@@ -1353,6 +1405,8 @@
       sbSchool.style.color = meta ? (meta.color || '') : '';
     }
     if (sbMascot) { sbMascot.textContent = disp.mascot; }
+    if (sbAbbr) { sbAbbr.textContent = (meta && meta.abbr) ? meta.abbr : team.toUpperCase(); }
+    if (sbBtn) { sbBtn.style.setProperty('--team-color', meta && meta.color ? meta.color : 'var(--orange)'); }
   }
 
   // ===== Tweak 5: stat-comparison reference data =====
