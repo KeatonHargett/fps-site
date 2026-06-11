@@ -125,6 +125,12 @@
     .sb-vs.sb-socials .sb-soc { width: 24px; height: 24px; }
     .sb-vs.sb-socials .sb-soc svg { width: 14px; height: 14px; }
   }
+
+  @media (max-width: 700px) {
+    /* v39: viewport safety - prevent horizontal scroll on mobile */
+    body, main { overflow-x: hidden; }
+    .compare-card { max-width: 100%; box-sizing: border-box; }
+  }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -192,12 +198,33 @@
   }
   .sb-side .dd-panel { left: 0; right: 0; }
   @media (max-width: 700px) {
-    .sb-abbr { font-size: 1.9rem; }
-    .sb-caret { width: 14px; height: 14px; margin-left: 0.15rem; }
-    .sb-vs { font-size: 1.4rem; padding: 0 0.2rem 0.45rem; }
-    .selector-bar { gap: 0.4rem; margin: 1rem 0 1.25rem; }
-    .sb-side .dd-panel { width: calc(100vw - 2rem); max-width: 360px; left: 0; right: auto; }
-    .sb-side.right .dd-panel { right: 0; left: auto; }
+    /* v39: stack home selectors vertically on mobile so nothing clips the viewport */
+    .selector-bar {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "team1"
+        "socials"
+        "team2";
+      gap: 0.4rem;
+      margin: 1rem 0 1.25rem;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .sb-side { width: 100%; max-width: 100%; box-sizing: border-box; }
+    .sb-side:first-of-type { grid-area: team1; }
+    .sb-side.right { grid-area: team2; }
+    .sb-vs.sb-socials, .sb-vs { grid-area: socials; padding: 0.3rem 0; justify-content: center; align-self: center; }
+    .sb-abbr {
+      font-size: 1.9rem;
+      max-width: calc(100% - 28px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sb-caret { width: 14px; height: 14px; margin-left: 0.15rem; flex-shrink: 0; }
+    .sb-vs { font-size: 1.4rem; }
+    .sb-side .dd-panel { width: 100%; max-width: 100%; left: 0; right: 0; box-sizing: border-box; }
+    .sb-side.right .dd-panel { right: 0; left: 0; }
   }
 
   /* Custom dropdown */
@@ -368,7 +395,8 @@
 
 </style>
 <title>Front Porch Sports — College Football Rivalry Database</title>
-</head>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
+     crossorigin="anonymous"></script></head>
 <body>
 <nav class="navbar">
   <div class="navbar-inner">
