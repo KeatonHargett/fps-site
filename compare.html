@@ -330,12 +330,62 @@
   .hb-seg.ties { background: var(--gray); font-size: 0.85rem; }
   .hb-record-line { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; text-align: center; letter-spacing: 0.04em; }
   @media (max-width: 700px) {
-    .hero-bar-row { grid-template-columns: 80px 1fr 80px; gap: 0.5rem; }
-    .hb-end img { width: 60px; height: 60px; }
-    .hb-end .hb-wins { font-size: 2.25rem; }
-    .hb-end .hb-wins-label { font-size: 0.78rem; }
-    .hb-bar { height: 42px; }
-    .hb-seg { font-size: 1.1rem; }
+    /* v31: mobile H2H hero -> Winsipedia layout. Row 1: [Logo + Wins block] [Ties] [Wins block + Logo]. Row 2: full width bar. */
+    .hero-bar { margin: 1.25rem 0 1rem; }
+    .hero-bar-row {
+      grid-template-columns: 1fr auto 1fr;
+      grid-template-areas:
+        "left tie right"
+        "bar  bar  bar";
+      align-items: center;
+      column-gap: 0.4rem;
+      row-gap: 0.85rem;
+    }
+    .hero-bar-row > .hb-end:first-child { grid-area: left; }
+    .hero-bar-row > .hb-end:last-child  { grid-area: right; }
+    .hb-bar-wrap { display: contents; }
+    .hero-bar-row .hb-bar {
+      grid-area: bar;
+      width: 100%;
+      height: 40px;
+    }
+    .hero-bar-row .hb-record-line {
+      grid-area: tie;
+      margin: 0;
+      align-self: center;
+      justify-self: center;
+      font-size: 1.05rem;
+      letter-spacing: 0.05em;
+      color: var(--gray);
+    }
+    .hb-end {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-template-areas:
+        "logo wins"
+        "logo label"
+        "logo games";
+      column-gap: 0.5rem;
+      row-gap: 0;
+      align-items: center;
+      justify-items: start;
+      text-align: left;
+    }
+    .hero-bar-row > .hb-end:last-child {
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        "wins  logo"
+        "label logo"
+        "games logo";
+      justify-items: end;
+      text-align: right;
+    }
+    .hb-end .hb-logo-wrap { grid-area: logo; padding: 0; }
+    .hb-end img { width: 52px; height: 52px; }
+    .hb-end .hb-wins { grid-area: wins; font-size: 1.9rem; line-height: 1.05; }
+    .hb-end .hb-wins-label { grid-area: label; font-size: 0.7rem; letter-spacing: 0.1em; margin-top: -0.1rem; }
+    .hb-end .hb-games { grid-area: games; font-size: 0.66rem; margin-top: 0; }
+    .hb-seg { font-size: 1rem; }
   }
 
   /* v29 Tweak 1C: Current Win Streak block */
