@@ -443,13 +443,21 @@
     .stat-card-compare .scc-side.right { grid-area: right; }
     .stat-card-compare.a-wins .scc-side.left {
       background: var(--t1c, var(--orange)) !important;
-      color: #fff;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.45);
+      color: #fff !important;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.45) !important;
+    }
+    .stat-card-compare.a-wins .scc-side.left .scc-value,
+    .stat-card-compare.a-wins .scc-side.left .scc-rank-ord {
+      color: #fff !important;
     }
     .stat-card-compare.b-wins .scc-side.right {
       background: var(--t2c, #da291c) !important;
-      color: #fff;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.45);
+      color: #fff !important;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.45) !important;
+    }
+    .stat-card-compare.b-wins .scc-side.right .scc-value,
+    .stat-card-compare.b-wins .scc-side.right .scc-rank-ord {
+      color: #fff !important;
     }
     .stat-card-compare .scc-value { font-size: 1.35rem; line-height: 1; order: 2; }
     .stat-card-compare .scc-rank-ord { font-size: 0.85rem; line-height: 1; margin-top: 0; order: 1; letter-spacing: 0.03em; }
