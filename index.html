@@ -291,8 +291,11 @@
   .team-label .team-info { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; line-height: 1.1; }
   .team-label.right .team-info { text-align: right; }
   .team-label .wins-count { font-family: 'Inter'; font-size: 0.85rem; color: var(--gray); font-weight: 500; }
-  .h2h-bar { height: 52px; display: flex; border-radius: 6px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
-  .h2h-bar-segment { display: flex; align-items: center; justify-content: center; color: white; font-family: 'Bebas Neue', sans-serif; font-size: 1.75rem; text-shadow: 0 1px 2px rgba(0,0,0,0.3); min-width: 0; transition: width 0.55s cubic-bezier(0.22,0.61,0.36,1); }
+  /* v43: home win-totals bar uses the same edge-to-middle fill animation as the compare page */
+  .h2h-bar { position: relative; height: 52px; background: var(--light); border-radius: 6px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
+  .h2h-bar-segment { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; color: white; font-family: 'Bebas Neue', sans-serif; font-size: 1.75rem; text-shadow: 0 1px 2px rgba(0,0,0,0.3); transition: width 1s cubic-bezier(0.42,0,0.58,1), left 1s cubic-bezier(0.42,0,0.58,1); white-space: nowrap; overflow: hidden; min-width: 0; }
+  .h2h-bar-segment.t1 { left: 0; }
+  .h2h-bar-segment.t2 { right: 0; }
   .h2h-bar-segment.ties { background: var(--gray); font-size: 1rem; }
   .chart-box { margin: 2.5rem 0; }
   .chart-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; text-align: center; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
@@ -394,6 +397,7 @@
 </style>
 <title>Front Porch Sports — College Football Rivalry Database</title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
+     crossorigin="anonymous"></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
      crossorigin="anonymous"></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
      crossorigin="anonymous"></script></head>
 <body>
@@ -1297,9 +1301,9 @@
           <div class="team-label right">${teamLogo(state.team2,true)}<div class="team-info">${state.team2}<br><span class="wins-count">${t2Wins} wins</span></div></div>
         </div>
         <div class="h2h-bar">
-          ${t1Pct>0?`<div class="h2h-bar-segment" data-target="${t1Pct}" style="background:${t1Color};width:${prevWidths.t1}%">${t1Pct>=8?t1Wins:''}</div>`:''}
-          ${tiePct>0?`<div class="h2h-bar-segment ties" data-target="${tiePct}" title="${ties} tie${ties===1?'':'s'}" style="width:${prevWidths.tie}%">${tiePct>=6?ties+(ties===1?' TIE':' TIES'):tiePct>=3?ties:''}</div>`:''}
-          ${t2Pct>0?`<div class="h2h-bar-segment" data-target="${t2Pct}" style="background:${t2Color};width:${prevWidths.t2}%">${t2Pct>=8?t2Wins:''}</div>`:''}
+          ${t1Pct>0?`<div class="h2h-bar-segment t1" data-target-width="${t1Pct}" style="background:${t1Color};width:0%">${t1Pct>=8?t1Wins:''}</div>`:''}
+          ${tiePct>0?`<div class="h2h-bar-segment ties" data-target-left="${t1Pct}" data-target-width="${tiePct}" title="${ties} tie${ties===1?'':'s'}" style="left:${(t1Pct + tiePct/2).toFixed(2)}%;width:0%">${tiePct>=6?ties+(ties===1?' TIE':' TIES'):tiePct>=3?ties:''}</div>`:''}
+          ${t2Pct>0?`<div class="h2h-bar-segment t2" data-target-width="${t2Pct}" style="background:${t2Color};width:0%">${t2Pct>=8?t2Wins:''}</div>`:''}
         </div>
       </div>
 
@@ -1387,10 +1391,13 @@
     // Count-up the big total number
     animateNumber(document.getElementById('total-num'), total);
     // Slide the bar segments from prev widths to target widths
+    // v43: each color grows in from its own edge, tie segment opens at center - matches compare page
     requestAnimationFrame(() => {
       document.querySelectorAll('.h2h-bar-segment').forEach(seg => {
-        const tgt = parseFloat(seg.dataset.target);
-        if (!isNaN(tgt)) seg.style.width = tgt + '%';
+        const tgtW = parseFloat(seg.dataset.targetWidth);
+        const tgtL = parseFloat(seg.dataset.targetLeft);
+        if (!isNaN(tgtW)) seg.style.width = tgtW + '%';
+        if (!isNaN(tgtL)) seg.style.left = tgtL + '%';
       });
     });
     prevWidths = { t1: t1Pct, tie: tiePct, t2: t2Pct };
