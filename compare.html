@@ -150,11 +150,12 @@
   .chart-reveal-row .rev-meta .rev-pct { color: var(--gray); margin-left: 0.3rem; font-weight: 600; }
   .chart-reveal-row .rev-pill { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 999px; color: white; font-size: 0.75rem; letter-spacing: 0.04em; font-weight: 600; }
 
-  /* v37: Vs Ranked Opponents rows - no auto-highlight, white card with team color value text */
-  .stat-card-compare.ranked-row .scc-side.left .scc-value { color: var(--t1c, var(--dark)) !important; }
-  .stat-card-compare.ranked-row .scc-side.right .scc-value { color: var(--t2c, var(--dark)) !important; }
-  .stat-card-compare.ranked-row .scc-side { background: white !important; color: var(--dark) !important; text-shadow: none !important; }
+  /* v38: Vs Ranked rows now also get winner highlight on desktop (a-wins/b-wins set via win pct) */
+  .stat-card-compare.ranked-row .scc-side.left .scc-value { color: var(--t1c, var(--dark)); }
+  .stat-card-compare.ranked-row .scc-side.right .scc-value { color: var(--t2c, var(--dark)); }
   .stat-card-compare.ranked-row .scc-record { font-size: 2.3rem; letter-spacing: 0.02em; }
+  .stat-card-compare.ranked-row.a-wins .scc-side.left .scc-value { color: var(--t1win-text, #fff); }
+  .stat-card-compare.ranked-row.b-wins .scc-side.right .scc-value { color: var(--t2win-text, #fff); }
   @media (max-width: 700px) {
     .stat-card-compare.ranked-row .scc-side { background: var(--light) !important; }
     .stat-card-compare.ranked-row .scc-record { font-size: 1.1rem; }
@@ -349,6 +350,7 @@
   .stat-comparison-sub { text-align: center; color: var(--gray); font-size: 0.85rem; margin: -0.25rem 0 1.5rem; }
   .stat-comparison-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.1rem; }
   /* v36: polished desktop Program Comparison cards - soft label, larger values, tasteful color accents */
+  /* v38: polished desktop Program Comparison cards - clean title, full-color winner half */
   .stat-card-compare {
     background: white;
     border: 1px solid var(--border);
@@ -360,35 +362,69 @@
     position: relative;
   }
   .stat-card-compare .scc-title {
-    background: var(--light);
+    background: transparent;
     color: var(--dark);
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
+    font-size: 1.25rem;
+    font-weight: 700;
     text-align: center;
-    padding: 0.7rem 0.5rem;
-    letter-spacing: 0.06em;
+    padding: 0.85rem 0.6rem 0.5rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     line-height: 1.15;
     min-height: 2.6rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-bottom: 1px solid var(--border);
+    border-bottom: none;
   }
   .stat-card-compare .scc-body { display: grid; grid-template-columns: 1fr 1fr; flex: 1; }
   .stat-card-compare .scc-side {
     padding: 1.1rem 0.5rem 1.2rem;
     text-align: center;
-    color: var(--dark) !important;
-    text-shadow: none !important;
-    background: white !important;
+    color: var(--dark);
+    text-shadow: none;
+    background: white;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    transition: background 0.15s;
   }
-  .stat-card-compare .scc-side.left { border-right: 1px solid var(--border); }
-  .stat-card-compare .scc-side.left .scc-value, .stat-card-compare .scc-side.left .scc-rank-ord { color: var(--t1c, var(--dark)) !important; }
-  .stat-card-compare .scc-side.right .scc-value, .stat-card-compare .scc-side.right .scc-rank-ord { color: var(--t2c, var(--dark)) !important; }
+  .stat-card-compare .scc-side.left { border-right: none; }
+  .stat-card-compare .scc-side.left .scc-value, .stat-card-compare .scc-side.left .scc-rank-ord { color: var(--t1c, var(--dark)); }
+  .stat-card-compare .scc-side.right .scc-value, .stat-card-compare .scc-side.right .scc-rank-ord { color: var(--t2c, var(--dark)); }
+  /* v38: winner half gets primary color background + secondary color text (with contrast fallback) */
+  .stat-card-compare.a-wins .scc-side.left {
+    background: var(--t1c, var(--orange));
+    color: var(--t1win-text, #fff);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  }
+  .stat-card-compare.a-wins .scc-side.left .scc-value,
+  .stat-card-compare.a-wins .scc-side.left .scc-rank-ord {
+    color: var(--t1win-text, #fff);
+  }
+  .stat-card-compare.a-wins .scc-side.left .scc-rank-of,
+  .stat-card-compare.a-wins .scc-side.left .scc-value-sub,
+  .stat-card-compare.a-wins .scc-side.left .scc-record-sub {
+    color: var(--t1win-text, #fff);
+    opacity: 0.85;
+  }
+  .stat-card-compare.b-wins .scc-side.right {
+    background: var(--t2c, var(--blue));
+    color: var(--t2win-text, #fff);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  }
+  .stat-card-compare.b-wins .scc-side.right .scc-value,
+  .stat-card-compare.b-wins .scc-side.right .scc-rank-ord {
+    color: var(--t2win-text, #fff);
+  }
+  .stat-card-compare.b-wins .scc-side.right .scc-rank-of,
+  .stat-card-compare.b-wins .scc-side.right .scc-value-sub,
+  .stat-card-compare.b-wins .scc-side.right .scc-record-sub {
+    color: var(--t2win-text, #fff);
+    opacity: 0.85;
+  }
   .stat-card-compare .scc-value {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 3rem;
@@ -687,6 +723,7 @@
 </style>
 <title>Compare Teams — Front Porch Sports</title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
+     crossorigin="anonymous"></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
      crossorigin="anonymous"></script></head>
 <body>
 <nav class="navbar">
@@ -2356,8 +2393,45 @@
   }
 
   // v30: use PROGRAM_STATS for complete program-level stats; fall back to legacy TEAM_STATS
+  // v38: contrast helper - returns the most legible text color for a given primary bg + alt
+  function hexToRgb(hex) {
+    if (!hex) return null;
+    const h = hex.replace('#', '');
+    const n = h.length === 3 ? h.split('').map(c => c + c).join('') : h;
+    if (n.length !== 6) return null;
+    const r = parseInt(n.slice(0,2), 16), g = parseInt(n.slice(2,4), 16), b = parseInt(n.slice(4,6), 16);
+    return { r, g, b };
+  }
+  function relLum(rgb) {
+    if (!rgb) return 1;
+    const f = v => { v /= 255; return v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4); };
+    return 0.2126*f(rgb.r) + 0.7152*f(rgb.g) + 0.0722*f(rgb.b);
+  }
+  function contrastRatio(c1, c2) {
+    const L1 = relLum(c1), L2 = relLum(c2);
+    return (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
+  }
+  function winnerTextColor(primary, alt) {
+    // Prefer alt; if contrast vs primary is too low, fall back to white or black based on primary luminance
+    const pRgb = hexToRgb(primary), aRgb = hexToRgb(alt);
+    if (pRgb && aRgb) {
+      const r = contrastRatio(pRgb, aRgb);
+      if (r >= 4.5) return alt;
+    }
+    // fallback
+    if (pRgb) {
+      return relLum(pRgb) > 0.45 ? '#000000' : '#ffffff';
+    }
+    return '#ffffff';
+  }
+
   function renderStatComparison(t1Color, t2Color) {
     const t1 = state.team1, t2 = state.team2;
+    // v38: secondary colors + contrast-checked winner text colors for desktop highlight
+    const t1Alt = (TEAM_META[t1] && TEAM_META[t1].alt) || '#ffffff';
+    const t2Alt = (TEAM_META[t2] && TEAM_META[t2].alt) || '#ffffff';
+    const t1WinText = winnerTextColor(t1Color, t1Alt);
+    const t2WinText = winnerTextColor(t2Color, t2Alt);
     const ps1 = (PROGRAM_STATS && PROGRAM_STATS[t1]) || null;
     const ps2 = (PROGRAM_STATS && PROGRAM_STATS[t2]) || null;
     const s1 = TEAM_STATS[t1] || {};
@@ -2466,9 +2540,17 @@
       <div class="stat-comparison-grid">
         ${rows.map(s => {
           if (s.isRecord) {
-            // v37: record-style row (Vs Top N) - no auto-highlight; show W-L-T + pct
+            // v37: record-style row (Vs Top N) - winner determined by win %
             const fmtRec = obj => obj ? `<div class="scc-value scc-record">${obj.rec}</div><div class="scc-rank-of">${obj.pct == null ? '' : '.' + (obj.pct * 1000).toFixed(0).padStart(3,'0') + ' WIN%'}</div>` : '<div class="scc-na">&mdash;</div>';
-            return `<div class="stat-card-compare ranked-row" style="--t1c:${t1Color};--t2c:${t2Color}">
+            // v38: ranked row winner = higher win %
+            let rankedClass = '';
+            const ap = s.a.recObj ? s.a.recObj.pct : null;
+            const bp = s.b.recObj ? s.b.recObj.pct : null;
+            if (ap != null && bp != null) {
+              if (ap > bp) rankedClass = ' a-wins';
+              else if (bp > ap) rankedClass = ' b-wins';
+            }
+            return `<div class="stat-card-compare ranked-row${rankedClass}" style="--t1c:${t1Color};--t2c:${t2Color};--t1alt:${t1Alt};--t2alt:${t2Alt};--t1win-text:${t1WinText};--t2win-text:${t2WinText}">
               <div class="scc-title">${s.title}</div>
               <div class="scc-body">
                 <div class="scc-side left">${fmtRec(s.a.recObj)}</div>
@@ -2476,7 +2558,7 @@
               </div>
             </div>`;
           }
-          return `<div class="stat-card-compare${winnerClass(s.a.v, s.b.v)}" style="--t1c:${t1Color};--t2c:${t2Color}">
+          return `<div class="stat-card-compare${winnerClass(s.a.v, s.b.v)}" style="--t1c:${t1Color};--t2c:${t2Color};--t1alt:${t1Alt};--t2alt:${t2Alt};--t1win-text:${t1WinText};--t2win-text:${t2WinText}">
             <div class="scc-title">${s.title}</div>
             <div class="scc-body">
               <div class="scc-side left" style="background:${t1Color}">
