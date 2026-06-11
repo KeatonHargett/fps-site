@@ -712,6 +712,7 @@
 <title>Compare Teams — Front Porch Sports</title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
      crossorigin="anonymous"></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
+     crossorigin="anonymous"></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
      crossorigin="anonymous"></script></head>
 <body>
 <nav class="navbar">
@@ -1808,6 +1809,7 @@
   };
 
   const params = new URLSearchParams(location.search);
+  const _hadUrlTeams = !!(params.get('team1') || params.get('team2'));
   if (params.get('team1')) state.team1 = params.get('team1');
   if (params.get('team2')) state.team2 = params.get('team2');
 
@@ -1815,7 +1817,26 @@
   function fpsKey(s) {
     return (s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
   }
-  Promise.all([
+  // v40: pick a random FBS team pair that has at least one H2H game in the dataset
+  function pickRandomMatchup() {
+    if (!GAMES || GAMES.length === 0 || TEAMS.length === 0) return null;
+    const isFbs = t => FBS_NAMES.size === 0 || FBS_NAMES.has(fpsKey(t));
+    const opponents = {};
+    GAMES.forEach(g => {
+      if (!isFbs(g.team_a) || !isFbs(g.team_b)) return;
+      if (g.team_a === g.team_b) return;
+      (opponents[g.team_a] = opponents[g.team_a] || new Set()).add(g.team_b);
+      (opponents[g.team_b] = opponents[g.team_b] || new Set()).add(g.team_a);
+    });
+    const candidates = Object.keys(opponents).filter(t => opponents[t].size > 0);
+    if (candidates.length === 0) return null;
+    const a = candidates[Math.floor(Math.random() * candidates.length)];
+    const opps = [...opponents[a]];
+    const b = opps[Math.floor(Math.random() * opps.length)];
+    return [a, b];
+  }
+
+    Promise.all([
     fetch('front_porch_games.json').then(r => r.json()),
     fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] })),
     _ulPromise
@@ -1828,6 +1849,14 @@
       // Dropdown shows FBS-only when fbs_teams.json loaded; otherwise full list.
       TEAMS = (FBS_NAMES.size > 0 ? allTeams.filter(t => FBS_NAMES.has(fpsKey(t))) : allTeams).sort();
       applyMaxSeasonFromData(data);
+      // v40: when loaded without URL params, pick a random FBS pair with a prior matchup
+      if (!_hadUrlTeams) {
+        const pair = pickRandomMatchup();
+        if (pair) {
+          state.team1 = pair[0];
+          state.team2 = pair[1];
+        }
+      }
       initDropdown('dd1', 'team1');
       initDropdown('dd2', 'team2');
       initControls();

@@ -198,33 +198,31 @@
   }
   .sb-side .dd-panel { left: 0; right: 0; }
   @media (max-width: 700px) {
-    /* v39: stack home selectors vertically on mobile so nothing clips the viewport */
+    /* v40: revert v39 vertical stack - side by side selectors matching the compare page bar */
     .selector-bar {
-      grid-template-columns: 1fr;
-      grid-template-areas:
-        "team1"
-        "socials"
-        "team2";
+      grid-template-columns: 1fr auto 1fr;
       gap: 0.4rem;
       margin: 1rem 0 1.25rem;
       width: 100%;
       max-width: 100%;
       box-sizing: border-box;
     }
-    .sb-side { width: 100%; max-width: 100%; box-sizing: border-box; }
-    .sb-side:first-of-type { grid-area: team1; }
-    .sb-side.right { grid-area: team2; }
-    .sb-vs.sb-socials, .sb-vs { grid-area: socials; padding: 0.3rem 0; justify-content: center; align-self: center; }
+    .sb-side { min-width: 0; box-sizing: border-box; }
+    .sb-side .sb-btn { padding: 0.35rem 0.3rem 0.5rem; min-width: 0; }
     .sb-abbr {
-      font-size: 1.9rem;
-      max-width: calc(100% - 28px);
+      font-size: 1.7rem;
+      max-width: calc(100% - 22px);
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    .sb-caret { width: 14px; height: 14px; margin-left: 0.15rem; flex-shrink: 0; }
-    .sb-vs { font-size: 1.4rem; }
-    .sb-side .dd-panel { width: 100%; max-width: 100%; left: 0; right: 0; box-sizing: border-box; }
-    .sb-side.right .dd-panel { right: 0; left: 0; }
+    .sb-caret { width: 14px; height: 14px; margin-left: 0.1rem; flex-shrink: 0; }
+    .sb-vs { font-size: 1.4rem; padding: 0 0.15rem 0.4rem; }
+    .sb-vs.sb-socials { gap: 0.25rem; padding: 0 0.1rem 0.4rem; }
+    .sb-vs.sb-socials .sb-soc { width: 22px; height: 22px; }
+    .sb-vs.sb-socials .sb-soc svg { width: 12px; height: 12px; }
+    .sb-side .dd-panel { width: calc(100vw - 2rem); max-width: 360px; left: 0; right: auto; box-sizing: border-box; }
+    .sb-side.right .dd-panel { right: 0; left: auto; }
   }
 
   /* Custom dropdown */
@@ -396,6 +394,7 @@
 </style>
 <title>Front Porch Sports — College Football Rivalry Database</title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
+     crossorigin="anonymous"></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
      crossorigin="anonymous"></script></head>
 <body>
 <nav class="navbar">
@@ -917,7 +916,28 @@
   function fpsKey(s) {
     return (s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
   }
-  Promise.all([
+  // v40: pick a random FBS team pair that has at least one H2H game in the dataset
+  function pickRandomMatchup() {
+    if (!GAMES || GAMES.length === 0 || TEAMS.length < 2) return null;
+    // Build opponent map for FBS-only teams
+    const fbs = FBS_NAMES;
+    const isFbs = t => fbs.size === 0 || fbs.has(fpsKey(t));
+    const opponents = {};
+    GAMES.forEach(g => {
+      if (!isFbs(g.team_a) || !isFbs(g.team_b)) return;
+      if (g.team_a === g.team_b) return;
+      (opponents[g.team_a] = opponents[g.team_a] || new Set()).add(g.team_b);
+      (opponents[g.team_b] = opponents[g.team_b] || new Set()).add(g.team_a);
+    });
+    const candidates = Object.keys(opponents).filter(t => opponents[t].size > 0);
+    if (candidates.length === 0) return null;
+    const a = candidates[Math.floor(Math.random() * candidates.length)];
+    const opps = [...opponents[a]];
+    const b = opps[Math.floor(Math.random() * opps.length)];
+    return [a, b];
+  }
+
+    Promise.all([
     fetch('front_porch_games.json').then(r => r.json()),
     fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] }))
   ])
@@ -927,6 +947,15 @@
       const allTeams = [...new Set(data.flatMap(g => [g.team_a, g.team_b]))];
       TEAMS = (FBS_NAMES.size > 0 ? allTeams.filter(t => FBS_NAMES.has(fpsKey(t))) : allTeams).sort();
       applyMaxSeasonFromData(data);
+      // v40: load with two random FBS teams that have at least one prior H2H matchup
+      // (skip random pick if URL provided team1/team2)
+      if (!state.team1 || !state.team2) {
+        const pair = pickRandomMatchup();
+        if (pair) {
+          state.team1 = pair[0];
+          state.team2 = pair[1];
+        }
+      }
       initDropdown('dd1', 'team1');
       initDropdown('dd2', 'team2');
       initControls();
