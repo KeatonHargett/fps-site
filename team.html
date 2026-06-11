@@ -313,6 +313,7 @@
 </style>
 <title>Team Profile — Front Porch Sports</title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
+     crossorigin="anonymous"></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
      crossorigin="anonymous"></script></head>
 <body>
 
@@ -868,6 +869,9 @@
   // v30: complete program records (CFBD + Wikipedia accolades, includes FCS/NAIA opponents)
   let PROGRAM_STATS = null;
   let _psPromise = fetch('program_stats.json').then(r => r.ok ? r.json() : null).then(d => { PROGRAM_STATS = d; }).catch(() => { PROGRAM_STATS = null; });
+  // v41: complete historical FCS/inactive opponent list (CFBD-derived, supplemental to Kyle H2H)
+  let HISTORICAL_OPPS = null;
+  let _hoPromise = fetch('historical_opponents.json').then(r => r.ok ? r.json() : null).then(d => { HISTORICAL_OPPS = d; }).catch(() => { HISTORICAL_OPPS = null; });
 
   function fpsKey(s) {
     return (s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
@@ -879,7 +883,8 @@
   Promise.all([
     fetch('front_porch_games.json').then(r => r.json()),
     fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] })),
-    _psPromise
+    _psPromise,
+    _hoPromise
   ])
   .then(([gamesData, fbsData]) => {
     GAMES = gamesData;
@@ -947,8 +952,18 @@
       if (!useSplit || isFBS(opp)) fbsRecords[opp] = oppRecords[opp];
       else fcsRecords[opp] = oppRecords[opp];
     });
-    fcsState.records = fcsRecords;
-    const fcsCount = Object.keys(fcsRecords).length;
+    // v41: complete FCS/inactive opponent list from CFBD historical data (supplements Kyle H2H)
+    const histRows = (HISTORICAL_OPPS && HISTORICAL_OPPS.teams && HISTORICAL_OPPS.teams[TEAM]) || [];
+    const fcsHistRecords = {};
+    histRows.forEach(r => {
+      // Skip any opp that's already counted in Kyle FBS data (shouldn't happen since spec excludes FBS, but safe)
+      if (fbsRecords[r.opp]) return;
+      fcsHistRecords[r.opp] = { w: r.w, l: r.l, t: r.t };
+    });
+    // Merge any H2H-derived FCS records (rare since Kyle is FBS-only) - prefer historical if both exist
+    Object.keys(fcsRecords).forEach(k => { if (!fcsHistRecords[k]) fcsHistRecords[k] = fcsRecords[k]; });
+    fcsState.records = fcsHistRecords;
+    const fcsCount = Object.keys(fcsHistRecords).length;
 
     const confLogoHtml = CONF_LOGOS[conf]
       ? `<img src="${CONF_LOGOS[conf]}" alt="${conf}" onerror="this.style.display='none'">` : '';
