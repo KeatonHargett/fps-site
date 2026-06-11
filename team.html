@@ -93,6 +93,10 @@
     .navbar-inner { flex-direction: column; }
     .navbar-links a { font-size: 1.1rem; padding: 0.35rem 0.7rem; }
   }
+
+  /* v36: nav — logo top-left, tabs left-aligned right next to logo, no socials in nav */
+  .navbar-social { display: none !important; }
+  .navbar-links { margin-left: 0 !important; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -114,23 +118,98 @@
   .card { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 2rem; }
   .card h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; margin-bottom: 1.25rem; }
   .quick-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 1rem; }
-  .qs-card { background: var(--light); border-radius: 8px; padding: 1.1rem; text-align: center; }
+  /* v36: clean snapshot stats - no heavy bubble */
+  .qs-card { background: transparent; border-radius: 0; padding: 0.6rem 0.5rem; text-align: center; border-right: 1px solid var(--border); }
+  .qs-card:last-child { border-right: none; }
   .qs-value { font-family: 'Bebas Neue', sans-serif; font-size: 2.25rem; line-height: 1; }
   .qs-label { font-size: 0.72rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 0.3rem; font-weight: 600; }
 
   /* Improvement 1B (v27): national ranking stat cards */
   .nat-stats-section { margin: 0 0 1.75rem; }
   .nat-stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-  .nat-stat-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); display: flex; flex-direction: column; min-height: 158px; }
-  .nat-stat-card .nsc-head { font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; text-align: center; padding: 0.55rem 0.6rem; letter-spacing: 0.05em; line-height: 1.15; color: white; background: var(--dark); min-height: 2.6rem; display: flex; align-items: center; justify-content: center; }
-  .nat-stat-card .nsc-body { flex: 1; display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; }
-  .nat-stat-card .nsc-value-side, .nat-stat-card .nsc-rank-side { padding: 1rem 0.5rem 1.1rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.4); }
-  .nat-stat-card .nsc-value { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; line-height: 1; letter-spacing: 0.02em; }
-  .nat-stat-card .nsc-rank-ord { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; line-height: 1; letter-spacing: 0.02em; }
-  .nat-stat-card .nsc-rank-of { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.35rem; opacity: 0.9; }
-  .nat-stat-card .nsc-value-sub { font-family: 'Inter', sans-serif; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.35rem; opacity: 0.9; }
-  .nat-stat-card.tinted-solid .nsc-body { color: white; }
-  .nat-stat-card .nsc-na { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; opacity: 0.55; }
+  /* v36: polished national stat cards - soft label header, larger values, tasteful team color */
+  .nat-stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--team-color, var(--orange));
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    min-height: 168px;
+  }
+  .nat-stat-card .nsc-head {
+    background: var(--light);
+    color: var(--dark);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.06em;
+    text-align: center;
+    padding: 0.7rem 0.6rem;
+    line-height: 1.15;
+    border-bottom: 1px solid var(--border);
+    min-height: 2.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nat-stat-card .nsc-body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+  }
+  .nat-stat-card .nsc-value-side, .nat-stat-card .nsc-rank-side {
+    padding: 1.1rem 0.5rem 1.2rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: white !important;
+    color: var(--dark);
+    text-shadow: none;
+  }
+  .nat-stat-card .nsc-value-side { border-right: 1px solid var(--border); }
+  .nat-stat-card .nsc-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--team-color, var(--dark));
+  }
+  .nat-stat-card .nsc-rank-ord {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--team-color, var(--dark));
+  }
+  .nat-stat-card .nsc-rank-of {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 0.4rem;
+    color: var(--gray);
+    opacity: 1;
+  }
+  .nat-stat-card .nsc-value-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 0.4rem;
+    color: var(--gray);
+    opacity: 1;
+  }
+  .nat-stat-card .nsc-na {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--gray);
+    opacity: 0.45;
+  }
   @media (max-width: 900px) { .nat-stats-grid { grid-template-columns: repeat(3, 1fr); gap: 0.85rem; } }
   @media (max-width: 700px) { .nat-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; } }
   @media (max-width: 420px) { .nat-stats-grid { grid-template-columns: 1fr; } }
@@ -658,11 +737,11 @@
       const valHtml = (value == null || value === undefined || value === '') ? '<div class="nsc-na">&mdash;</div>' : `<div class="nsc-value">${value}</div>`;
       const subHtml = sub ? `<div class="nsc-value-sub">${sub}</div>` : '';
       const rankHtml = (rank == null || rank === 0) ? '<div class="nsc-na">&mdash;</div>' : `<div class="nsc-rank-ord">${ordinal(rank)}</div><div class="nsc-rank-of">of ${total}</div>`;
-      return `<div class="nat-stat-card">
+      return `<div class="nat-stat-card" style="--team-color:${tColor}">
         <div class="nsc-head">${title}</div>
         <div class="nsc-body">
-          <div class="nsc-value-side" style="background:${tColor}">${valHtml}${subHtml}</div>
-          <div class="nsc-rank-side" style="background:${tColor};filter:brightness(0.78)">${rankHtml}</div>
+          <div class="nsc-value-side">${valHtml}${subHtml}</div>
+          <div class="nsc-rank-side">${rankHtml}</div>
         </div>
       </div>`;
     };

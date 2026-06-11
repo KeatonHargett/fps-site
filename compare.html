@@ -93,6 +93,62 @@
     .navbar-inner { flex-direction: column; }
     .navbar-links a { font-size: 1.1rem; padding: 0.35rem 0.7rem; }
   }
+
+  /* v36: nav — logo top-left, tabs left-aligned right next to logo, no socials in nav */
+  .navbar-social { display: none !important; }
+  .navbar-links { margin-left: 0 !important; }
+
+  /* v36: social icons cluster in center between team selectors */
+  .sb-vs.sb-socials {
+    padding: 0 0.2rem 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--gray);
+  }
+  .sb-vs.sb-socials .sb-soc {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.04);
+    color: var(--dark);
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .sb-vs.sb-socials .sb-soc:hover { background: var(--orange); color: white; }
+  @media (max-width: 700px) {
+    .sb-vs.sb-socials { gap: 0.35rem; padding: 0 0.1rem 0.4rem; }
+    .sb-vs.sb-socials .sb-soc { width: 24px; height: 24px; }
+    .sb-vs.sb-socials .sb-soc svg { width: 14px; height: 14px; }
+  }
+
+  /* v36: chart reveal containers - tap a year/bar to see detail */
+  .chart-reveal {
+    margin-top: 0.6rem;
+    padding: 0.7rem 0.9rem;
+    background: var(--light);
+    border-radius: 8px;
+    min-height: 2.2rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: var(--dark);
+  }
+  .chart-reveal .chart-reveal-hint {
+    color: var(--gray);
+    font-size: 0.78rem;
+    text-align: center;
+    letter-spacing: 0.03em;
+  }
+  .chart-reveal-row { display: flex; flex-direction: column; gap: 0.3rem; align-items: center; text-align: center; }
+  .chart-reveal-row .rev-year { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--dark); letter-spacing: 0.04em; }
+  .chart-reveal-row .rev-score { font-size: 0.92rem; }
+  .chart-reveal-row .rev-meta { font-size: 0.82rem; color: var(--dark); }
+  .chart-reveal-row .rev-meta .rev-pct { color: var(--gray); margin-left: 0.3rem; font-weight: 600; }
+  .chart-reveal-row .rev-pill { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 999px; color: white; font-size: 0.75rem; letter-spacing: 0.04em; font-weight: 600; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -196,7 +252,9 @@
   .chart-canvas-wrap { position: relative; height: 300px; width: 100%; }
   @media (max-width: 640px) { .chart-canvas-wrap { height: 240px; } }
   .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem; }
-  .stat-card { background: var(--light); padding: 1.25rem; border-radius: 8px; text-align: center; }
+  /* v36: clean Largest Margin / Longest Win Streak - no heavy bubble */
+  .stat-card { background: transparent; padding: 0.8rem 0.5rem; border-radius: 0; border-right: 1px solid var(--border); text-align: center; }
+  .stat-card:nth-child(2n) { border-right: none; }
   .stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 2.75rem; line-height: 1; }
   .stat-label { font-size: 0.72rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 0.3rem; font-weight: 600; }
   .stat-detail { font-size: 0.78rem; color: var(--gray); margin-top: 0.25rem; }
@@ -264,15 +322,76 @@
   .stat-comparison-section .chart-title { margin-bottom: 0.25rem; }
   .stat-comparison-sub { text-align: center; color: var(--gray); font-size: 0.85rem; margin: -0.25rem 0 1.5rem; }
   .stat-comparison-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.1rem; }
-  .stat-card-compare { background: transparent; border: none; border-radius: 10px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.12); display: flex; flex-direction: column; }
-  .stat-card-compare .scc-title { background: var(--dark); color: white; font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; text-align: center; padding: 0.6rem 0.5rem; letter-spacing: 0.05em; line-height: 1.15; min-height: 2.6rem; display: flex; align-items: center; justify-content: center; }
+  /* v36: polished desktop Program Comparison cards - soft label, larger values, tasteful color accents */
+  .stat-card-compare {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .stat-card-compare .scc-title {
+    background: var(--light);
+    color: var(--dark);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    text-align: center;
+    padding: 0.7rem 0.5rem;
+    letter-spacing: 0.06em;
+    line-height: 1.15;
+    min-height: 2.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--border);
+  }
   .stat-card-compare .scc-body { display: grid; grid-template-columns: 1fr 1fr; flex: 1; }
-  .stat-card-compare .scc-side { padding: 1.1rem 0.5rem 1.2rem; text-align: center; color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.45); }
-  .stat-card-compare .scc-side.left { border-right: none; }
-  .stat-card-compare .scc-value { font-family: 'Bebas Neue', sans-serif; font-size: 2.6rem; line-height: 1; letter-spacing: 0.02em; }
-  .stat-card-compare .scc-rank-ord { font-family: 'Bebas Neue', sans-serif; font-size: 1.55rem; line-height: 1; margin-top: 0.65rem; letter-spacing: 0.04em; }
-  .stat-card-compare .scc-rank-of { font-family: 'Inter', sans-serif; font-size: 0.72rem; margin-top: 0.25rem; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.88; }
-  .stat-card-compare .scc-na { font-family: 'Bebas Neue', sans-serif; font-size: 2.6rem; line-height: 1; opacity: 0.6; }
+  .stat-card-compare .scc-side {
+    padding: 1.1rem 0.5rem 1.2rem;
+    text-align: center;
+    color: var(--dark) !important;
+    text-shadow: none !important;
+    background: white !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .stat-card-compare .scc-side.left { border-right: 1px solid var(--border); }
+  .stat-card-compare .scc-side.left .scc-value, .stat-card-compare .scc-side.left .scc-rank-ord { color: var(--t1c, var(--dark)) !important; }
+  .stat-card-compare .scc-side.right .scc-value, .stat-card-compare .scc-side.right .scc-rank-ord { color: var(--t2c, var(--dark)) !important; }
+  .stat-card-compare .scc-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+  .stat-card-compare .scc-rank-ord {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.75rem;
+    line-height: 1;
+    margin-top: 0.6rem;
+    letter-spacing: 0.04em;
+  }
+  .stat-card-compare .scc-rank-of {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    margin-top: 0.3rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray);
+    opacity: 1;
+  }
+  .stat-card-compare .scc-na {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    line-height: 1;
+    color: var(--gray);
+    opacity: 0.45;
+  }
   @media (max-width: 900px) { .stat-comparison-grid { grid-template-columns: repeat(2, 1fr); gap: 0.85rem; } }
   @media (max-width: 700px) {
     /* v33: mobile Winsipedia row layout — slim rows, better side highlighted in team color */
@@ -571,7 +690,11 @@
         </div>
         <img id="dd1-logo" alt="" style="display:none"><span id="dd1-label" style="display:none"></span>
       </div>
-      <div class="sb-vs">VS</div>
+      <div class="sb-vs sb-socials">
+        <a href="https://x.com/FrontPorchU" target="_blank" rel="noopener" aria-label="X" class="sb-soc"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="https://www.instagram.com/frontporchsports/" target="_blank" rel="noopener" aria-label="Instagram" class="sb-soc"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zm0 1.62c-3.15 0-3.5.01-4.74.07-2.5.11-3.6 1.23-3.71 3.71-.06 1.23-.07 1.6-.07 4.74s.01 3.5.07 4.74c.11 2.48 1.21 3.6 3.71 3.71 1.23.06 1.6.07 4.74.07s3.5-.01 4.74-.07c2.5-.11 3.6-1.23 3.71-3.71.06-1.23.07-1.6.07-4.74s-.01-3.5-.07-4.74c-.11-2.48-1.21-3.6-3.71-3.71-1.23-.06-1.6-.07-4.74-.07zm0 4.32a3.9 3.9 0 110 7.8 3.9 3.9 0 010-7.8zm0 6.43a2.53 2.53 0 100-5.06 2.53 2.53 0 000 5.06zm4.96-6.6a.91.91 0 11-1.82 0 .91.91 0 011.82 0z"/></svg></a>
+        <a href="https://www.facebook.com/p/Front-Porch-Sports-61575902150695/" target="_blank" rel="noopener" aria-label="Facebook" class="sb-soc"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.03 4.39 11.03 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.49 0-1.95.93-1.95 1.89v2.26h3.32l-.53 3.49h-2.79v8.44C19.61 23.1 24 18.1 24 12.07z"/></svg></a>
+      </div>
       <div class="sb-side right dd" id="dd2">
         <button class="sb-btn dd-toggle" id="dd2-toggle" type="button">
           <span class="sb-school" id="dd2-school">Pick a team</span>
@@ -2099,6 +2222,7 @@
       <div class="chart-box">
         <div class="chart-title">Head-to-Head Results</div>
         <canvas id="marginChart" height="110"></canvas>
+        <div id="marginReveal" class="chart-reveal"></div>
       </div>
 
       <div class="stats-grid">
@@ -2131,6 +2255,7 @@
       <div class="chart-box">
         <div class="chart-title">Record (Winning %)</div>
         <div class="chart-canvas-wrap"><canvas id="winPctChart"></canvas></div>
+        <div id="winPctReveal" class="chart-reveal"></div>
       </div>
 
       ${renderStatComparison(t1Color, t2Color)}
@@ -2280,15 +2405,69 @@
       if (g.is_tie) return 0;
       return g.winner === state.team1 ? Math.abs(g.margin) : -Math.abs(g.margin);
     });
+    // v36: mobile-friendly chart + tap to reveal game detail
+    const isMobile = window.innerWidth <= 700;
+    const marginReveal = document.getElementById('marginReveal');
+    if (marginReveal) marginReveal.innerHTML = '<div class="chart-reveal-hint">Tap a year to see the game detail</div>';
     charts.margin = new Chart(document.getElementById('marginChart'), {
       type: 'bar',
-      data: { labels, datasets: [{ data: marginData, backgroundColor: marginData.map(v => v>=0?t1Color:t2Color), borderWidth: 0 }] },
+      data: { labels, datasets: [{
+        label: 'Margin of victory',
+        data: marginData,
+        backgroundColor: marginData.map(v => v>=0?t1Color:t2Color),
+        borderWidth: 0,
+        barPercentage: isMobile ? 0.9 : 0.85
+      }] },
       options: {
         responsive: true, maintainAspectRatio: true,
-        plugins: { legend:{display:false}, tooltip:{callbacks:{label:ctx=>{
-          const v=ctx.raw; if(v===0)return'Tie'; return `${v>0?state.team1:state.team2} by ${Math.abs(v)}`;
-        }}}},
-        scales: { x:{ticks:{maxTicksLimit:12},grid:{display:false}}, y:{title:{display:true,text:`\u2190 ${t2Abbr}    |    ${t1Abbr} \u2192`}} }
+        layout: { padding: { top: 4, bottom: 0 } },
+        plugins: {
+          legend: {
+            display: true, position: 'bottom',
+            labels: {
+              boxWidth: 18, padding: isMobile ? 10 : 14,
+              font: { size: isMobile ? 12 : 13, weight: '600' },
+              generateLabels: chart => [
+                { text: state.team1, fillStyle: t1Color, strokeStyle: t1Color, hidden: false, lineWidth: 0 },
+                { text: state.team2, fillStyle: t2Color, strokeStyle: t2Color, hidden: false, lineWidth: 0 }
+              ]
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(13,17,23,0.92)', padding: 10, cornerRadius: 6,
+            titleFont: { size: 13, weight: '700' }, bodyFont: { size: 12 },
+            callbacks: { label: ctx => {
+              const v = ctx.raw; if (v===0) return 'Tie'; return `${v>0?state.team1:state.team2} by ${Math.abs(v)}`;
+            }}
+          }
+        },
+        scales: {
+          x: {
+            ticks: { maxTicksLimit: isMobile ? 8 : 12, font: { size: isMobile ? 11 : 12 }, color: '#6b7280' },
+            grid: { display: false }
+          },
+          y: {
+            title: { display: !isMobile, text: `\u2190 ${t2Abbr}    |    ${t1Abbr} \u2192`, font: { size: 12 } },
+            ticks: { font: { size: isMobile ? 10 : 12 }, color: '#6b7280' },
+            grid: { color: 'rgba(0,0,0,0.06)' }
+          }
+        },
+        onClick: (evt, items) => {
+          if (!items || !items.length) return;
+          const idx = items[0].index;
+          const g = sorted[idx];
+          if (!g || !marginReveal) return;
+          const t1Score = g.team_a===state.team1 ? g.team_a_score : g.team_b_score;
+          const t2Score = g.team_a===state.team1 ? g.team_b_score : g.team_a_score;
+          const loc = g.city ? `${g.city}${g.state?', '+g.state:''}` : '\u2014';
+          const winLabel = g.is_tie ? 'Tie game' : `${g.winner} won`;
+          const winColor = g.is_tie ? 'var(--gray)' : (g.winner===state.team1 ? t1Color : t2Color);
+          marginReveal.innerHTML = `<div class="chart-reveal-row">
+            <div class="rev-year">${g.season}</div>
+            <div class="rev-score"><span style="color:${t1Color}">${state.team1} ${t1Score??'-'}</span> &middot; <span style="color:${t2Color}">${state.team2} ${t2Score??'-'}</span></div>
+            <div class="rev-meta"><span class="rev-pill" style="background:${winColor}">${winLabel}</span> &middot; ${loc}</div>
+          </div>`;
+        }
       }
     });
 
@@ -2318,6 +2497,9 @@
     const allSeasons = [...new Set([...Object.keys(s1), ...Object.keys(s2)].map(Number))]
       .filter(y => y >= state.startYear && y <= state.endYear)
       .sort((a,b)=>a-b);
+    // v36: tap to reveal season records under the chart on mobile
+    const winPctReveal = document.getElementById('winPctReveal');
+    if (winPctReveal) winPctReveal.innerHTML = '<div class="chart-reveal-hint">Tap a year to see each team\u2019s season record</div>';
 
     const recordOf = (bySeason, yr) => {
       const r = bySeason[yr];
@@ -2366,7 +2548,7 @@
         scales: {
           x: {
             ticks: { maxTicksLimit: 10, maxRotation: 0, autoSkip: true,
-              font: { size: 11 }, color: '#6b7280' },
+              font: { size: window.innerWidth <= 700 ? 11 : 12 }, color: '#6b7280' },
             grid: { display: false },
             border: { color: '#e5e7eb' }
           },
@@ -2380,6 +2562,27 @@
         }
       }
     });
+    // v36: tap to reveal season record on mobile (chart-reveal box under winPct)
+    const winPctCanvas = document.getElementById('winPctChart');
+    if (winPctCanvas) {
+      winPctCanvas.onclick = function(evt) {
+        const points = charts.winpct.getElementsAtEventForMode(evt, 'index', {intersect: false}, true);
+        if (!points || !points.length) return;
+        const idx = points[0].index;
+        const yr = allSeasons[idx];
+        const r1 = rec1[idx]; const r2 = rec2[idx];
+        const p1 = d1[idx]; const p2 = d2[idx];
+        const fmtPct = v => v == null ? '\u2014' : '.' + (v*1000).toFixed(0).padStart(3,'0');
+        const box = document.getElementById('winPctReveal');
+        if (box) {
+          box.innerHTML = `<div class="chart-reveal-row">
+            <div class="rev-year">${yr}</div>
+            <div class="rev-meta"><span style="color:${t1Color};font-weight:700">${state.team1}:</span> ${r1 || 'did not play'} ${r1?'<span class=\"rev-pct\">'+fmtPct(p1)+'</span>':''}</div>
+            <div class="rev-meta"><span style="color:${t2Color};font-weight:700">${state.team2}:</span> ${r2 || 'did not play'} ${r2?'<span class=\"rev-pct\">'+fmtPct(p2)+'</span>':''}</div>
+          </div>`;
+        }
+      };
+    }
   }
 
 

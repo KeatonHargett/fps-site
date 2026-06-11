@@ -93,6 +93,38 @@
     .navbar-inner { flex-direction: column; }
     .navbar-links a { font-size: 1.1rem; padding: 0.35rem 0.7rem; }
   }
+
+  /* v36: nav — logo top-left, tabs left-aligned right next to logo, no socials in nav */
+  .navbar-social { display: none !important; }
+  .navbar-links { margin-left: 0 !important; }
+
+  /* v36: social icons cluster in center between team selectors */
+  .sb-vs.sb-socials {
+    padding: 0 0.2rem 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--gray);
+  }
+  .sb-vs.sb-socials .sb-soc {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.04);
+    color: var(--dark);
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .sb-vs.sb-socials .sb-soc:hover { background: var(--orange); color: white; }
+  @media (max-width: 700px) {
+    .sb-vs.sb-socials { gap: 0.35rem; padding: 0 0.1rem 0.4rem; }
+    .sb-vs.sb-socials .sb-soc { width: 24px; height: 24px; }
+    .sb-vs.sb-socials .sb-soc svg { width: 14px; height: 14px; }
+  }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -377,7 +409,11 @@
           <div id="dd1-options"></div>
         </div>
       </div>
-      <div class="sb-vs">VS</div>
+      <div class="sb-vs sb-socials">
+        <a href="https://x.com/FrontPorchU" target="_blank" rel="noopener" aria-label="X" class="sb-soc"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="https://www.instagram.com/frontporchsports/" target="_blank" rel="noopener" aria-label="Instagram" class="sb-soc"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zm0 1.62c-3.15 0-3.5.01-4.74.07-2.5.11-3.6 1.23-3.71 3.71-.06 1.23-.07 1.6-.07 4.74s.01 3.5.07 4.74c.11 2.48 1.21 3.6 3.71 3.71 1.23.06 1.6.07 4.74.07s3.5-.01 4.74-.07c2.5-.11 3.6-1.23 3.71-3.71.06-1.23.07-1.6.07-4.74s-.01-3.5-.07-4.74c-.11-2.48-1.21-3.6-3.71-3.71-1.23-.06-1.6-.07-4.74-.07zm0 4.32a3.9 3.9 0 110 7.8 3.9 3.9 0 010-7.8zm0 6.43a2.53 2.53 0 100-5.06 2.53 2.53 0 000 5.06zm4.96-6.6a.91.91 0 11-1.82 0 .91.91 0 011.82 0z"/></svg></a>
+        <a href="https://www.facebook.com/p/Front-Porch-Sports-61575902150695/" target="_blank" rel="noopener" aria-label="Facebook" class="sb-soc"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.03 4.39 11.03 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.49 0-1.95.93-1.95 1.89v2.26h3.32l-.53 3.49h-2.79v8.44C19.61 23.1 24 18.1 24 12.07z"/></svg></a>
+      </div>
       <div class="sb-side right dd" id="dd2">
         <button class="dd-toggle sb-btn" id="dd2-toggle" type="button">
           <img id="dd2-logo" alt="" style="display:none">
