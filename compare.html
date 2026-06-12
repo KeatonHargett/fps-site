@@ -2211,6 +2211,9 @@
       resEl.innerHTML = `<div class="empty-state"><h3>Pick two different teams</h3></div>`;
       return;
     }
+    // v45: restore static H2H controls visibility (in case prior render hid them for a never-met pair)
+    const _cr0 = document.querySelector('.controls-row'); if (_cr0 && _cr0.style.display === 'none') _cr0.style.display = '';
+    const _yr0 = document.querySelector('.year-range-section'); if (_yr0 && _yr0.style.display === 'none') _yr0.style.display = '';
     const games = getRivalryGames();
     if (games.length === 0) {
       // v45 Change 2: check if these teams have NEVER played at all
@@ -2221,6 +2224,9 @@
         const t1ColorFB = TEAM_META[state.team1]?.color || '#fe5c00';
         const t2ColorFB = TEAM_META[state.team2]?.color || '#003594';
         resEl.innerHTML = renderStatComparison(t1ColorFB, t2ColorFB);
+        // Hide static H2H-only controls (Full Games List + Time Period) when no prior meetings
+        const _cr = document.querySelector('.controls-row'); if (_cr) _cr.style.display = 'none';
+        const _yr = document.querySelector('.year-range-section'); if (_yr) _yr.style.display = 'none';
         return;
       }
       if (topEl) topEl.innerHTML = '';
