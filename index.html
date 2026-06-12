@@ -1391,13 +1391,28 @@
     // Count-up the big total number
     animateNumber(document.getElementById('total-num'), total);
     // Slide the bar segments from prev widths to target widths
-    // v43: each color grows in from its own edge, tie segment opens at center - matches compare page
+    // v44: double-RAF + reflow to guarantee transition fires from width:0 (matches compare bar)
+    const _segs = document.querySelectorAll('.h2h-bar-segment');
+    // Force the starting state (initial inline style sets these but reset explicitly for safety)
+    _segs.forEach(seg => {
+      seg.style.width = '0%';
+      const tgtL = parseFloat(seg.dataset.targetLeft);
+      if (!isNaN(tgtL)) {
+        const tgtW = parseFloat(seg.dataset.targetWidth) || 0;
+        // ties starting position = its target center
+        seg.style.left = (tgtL + tgtW/2).toFixed(4) + '%';
+      }
+    });
+    // Force reflow so the browser registers the 0% state
+    void document.querySelector('.h2h-bar')?.offsetWidth;
     requestAnimationFrame(() => {
-      document.querySelectorAll('.h2h-bar-segment').forEach(seg => {
-        const tgtW = parseFloat(seg.dataset.targetWidth);
-        const tgtL = parseFloat(seg.dataset.targetLeft);
-        if (!isNaN(tgtW)) seg.style.width = tgtW + '%';
-        if (!isNaN(tgtL)) seg.style.left = tgtL + '%';
+      requestAnimationFrame(() => {
+        _segs.forEach(seg => {
+          const tgtW = parseFloat(seg.dataset.targetWidth);
+          const tgtL = parseFloat(seg.dataset.targetLeft);
+          if (!isNaN(tgtW)) seg.style.width = tgtW + '%';
+          if (!isNaN(tgtL)) seg.style.left = tgtL + '%';
+        });
       });
     });
     prevWidths = { t1: t1Pct, tie: tiePct, t2: t2Pct };
