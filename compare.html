@@ -172,6 +172,9 @@
     .upcoming-matchup .um-spread { font-size: 1.35rem; }
     .upcoming-matchup .um-row { gap: 0.65rem; }
   }
+
+  /* v45: neutral line shown when two teams have no prior meetings */
+  .no-h2h-line { text-align: center; padding: 2rem 1rem; color: var(--gray); font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.04em; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -711,6 +714,7 @@
 </style>
 <title>Compare Teams — Front Porch Sports</title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
+     crossorigin="anonymous"></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
      crossorigin="anonymous"></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
      crossorigin="anonymous"></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
      crossorigin="anonymous"></script></head>
@@ -2209,6 +2213,16 @@
     }
     const games = getRivalryGames();
     if (games.length === 0) {
+      // v45 Change 2: check if these teams have NEVER played at all
+      const allTimeAny = GAMES.some(g => (g.team_a===state.team1 && g.team_b===state.team2) || (g.team_a===state.team2 && g.team_b===state.team1));
+      if (!allTimeAny) {
+        // Never met: hide H2H-only blocks; show neutral line + Program Comparison only
+        if (topEl) topEl.innerHTML = `<div class="no-h2h-line">No previous meetings on record.</div>`;
+        const t1ColorFB = TEAM_META[state.team1]?.color || '#fe5c00';
+        const t2ColorFB = TEAM_META[state.team2]?.color || '#003594';
+        resEl.innerHTML = renderStatComparison(t1ColorFB, t2ColorFB);
+        return;
+      }
       if (topEl) topEl.innerHTML = '';
       resEl.innerHTML =
         `<div class="empty-state"><h3>No games found</h3><p>${state.team1} and ${state.team2} haven't played between ${state.startYear} and ${state.endYear}.</p></div>`;

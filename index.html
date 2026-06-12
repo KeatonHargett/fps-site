@@ -131,6 +131,11 @@
     body, main { overflow-x: hidden; }
     .compare-card { max-width: 100%; box-sizing: border-box; }
   }
+
+  /* v45: home Compare Teams module reorder + zero-meetings line */
+  .results-top { margin-bottom: 1rem; }
+  .results-top .h2h-summary { text-align: center; margin-bottom: 1rem; }
+  .no-h2h-line { text-align: center; padding: 2rem 1rem; color: var(--gray); font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.04em; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -399,6 +404,7 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
      crossorigin="anonymous"></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
      crossorigin="anonymous"></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
+     crossorigin="anonymous"></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
      crossorigin="anonymous"></script></head>
 <body>
 <nav class="navbar">
@@ -458,6 +464,7 @@
         </div>
       </div>
     </div>
+    <div class="results-top" id="results-top"></div>
     <div class="year-range-section">
       <div class="year-range-header">
         <span class="year-range-title">Year Range</span>
@@ -1244,15 +1251,24 @@
   function render() {
     if (!GAMES.length) return;
     if (!state.team1 || !state.team2) {
-      document.getElementById('results').innerHTML = `<div class="empty-state"><h3>Select two teams to compare</h3><p>Pick a team from each dropdown above to see their head-to-head history.</p></div>`;
+      const _top=document.getElementById('results-top'); if(_top)_top.innerHTML=''; document.getElementById('results').innerHTML = `<div class="empty-state"><h3>Select two teams to compare</h3><p>Pick a team from each dropdown above to see their head-to-head history.</p></div>`;
       return;
     }
     if (state.team1 === state.team2) {
-      document.getElementById('results').innerHTML = `<div class="empty-state"><h3>Pick two different teams</h3></div>`;
+      const _top=document.getElementById('results-top'); if(_top)_top.innerHTML=''; document.getElementById('results').innerHTML = `<div class="empty-state"><h3>Pick two different teams</h3></div>`;
       return;
     }
     const games = getRivalryGames();
     if (games.length === 0) {
+      const _top = document.getElementById('results-top'); if (_top) _top.innerHTML = '';
+      // v45 Change 2: check if teams have NEVER played at all (not just in current filter)
+      const allTimeAny = GAMES.some(g => (g.team_a===state.team1 && g.team_b===state.team2) || (g.team_a===state.team2 && g.team_b===state.team1));
+      if (!allTimeAny) {
+        // No prior meetings at all - show neutral line, hide H2H-only blocks
+        if (_top) _top.innerHTML = `<div class="no-h2h-line">No previous meetings on record.</div>`;
+        document.getElementById('results').innerHTML = '';
+        return;
+      }
       document.getElementById('results').innerHTML =
         `<div class="empty-state"><h3>No games found</h3><p>${state.team1} and ${state.team2} haven't played between ${state.startYear} and ${state.endYear}.</p></div>`;
       return;
@@ -1276,7 +1292,7 @@
     const t1Streak = longestStreak(games, state.team1);
     const t2Streak = longestStreak(games, state.team2);
 
-    document.getElementById('results').innerHTML = `
+    document.getElementById('results-top').innerHTML = `
       <div class="h2h-summary">
         ${['past5','past10','past20'].includes(state.activePreset)
           ? ''
@@ -1306,7 +1322,8 @@
           ${t2Pct>0?`<div class="h2h-bar-segment t2" data-target-width="${t2Pct}" style="background:${t2Color};width:0%">${t2Pct>=8?t2Wins:''}</div>`:''}
         </div>
       </div>
-
+    `;
+    document.getElementById('results').innerHTML = `
       <div class="chart-box">
         <div class="chart-title">Head-to-Head Results</div>
         <canvas id="marginChart" height="110"></canvas>
