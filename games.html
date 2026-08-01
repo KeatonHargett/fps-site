@@ -41,6 +41,19 @@
   }
   .navbar-links a:hover { background: rgba(255,255,255,0.12); }
   .navbar-links a.active { background: var(--orange); }
+  /* v46: Store tab — stacked cart icon above label */
+  .navbar-links { flex-wrap: wrap; }
+  .navbar-links a.nav-store {
+    display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 0.12rem; padding: 0.2rem 0.7rem; line-height: 1;
+  }
+  .navbar-links a.nav-store svg { width: 20px; height: 20px; display: block; }
+  .navbar-links a.nav-store span { font-size: 0.95rem; line-height: 1; }
+  @media (max-width: 480px) {
+    .navbar-links a.nav-store { padding: 0.2rem 0.5rem; }
+    .navbar-links a.nav-store svg { width: 16px; height: 16px; }
+    .navbar-links a.nav-store span { font-size: 0.8rem; }
+  }
   /* v29 Tweak 3: nav layout — logo + social on left, nav-links on right */
   .navbar-inner { justify-content: flex-start; }
   .navbar-brand { display: flex; align-items: center; gap: 0.6rem; margin-right: 0.6rem; }
@@ -214,6 +227,10 @@
       <a href='/rankings'>Rankings</a>
       <a href='/teams'>Teams</a>
       <a class='active' href='/compare'>Compare</a>
+      <a class="nav-store" href="https://frontporchsports.shop" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        <span>Store</span>
+      </a>
     </div>
   </div>
 </nav>
