@@ -12,12 +12,70 @@
     Referrer-Policy        = "strict-origin-when-cross-origin"
     Permissions-Policy     = "geolocation=(), microphone=(), camera=()"
 
+# HTML must never be cached: the weekly refresh can change what a page renders.
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Datasets. Short TTL + revalidate, so a repeat visitor gets a cheap 304 instead
+# of re-downloading the payload, but still picks up the weekly refresh promptly.
+# Netlify applies no caching by default, so without these every visit refetches
+# these files in full.
 [[headers]]
   for = "/front_porch_games.json"
   [headers.values]
     Cache-Control = "public, max-age=300, must-revalidate"
 
 [[headers]]
-  for = "/*.html"
+  for = "/fbs_teams.json"
   [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
+[[headers]]
+  for = "/program_stats.json"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
+[[headers]]
+  for = "/historical_opponents.json"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+[[headers]]
+  for = "/upcoming_lines.json"
+  [headers.values]
+    Cache-Control = "public, max-age=300, must-revalidate"
+
+# Brand images and icons. Filenames are not content-hashed, so this is a week
+# rather than a year - long enough to help repeat visits, short enough that a
+# logo swap still propagates without a rename.
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=86400"
+
+[[headers]]
+  for = "/favicon.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=86400"
+
+[[headers]]
+  for = "/site.webmanifest"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/llms.txt"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"

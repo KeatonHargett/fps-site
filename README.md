@@ -2,23 +2,58 @@
 
 Static site for college football head to head rivalry records, deployed on Netlify.
 
-Live: https://front-porch-sports.netlify.app
-Netlify site ID: 3970b88d-f352-4ca3-85ad-80b8bcca3ebb
+Live: https://frontporchsports.com
+Netlify project: front-porch-sports
+Netlify site ID: ba621860-d998-4c7e-a858-94c100312b49
 
 ## Layout
 
 ```
 .
 |-- index.html                          live page, do not redesign
-|-- front_porch_games.json              dataset the page fetches
-|-- netlify.toml                        Netlify build and headers config
+|-- teams.html  team.html               team directory and per-team profile
+|-- compare.html  games.html            matchup comparison and full game list
+|-- rankings.html  rank.html            all-time rankings and per-category page
+|-- heisman.html                        Heisman winners by program
+|-- 404.html                            branded not-found page (Netlify serves it automatically)
+|-- front_porch_games.json              dataset the pages fetch
+|-- fbs_teams.json  program_stats.json  supporting datasets
+|-- historical_opponents.json  upcoming_lines.json
+|-- robots.txt  sitemap.xml  llms.txt   crawler files
+|-- favicon.ico  favicon-16/32.png      brand icons (generated from the poker chip mark)
+|-- apple-touch-icon.png  icon-192/512.png
+|-- site.webmanifest
+|-- og-image.png  logo.png              social share image and wordmark
+|-- netlify.toml                        Netlify publish config, security and cache headers
 |-- scripts/
 |   |-- refresh_games.py                CFBD pull, current season only
+|   |-- refresh_fbs_teams.py
+|   |-- generate_sitemap.py             regenerates sitemap.xml
 |   |-- requirements.txt
 |-- .github/
     |-- workflows/
         |-- weekly_refresh.yml          weekly auto refresh during season
 ```
+
+## SEO files
+
+`sitemap.xml` is generated, not hand-edited. It lists the 6 static routes plus one
+URL per FBS program and one per ranking category (154 URLs). Regenerate it after
+any change to `fbs_teams.json` or to the `CATEGORIES` map in `rank.html`:
+
+```
+python scripts/generate_sitemap.py
+```
+
+`team.html`, `compare.html`, `games.html` and `rank.html` each render many
+different pages from one HTML file. Their inline JS rewrites `title`,
+`meta description`, `canonical` and the `og:` tags from the query string via the
+`fpsMeta()` helper, so each variant is a distinct page to a crawler. If you add a
+query parameter that changes what a page shows, update its `fpsMeta()` call too.
+
+`robots.txt` deliberately allows the JSON datasets. Every page renders its
+content client-side from those files, so blocking them would leave crawlers with
+empty page shells.
 
 ## Deploy
 
@@ -66,7 +101,7 @@ The HTML, CSS, and JavaScript in index.html are locked. Only front_porch_games.j
 
 ## Credits
 
-All rights reserved. Dataset compiled by Kyle Umlang. Site built by Keaton Hargett (https://keatonhargett.com).
+All rights reserved. Site built by Keaton Hargett (https://keatonhargett.com).
 <!-- pipe-check 2026-06-02T06:32:21Z -->
 
 

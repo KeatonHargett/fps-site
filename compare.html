@@ -3,14 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta property="og:title" content="Compare Teams · Front Porch Sports">
+<title>Compare Teams — Front Porch Sports</title>
+<link rel="canonical" href="https://frontporchsports.com/compare">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#003594">
+<meta property="og:title" content="Compare Teams — Front Porch Sports">
 <meta property="og:description" content="Compare any two FBS programs head-to-head across every era.">
 <meta property="og:image" content="https://frontporchsports.com/og-image.png">
 <meta property="og:url" content="https://frontporchsports.com/compare">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Front Porch Sports">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Compare Teams · Front Porch Sports">
+<meta name="twitter:title" content="Compare Teams — Front Porch Sports">
 <meta name="twitter:description" content="Compare any two FBS programs head-to-head across every era.">
 <meta name="twitter:image" content="https://frontporchsports.com/og-image.png">
 <meta name="description" content="Compare any two FBS programs head-to-head across every era.">
@@ -97,6 +107,9 @@
     transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
   }
   .footer-social .fs-icon:hover { background: var(--orange); color: #fff; transform: translateY(-2px); }
+  .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem 1.35rem; margin-bottom: 1.1rem; font-size: 0.85rem; line-height: 1.9; }
+  .footer-links a { color: #9ca3af; text-decoration: none; }
+  .footer-links a:hover { color: var(--orange); text-decoration: underline; }
   .footer-credit { font-size: 0.9rem; color: #9ca3af; }
   .footer-credit a { font-weight: 700; }
   .footer-credit a:hover { text-decoration: underline; }
@@ -193,7 +206,7 @@
 <style>
 
   .compare-card { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 2rem; }
-  .compare-card h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; margin-bottom: 1.5rem; text-align: center; }
+  .compare-card h1, .compare-card h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; margin-bottom: 1.5rem; text-align: center; }
   .selectors { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: end; margin-bottom: 1.5rem; }
   .selector label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray); text-transform: uppercase; margin-bottom: 0.4rem; letter-spacing: 0.05em; }
   .vs { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--orange); padding: 0 1rem; padding-bottom: 0.6rem; }
@@ -341,7 +354,7 @@
     .dd-toggle { padding: 0.55rem 1.75rem 0.55rem 0.5rem; font-size: 0.85rem; min-height: 46px; gap: 0.35rem; }
     .dd-toggle img { width: 24px; height: 24px; }
     .selector label { font-size: 0.72rem; }
-    .compare-card h2 { font-size: 2rem; }
+    .compare-card h1, .compare-card h2 { font-size: 2rem; }
     .h2h-summary .total { font-size: 3rem; }
     .stats-grid { grid-template-columns: 1fr 1fr; }
     .games-table { font-size: 0.8rem; }
@@ -725,12 +738,51 @@
   @media (max-width: 640px) { .suggested-grid { grid-template-columns: 1fr; } }
 
 </style>
-<title>Compare Teams — Front Porch Sports</title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
-     crossorigin="anonymous"></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
-     crossorigin="anonymous"></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
-     crossorigin="anonymous"></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
-     crossorigin="anonymous"></script></head>
+     crossorigin="anonymous"></script><script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://frontporchsports.com/#organization",
+      "name": "Front Porch Sports",
+      "description": "Free college football reference site covering head-to-head rivalry records, all-time program rankings and complete team history for every FBS program, with results from every season since 1887.",
+      "url": "https://frontporchsports.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://frontporchsports.com/logo.png",
+        "width": 480,
+        "height": 135
+      },
+      "image": "https://frontporchsports.com/og-image.png",
+      "sameAs": [
+        "https://x.com/FrontPorchU",
+        "https://www.instagram.com/frontporchsports/",
+        "https://www.facebook.com/p/Front-Porch-Sports-61575902150695/"
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://frontporchsports.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Compare",
+          "item": "https://frontporchsports.com/compare"
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
 <body>
 <nav class="navbar">
   <div class="navbar-inner">
@@ -756,7 +808,7 @@
 </nav>
 <main>
   <div class="compare-card">
-    <h2>COMPARE TEAMS</h2>
+    <h1>COMPARE TEAMS</h1>
     <!-- v29 Tweak 1A: Winsipedia-style wide selector bar — each team area is its own dropdown -->
     <div class="selector-bar">
       <div class="sb-side dd" id="dd1">
@@ -846,6 +898,15 @@
         <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.03 4.39 11.03 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.49 0-1.95.93-1.95 1.89v2.26h3.32l-.53 3.49h-2.79v8.44C19.61 23.1 24 18.1 24 12.07z"/></svg>
       </a>
     </div>
+    <nav class="footer-links" aria-label="Site sections">
+      <a href="/">Rivalry database home</a>
+      <a href="/teams">All FBS teams</a>
+      <a href="/compare">Compare two programs</a>
+      <a href="/games">Full game archive since 1887</a>
+      <a href="/rankings">All-time program rankings</a>
+      <a href="/heisman">Heisman Trophy winners by program</a>
+      <a href="https://frontporchsports.shop" rel="noopener">Front Porch Sports store</a>
+    </nav>
     <p class="footer-credit">Website Built By <a href="https://keatonhargett.com" target="_blank" rel="noopener">Keaton Hargett</a></p>
     <p class="footer-copy">&copy; 2025 Front Porch Sports</p>
   </div>
@@ -1830,6 +1891,30 @@
   };
 
   const params = new URLSearchParams(location.search);
+
+  /* SEO (v47): these pages render many different results from one HTML file, so the
+     head has to follow the query string or every variant looks identical to a crawler. */
+  function fpsMeta(o) {
+    const B = 'https://frontporchsports.com';
+    const set = (sel, attr, val) => {
+      const el = document.head.querySelector(sel);
+      if (el && val) el.setAttribute(attr, val);
+    };
+    if (o.title) {
+      document.title = o.title;
+      set('meta[property="og:title"]', 'content', o.title);
+      set('meta[name="twitter:title"]', 'content', o.title);
+    }
+    if (o.description) {
+      set('meta[name="description"]', 'content', o.description);
+      set('meta[property="og:description"]', 'content', o.description);
+      set('meta[name="twitter:description"]', 'content', o.description);
+    }
+    if (o.path) {
+      set('link[rel="canonical"]', 'href', B + o.path);
+      set('meta[property="og:url"]', 'content', B + o.path);
+    }
+  }
   const _hadUrlTeams = !!(params.get('team1') || params.get('team2'));
   if (params.get('team1')) state.team1 = params.get('team1');
   if (params.get('team2')) state.team2 = params.get('team2');
@@ -1909,7 +1994,7 @@
         const meta = TEAM_META[t];
         const sel = t === state[stateKey] ? ' selected' : '';
         return `<div class="dd-option${sel}" data-team="${t.replace(/"/g,'&quot;')}" data-idx="${i}">
-          ${meta ? `<img src="${LOGO_URL(meta.id)}" alt="" onerror="this.style.display='none'">` : ''}
+          ${meta ? `<img src="${LOGO_URL(meta.id)}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
           <span>${t}</span></div>`;
       }).join('');
       optsBox.querySelectorAll('.dd-option').forEach(opt => {
@@ -2087,7 +2172,7 @@
   function teamLogo(team, large=false) {
     const meta = TEAM_META[team];
     if (!meta) return '';
-    return `<img class="${large?'':'small-logo'}" src="${LOGO_URL(meta.id)}" alt="${team}" onerror="this.style.display='none'">`;
+    return `<img class="${large?'':'small-logo'}" src="${LOGO_URL(meta.id)}" alt="${team}"${large?'':' loading="lazy"'} onerror="this.style.display='none'">`;
   }
 
   // Compute longest win streak for a team within a game set
@@ -2219,6 +2304,12 @@
     const resEl = document.getElementById('results');
 
     if (!state.team1 || !state.team2) {
+      // no matchup chosen yet: this variant is not its own page, point at /compare
+      fpsMeta({
+        title: 'Compare Teams — Front Porch Sports',
+        description: 'Compare any two FBS programs head-to-head across every era.',
+        path: '/compare'
+      });
       if (topEl) topEl.innerHTML = '';
       resEl.innerHTML = `<div class="empty-state"><h3>Select two teams to compare</h3><p>Pick a team from each dropdown above to see their head-to-head history.</p></div>`;
       return;
@@ -2229,6 +2320,16 @@
       return;
     }
     // v45: restore static H2H controls visibility (in case prior render hid them for a never-met pair)
+    // With no ?team1/?team2 this page renders a RANDOM demo matchup, so the
+    // canonical must stay /compare - otherwise every crawl of /compare would
+    // point somewhere different. Only a URL-supplied matchup is its own page.
+    fpsMeta({
+      title: `${state.team1} vs ${state.team2} — All-Time Series Record | Front Porch Sports`,
+      description: `Head-to-head record, every meeting, current streak and full series history for ${state.team1} vs ${state.team2}.`,
+      path: _hadUrlTeams
+        ? `/compare?team1=${encodeURIComponent(state.team1)}&team2=${encodeURIComponent(state.team2)}`
+        : '/compare'
+    });
     const _cr0 = document.querySelector('.controls-row'); if (_cr0 && _cr0.style.display === 'none') _cr0.style.display = '';
     const _yr0 = document.querySelector('.year-range-section'); if (_yr0 && _yr0.style.display === 'none') _yr0.style.display = '';
     const games = getRivalryGames();

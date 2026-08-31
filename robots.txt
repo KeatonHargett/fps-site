@@ -1,0 +1,9 @@
+# frontporchsports.com
+# Every page on this site renders its content client-side from the JSON files in
+# the root. Those files must stay crawlable - blocking them would leave crawlers
+# with empty page shells and no content at all.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://frontporchsports.com/sitemap.xml

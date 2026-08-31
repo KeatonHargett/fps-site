@@ -1,0 +1,63 @@
+# Front Porch Sports
+
+> A free college football reference site built on a complete head-to-head game
+> database: every result between major programs from 1887 to the present, plus
+> all-time program rankings and per-team history.
+
+Front Porch Sports answers one kind of question well: what has actually happened
+between two college football programs, and how does any program rank all-time.
+It is a reference tool, not a news site. There is no editorial content, no
+opinion, and no paywall.
+
+## Dataset
+
+- 54,000+ completed games through the 2025 season (the count grows each season).
+- Coverage: 1887 through the present.
+- 136 current FBS programs have full profile pages; historical and FCS opponents
+  appear in head-to-head records where they played an FBS program.
+- Refreshed weekly during the season (August-January) from live results.
+- The raw data is public: https://frontporchsports.com/front_porch_games.json
+
+## Site structure
+
+- https://frontporchsports.com/ - Home. Rivalry lookup and featured matchups.
+- https://frontporchsports.com/teams - Directory of all 136 FBS programs.
+- https://frontporchsports.com/team?team=NAME - One program: all-time record,
+  head-to-head record against every opponent it has played, season-by-season
+  results, conference and national ranking context.
+  Example: /team?team=Alabama
+- https://frontporchsports.com/compare?team1=A&team2=B - Two programs head to
+  head: series record, current streak, scoring history, era filters.
+  Example: /compare?team1=Oklahoma&team2=Texas
+- https://frontporchsports.com/games?team1=A&team2=B - Every individual game in
+  a series, with date, score and result.
+- https://frontporchsports.com/rankings - All-time program rankings across 12
+  categories.
+- https://frontporchsports.com/rank?cat=SLUG - One ranking category in full.
+  Slugs include: all-time-record, all-time-wins, claimed-national-championships,
+  recognized-national-championships, conference-championships, bowl-games,
+  all-americans, heisman-winners, nfl-draft-picks, first-round-nfl-draft-picks,
+  weeks-in-poll, weeks-at-ap-number-one
+- https://frontporchsports.com/heisman - Heisman Trophy winners by program.
+
+## Notes for automated readers
+
+- Team names in URLs use the site's canonical short form, which abbreviates
+  "State" as "St." - for example /team?team=Oklahoma%20St. and
+  /team?team=Appalachian%20St. The full list is at
+  https://frontporchsports.com/fbs_teams.json
+- Page content is rendered client-side from JSON. A fetch that does not execute
+  JavaScript will receive a page shell rather than the data. Read the JSON
+  endpoints directly instead: front_porch_games.json (all games),
+  fbs_teams.json (team list and metadata), program_stats.json (per-program
+  totals), historical_opponents.json.
+- An unrecognised ?team= value falls back to a default program rather than
+  returning an error.
+
+## About
+
+Front Porch Sports is an independent college football project.
+Store: https://frontporchsports.shop
+X: https://x.com/FrontPorchU
+Instagram: https://www.instagram.com/frontporchsports/
+Facebook: https://www.facebook.com/p/Front-Porch-Sports-61575902150695/

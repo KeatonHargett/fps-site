@@ -3,14 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta property="og:title" content="All Teams · Front Porch Sports">
+<title>All Teams — Front Porch Sports</title>
+<link rel="canonical" href="https://frontporchsports.com/teams">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#003594">
+<meta property="og:title" content="All Teams — Front Porch Sports">
 <meta property="og:description" content="Browse every FBS program — head-to-head records and team history.">
 <meta property="og:image" content="https://frontporchsports.com/og-image.png">
 <meta property="og:url" content="https://frontporchsports.com/teams">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Front Porch Sports">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="All Teams · Front Porch Sports">
+<meta name="twitter:title" content="All Teams — Front Porch Sports">
 <meta name="twitter:description" content="Browse every FBS program — head-to-head records and team history.">
 <meta name="twitter:image" content="https://frontporchsports.com/og-image.png">
 <meta name="description" content="Browse every FBS program — head-to-head records and team history.">
@@ -97,6 +107,9 @@
     transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
   }
   .footer-social .fs-icon:hover { background: var(--orange); color: #fff; transform: translateY(-2px); }
+  .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem 1.35rem; margin-bottom: 1.1rem; font-size: 0.85rem; line-height: 1.9; }
+  .footer-links a { color: #9ca3af; text-decoration: none; }
+  .footer-links a:hover { color: var(--orange); text-decoration: underline; }
   .footer-credit { font-size: 0.9rem; color: #9ca3af; }
   .footer-credit a { font-weight: 700; }
   .footer-credit a:hover { text-decoration: underline; }
@@ -139,6 +152,11 @@
   .team-item .ti-name { font-weight: 600; font-size: 0.95rem; color: var(--blue); line-height: 1.15; }
   .team-item .ti-sub { font-size: 0.78rem; color: var(--gray); }
   .no-results { text-align: center; padding: 3rem; color: var(--gray); }
+  /* Reserve a viewport of space while the dataset loads. Everything on this page
+     is rendered client-side, so without this the footer sits directly under an
+     empty container and is shoved down when the data lands - the single largest
+     source of layout shift on the site. Harmless once content fills the box. */
+  #content { min-height: 100vh; }
   .loading { text-align: center; padding: 3rem; color: var(--gray); font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
   .spinner { display: inline-block; width: 40px; height: 40px; border: 4px solid var(--light); border-top-color: var(--orange); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 1rem; }
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -147,7 +165,49 @@
     .team-grid { grid-template-columns: 1fr 1fr; }
   }
 </style>
-<title>All Teams — Front Porch Sports</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://frontporchsports.com/#organization",
+      "name": "Front Porch Sports",
+      "description": "Free college football reference site covering head-to-head rivalry records, all-time program rankings and complete team history for every FBS program, with results from every season since 1887.",
+      "url": "https://frontporchsports.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://frontporchsports.com/logo.png",
+        "width": 480,
+        "height": 135
+      },
+      "image": "https://frontporchsports.com/og-image.png",
+      "sameAs": [
+        "https://x.com/FrontPorchU",
+        "https://www.instagram.com/frontporchsports/",
+        "https://www.facebook.com/p/Front-Porch-Sports-61575902150695/"
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://frontporchsports.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Teams",
+          "item": "https://frontporchsports.com/teams"
+        }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -204,6 +264,15 @@
         <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.03 4.39 11.03 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.49 0-1.95.93-1.95 1.89v2.26h3.32l-.53 3.49h-2.79v8.44C19.61 23.1 24 18.1 24 12.07z"/></svg>
       </a>
     </div>
+    <nav class="footer-links" aria-label="Site sections">
+      <a href="/">Rivalry database home</a>
+      <a href="/teams">All FBS teams</a>
+      <a href="/compare">Compare two programs</a>
+      <a href="/games">Full game archive since 1887</a>
+      <a href="/rankings">All-time program rankings</a>
+      <a href="/heisman">Heisman Trophy winners by program</a>
+      <a href="https://frontporchsports.shop" rel="noopener">Front Porch Sports store</a>
+    </nav>
     <p class="footer-credit">Website Built By <a href="https://keatonhargett.com" target="_blank" rel="noopener">Keaton Hargett</a></p>
     <p class="footer-copy">&copy; 2025 Front Porch Sports</p>
   </div>
@@ -533,7 +602,7 @@
     const meta = TEAM_META[t];
     const conf = TEAM_CONF[t] || '';
     return `<a class="team-item" href="team.html?team=${encodeURIComponent(t)}">
-      ${meta ? `<img src="${LOGO_URL(meta.id)}" alt="" onerror="this.style.display='none'">` : ''}
+      ${meta ? `<img src="${LOGO_URL(meta.id)}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
       <div><div class="ti-name">${t}</div><div class="ti-sub">${conf}</div></div>
     </a>`;
   }
@@ -570,7 +639,7 @@
       const ordered = CONF_ORDER.filter(c => groups[c]);
       Object.keys(groups).forEach(c => { if (!ordered.includes(c)) ordered.push(c); });
       box.innerHTML = ordered.map(c => `
-        <div class="group-header conf-header">${CONF_LOGOS[c] ? `<img src="${CONF_LOGOS[c]}" alt="${c}" onerror="this.style.display='none'">` : ''}<span class="conf-name">${c}</span> <span class="conf-count">${groups[c].length}</span></div>
+        <div class="group-header conf-header">${CONF_LOGOS[c] ? `<img src="${CONF_LOGOS[c]}" alt="${c}" loading="lazy" onerror="this.style.display='none'">` : ''}<span class="conf-name">${c}</span> <span class="conf-count">${groups[c].length}</span></div>
         <div class="team-grid">${groups[c].sort().map(teamItem).join('')}</div>
       `).join('');
     }
