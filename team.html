@@ -537,6 +537,7 @@
   'New Mexico St.': {id:'166',color:'#7e141b',alt:'#231f20',abbr:'NMSU'},
   'North Carolina': {id:'153',color:'#7bafd4',alt:'#13294b',abbr:'UNC'},
   'North Carolina St.': {id:'152',color:'#cc0000',alt:'#ffffff',abbr:'NCSU'},
+  'North Dakota St.': {id:'2449',color:'#01402a',alt:'#ffffff',abbr:'NDSU'},
   'North Texas': {id:'249',color:'#068f33',alt:'#ffffff',abbr:'UNT'},
   'Northern Illinois': {id:'2459',color:'#c8102e',alt:'#000000',abbr:'NIU'},
   'Northwestern': {id:'77',color:'#492f92',alt:'#ffffff',abbr:'NU'},
@@ -555,6 +556,7 @@
   'Rice': {id:'242',color:'#00205b',alt:'#c1c6c8',abbr:'RICE'},
   'Rutgers': {id:'164',color:'#ce0e2d',alt:'#ffffff',abbr:'RUTG'},
   'SMU': {id:'2567',color:'#a80000',alt:'#0033a1',abbr:'SMU'},
+  'Sacramento St.': {id:'16',color:'#00573c',alt:'#cdb97d',abbr:'SAC'},
   'Sam Houston St.': {id:'2534',color:'#f56423',alt:'#ffffff',abbr:'SHSU'},
   'San Diego St.': {id:'21',color:'#a6192e',alt:'#000000',abbr:'SDSU'},
   'San José St.': {id:'23',color:'#0055A2',alt:'#ffb81a',abbr:'SJSU'},
@@ -630,6 +632,7 @@
   'FIU':'C-USA',
   'Florida':'SEC',
   'Florida Atlantic':'American',
+  'FAU':'American',
   'Florida St.':'ACC',
   'Fresno St.':'Mountain West',
   'Georgia':'SEC',
@@ -642,6 +645,7 @@
   'Indiana':'Big Ten',
   'Iowa':'Big Ten',
   'Iowa St.':'Big 12',
+  'Delaware':'C-USA',
   'Jacksonville St.':'C-USA',
   'James Madison':'Sun Belt',
   'Kansas':'Big 12',
@@ -658,6 +662,7 @@
   'Marshall':'Sun Belt',
   'Maryland':'Big Ten',
   'Massachusetts':'Independents',
+  'UMass':'MAC',
   'Memphis':'American',
   'Miami':'ACC',
   'Miami (OH)':'MAC',
@@ -675,6 +680,7 @@
   'New Mexico St.':'C-USA',
   'North Carolina':'ACC',
   'North Carolina St.':'ACC',
+  'North Dakota St.':'Mountain West',
   'North Texas':'American',
   'Northern Illinois':'MAC',
   'Northwestern':'Big Ten',
@@ -693,13 +699,16 @@
   'Rice':'American',
   'Rutgers':'Big Ten',
   'SMU':'ACC',
+  'Sacramento St.':'MAC',
   'Sam Houston St.':'C-USA',
   'San Diego St.':'Mountain West',
   'San Jose St.':'Mountain West',
+  'San José St.':'Mountain West',
   'South Alabama':'Sun Belt',
   'South Carolina':'SEC',
   'South Florida':'American',
   'Southern Mississippi':'Sun Belt',
+  'Southern Miss':'Sun Belt',
   'Stanford':'ACC',
   'Syracuse':'ACC',
   'TCU':'Big 12',
@@ -996,6 +1005,18 @@
   function fpsKey(s) {
     return (s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
   }
+
+  // v48: the weekly ESPN refresh can introduce a second spelling for a program that
+  // already exists in the dataset (it wrote "San Jose St." alongside the historical
+  // "San José St."), which lists the same team twice - once correctly, once under
+  // "Other" with no logo. Collapse every name onto the TEAM_META spelling sharing its
+  // accent-folded key so each program renders exactly once, whatever the feed sends.
+  const CANON_BY_KEY = (() => {
+    const m = {};
+    for (const n of Object.keys(TEAM_META)) m[fpsKey(n)] = n;
+    return m;
+  })();
+  const fpsCanon = n => CANON_BY_KEY[fpsKey(n)] || n;
   function isFBS(team) {
     return FBS_NAMES.has(fpsKey(team));
   }
@@ -1056,7 +1077,7 @@
     // H2H vs every opponent
     const oppRecords = {};
     teamGames.forEach(g => {
-      const opp = g.team_a===TEAM ? g.team_b : g.team_a;
+      const opp = fpsCanon(g.team_a===TEAM ? g.team_b : g.team_a);
       const r = oppRecords[opp] = oppRecords[opp] || {w:0,l:0,t:0};
       if (g.is_tie) r.t++;
       else if (g.winner===TEAM) r.w++;

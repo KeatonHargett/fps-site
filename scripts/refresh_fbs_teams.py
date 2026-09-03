@@ -19,6 +19,7 @@ Usage:
 from __future__ import annotations
 import json
 import os
+import re
 import sys
 import time
 import unicodedata
@@ -55,14 +56,14 @@ TEAM_REMAP = {
     "Ohio State": "Ohio St.", "Michigan State": "Michigan St.", "Penn State": "Penn St.",
     "Florida State": "Florida St.", "Mississippi State": "Mississippi St.", "Iowa State": "Iowa St.",
     "Oklahoma State": "Oklahoma St.", "Oregon State": "Oregon St.", "Kansas State": "Kansas St.",
-    "Kent State": "Kent St.", "San Diego State": "San Diego St.", "San Jose State": "San Jose St.",
+    "Kent State": "Kent St.", "San Diego State": "San Diego St.", "San Jose State": "San José St.",
     "Colorado State": "Colorado St.", "Utah State": "Utah St.", "Boise State": "Boise St.",
     "Fresno State": "Fresno St.", "Washington State": "Washington St.", "Arizona State": "Arizona St.",
     "New Mexico State": "New Mexico St.", "Arkansas State": "Arkansas St.", "Texas State": "Texas St.",
     "Appalachian State": "Appalachian St.", "App State": "Appalachian St.", "Ball State": "Ball St.",
     "Georgia State": "Georgia St.", "Missouri State": "Missouri St.", "Sam Houston": "Sam Houston St.",
     "Sam Houston State": "Sam Houston St.", "NC State": "North Carolina St.",
-    "North Carolina State": "North Carolina St.", "Ole Miss": "Mississippi", "Pitt": "Pittsburgh",
+    "North Carolina State": "North Carolina St.", "Mississippi": "Ole Miss", "Pitt": "Pittsburgh",
     "Louisiana": "Louisiana Lafayette", "Louisiana-Lafayette": "Louisiana Lafayette",
     "Massachusetts": "UMass", "Brigham Young": "BYU", "Southern California": "USC",
     "Southern Methodist": "SMU", "Texas Christian": "TCU", "Central Florida": "UCF",
@@ -149,8 +150,9 @@ def fetch_teams_for_conference(group_id: int, conf_name: str) -> dict:
     return out
 
 
-def fetch_all_fbs_teams() -> dict:
+def fetch_all_fbs_teams(palette: dict | None = None) -> dict:
     """Return dict[canonical_name] -> meta dict across all FBS conferences."""
+    palette = palette or {}
     all_teams: dict = {}
     for group_id, conf_name in FBS_CONFERENCES.items():
         print(f"    fetching {conf_name} (group {group_id}) via standings...", flush=True)
@@ -164,7 +166,18 @@ def fetch_all_fbs_teams() -> dict:
                 all_teams[name] = meta
         print(f"      +{len(conf_teams)} (running total {len(all_teams)})", flush=True)
         time.sleep(HTTP_SLEEP)
-    # Enrich missing colors / abbreviations via /teams/{id}
+    # Fill colours from the site's canonical palette first. Only teams it cannot
+    # cover (brand-new FBS members) fall through to the per-team ESPN lookup, which
+    # keeps this loop at a handful of requests instead of one per program.
+    filled = 0
+    for name, t in all_teams.items():
+        if not t["color"] and name in palette:
+            t["color"] = palette[name]
+            filled += 1
+    if palette:
+        print(f"    palette: filled {filled}/{len(all_teams)} colors from index.html", flush=True)
+
+    # Enrich anything still missing via /teams/{id}
     needs = [t for t in all_teams.values() if t["espn_id"] and (not t["color"] or not t["abbreviation"])]
     if needs:
         print(f"    enriching {len(needs)} teams via /teams/{{id}}...", flush=True)
@@ -178,12 +191,33 @@ def fetch_all_fbs_teams() -> dict:
     return all_teams
 
 
+# ESPN's /teams/{id} colour enrichment has been returning empty for every team since
+# 2026-08-04, which shipped color:"" across the whole roster and left /rank and /heisman
+# rendering every program in the same fallback navy. index.html's TEAM_META block is the
+# site's canonical palette, so fall back to it rather than to nothing. Parse failures are
+# non-fatal: an empty palette just restores the previous (colourless) behaviour.
+TEAM_META_RE = re.compile(r"'([^']+)':\s*\{id:'(\d+)',color:'#([0-9a-fA-F]{6})'")
+
+
+def palette_from_index_html(repo_root: Path) -> dict:
+    """Return dict[canonical_name] -> 6-digit hex (no leading '#')."""
+    try:
+        html = (repo_root / "index.html").read_text(encoding="utf-8")
+    except Exception as e:
+        print(f"    palette: could not read index.html ({e}); leaving colors empty", flush=True)
+        return {}
+    palette = {name: hexval.lower() for name, _id, hexval in TEAM_META_RE.findall(html)}
+    print(f"    palette: {len(palette)} colors read from index.html TEAM_META", flush=True)
+    return palette
+
+
 # Historical / alternate name spellings that point to the same FBS program.
 # Each entry duplicates the canonical record under the alias name so the
 # JS filter recognizes both spellings without modifying front_porch_games.json.
 TEAM_ALIASES = [
     ("Southern Miss", "Southern Mississippi"),     # xlsx uses the long form
-    ("San Jose St.",  "San Jose St."),             # already canonical, no-op
+    ("Ole Miss",      "Mississippi"),              # legacy spelling, defensive
+    ("San José St.", "San Jose St."),              # ASCII spelling still matches
 ]
 
 
@@ -192,7 +226,7 @@ def main() -> int:
     out_path = repo_root / "fbs_teams.json"
 
     print("==> Pulling FBS team rosters by conference...", flush=True)
-    teams = fetch_all_fbs_teams()
+    teams = fetch_all_fbs_teams(palette_from_index_html(repo_root))
 
     # Add alias entries so legacy spellings in the dataset still match.
     for canonical, alias in TEAM_ALIASES:
