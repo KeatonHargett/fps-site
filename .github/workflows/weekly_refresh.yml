@@ -67,12 +67,24 @@ jobs:
         run: |
           python scripts/refresh_fbs_teams.py
 
+      - name: Refresh team schedules from CFBD
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        env:
+          CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
+        run: |
+          if [ -z "$CFBD_API_KEY" ]; then
+            echo "CFBD_API_KEY not set; skipping schedules refresh."
+          else
+            python scripts/refresh_schedules.py
+          fi
+
       - name: Commit refreshed data
         if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.event.inputs.dry_run != 'true'
         run: |
           CHANGED=""
           if [ -n "$(git status --porcelain front_porch_games.json)" ]; then CHANGED="$CHANGED front_porch_games.json"; fi
           if [ -n "$(git status --porcelain fbs_teams.json)"        ]; then CHANGED="$CHANGED fbs_teams.json"; fi
+          if [ -n "$(git status --porcelain schedules_data.json)"   ]; then CHANGED="$CHANGED schedules_data.json"; fi
           if [ -n "$CHANGED" ]; then
             git config user.name  "fps-refresh-bot"
             git config user.email "fps-refresh-bot@users.noreply.github.com"

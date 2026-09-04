@@ -37,6 +37,12 @@
   [headers.values]
     Cache-Control = "public, max-age=3600, must-revalidate"
 
+# Season schedules: refreshed weekly in season, so it tracks the games dataset.
+[[headers]]
+  for = "/schedules_data.json"
+  [headers.values]
+    Cache-Control = "public, max-age=300, must-revalidate"
+
 [[headers]]
   for = "/historical_opponents.json"
   [headers.values]

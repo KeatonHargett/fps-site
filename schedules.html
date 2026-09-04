@@ -3,28 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>College Football Scoreboard — Live Scores &amp; Results | Front Porch Sports</title>
-<link rel="canonical" href="https://frontporchsports.com/scoreboard">
+<title>College Football Schedules — Every FBS Team by Season | Front Porch Sports</title>
+<link rel="canonical" href="https://frontporchsports.com/schedules">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://site.api.espn.com">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#003594">
-<meta property="og:title" content="College Football Scoreboard — Live Scores &amp; Results | Front Porch Sports">
-<meta property="og:description" content="Live college football scores, final results and upcoming kickoff times for every FBS game this season, with records, conference filters and week-by-week browsing.">
+<meta property="og:title" content="College Football Schedules — Every FBS Team by Season | Front Porch Sports">
+<meta property="og:description" content="Browse full season schedules for every FBS team from 2022 to 2026, including FCS and non-conference opponents, with results, scores and home, away or neutral site for every game.">
 <meta property="og:image" content="https://frontporchsports.com/og-image.png">
-<meta property="og:url" content="https://frontporchsports.com/scoreboard">
+<meta property="og:url" content="https://frontporchsports.com/schedules">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Front Porch Sports">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="College Football Scoreboard — Live Scores &amp; Results | Front Porch Sports">
-<meta name="twitter:description" content="Live college football scores, final results and upcoming kickoff times for every FBS game this season, with records, conference filters and week-by-week browsing.">
+<meta name="twitter:title" content="College Football Schedules — Every FBS Team by Season | Front Porch Sports">
+<meta name="twitter:description" content="Browse full season schedules for every FBS team from 2022 to 2026, including FCS and non-conference opponents, with results, scores and home, away or neutral site for every game.">
 <meta name="twitter:image" content="https://frontporchsports.com/og-image.png">
-<meta name="description" content="Live college football scores, final results and upcoming kickoff times for every FBS game this season, with records, conference filters and week-by-week browsing.">
+<meta name="description" content="Browse full season schedules for every FBS team from 2022 to 2026, including FCS and non-conference opponents, with results, scores and home, away or neutral site for every game.">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -99,80 +98,107 @@
   @media (max-width: 640px) { .rk-hero h1 { font-size: 2.2rem; } }
 
 
-  /* ===== Scoreboard ===== */
-  .sb-controls {
+  /* ===== Schedules ===== */
+  .sc-controls {
     background: white; border-radius: 12px; padding: 1.1rem 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
     margin: -2rem 0 1.25rem; position: relative; z-index: 2;
     display: flex; align-items: flex-end; gap: 1rem; flex-wrap: wrap;
   }
-  .sb-field { display: flex; flex-direction: column; gap: 0.3rem; }
-  .sb-field label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray); font-weight: 700; }
-  .sb-field select {
-    font-family: 'Inter', sans-serif; font-size: 0.95rem; padding: 0.45rem 0.7rem;
-    border: 1px solid var(--border); border-radius: 8px; background: white; color: var(--dark); min-width: 8.5rem;
-  }
-  .sb-field select:disabled { background: var(--light); color: var(--gray); cursor: not-allowed; }
-  .sb-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-  .sb-toggle button {
+  .sc-field { display: flex; flex-direction: column; gap: 0.3rem; }
+  .sc-field label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray); font-weight: 700; }
+  .sc-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .sc-toggle button {
     font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600; padding: 0.5rem 0.9rem;
     border: 0; background: white; color: var(--gray); cursor: pointer; transition: background 0.15s, color 0.15s;
   }
-  .sb-toggle button.active { background: var(--blue); color: white; }
-  .sb-refresh { margin-left: auto; font-size: 0.78rem; color: var(--gray); display: flex; align-items: center; gap: 0.4rem; }
-  .sb-live-dot { width: 8px; height: 8px; border-radius: 50%; background: #dc2626; display: inline-block; }
-  .sb-live-dot.idle { background: var(--border); }
-
-  /* Conference pills */
-  .sb-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem; }
-  .sb-pills button {
-    font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600; padding: 0.4rem 0.85rem;
-    border: 1px solid var(--border); border-radius: 999px; background: white; color: var(--gray);
-    cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s;
+  .sc-toggle button.active { background: var(--blue); color: white; }
+  .sc-toggle button:disabled { background: var(--light); color: #b6bcc6; cursor: not-allowed; }
+  .sc-search { flex: 1 1 15rem; }
+  .sc-search input {
+    width: 100%; font-family: 'Inter', sans-serif; font-size: 0.95rem; padding: 0.5rem 0.8rem;
+    border: 1px solid var(--border); border-radius: 8px; background: white; color: var(--dark);
   }
-  .sb-pills button:hover { border-color: var(--blue); color: var(--blue); }
-  .sb-pills button.active { background: var(--blue); border-color: var(--blue); color: white; }
+  .sc-search input:focus { outline: 2px solid var(--blue); outline-offset: -1px; }
 
-  /* Group headers */
-  .sb-group { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.03em;
-    color: var(--dark); margin: 1.75rem 0 0.75rem; display: flex; align-items: center; gap: 0.55rem; }
-  .sb-group:first-child { margin-top: 0; }
-  .sb-group img { width: 26px; height: 26px; object-fit: contain; }
-  .sb-group .sb-group-count { font-size: 0.95rem; color: var(--gray); font-family: 'Inter', sans-serif; font-weight: 600; }
-
-  /* Card grid: 2 up on desktop, 1 up on mobile */
-  .sb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .sb-card {
-    background: white; border: 1px solid var(--border); border-left: 6px solid transparent; border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.07); overflow: hidden; text-decoration: none; color: inherit; display: block;
-    transition: box-shadow 0.15s, transform 0.15s;
+  /* A-Z jump bar */
+  .sc-letters { display: flex; flex-wrap: wrap; gap: 0.3rem; align-items: center; margin-bottom: 1.5rem; }
+  .sc-letters .sl-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray); font-weight: 700; margin-right: 0.25rem; }
+  .sc-letters a {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; line-height: 1; padding: 0.3rem 0.5rem;
+    border: 1px solid var(--border); border-radius: 6px; color: var(--gray); text-decoration: none; background: white;
   }
-  .sb-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.11); transform: translateY(-1px); }
-  .sb-card-head {
-    display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
-    padding: 0.5rem 0.9rem; background: var(--light); border-bottom: 1px solid var(--border);
-    font-size: 0.76rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray);
+  .sc-letters a:hover { border-color: var(--blue); color: var(--blue); }
+
+  .sc-group { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.03em; color: var(--dark);
+    margin: 1.75rem 0 0.75rem; padding-bottom: 0.35rem; border-bottom: 2px solid var(--border);
+    display: flex; align-items: center; gap: 0.55rem; scroll-margin-top: 1rem; }
+  .sc-group:first-child { margin-top: 0; }
+  .sc-group img { width: 26px; height: 26px; object-fit: contain; }
+  .sc-group .sc-count { font-size: 0.9rem; color: var(--gray); font-family: 'Inter', sans-serif; font-weight: 600; }
+
+  /* Team cards */
+  .sc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+  .sc-team {
+    background: white; border: 1px solid var(--border); border-left: 6px solid transparent; border-radius: 10px;
+    padding: 0.75rem 0.9rem; display: grid; grid-template-columns: 40px 1fr; gap: 0.75rem; align-items: center;
   }
-  .sb-status.is-live { color: #dc2626; display: inline-flex; align-items: center; gap: 0.35rem; }
-  .sb-status.is-final { color: var(--dark); }
-  .sb-tv, .sb-neutral { font-weight: 600; letter-spacing: 0.03em; text-transform: none; }
+  .sc-team > img { width: 40px; height: 40px; object-fit: contain; }
+  .sc-team .st-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; line-height: 1.1; letter-spacing: 0.02em; text-decoration: none; color: inherit; }
+  .sc-team .st-name:hover { color: var(--blue); }
+  .sc-team .st-mascot { font-size: 0.75rem; color: var(--gray); margin-top: 0.05rem; }
+  .sc-years { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.4rem; }
+  .sc-years a {
+    font-size: 0.75rem; font-weight: 600; padding: 0.15rem 0.45rem; border-radius: 5px;
+    background: var(--light); color: var(--gray); text-decoration: none;
+  }
+  .sc-years a:hover { background: var(--blue); color: white; }
+  .sc-team[data-team="Oklahoma St."] { border-left-color: var(--orange); background: rgba(254, 92, 0, 0.05); }
+  .sc-team[data-team="Oklahoma St."] .st-name { color: var(--orange); }
 
-  .sb-team { display: grid; grid-template-columns: 34px 1fr auto; align-items: center; gap: 0.7rem; padding: 0.6rem 0.9rem; }
-  .sb-team + .sb-team { border-top: 1px solid var(--border); }
-  .sb-team img { width: 34px; height: 34px; object-fit: contain; }
-  .sb-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; line-height: 1.1; letter-spacing: 0.02em; }
-  .sb-rank { font-size: 0.75rem; color: var(--gray); font-family: 'Inter', sans-serif; font-weight: 700; margin-right: 0.25rem; }
-  .sb-rec { font-size: 0.72rem; color: var(--gray); margin-top: 0.1rem; }
-  .sb-score { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; line-height: 1; letter-spacing: 0.02em; min-width: 2.2rem; text-align: right; }
-  .sb-team.loser .sb-name, .sb-team.loser .sb-score { color: var(--gray); }
-  .sb-kick { padding: 0.6rem 0.9rem; font-size: 0.8rem; color: var(--gray); border-top: 1px solid var(--border); }
+  /* Team schedule view */
+  .sc-head { display: flex; align-items: center; gap: 1rem; background: white; border: 1px solid var(--border);
+    border-radius: 12px; padding: 1rem 1.25rem; margin: -2rem 0 1.25rem; position: relative; z-index: 2;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06); flex-wrap: wrap; }
+  .sc-head img { width: 56px; height: 56px; object-fit: contain; }
+  .sc-head h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; line-height: 1; letter-spacing: 0.02em; }
+  .sc-head .sh-sub { font-size: 0.82rem; color: var(--gray); margin-top: 0.2rem; }
+  .sc-head[data-team="Oklahoma St."] { border-left: 6px solid var(--orange); }
+  .sc-head[data-team="Oklahoma St."] h2 { color: var(--orange); }
+  .sc-yearnav { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-left: auto; }
+  .sc-yearnav a {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 0.03em;
+    padding: 0.3rem 0.7rem; border-radius: 6px; border: 1px solid var(--border);
+    color: var(--gray); text-decoration: none; background: white;
+  }
+  .sc-yearnav a:hover { border-color: var(--blue); color: var(--blue); }
+  .sc-yearnav a.active { background: var(--blue); border-color: var(--blue); color: white; }
 
-  /* Oklahoma State auto highlight */
-  .sb-card[data-has-osu="1"] { border-left-color: var(--orange); background: rgba(254, 92, 0, 0.05); }
-  .sb-team[data-team="Oklahoma St."] .sb-name { color: var(--orange); }
+  .sc-games { background: white; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .sc-game { display: grid; grid-template-columns: 92px 34px 1fr auto; align-items: center; gap: 0.75rem;
+    padding: 0.6rem 0.95rem; border-left: 6px solid transparent; text-decoration: none; color: inherit; }
+  .sc-game + .sc-game { border-top: 1px solid var(--border); }
+  .sc-game:hover { background: #fafafa; }
+  .sc-date { font-size: 0.76rem; color: var(--gray); font-weight: 600; }
+  .sc-game img { width: 34px; height: 34px; object-fit: contain; }
+  .sc-opp { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; line-height: 1.15; letter-spacing: 0.02em; }
+  .sc-site { font-size: 0.72rem; color: var(--gray); font-weight: 600; margin-right: 0.3rem; }
+  .sc-tag { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+    color: var(--gray); background: var(--light); border-radius: 4px; padding: 0.08rem 0.3rem; margin-left: 0.35rem; }
+  .sc-result { text-align: right; font-family: 'Bebas Neue', sans-serif; font-size: 1.25rem; letter-spacing: 0.02em; white-space: nowrap; }
+  .sc-result .sr-w { color: var(--win-green); }
+  .sc-result .sr-l { color: #dc2626; }
+  .sc-result .sr-t { color: var(--gray); }
+  .sc-result .sr-pending { font-family: 'Inter', sans-serif; font-size: 0.78rem; color: var(--gray); font-weight: 600; }
+  .sc-game[data-team="Oklahoma St."] { border-left-color: var(--orange); background: rgba(254, 92, 0, 0.05); }
+  .sc-game[data-team="Oklahoma St."] .sc-opp { color: var(--orange); }
+  .sc-summary { padding: 0.7rem 0.95rem; background: var(--light); border-top: 1px solid var(--border);
+    font-size: 0.82rem; color: var(--gray); font-weight: 600; }
+  .sc-back { display: inline-block; margin-bottom: 1rem; font-size: 0.85rem; color: var(--blue); text-decoration: none; font-weight: 600; }
+  .sc-back:hover { text-decoration: underline; }
 
-  .sb-empty { padding: 3rem 1rem; text-align: center; color: var(--gray); }
-  /* Everything renders client-side; reserve height so the footer does not jump. */
-  #sb-content { min-height: 100vh; }
+  .sc-empty { padding: 3rem 1rem; text-align: center; color: var(--gray); }
+  /* Rendered client-side; reserve height so the footer does not jump. */
+  #sc-content { min-height: 100vh; }
   .loading { text-align: center; padding: 3rem; color: var(--gray); font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
   .spinner { display: inline-block; width: 40px; height: 40px; border: 4px solid var(--light); border-top-color: var(--orange); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 1rem; }
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -197,12 +223,15 @@
     .navbar-links a { font-size: 1.1rem; padding: 0.35rem 0.7rem; }
     .navbar-social { gap: 0.35rem; }
     .navbar-social .nav-soc { width: 32px; height: 32px; }
-    .sb-grid { grid-template-columns: 1fr; }
-    .sb-controls { margin-top: -1.5rem; gap: 0.75rem; }
-    .sb-field select { min-width: 7rem; font-size: 0.9rem; }
-    .sb-refresh { margin-left: 0; width: 100%; }
-    .sb-name { font-size: 1.05rem; }
-    .sb-score { font-size: 1.35rem; }
+    .sc-grid { grid-template-columns: 1fr; }
+    .sc-controls { margin-top: -1.5rem; gap: 0.75rem; }
+    .sc-head { margin-top: -1.5rem; }
+    .sc-yearnav { margin-left: 0; width: 100%; }
+    .sc-game { grid-template-columns: 68px 28px 1fr auto; gap: 0.5rem; padding: 0.55rem 0.7rem; }
+    .sc-game img { width: 28px; height: 28px; }
+    .sc-opp { font-size: 1rem; }
+    .sc-result { font-size: 1.05rem; }
+    .sc-date { font-size: 0.68rem; }
   }
 
   /* v36: nav — logo top-left, tabs left-aligned right next to logo, no socials in nav */
@@ -245,8 +274,8 @@
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Scoreboard",
-          "item": "https://frontporchsports.com/scoreboard"
+          "name": "Schedules",
+          "item": "https://frontporchsports.com/schedules"
         }
       ]
     }
@@ -268,8 +297,8 @@
     </div>
     <div class="navbar-links">
       <a href='/'>Home</a>
-      <a class='active' href='/scoreboard'>Scoreboard</a>
-      <a href='/schedules'>Schedules</a>
+      <a href='/scoreboard'>Scoreboard</a>
+      <a class='active' href='/schedules'>Schedules</a>
       <a href='/rankings'>Rankings</a>
       <a href='/teams'>Teams</a>
       <a href='/compare'>Compare</a>
@@ -279,43 +308,18 @@
       </a>
     </div>
   </div>
-</nav>
 
 <section class="rk-hero">
-  <h1>COLLEGE FOOTBALL <span class="accent">SCOREBOARD</span></h1>
-  <p>Live scores, final results and upcoming kickoffs for every FBS game this season.</p>
+  <h1>COLLEGE FOOTBALL <span class="accent">SCHEDULES</span></h1>
+  <p id="sc-hero-sub">Browse historical schedules for every FBS team, grouped alphabetically or by conference. Pick a team for its full season history, or jump straight to a recent year.</p>
 </section>
 
 <main>
-  <div class="sb-controls">
-    <div class="sb-field">
-      <label for="sb-season">Season</label>
-      <select id="sb-season" disabled title="This page covers the current season only"><option>2026</option></select>
-    </div>
-    <div class="sb-field">
-      <label for="sb-week">Week</label>
-      <select id="sb-week"></select>
-    </div>
-    <div class="sb-field">
-      <label for="sb-division">Division</label>
-      <select id="sb-division" disabled title="Front Porch Sports covers FBS"><option>FBS</option></select>
-    </div>
-    <div class="sb-field">
-      <label>Sort</label>
-      <div class="sb-toggle" role="group" aria-label="Sort games">
-        <button id="sb-by-date" class="active" type="button">By Date</button>
-        <button id="sb-by-conf" type="button">By Conference</button>
-      </div>
-    </div>
-    <div class="sb-refresh"><span id="sb-dot" class="sb-live-dot idle"></span><span id="sb-refresh-text">Loading&hellip;</span></div>
-  </div>
-
-  <div class="sb-pills" id="sb-pills"></div>
-
-  <div id="sb-content">
-    <div class="loading"><div class="spinner"></div><div>Loading scoreboard&hellip;</div></div>
+  <div id="sc-content">
+    <div class="loading"><div class="spinner"></div><div>Loading schedules&hellip;</div></div>
   </div>
 </main>
+
 
 <footer>
   <div class="footer-inner">
@@ -337,10 +341,7 @@
     </nav>
     <p class="footer-credit">Website Built By <a href="https://keatonhargett.com" target="_blank" rel="noopener">Keaton Hargett</a></p>
     <p class="footer-copy">&copy; 2025 Front Porch Sports</p>
-  </div>
-</footer>
 
-<script src="/vendor/gsap.min.js"></script>
 <script>
   const TEAM_META = {
   'Air Force': {id:'2005',color:'#003594',alt:'#ffffff',abbr:'AF'},
@@ -485,14 +486,6 @@
 };
 
   const LOGO_URL = id => `https://a.espncdn.com/i/teamlogos/ncaa/500/${id}.png`;
-
-  // ESPN conference (group) ids -> the conference labels used everywhere else on
-  // the site. ESPN calls group 18 "FBS Independents"; the rest of the site says
-  // "Independent", so normalise here rather than leaking a second spelling.
-  const CONF_BY_ID = {
-    1: 'ACC', 4: 'Big 12', 5: 'Big Ten', 8: 'SEC', 9: 'Pac-12', 12: 'Conference USA',
-    15: 'MAC', 17: 'Mountain West', 18: 'Independent', 37: 'Sun Belt', 151: 'American'
-  };
   const CONF_ORDER = ["ACC", "American", "Big 12", "Big Ten", "Conference USA", "Independent", "MAC", "Mountain West", "Pac-12", "SEC", "Sun Belt"];
   const CONF_LOGOS = {
     'ACC':            'https://a.espncdn.com/i/teamlogos/ncaa_conf/500/acc.png',
@@ -508,353 +501,216 @@
     'Sun Belt':       'https://a.espncdn.com/i/teamlogos/ncaa_conf/500/sun_belt.png'
   };
 
-  // Mirrors normalize() in scripts/refresh_games.py so a team is spelled the same
-  // here as it is in the H2H dataset and in TEAM_META.
-  const TEAM_REMAP = {
-    "Ohio State":"Ohio St.","Michigan State":"Michigan St.","Penn State":"Penn St.","Florida State":"Florida St.",
-    "Mississippi State":"Mississippi St.","Iowa State":"Iowa St.","Oklahoma State":"Oklahoma St.","Oregon State":"Oregon St.",
-    "Kansas State":"Kansas St.","Kent State":"Kent St.","San Diego State":"San Diego St.","San Jose State":"San José St.",
-    "Colorado State":"Colorado St.","Utah State":"Utah St.","Boise State":"Boise St.","Fresno State":"Fresno St.",
-    "Washington State":"Washington St.","Arizona State":"Arizona St.","New Mexico State":"New Mexico St.",
-    "Arkansas State":"Arkansas St.","Texas State":"Texas St.","Appalachian State":"Appalachian St.",
-    "App State":"Appalachian St.","Ball State":"Ball St.","Georgia State":"Georgia St.","Missouri State":"Missouri St.",
-    "Sam Houston":"Sam Houston St.","Sam Houston State":"Sam Houston St.","NC State":"North Carolina St.",
-    "North Carolina State":"North Carolina St.","Mississippi":"Ole Miss","Pitt":"Pittsburgh",
-    "Louisiana":"Louisiana Lafayette","Louisiana-Lafayette":"Louisiana Lafayette","Massachusetts":"UMass",
-    "Brigham Young":"BYU","Southern California":"USC","Southern Methodist":"SMU","Texas Christian":"TCU",
-    "Central Florida":"UCF","Nevada Las Vegas":"UNLV","Hawai'i":"Hawaii","Miami (FL)":"Miami","Miami (Florida)":"Miami",
-    "UConn":"Connecticut","USF":"South Florida","Florida Atlantic":"FAU","Florida International":"FIU",
-    "UL Monroe":"Louisiana Monroe","Louisiana-Monroe":"Louisiana Monroe","ULM":"Louisiana Monroe"
-  };
-  const fpsKey = s => (s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
-  const CANON_BY_KEY = (() => { const m = {}; for (const n of Object.keys(TEAM_META)) m[fpsKey(n)] = n; return m; })();
-  function normalizeTeam(raw) {
-    if (!raw) return '';
-    const ascii = raw.normalize('NFKD').replace(/[̀-ͯ]/g, '').trim();
-    let n = TEAM_REMAP[ascii] || (ascii.endsWith(' State') ? ascii.slice(0, -6) + ' St.' : ascii);
-    return CANON_BY_KEY[fpsKey(n)] || n;
+  /* SEO: one HTML file renders the index and every team-season, so the head has to
+     follow the query string or every variant looks identical to a crawler. */
+  function fpsMeta(o) {
+    const B = 'https://frontporchsports.com';
+    const set = (sel, attr, val) => {
+      const el = document.head.querySelector(sel);
+      if (el && val) el.setAttribute(attr, val);
+    };
+    if (o.title) {
+      document.title = o.title;
+      set('meta[property="og:title"]', 'content', o.title);
+      set('meta[name="twitter:title"]', 'content', o.title);
+    }
+    if (o.description) {
+      set('meta[name="description"]', 'content', o.description);
+      set('meta[property="og:description"]', 'content', o.description);
+      set('meta[name="twitter:description"]', 'content', o.description);
+    }
+    if (o.path) {
+      set('link[rel="canonical"]', 'href', B + o.path);
+      set('meta[property="og:url"]', 'content', B + o.path);
+    }
   }
 
-  const ESPN_SB = 'https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard';
-  const POLL_MS = 60000;
-  const MAX_WEEK = 16;
-
-  let GAMES = [];
-  let week = null;            // null on first load = whatever week ESPN says is current
-  let sort = 'date';
-  let confFilter = 'ALL';
-  let pollTimer = null;
-  let lastFetch = null;
-
+  const params = new URLSearchParams(location.search);
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-  /* Pull the fields the cards need out of one ESPN event. */
-  function parseEvent(ev) {
-    const c = (ev.competitions || [])[0];
-    if (!c || !c.competitors || c.competitors.length < 2) return null;
-    const st = c.status || {};
-    const ty = st.type || {};
-    const side = ha => {
-      const x = c.competitors.find(t => t.homeAway === ha) || {};
-      const t = x.team || {};
-      const rec = (x.records || []).find(r => r.type === 'total');
-      return {
-        name: normalizeTeam(t.location || t.displayName || ''),
-        espnId: t.id || '',
-        logo: t.logo || (t.id ? LOGO_URL(t.id) : ''),
-        score: x.score == null ? '' : String(x.score),
-        record: rec ? rec.summary : '',
-        rank: x.curatedRank && x.curatedRank.current && x.curatedRank.current <= 25 ? x.curatedRank.current : null,
-        confId: t.conferenceId == null ? null : parseInt(t.conferenceId, 10),
-        winner: !!x.winner
+  let DATA = null;
+  let view = 'az';
+  let searchTerm = '';
+
+  const box = () => document.getElementById('sc-content');
+  const teamsList = () => Object.keys(DATA.teams).sort((a, b) => a.localeCompare(b));
+  const seasonsDesc = () => DATA._meta.seasons.slice().sort((a, b) => b - a);
+
+  const prettyDate = iso => {
+    if (!iso) return 'TBD';
+    const d = new Date(iso + 'T12:00:00Z');
+    return isNaN(d) ? iso : d.toLocaleDateString(undefined, { timeZone: 'UTC', month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  /* ---------- Index ---------- */
+  function renderIndex() {
+    fpsMeta({
+      title: 'College Football Schedules — Every FBS Team by Season | Front Porch Sports',
+      description: 'Browse full season schedules for every FBS team from ' + DATA._meta.seasons[0] + ' to ' + DATA._meta.seasons[DATA._meta.seasons.length - 1] + ', including FCS and non-conference opponents.',
+      path: '/schedules'
+    });
+    document.getElementById('sc-hero-sub').textContent =
+      'Browse historical schedules for every FBS team, grouped alphabetically or by conference. Pick a team for its full season history, or jump straight to a recent year.';
+
+    const years = seasonsDesc();
+    const controls = `
+      <div class="sc-controls">
+        <div class="sc-field">
+          <label>Division</label>
+          <div class="sc-toggle" role="group" aria-label="Division">
+            <button type="button" class="active" id="sc-fbs">FBS</button>
+            <button type="button" id="sc-fcs" disabled title="Front Porch Sports covers FBS programs">FCS</button>
+          </div>
+        </div>
+        <div class="sc-field">
+          <label>View</label>
+          <div class="sc-toggle" role="group" aria-label="View">
+            <button type="button" id="sc-az" class="${view === 'az' ? 'active' : ''}">A&ndash;Z</button>
+            <button type="button" id="sc-conf" class="${view === 'conf' ? 'active' : ''}">By Conference</button>
+          </div>
+        </div>
+        <div class="sc-field sc-search">
+          <label for="sc-q">Search</label>
+          <input id="sc-q" type="search" placeholder="Search teams&hellip;" value="${esc(searchTerm)}" autocomplete="off">
+        </div>
+      </div>`;
+
+    const all = teamsList().filter(t => t.toLowerCase().includes(searchTerm.toLowerCase()));
+    if (!all.length) {
+      box().innerHTML = controls + '<div class="sc-empty">No teams match your search.</div>';
+      wireIndex();
+      return;
+    }
+
+    const card = t => {
+      const m = TEAM_META[t], info = DATA.teams[t];
+      const has = new Set(Object.keys(DATA.schedules[t] || {}));
+      const yl = years.filter(y => has.has(String(y)))
+        .map(y => `<a href="schedules.html?team=${encodeURIComponent(t)}&year=${y}">${y}</a>`).join('');
+      return `<div class="sc-team" data-team="${esc(t)}">
+        ${m ? `<img src="${LOGO_URL(m.id)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '<span></span>'}
+        <div>
+          <a class="st-name" href="schedules.html?team=${encodeURIComponent(t)}">${esc(t)}</a>
+          <div class="st-mascot">${esc(info.mascot || info.conference || '')}</div>
+          <div class="sc-years">${yl}</div>
+        </div>
+      </div>`;
+    };
+
+    let body = '';
+    if (view === 'az') {
+      const groups = {};
+      all.forEach(t => { const L = t[0].toUpperCase(); (groups[L] = groups[L] || []).push(t); });
+      const letters = Object.keys(groups).sort();
+      body = `<div class="sc-letters"><span class="sl-label">Jump to</span>${
+        letters.map(L => `<a href="#L-${L}">${L}</a>`).join('')}</div>` +
+        letters.map(L => `
+          <div class="sc-group" id="L-${L}"><span>${L}</span> <span class="sc-count">${groups[L].length}</span></div>
+          <div class="sc-grid">${groups[L].map(card).join('')}</div>`).join('');
+    } else {
+      const groups = {};
+      all.forEach(t => { const c = DATA.teams[t].conference || 'Other'; (groups[c] = groups[c] || []).push(t); });
+      const order = CONF_ORDER.filter(c => groups[c]).concat(Object.keys(groups).filter(c => !CONF_ORDER.includes(c)));
+      body = order.map(c => `
+        <div class="sc-group">${CONF_LOGOS[c] ? `<img src="${CONF_LOGOS[c]}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}<span>${esc(c)}</span> <span class="sc-count">${groups[c].length}</span></div>
+        <div class="sc-grid">${groups[c].map(card).join('')}</div>`).join('');
+    }
+    box().innerHTML = controls + body;
+    wireIndex();
+  }
+
+  function wireIndex() {
+    const az = document.getElementById('sc-az'), cf = document.getElementById('sc-conf');
+    if (az) az.onclick = () => { view = 'az'; renderIndex(); };
+    if (cf) cf.onclick = () => { view = 'conf'; renderIndex(); };
+    const q = document.getElementById('sc-q');
+    if (q) {
+      q.oninput = e => {
+        searchTerm = e.target.value;
+        const pos = e.target.selectionStart;
+        renderIndex();
+        const n = document.getElementById('sc-q');
+        if (n) { n.focus(); n.setSelectionRange(pos, pos); }
       };
-    };
-    const home = side('home'), away = side('away');
-    // FBS scope: keep a game when either side belongs to an FBS conference, so an
-    // FBS team hosting an FCS opponent still shows up (tagged by the FBS side).
-    const conf = CONF_BY_ID[home.confId] || CONF_BY_ID[away.confId] || null;
-    if (!conf) return null;
-    return {
-      id: ev.id,
-      date: ev.date,
-      conf,
-      state: ty.state || 'pre',            // pre | in | post
-      completed: !!ty.completed,
-      shortDetail: ty.shortDetail || '',
-      period: st.period || 0,
-      clock: st.displayClock || '',
-      neutral: !!c.neutralSite,
-      tv: ((c.broadcasts || [])[0] || {}).names ? c.broadcasts[0].names[0] : '',
-      home, away
-    };
-  }
-
-  async function fetchWeek(w) {
-    // With no week, ESPN needs to be asked bare - sending dates=2026 without a week
-    // returns the entire season (~800 games) rather than the current week.
-    const qs = w
-      ? new URLSearchParams({ dates: '2026', seasontype: '2', week: String(w), groups: '80', limit: '400' })
-      : new URLSearchParams({ groups: '80', limit: '400' });
-    const r = await fetch(`${ESPN_SB}?${qs}`, { cache: 'no-store' });
-    if (!r.ok) throw new Error(`ESPN returned ${r.status}`);
-    const d = await r.json();
-    if (!w && d.week && d.week.number) week = d.week.number;
-    return (d.events || []).map(parseEvent).filter(Boolean);
-  }
-
-  const kickoff = iso => {
-    const d = new Date(iso);
-    return isNaN(d) ? '' : d.toLocaleString(undefined, { weekday: 'short', month: 'numeric', day: 'numeric', hour: 'numeric', minute: '2-digit' });
-  };
-
-  function statusHtml(g) {
-    if (g.state === 'in') {
-      const ord = ['', '1st', '2nd', '3rd', '4th'][g.period] || (g.period > 4 ? 'OT' : '');
-      return `<span class="sb-status is-live"><span class="sb-live-dot"></span>${esc(g.clock)}${ord ? ' &middot; ' + ord : ''}</span>`;
     }
-    if (g.state === 'post') return `<span class="sb-status is-final">${esc(g.completed ? 'Final' : g.shortDetail)}</span>`;
-    return `<span class="sb-status">${esc(kickoff(g.date) || g.shortDetail)}</span>`;
   }
 
-  function teamRow(g, side) {
-    const t = g[side];
-    const meta = TEAM_META[t.name];
-    const showScore = g.state !== 'pre';
-    const loser = g.state === 'post' && !t.winner ? ' loser' : '';
-    return `<div class="sb-team${loser}" data-team="${esc(t.name)}">
-      <img src="${esc(t.logo)}" alt="" loading="lazy" onerror="this.style.display='none'">
-      <div>
-        <div class="sb-name">${t.rank ? `<span class="sb-rank">#${t.rank}</span>` : ''}${esc(t.name)}</div>
-        ${t.record ? `<div class="sb-rec">${esc(t.record)}</div>` : ''}
-      </div>
-      <div class="sb-score" id="sc-${esc(g.id)}-${side}">${showScore ? esc(t.score) : ''}</div>
-    </div>`;
-  }
-
-  function cardHtml(g) {
-    const osu = (g.home.name === 'Oklahoma St.' || g.away.name === 'Oklahoma St.') ? '1' : '0';
-    // Only send to /compare when both programs exist in the H2H dataset. FBS-vs-FCS
-    // games would otherwise land on an empty comparison, so those link to the FBS
-    // team's own page instead.
-    const bothFbs = !!TEAM_META[g.home.name] && !!TEAM_META[g.away.name];
-    const href = bothFbs
-      ? `compare.html?team1=${encodeURIComponent(g.away.name)}&team2=${encodeURIComponent(g.home.name)}`
-      : `team.html?team=${encodeURIComponent(TEAM_META[g.home.name] ? g.home.name : g.away.name)}`;
-    const tag = g.neutral ? '<span class="sb-neutral">Neutral site</span>' : (g.tv ? `<span class="sb-tv">${esc(g.tv)}</span>` : '');
-    return `<a class="sb-card" data-game="${esc(g.id)}" data-has-osu="${osu}" href="${href}">
-      <div class="sb-card-head"><span class="sb-head-status">${statusHtml(g)}</span>${tag}</div>
-      ${teamRow(g, 'away')}
-      ${teamRow(g, 'home')}
-    </a>`;
-  }
-
-  function visibleGames() {
-    return GAMES.filter(g => confFilter === 'ALL' || g.conf === confFilter);
-  }
-
-  function render() {
-    const box = document.getElementById('sb-content');
-    const games = visibleGames();
-    if (!games.length) {
-      box.innerHTML = '<div class="sb-empty">No games match this filter for the selected week.</div>';
+  /* ---------- One team, one season ---------- */
+  function renderTeam(team, year) {
+    const bySeason = DATA.schedules[team];
+    if (!bySeason) {
+      box().innerHTML = `<div class="sc-empty">No schedule data for &ldquo;${esc(team)}&rdquo;. <a href="schedules.html">Back to all teams</a></div>`;
       return;
     }
-    const groups = {};
-    if (sort === 'conf') {
-      games.forEach(g => (groups[g.conf] = groups[g.conf] || []).push(g));
-    } else {
-      games.slice().sort((a, b) => new Date(a.date) - new Date(b.date)).forEach(g => {
-        const d = new Date(g.date);
-        const label = isNaN(d) ? 'Scheduled' : d.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
-        (groups[label] = groups[label] || []).push(g);
-      });
-    }
-    let order = Object.keys(groups);
-    if (sort === 'conf') {
-      order = CONF_ORDER.filter(c => groups[c]).concat(order.filter(c => !CONF_ORDER.includes(c)));
-    } else {
-      order.sort((a, b) => new Date(groups[a][0].date) - new Date(groups[b][0].date));
-    }
-    box.innerHTML = order.map(k => `
-      <div class="sb-group">${sort === 'conf' && CONF_LOGOS[k] ? `<img src="${CONF_LOGOS[k]}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}<span>${esc(k)}</span> <span class="sb-group-count">${groups[k].length}</span></div>
-      <div class="sb-grid">${groups[k].map(cardHtml).join('')}</div>
-    `).join('');
-  }
+    const years = seasonsDesc().filter(y => bySeason[String(y)]);
+    if (!year || !bySeason[String(year)]) year = years[0];
+    const games = bySeason[String(year)] || [];
+    const info = DATA.teams[team] || {};
+    const m = TEAM_META[team];
 
-  /* Patch scores/status in place so live cards keep their DOM nodes between polls.
-     Returns the score nodes whose value actually changed on a live game. */
-  function applyUpdates(fresh) {
-    const byId = new Map(GAMES.map(g => [g.id, g]));
-    const changed = [];
-    fresh.forEach(n => {
-      const prev = byId.get(n.id);
-      const card = document.querySelector(`.sb-card[data-game="${CSS.escape(n.id)}"]`);
-      if (!prev || !card) return;
-      const head = card.querySelector('.sb-head-status');
-      if (head) head.innerHTML = statusHtml(n);
-      ['away', 'home'].forEach(side => {
-        const el = document.getElementById(`sc-${n.id}-${side}`);
-        if (!el) return;
-        const before = el.textContent;
-        const next = n.state === 'pre' ? '' : String(n[side].score);
-        if (before !== next) {
-          el.textContent = next;
-          // Flag only a genuine score movement inside a game that was already in
-          // progress: never a final, never an upcoming game, and never the blank
-          // -> 0 transition when a game first kicks off.
-          if (n.state === 'in' && prev.state === 'in' && before !== '' && next !== '') changed.push(el);
-        }
-        const row = el.closest('.sb-team');
-        if (row) row.classList.toggle('loser', n.state === 'post' && !n[side].winner);
-      });
+    fpsMeta({
+      title: `${team} ${year} Football Schedule — Results & Scores | Front Porch Sports`,
+      description: `Complete ${year} ${team} football schedule: every opponent, home, away or neutral site, final scores and results, including FCS opponents.`,
+      path: `/schedules?team=${encodeURIComponent(team)}&year=${year}`
     });
-    GAMES = fresh;
-    return changed;
-  }
+    document.getElementById('sc-hero-sub').textContent = `${team} — ${year} season schedule and results.`;
 
-  function anyLive() { return GAMES.some(g => g.state === 'in'); }
+    let w = 0, l = 0, t = 0;
+    games.forEach(g => { if (g.result === 'W') w++; else if (g.result === 'L') l++; else if (g.result === 'T') t++; });
+    const played = w + l + t;
 
-  function setStatusLine() {
-    const dot = document.getElementById('sb-dot');
-    const txt = document.getElementById('sb-refresh-text');
-    const live = anyLive();
-    dot.className = 'sb-live-dot' + (live ? '' : ' idle');
-    const stamp = lastFetch ? lastFetch.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', second: '2-digit' }) : '';
-    txt.textContent = live
-      ? `${GAMES.filter(g => g.state === 'in').length} live &middot; refreshing every 60s`
-      : `Updated ${stamp}`;
-    txt.innerHTML = txt.textContent.replace(' &middot; ', ' · ');
-  }
-
-  /* Poll only while a game is actually in progress, and never while the tab is
-     hidden - a backgrounded tab should not keep hitting ESPN. */
-  function schedulePoll() {
-    clearTimeout(pollTimer);
-    if (!anyLive() || document.hidden) return;
-    pollTimer = setTimeout(poll, POLL_MS);
-  }
-
-  async function poll() {
-    try {
-      const fresh = await fetchWeek(week);
-      lastFetch = new Date();
-      const sameSet = fresh.length === GAMES.length && fresh.every(g => GAMES.some(o => o.id === g.id));
-      if (sameSet) {
-        const changed = applyUpdates(fresh);
-        if (window.fpsPulse) changed.forEach(window.fpsPulse);
+    const row = g => {
+      const om = TEAM_META[g.opp];
+      const site = g.site === 'home' ? 'vs' : (g.site === 'away' ? '@' : 'vs');
+      const tag = g.site === 'neutral' ? '<span class="sc-tag">Neutral</span>' : '';
+      const fcs = g.oppFbs ? '' : '<span class="sc-tag">FCS</span>';
+      const post = g.postseason ? '<span class="sc-tag">Postseason</span>' : '';
+      let res;
+      if (g.result) {
+        const cls = g.result === 'W' ? 'sr-w' : (g.result === 'L' ? 'sr-l' : 'sr-t');
+        res = `<span class="${cls}">${g.result} ${g.pts}&ndash;${g.oppPts}</span>`;
       } else {
-        GAMES = fresh;
-        render();
+        res = `<span class="sr-pending">${g.tbd ? 'Time TBD' : 'Scheduled'}</span>`;
       }
-      setStatusLine();
-    } catch (e) {
-      /* transient ESPN failure: keep the last good board and try again next tick */
-    }
-    schedulePoll();
-  }
-
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { clearTimeout(pollTimer); return; }
-    if (anyLive()) poll();
-  });
-
-  function buildWeekSelect() {
-    const sel = document.getElementById('sb-week');
-    sel.innerHTML = '';
-    for (let i = 1; i <= MAX_WEEK; i++) {
-      const o = document.createElement('option');
-      o.value = String(i); o.textContent = `Week ${i}`;
-      if (i === week) o.selected = true;
-      sel.appendChild(o);
-    }
-    sel.onchange = async () => {
-      week = parseInt(sel.value, 10);
-      document.getElementById('sb-content').innerHTML = '<div class="loading"><div class="spinner"></div><div>Loading week&hellip;</div></div>';
-      await load(false);
+      const inner = `
+        <div class="sc-date">${esc(prettyDate(g.date))}</div>
+        ${om ? `<img src="${LOGO_URL(om.id)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '<span></span>'}
+        <div class="sc-opp"><span class="sc-site">${site}</span>${esc(g.opp)}${tag}${fcs}${post}</div>
+        <div class="sc-result">${res}</div>`;
+      // Only link an opponent the site actually has a page for.
+      return om
+        ? `<a class="sc-game" data-team="${esc(g.opp)}" href="schedules.html?team=${encodeURIComponent(g.opp)}&year=${year}">${inner}</a>`
+        : `<div class="sc-game" data-team="${esc(g.opp)}">${inner}</div>`;
     };
+
+    box().innerHTML = `
+      <a class="sc-back" href="schedules.html">&larr; All teams</a>
+      <div class="sc-head" data-team="${esc(team)}">
+        ${m ? `<img src="${LOGO_URL(m.id)}" alt="">` : ''}
+        <div>
+          <h2>${esc(team)}</h2>
+          <div class="sh-sub">${esc([info.mascot, info.conference].filter(Boolean).join(' · '))}</div>
+        </div>
+        <div class="sc-yearnav">${years.map(y =>
+          `<a class="${String(y) === String(year) ? 'active' : ''}" href="schedules.html?team=${encodeURIComponent(team)}&year=${y}">${y}</a>`).join('')}</div>
+      </div>
+      <div class="sc-games">
+        ${games.map(row).join('')}
+        <div class="sc-summary">${games.length} games${played ? ` &middot; ${w}&ndash;${l}${t ? '&ndash;' + t : ''} record` : ''} &middot; ${games.filter(g => !g.oppFbs).length} non-FBS opponent${games.filter(g => !g.oppFbs).length === 1 ? '' : 's'}</div>
+      </div>`;
   }
 
-  function buildPills() {
-    const box = document.getElementById('sb-pills');
-    const counts = {};
-    GAMES.forEach(g => counts[g.conf] = (counts[g.conf] || 0) + 1);
-    const list = ['ALL'].concat(CONF_ORDER.filter(c => counts[c]));
-    box.innerHTML = list.map(c =>
-      `<button type="button" data-conf="${esc(c)}" class="${c === confFilter ? 'active' : ''}">${c === 'ALL' ? 'ALL' : esc(c)}${c === 'ALL' ? '' : ` (${counts[c]})`}</button>`
-    ).join('');
-    box.querySelectorAll('button').forEach(b => b.onclick = () => {
-      confFilter = b.dataset.conf;
-      box.querySelectorAll('button').forEach(x => x.classList.toggle('active', x === b));
-      render();
+  fetch('schedules_data.json')
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(d => {
+      DATA = d;
+      const team = params.get('team');
+      if (team) renderTeam(team, params.get('year'));
+      else renderIndex();
+    })
+    .catch(e => {
+      box().innerHTML = `<div class="sc-empty">Could not load schedules (${esc(e.message)}). Please try again shortly.</div>`;
     });
-  }
-
-  document.getElementById('sb-by-date').onclick = () => {
-    sort = 'date';
-    document.getElementById('sb-by-date').classList.add('active');
-    document.getElementById('sb-by-conf').classList.remove('active');
-    render();
-  };
-  document.getElementById('sb-by-conf').onclick = () => {
-    sort = 'conf';
-    document.getElementById('sb-by-conf').classList.add('active');
-    document.getElementById('sb-by-date').classList.remove('active');
-    render();
-  };
-
-  /* ===== Live score pulse (GSAP core only) =====
-     Fires on the specific score node whose value changed during the 60s poll of a
-     game that is in progress. Animates scale (compositor-friendly transform) plus a
-     brief brand-orange colour flash, then hands the styling back to CSS. No layout
-     properties are touched, so a burst of simultaneous score updates cannot thrash
-     layout. Oklahoma State uses this same treatment - there is no separate variant. */
-  const PULSE_ORANGE = '#fe5c00';
-  let prefersReducedMotion = false;
-  if (window.gsap) {
-    gsap.matchMedia().add('(prefers-reduced-motion: reduce)', () => {
-      prefersReducedMotion = true;
-      return () => { prefersReducedMotion = false; };
-    });
-  }
-
-  window.fpsPulse = function (el) {
-    if (!el || !window.gsap) return;
-    // single read before any write, so a batch of pulses cannot interleave
-    // reads and writes and force repeated style recalculation
-    const restColor = getComputedStyle(el).color;
-    if (prefersReducedMotion) {
-      gsap.timeline({ overwrite: true })
-        .set(el, { color: PULSE_ORANGE })
-        .to(el, { color: restColor, duration: 0.3, ease: 'none', clearProps: 'color' }, '+=0.1');
-      return;
-    }
-    gsap.timeline({ overwrite: true })
-      .fromTo(el,
-        { scale: 1, transformOrigin: 'right center' },
-        { scale: 1.45, color: PULSE_ORANGE, duration: 0.16, ease: 'back.out(2.5)' })
-      .to(el,
-        { scale: 1, color: restColor, duration: 0.2, ease: 'power2.out', clearProps: 'transform,transformOrigin,color' });
-  };
-
-  async function load(first) {
-    try {
-      GAMES = await fetchWeek(week);
-      lastFetch = new Date();
-      if (first) buildWeekSelect(); else {
-        const sel = document.getElementById('sb-week');
-        if (sel) sel.value = String(week);
-      }
-      buildPills();
-      render();
-      setStatusLine();
-      schedulePoll();
-    } catch (e) {
-      document.getElementById('sb-content').innerHTML =
-        `<div class="sb-empty">Could not load the scoreboard right now (${esc(e.message)}). Please try again shortly.</div>`;
-    }
-  }
-
-  load(true);
 </script>
 
 </body>

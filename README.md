@@ -26,8 +26,9 @@ Netlify site ID: ba621860-d998-4c7e-a858-94c100312b49
 |-- og-image.png  logo.png              social share image and wordmark
 |-- netlify.toml                        Netlify publish config, security and cache headers
 |-- scripts/
-|   |-- refresh_games.py                CFBD pull, current season only
-|   |-- refresh_fbs_teams.py
+|   |-- refresh_games.py                ESPN pull (keyless), current season only
+|   |-- refresh_fbs_teams.py            ESPN standings -> fbs_teams.json
+|   |-- refresh_schedules.py            CFBD pull -> schedules_data.json (needs CFBD_API_KEY)
 |   |-- generate_sitemap.py             regenerates sitemap.xml
 |   |-- requirements.txt
 |-- .github/
@@ -69,20 +70,27 @@ To wire Netlify to this repo the first time:
 
 The weekly refresh runs every Tuesday at 12:00 UTC from August through January. It can also be triggered manually from the Actions tab.
 
-The workflow uses two GitHub repo secrets:
+The workflow uses these GitHub repo secrets:
 
 | Secret | Used by | Notes |
 | --- | --- | --- |
-| CFBD_API_KEY | refresh_games.py | CollegeFootballData.com free tier key. Never commit. |
-| FPS_CURRENT_SEASON | optional override | If unset, the script derives the season from the system date. |
+| NETLIFY_AUTH_TOKEN | deploy step | Netlify personal access token. |
+| NETLIFY_SITE_ID | deploy step | Netlify site id. |
+| CFBD_API_KEY | refresh_schedules.py | CollegeFootballData.com key. Never commit. If unset, the schedules step is skipped and the rest of the refresh still runs. |
+
+FPS_CURRENT_SEASON is a workflow_dispatch input, not a secret: if unset, the script
+derives the season from the system date.
 
 Add secrets at GitHub -> repo -> Settings -> Secrets and variables -> Actions -> New repository secret.
  <!-- v25 deploy nudge -->
 ## Refresh behavior
 
-- The script pulls current season games from CFBD where completed = true.
+- refresh_games.py pulls current season games from ESPN (keyless) where completed = true.
 - Games already in front_porch_games.json for the current season are replaced, not merged, because in-season data is volatile.
 - All prior seasons are left untouched.
+- refresh_schedules.py rebuilds schedules_data.json (2022-present) from CFBD. This is a
+  separate, additive file and the only place FCS and other non-FBS opponents appear;
+  front_porch_games.json stays FBS-vs-FBS and is never written by it.
 - If the resulting JSON is identical to the existing one, no commit is made.
 
 ## Local dev

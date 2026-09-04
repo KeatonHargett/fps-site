@@ -22,6 +22,10 @@ opinion, and no paywall.
 
 - https://frontporchsports.com/ - Home. Rivalry lookup and featured matchups.
 - https://frontporchsports.com/teams - Directory of all 136 FBS programs.
+- https://frontporchsports.com/schedules - Full season schedules for every FBS
+  team, 2022-2026, including FCS and other non-FBS opponents that the head-to-head
+  dataset does not cover. /schedules?team=NAME&year=YYYY for one team-season.
+  Example: /schedules?team=Oklahoma%20St.&year=2026
 - https://frontporchsports.com/scoreboard - Live college football scoreboard for
   the current season: in-progress scores with quarter and clock, final results and
   upcoming kickoff times, filterable by week and conference.

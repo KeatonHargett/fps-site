@@ -2,43 +2,49 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://frontporchsports.com/</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/scoreboard</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://frontporchsports.com/schedules</loc>
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://frontporchsports.com/teams</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/compare</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rankings</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/games</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/heisman</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -872,73 +878,73 @@
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=all-time-record</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=claimed-national-championships</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=recognized-national-championships</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=conference-championships</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=bowl-games</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=all-time-wins</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=all-americans</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=heisman-winners</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=nfl-draft-picks</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=first-round-nfl-draft-picks</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=weeks-in-poll</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=weeks-at-ap-number-one</loc>
-    <lastmod>2026-09-03</lastmod>
+    <lastmod>2026-09-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

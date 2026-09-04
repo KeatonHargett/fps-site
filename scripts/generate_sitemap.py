@@ -78,6 +78,7 @@ def main():
     urls = [
         ("/",          lastmod("index.html"),     "daily",   "1.0"),
         ("/scoreboard", lastmod("scoreboard.html"), "daily",  "0.9"),
+        ("/schedules", lastmod("schedules.html", "schedules_data.json"), "weekly", "0.9"),
         ("/teams",     lastmod("teams.html"),     "weekly",  "0.9"),
         ("/compare",   lastmod("compare.html"),   "weekly",  "0.9"),
         ("/rankings",  lastmod("rankings.html"),  "weekly",  "0.9"),
