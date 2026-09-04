@@ -659,7 +659,7 @@
       const ordered = CONF_ORDER.filter(c => groups[c]);
       Object.keys(groups).forEach(c => { if (!ordered.includes(c)) ordered.push(c); });
       box.innerHTML = ordered.map(c => `
-        <div class="group-header conf-header">${CONF_LOGOS[c] ? `<img src="${CONF_LOGOS[c]}" alt="${c}" loading="lazy" onerror="this.style.display='none'">` : ''}<span class="conf-name">${c}</span> <span class="conf-count">${groups[c].length}</span></div>
+        <div class="group-header conf-header">${CONF_LOGOS[c] ? `<img src="${CONF_LOGOS[c]}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}<span class="conf-name">${c}</span> <span class="conf-count">${groups[c].length}</span></div>
         <div class="team-grid">${groups[c].sort().map(teamItem).join('')}</div>
       `).join('');
     }

@@ -735,7 +735,7 @@
       return `<a class="cat-card cat-card-link" href="rank.html?cat=${catSlug}">
         <div class="cat-card-head">${label} <span class="cat-card-chevron">&rsaquo;</span></div>
         <div class="cat-card-body">
-          <img class="cat-leader-logo" src="${LOGO_URL(lm.id)}" alt="${leader.display}" loading="lazy" onerror="this.style.visibility='hidden'">
+          <img class="cat-leader-logo" src="${LOGO_URL(lm.id)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
           <div class="cl-list">${rows}</div>
         </div>
       </div></a>`;
@@ -767,7 +767,6 @@
       return `<a class="podium-card ${md.cls}" style="--medal:${md.color}" href="team.html?team=${encodeURIComponent(t.name)}">
         <div class="podium-medal">${md.medal}</div>
         <img src="${LOGO_URL(m.id)}" alt="${t.display}" loading="lazy" onerror="this.style.visibility='hidden'">
-        <div class="podium-name">${t.display}</div>
         <div class="podium-avg"><span class="pa-num">${t.avg.toFixed(1)}</span><span class="pa-label">Avg Ranking</span></div>
       </a>`;
     }).join('');
