@@ -328,6 +328,10 @@
   .h2h-bar-segment.t1 { left: 0; }
   .h2h-bar-segment.t2 { right: 0; }
   .h2h-bar-segment.ties { background: var(--gray); font-size: 1rem; }
+  /* v49: the in-segment tie label is suppressed below ~6% width, and most series sit at
+     4-8% ties, so the count read as an unlabelled grey sliver. Surface it outside the
+     bar too - compare.html already does this via .hb-record-line. */
+  .h2h-tie-line { text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 0.06em; color: var(--gray); margin-top: 0.5rem; }
   .chart-box { margin: 2.5rem 0; }
   .chart-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; text-align: center; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
   .chart-canvas-wrap { position: relative; height: 300px; width: 100%; }
@@ -401,6 +405,7 @@
   .sc-wins { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; line-height: 1; flex-shrink: 0; }
   .sc-bar { height: 22px; display: flex; border-radius: 4px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.12); margin-bottom: 0.5rem; }
   .sc-bar-seg { height: 100%; }
+  .sc-bar-seg.sc-bar-tie { background: var(--gray); }
   .sc-record { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; text-align: center; color: var(--dark); letter-spacing: 0.02em; }
   .sc-record .sc-sub { display: block; font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 500; color: var(--gray); letter-spacing: 0; text-transform: none; margin-top: 0.15rem; }
   @media (max-width: 640px) { .suggested-grid { grid-template-columns: 1fr; } }
@@ -412,6 +417,42 @@
   .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; text-align: center; margin: 3rem 0 1.5rem; }
   .section-title .accent { color: var(--orange); }
   .rivalry-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 1.5rem; }
+
+  /* v49: Featured Matchups - six auto-selected games, refreshed by the Tuesday job.
+     Segments use .fm-seg rather than .h2h-bar-segment on purpose: index.html runs a
+     global querySelectorAll('.h2h-bar-segment') animation sweep on every compare
+     re-render, which would otherwise drag all six cards into it. */
+  .fm-sub { text-align: center; color: var(--gray); font-size: 0.9rem; margin: -1rem 0 1.5rem; }
+  .fm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .fm-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.25rem 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
+  .fm-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); border-color: var(--orange); }
+  .fm-head { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; margin-bottom: 0.9rem; }
+  .fm-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; line-height: 1.1; letter-spacing: 0.02em; min-width: 0; }
+  .fm-kick { display: block; font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 500; color: var(--gray); letter-spacing: 0; margin-top: 0.1rem; }
+  .fm-link { flex-shrink: 0; font-size: 0.72rem; color: var(--orange); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; text-decoration: none; white-space: nowrap; }
+  .fm-link:hover { text-decoration: underline; }
+  .fm-teams { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+  .fm-team { display: flex; align-items: center; gap: 0.5rem; flex: 1; min-width: 0; }
+  .fm-team.right { flex-direction: row-reverse; text-align: right; }
+  .fm-team img { width: 40px; height: 40px; flex-shrink: 0; object-fit: contain; }
+  .fm-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; line-height: 1.1; letter-spacing: 0.02em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .fm-rank { font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 700; color: var(--gray); white-space: nowrap; }
+  .fm-labels { display: flex; justify-content: space-between; align-items: flex-end; gap: 0.5rem; margin-bottom: 0.35rem; }
+  .fm-wins { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; line-height: 1; letter-spacing: 0.02em; }
+  .fm-wins .fm-pct { display: block; font-family: 'Inter', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0; margin-top: 0.1rem; }
+  .fm-labels .right { text-align: right; }
+  .fm-ties { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.06em; color: var(--gray); text-align: center; padding-bottom: 0.1rem; }
+  .fm-bar { position: relative; display: flex; height: 30px; border-radius: 5px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); background: var(--light); }
+  .fm-seg { height: 100%; }
+  .fm-seg.fm-tie { background: var(--gray); }
+  .fm-streak { text-align: center; margin-top: 0.85rem; }
+  .fm-streak-label { font-family: 'Bebas Neue', sans-serif; font-size: 0.8rem; letter-spacing: 0.12em; color: var(--gray); }
+  .fm-streak-value { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; line-height: 1; margin-top: 0.15rem; letter-spacing: 0.03em; }
+  .fm-empty { grid-column: 1 / -1; text-align: center; color: var(--gray); padding: 2rem 0; }
+  /* Oklahoma State auto highlight, matching rank.html / schedules.html */
+  .fm-card[data-has-osu="1"] { border-left: 4px solid var(--orange); }
+  .fm-card [data-team="Oklahoma St."] .fm-name { color: var(--orange); }
+  @media (max-width: 640px) { .fm-grid { grid-template-columns: 1fr; } }
   .rivalry-card { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; text-decoration: none; color: inherit; }
   .rivalry-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
   .rivalry-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
@@ -423,6 +464,10 @@
   .rc-bar-seg { display: flex; align-items: center; justify-content: center; color: white; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
   .rc-name { text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; margin-top: 0.85rem; color: var(--dark); }
   .rc-cta { text-align: center; font-size: 0.8rem; color: var(--orange); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.4rem; }
+  /* v49: tie slice + tie count. The slice uses the same grey as the main H2H bar's
+     .ties segment; the count sits outside the bar so it stays legible at any width. */
+  .rc-bar-seg.rc-bar-tie { background: var(--gray); }
+  .rc-ties { text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; letter-spacing: 0.08em; color: var(--gray); margin-top: 0.4rem; }
   @media (max-width: 640px) { .hero h1 { font-size: 2.5rem; } .rivalry-grid { grid-template-columns: 1fr; } }
 
 </style>
@@ -584,6 +629,10 @@
       <div class="loading"><div class="spinner"></div><div>Loading game data&hellip;</div></div>
     </div>
   </div>
+  <div class="section-title">FEATURED <span class="accent">MATCHUPS</span></div>
+  <p class="fm-sub" id="fm-sub">This week's biggest games, ranked by poll position, rivalry and series history.</p>
+  <div class="fm-grid" id="fm-grid"></div>
+
   <div class="section-title">BLUE BLOOD <span class="accent">RIVALRIES</span></div>
   <div class="rivalry-grid" id="rivalry-grid"></div>
 </main>
@@ -757,74 +806,30 @@
   'Wisconsin': {id:'275',color:'#a00000',alt:'#ffffff',abbr:'WIS'},
   'Wyoming': {id:'2751',color:'#492f24',alt:'#ffc425',abbr:'WYO'}
 };
-  const RIVALRIES = {
-  'Oklahoma|Oklahoma St.': {name:'Bedlam',trophy:'Bedlam Bell',logo:'rivalry-logos/bedlam.png'},
-  'Oklahoma|Texas': {name:'Red River Rivalry',trophy:'Golden Hat',logo:'rivalry-logos/red-river.png'},
-  'Nebraska|Oklahoma': {name:'Nebraska–Oklahoma Rivalry',trophy:'',logo:''},
-  'Alabama|Auburn': {name:'Iron Bowl',trophy:'Foy–ODK Trophy',logo:'rivalry-logos/iron-bowl.png'},
-  'Michigan|Ohio St.': {name:'The Game',trophy:'',logo:''},
-  'Michigan|Michigan St.': {name:'Paul Bunyan Trophy',trophy:'Paul Bunyan Trophy',logo:''},
-  'Michigan|Minnesota': {name:'Little Brown Jug',trophy:'Little Brown Jug',logo:''},
-  'Minnesota|Wisconsin': {name:'Paul Bunyan’s Axe',trophy:'Paul Bunyan’s Axe',logo:''},
-  'Notre Dame|USC': {name:'Jeweled Shillelagh',trophy:'Jeweled Shillelagh',logo:''},
-  'Florida|Georgia': {name:'World’s Largest Outdoor Cocktail Party',trophy:'',logo:''},
-  'Florida|Florida St.': {name:'Florida–Florida State Rivalry',trophy:'',logo:''},
-  'Florida|Miami': {name:'Florida–Miami Rivalry',trophy:'War Canoe',logo:''},
-  'Georgia|Georgia Tech': {name:'Clean Old-Fashioned Hate',trophy:'Governor’s Cup',logo:''},
-  'Auburn|Georgia': {name:'Deep South’s Oldest Rivalry',trophy:'',logo:''},
-  'Alabama|Tennessee': {name:'Third Saturday in October',trophy:'',logo:''},
-  'Kentucky|Tennessee': {name:'Tennessee–Kentucky Rivalry',trophy:'Beer Barrel (retired)',logo:''},
-  'Texas|Texas A&M': {name:'Lone Star Showdown',trophy:'',logo:'rivalry-logos/lone-star-showdown.png'},
-  'Arkansas|Texas': {name:'Texas–Arkansas Rivalry',trophy:'',logo:''},
-  'UCLA|USC': {name:'Victory Bell Rivalry',trophy:'Victory Bell',logo:''},
-  'Notre Dame|USC': {name:'Jeweled Shillelagh',trophy:'Jeweled Shillelagh',logo:''},
-  'California|Stanford': {name:'The Big Game',trophy:'Stanford Axe',logo:''},
-  'Oregon|Oregon St.': {name:'Platypus Trophy',trophy:'Platypus Trophy',logo:''},
-  'Washington|Washington St.': {name:'Apple Cup',trophy:'Apple Cup',logo:''},
-  'Oregon|Washington': {name:'Washington–Oregon Rivalry',trophy:'',logo:''},
-  'Colorado|Nebraska': {name:'Colorado–Nebraska Rivalry',trophy:'',logo:''},
-  'Kansas|Kansas St.': {name:'Sunflower Showdown',trophy:'Governor’s Cup',logo:''},
-  'Kansas|Missouri': {name:'Border War',trophy:'Lamar Hunt Trophy',logo:''},
-  'Arkansas|Missouri': {name:'Battle Line Rivalry',trophy:'Battle Line Trophy',logo:''},
-  'Iowa|Iowa St.': {name:'Cy-Hawk Series',trophy:'Cy-Hawk Trophy',logo:''},
-  'Iowa|Minnesota': {name:'Floyd of Rosedale',trophy:'Floyd of Rosedale',logo:''},
-  'Iowa|Wisconsin': {name:'Heartland Trophy',trophy:'Heartland Trophy',logo:''},
-  'Iowa|Nebraska': {name:'Heroes Trophy',trophy:'Heroes Game',logo:''},
-  'Indiana|Purdue': {name:'Old Oaken Bucket',trophy:'Old Oaken Bucket',logo:''},
-  'Illinois|Northwestern': {name:'Land of Lincoln Trophy',trophy:'Land of Lincoln Trophy',logo:''},
-  'Illinois|Purdue': {name:'Purdue Cannon',trophy:'Purdue Cannon',logo:''},
-  'Penn St.|Pittsburgh': {name:'Keystone Classic',trophy:'',logo:''},
-  'Pittsburgh|West Virginia': {name:'Backyard Brawl',trophy:'',logo:''},
-  'Virginia|Virginia Tech': {name:'Commonwealth Cup',trophy:'Commonwealth Cup',logo:''},
-  'Duke|North Carolina': {name:'Carolina–Duke Rivalry',trophy:'Victory Bell',logo:''},
-  'North Carolina|North Carolina St.': {name:'Carolina–NC State Rivalry',trophy:'',logo:''},
-  'Clemson|South Carolina': {name:'Palmetto Bowl',trophy:'',logo:''},
-  'Nebraska|Wisconsin': {name:'Freedom Trophy',trophy:'Freedom Trophy',logo:''},
-  'LSU|Texas A&M': {name:'Texas A&M–LSU Rivalry',trophy:'',logo:''},
-  'LSU|Tulane': {name:'Battle for the Rag',trophy:'The Rag',logo:''},
-  'Arkansas|LSU': {name:'The Boot',trophy:'Golden Boot',logo:''},
-  'Mississippi St.|Ole Miss': {name:'Egg Bowl',trophy:'Golden Egg',logo:''},
-  'Cincinnati|Miami (OH)': {name:'Victory Bell',trophy:'Victory Bell',logo:''},
-  'Army|Navy': {name:'Army–Navy Game',trophy:'Commander-in-Chief’s Trophy',logo:''},
-  'Air Force|Army': {name:'Commander-in-Chief’s Trophy',trophy:'Commander-in-Chief’s Trophy',logo:''},
-  'Air Force|Navy': {name:'Commander-in-Chief’s Trophy',trophy:'Commander-in-Chief’s Trophy',logo:''},
-  'BYU|Utah': {name:'Holy War',trophy:'',logo:''},
-  'Utah|Utah St.': {name:'Battle of the Brothers',trophy:'Old Wagon Wheel',logo:''},
-  'Colorado|Colorado St.': {name:'Rocky Mountain Showdown',trophy:'',logo:''},
-  'Arizona|Arizona St.': {name:'Territorial Cup',trophy:'Territorial Cup',logo:''},
-  'Boston College|Notre Dame': {name:'Holy War',trophy:'Frank Leahy Memorial Bowl',logo:''},
-  'Fresno St.|San Jose St.': {name:'Valley Trophy',trophy:'Valley Trophy',logo:''},
-  'Nevada|UNLV': {name:'Battle for Nevada',trophy:'Fremont Cannon',logo:''},
-  'Marshall|Ohio': {name:'Marshall–Ohio Rivalry',trophy:'',logo:''},
-  'Bowling Green|Toledo': {name:'Battle of I-75',trophy:'Peace Pipe',logo:''},
-  'Cincinnati|Miami (OH)': {name:'Victory Bell',trophy:'Victory Bell',logo:''},
-  'Memphis|Mississippi St.': {name:'Memphis–Mississippi State Rivalry',trophy:'',logo:''},
-  'SMU|TCU': {name:'Battle for the Iron Skillet',trophy:'Iron Skillet',logo:''},
-  'Houston|Rice': {name:'Bayou Bucket Classic',trophy:'Bayou Bucket',logo:''},
-  'South Florida|UCF': {name:'War on I-4',trophy:'',logo:''},
-  'Kentucky|Louisville': {name:'Governor’s Cup',trophy:'Governor’s Cup',logo:''},
-  'Baylor|TCU': {name:'Bluebonnet Battle',trophy:'',logo:'rivalry-logos/bluebonnet-battle.png'}
-};
+  // v49: the rivalry map moved to rivalries.json so the weekly Actions job can read it
+  // as well - a Python step cannot parse a JS literal, and the map used to be duplicated
+  // byte-for-byte in index.html and compare.html. The page renders fine before the fetch
+  // lands; it just has no rivalry badge yet, so the badge re-renders on arrival.
+  let RIVALRIES = {};
+  let RIVALRY_INDEX = {};
+  // Accent-fold BOTH halves and re-sort the folded pair, on write and on read alike, so
+  // the lookup is self-consistent and 'San Jose St.' finds the map's 'San Jose St.' key.
+  function rivalryKey(a, b) { return [fpsKey(a), fpsKey(b)].sort().join('|'); }
+  function buildRivalryIndex() {
+    RIVALRY_INDEX = {};
+    for (const k of Object.keys(RIVALRIES)) {
+      const parts = k.split('|');
+      if (parts.length === 2) RIVALRY_INDEX[rivalryKey(parts[0], parts[1])] = RIVALRIES[k];
+    }
+  }
+  fetch('rivalries.json')
+    .then(r => r.ok ? r.json() : null)
+    .then(d => {
+      RIVALRIES = (d && d.rivalries) || {};
+      buildRivalryIndex();
+      if (typeof onRivalriesLoaded === 'function') onRivalriesLoaded();
+    })
+    .catch(() => {});
   const COMPARE_START_MODE = 'empty';
   const LOGO_URL = id => `https://a.espncdn.com/i/teamlogos/ncaa/500/${id}.png`;
   const MIN_YEAR = 1887;
@@ -1257,8 +1262,7 @@
   // Look up a named rivalry for the current two teams
   function getRivalry() {
     if (!state.team1 || !state.team2) return null;
-    const [a, b] = [state.team1, state.team2].sort();
-    return RIVALRIES[a + '|' + b] || null;
+    return RIVALRY_INDEX[rivalryKey(state.team1, state.team2)] || null;
   }
 
   function getRivalryGames() {
@@ -1438,6 +1442,7 @@
           ${tiePct>0?`<div class="h2h-bar-segment ties" data-target-left="${t1Pct}" data-target-width="${tiePct}" title="${ties} tie${ties===1?'':'s'}" style="left:${(t1Pct + tiePct/2).toFixed(2)}%;width:0%">${tiePct>=6?ties+(ties===1?' TIE':' TIES'):tiePct>=3?ties:''}</div>`:''}
           ${t2Pct>0?`<div class="h2h-bar-segment t2" data-target-width="${t2Pct}" style="background:${t2Color};width:0%">${t2Pct>=8?t2Wins:''}</div>`:''}
         </div>
+        ${ties > 0 ? `<div class="h2h-tie-line">${ties} ${ties===1?'TIE':'TIES'}</div>` : ''}
       </div>
     `;
     document.getElementById('results').innerHTML = `
@@ -1494,11 +1499,15 @@
               const oColor = TEAM_META[m.opp]?.color || '#003594';
               const recStr = `${m.r.w}-${m.r.l}${m.r.t?'-'+m.r.t:''}`;
               const url = `compare.html?team1=${encodeURIComponent(m.base)}&team2=${encodeURIComponent(m.opp)}`;
-              // all-time H2H bar in team colors (wins-only split)
+              // all-time H2H bar in team colors
+              // v49: was a wins-only split - ties were read into a variable, used in the
+              // text, then left out of the bar entirely. Divide by every meeting played
+              // so the three slices sum to the series.
               const bWins = m.r.w, oWins = m.r.l, ties = m.r.t;
-              const winsTotal = bWins + oWins || 1;
-              const bPct = (bWins / winsTotal) * 100;
-              const oPct = (oWins / winsTotal) * 100;
+              const barTotal = bWins + oWins + ties || 1;
+              const bPct = (bWins / barTotal) * 100;
+              const oPct = (oWins / barTotal) * 100;
+              const tiePct = (ties / barTotal) * 100;
               const leadStr = bWins > oWins ? `${m.base} leads ${recStr}`
                             : oWins > bWins ? `${m.opp} leads ${oWins}-${bWins}${ties?'-'+ties:''}`
                             : `Series tied ${recStr}`;
@@ -1511,6 +1520,7 @@
                 </div>
                 <div class="sc-bar">
                   ${bPct>0?`<div class="sc-bar-seg" style="background:${bColor};width:${bPct}%"></div>`:''}
+                  ${tiePct>0?`<div class="sc-bar-seg sc-bar-tie" title="${ties} tie${ties===1?'':'s'}" style="width:${tiePct}%"></div>`:''}
                   ${oPct>0?`<div class="sc-bar-seg" style="background:${oColor};width:${oPct}%"></div>`:''}
                 </div>
                 <div class="sc-record">${leadStr}<span class="sc-sub">${m.games} all-time meetings${ties?' &middot; '+ties+' tie'+(ties>1?'s':''):''}</span></div>
@@ -1678,18 +1688,99 @@
   }
 
 
+  // ===== v49: Featured Matchups =====================================================
+  // The whole card payload is precomputed by scripts/compute_featured.py, so this
+  // section paints from a ~4 KB file and never waits on the 16 MB games dataset.
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  function fmWins(n) { return n === 1 ? 'WIN' : 'WINS'; }
+
+  function fmStreakLine(s) {
+    if (!s) return '';
+    if (s.tied) {
+      return `<div class="fm-streak">
+        <div class="fm-streak-label">Last Meeting</div>
+        <div class="fm-streak-value" style="color:var(--gray)">TIE (${s.startYear})</div>
+      </div>`;
+    }
+    if (!s.count || !s.team) return '';
+    const yr = s.startYear === s.endYear ? `${s.startYear}` : `${s.startYear}-${s.endYear}`;
+    const color = TEAM_META[s.team] ? TEAM_META[s.team].color : 'var(--dark)';
+    return `<div class="fm-streak">
+      <div class="fm-streak-label">Current Win Streak</div>
+      <div class="fm-streak-value" style="color:${color}">${s.count} &middot; ${esc(s.team.toUpperCase())} (${yr})</div>
+    </div>`;
+  }
+
+  function fmSide(name, id, color, rank, right) {
+    const logo = id ? `<img src="${LOGO_URL(id)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
+    return `<span class="fm-team${right ? ' right' : ''}" data-team="${esc(name)}">${logo}<span>
+        <span class="fm-name" style="color:${color}">${esc(name)}</span>
+        ${rank ? `<span class="fm-rank">AP #${rank}</span>` : ''}
+      </span></span>`;
+  }
+
+  function renderFeatured(doc) {
+    const box = document.getElementById('fm-grid');
+    if (!box) return;
+    const list = (doc && doc.matchups) || [];
+    if (!list.length) {
+      box.innerHTML = `<div class="fm-empty">Featured matchups will appear once this week&rsquo;s schedule is posted.</div>`;
+      return;
+    }
+    const sub = document.getElementById('fm-sub');
+    if (sub && doc._meta && doc._meta.week) {
+      sub.textContent = `Week ${doc._meta.week} · ranked by poll position, rivalry and series history.`;
+    }
+    box.innerHTML = list.map(m => {
+      const hasOsu = (m.a === 'Oklahoma St.' || m.b === 'Oklahoma St.') ? '1' : '0';
+      const title = m.rivalry && m.rivalry.name ? m.rivalry.name : `${m.a} vs ${m.b}`;
+      const kick = m.kickoff ? new Date(m.kickoff + 'T12:00:00Z')
+        .toLocaleDateString(undefined, { timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric' }) : '';
+      return `<div class="fm-card" data-has-osu="${hasOsu}">
+        <div class="fm-head">
+          <div class="fm-title">${esc(title)}${kick ? `<span class="fm-kick">${esc(kick)}</span>` : ''}</div>
+          <a class="fm-link" href="${m.url}">Full Matchup Page &rarr;</a>
+        </div>
+        <div class="fm-teams">
+          ${fmSide(m.a, m.aId, m.aColor, m.aRank, false)}
+          ${fmSide(m.b, m.bId, m.bColor, m.bRank, true)}
+        </div>
+        <div class="fm-labels">
+          <div class="fm-wins" style="color:${m.aColor}">${m.w} ${fmWins(m.w)}<span class="fm-pct">(${m.aPct})</span></div>
+          ${m.t > 0 ? `<div class="fm-ties">${m.t} ${m.t === 1 ? 'TIE' : 'TIES'}</div>` : ''}
+          <div class="fm-wins right" style="color:${m.bColor}">${m.l} ${fmWins(m.l)}<span class="fm-pct">(${m.bPct})</span></div>
+        </div>
+        <div class="fm-bar">
+          ${m.aWidth > 0 ? `<div class="fm-seg" style="background:${m.aColor};width:${m.aWidth}%"></div>` : ''}
+          ${m.tieWidth > 0 ? `<div class="fm-seg fm-tie" title="${m.t} tie${m.t === 1 ? '' : 's'}" style="width:${m.tieWidth}%"></div>` : ''}
+          ${m.bWidth > 0 ? `<div class="fm-seg" style="background:${m.bColor};width:${m.bWidth}%"></div>` : ''}
+        </div>
+        ${m.total === 0 ? '<div class="fm-streak"><div class="fm-streak-label">No previous meetings on record.</div></div>' : fmStreakLine(m.streak)}
+      </div>`;
+    }).join('');
+  }
+
+  fetch('featured_matchups.json')
+    .then(r => r.ok ? r.json() : null)
+    .then(renderFeatured)
+    .catch(() => renderFeatured(null));
+
   const BLUE_BLOODS = [['Texas','Oklahoma'],['Notre Dame','USC'],['Ohio St.','Michigan'],['Alabama','Auburn'],['Nebraska','Oklahoma']];
   function renderBlueBloods() {
     if (!GAMES.length) { setTimeout(renderBlueBloods, 100); return; }
     const cards = BLUE_BLOODS.map(([a,b]) => {
       const rg = GAMES.filter(g => (g.team_a===a&&g.team_b===b)||(g.team_a===b&&g.team_b===a));
       const aw = rg.filter(g=>g.winner===a).length, bw = rg.filter(g=>g.winner===b).length;
+      const ties = rg.filter(g=>g.is_tie).length;
       const aColor = TEAM_META[a]?.color||'#fe5c00', bColor = TEAM_META[b]?.color||'#003594';
-      const winsOnly = aw + bw;
-      const aPct=(aw/winsOnly)*100, bPct=(bw/winsOnly)*100;
+      // v49: ties were excluded here (denominator was aw+bw and there was no third
+      // segment), so a tied meeting silently vanished from the bar. Divide by every
+      // meeting played and render the tie slice, matching the main H2H bar.
+      const total = aw + bw + ties || 1;
+      const aPct=(aw/total)*100, bPct=(bw/total)*100, tiePct=(ties/total)*100;
       const url = `compare.html?team1=${encodeURIComponent(a)}&team2=${encodeURIComponent(b)}`;
-      const [ra,rb] = [a,b].sort();
-      const riv = RIVALRIES[ra+'|'+rb];
+      const riv = RIVALRY_INDEX[rivalryKey(a,b)];
       return `<a class="rivalry-card" href="${url}">
           <div class="rivalry-card-header">
             <div class="rc-team"><img src="${LOGO_URL(TEAM_META[a]?.id)}" alt="${a}" loading="lazy" onerror="this.style.display='none'"><span class="rc-wins" style="color:${aColor}">${aw}</span></div>
@@ -1697,8 +1788,10 @@
           </div>
           <div class="rc-bar">
             ${aPct>0?`<div class="rc-bar-seg" style="background:${aColor};width:${aPct}%">${aPct>=12?aw:''}</div>`:''}
+            ${tiePct>0?`<div class="rc-bar-seg rc-bar-tie" title="${ties} tie${ties===1?'':'s'}" style="width:${tiePct}%"></div>`:''}
             ${bPct>0?`<div class="rc-bar-seg" style="background:${bColor};width:${bPct}%">${bPct>=12?bw:''}</div>`:''}
           </div>
+          ${ties>0?`<div class="rc-ties">${ties} ${ties===1?'TIE':'TIES'}</div>`:''}
           <div class="rc-name">${riv ? riv.name : a + ' vs ' + b}</div>
           <div class="rc-cta">View Full Matchup &rarr;</div>
         </a>`;
@@ -1706,6 +1799,13 @@
     document.getElementById('rivalry-grid').innerHTML = cards;
   }
   renderBlueBloods();
+
+  // v49: rivalries.json arrives asynchronously, so redraw anything whose copy depends
+  // on it once it lands. Guarded because the compare module may not have rendered yet.
+  function onRivalriesLoaded() {
+    if (GAMES.length) renderBlueBloods();
+    if (typeof render === 'function' && state.team1 && state.team2) render();
+  }
 </script>
 </body>
 </html>

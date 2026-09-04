@@ -53,6 +53,18 @@
   [headers.values]
     Cache-Control = "public, max-age=300, must-revalidate"
 
+# Recomputed by the weekly job, so it tracks the other weekly datasets.
+[[headers]]
+  for = "/featured_matchups.json"
+  [headers.values]
+    Cache-Control = "public, max-age=300, must-revalidate"
+
+# Hand-maintained rivalry names; changes rarely, like the FBS team list.
+[[headers]]
+  for = "/rivalries.json"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
 # Brand images and icons. Filenames are not content-hashed, so this is a week
 # rather than a year - long enough to help repeat visits, short enough that a
 # logo swap still propagates without a rename.

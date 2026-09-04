@@ -1,0 +1,329 @@
+{
+ "_meta": {
+  "source": "Extracted from the RIVALRIES literal previously inlined in index.html and compare.html",
+  "keyFormat": "The two canonical team names, alphabetically sorted, joined by '|'. Lookups must accent-fold: the Fresno St. key uses the un-accented 'San Jose St.' spelling.",
+  "count": 64
+ },
+ "rivalries": {
+  "Oklahoma|Oklahoma St.": {
+   "name": "Bedlam",
+   "trophy": "Bedlam Bell",
+   "logo": "rivalry-logos/bedlam.png"
+  },
+  "Oklahoma|Texas": {
+   "name": "Red River Rivalry",
+   "trophy": "Golden Hat",
+   "logo": "rivalry-logos/red-river.png"
+  },
+  "Nebraska|Oklahoma": {
+   "name": "Nebraska–Oklahoma Rivalry",
+   "trophy": "",
+   "logo": ""
+  },
+  "Alabama|Auburn": {
+   "name": "Iron Bowl",
+   "trophy": "Foy–ODK Trophy",
+   "logo": "rivalry-logos/iron-bowl.png"
+  },
+  "Michigan|Ohio St.": {
+   "name": "The Game",
+   "trophy": "",
+   "logo": ""
+  },
+  "Michigan|Michigan St.": {
+   "name": "Paul Bunyan Trophy",
+   "trophy": "Paul Bunyan Trophy",
+   "logo": ""
+  },
+  "Michigan|Minnesota": {
+   "name": "Little Brown Jug",
+   "trophy": "Little Brown Jug",
+   "logo": ""
+  },
+  "Minnesota|Wisconsin": {
+   "name": "Paul Bunyan’s Axe",
+   "trophy": "Paul Bunyan’s Axe",
+   "logo": ""
+  },
+  "Notre Dame|USC": {
+   "name": "Jeweled Shillelagh",
+   "trophy": "Jeweled Shillelagh",
+   "logo": ""
+  },
+  "Florida|Georgia": {
+   "name": "World’s Largest Outdoor Cocktail Party",
+   "trophy": "",
+   "logo": ""
+  },
+  "Florida|Florida St.": {
+   "name": "Florida–Florida State Rivalry",
+   "trophy": "",
+   "logo": ""
+  },
+  "Florida|Miami": {
+   "name": "Florida–Miami Rivalry",
+   "trophy": "War Canoe",
+   "logo": ""
+  },
+  "Georgia|Georgia Tech": {
+   "name": "Clean Old-Fashioned Hate",
+   "trophy": "Governor’s Cup",
+   "logo": ""
+  },
+  "Auburn|Georgia": {
+   "name": "Deep South’s Oldest Rivalry",
+   "trophy": "",
+   "logo": ""
+  },
+  "Alabama|Tennessee": {
+   "name": "Third Saturday in October",
+   "trophy": "",
+   "logo": ""
+  },
+  "Kentucky|Tennessee": {
+   "name": "Tennessee–Kentucky Rivalry",
+   "trophy": "Beer Barrel (retired)",
+   "logo": ""
+  },
+  "Texas|Texas A&M": {
+   "name": "Lone Star Showdown",
+   "trophy": "",
+   "logo": "rivalry-logos/lone-star-showdown.png"
+  },
+  "Arkansas|Texas": {
+   "name": "Texas–Arkansas Rivalry",
+   "trophy": "",
+   "logo": ""
+  },
+  "UCLA|USC": {
+   "name": "Victory Bell Rivalry",
+   "trophy": "Victory Bell",
+   "logo": ""
+  },
+  "California|Stanford": {
+   "name": "The Big Game",
+   "trophy": "Stanford Axe",
+   "logo": ""
+  },
+  "Oregon|Oregon St.": {
+   "name": "Platypus Trophy",
+   "trophy": "Platypus Trophy",
+   "logo": ""
+  },
+  "Washington|Washington St.": {
+   "name": "Apple Cup",
+   "trophy": "Apple Cup",
+   "logo": ""
+  },
+  "Oregon|Washington": {
+   "name": "Washington–Oregon Rivalry",
+   "trophy": "",
+   "logo": ""
+  },
+  "Colorado|Nebraska": {
+   "name": "Colorado–Nebraska Rivalry",
+   "trophy": "",
+   "logo": ""
+  },
+  "Kansas|Kansas St.": {
+   "name": "Sunflower Showdown",
+   "trophy": "Governor’s Cup",
+   "logo": ""
+  },
+  "Kansas|Missouri": {
+   "name": "Border War",
+   "trophy": "Lamar Hunt Trophy",
+   "logo": ""
+  },
+  "Arkansas|Missouri": {
+   "name": "Battle Line Rivalry",
+   "trophy": "Battle Line Trophy",
+   "logo": ""
+  },
+  "Iowa|Iowa St.": {
+   "name": "Cy-Hawk Series",
+   "trophy": "Cy-Hawk Trophy",
+   "logo": ""
+  },
+  "Iowa|Minnesota": {
+   "name": "Floyd of Rosedale",
+   "trophy": "Floyd of Rosedale",
+   "logo": ""
+  },
+  "Iowa|Wisconsin": {
+   "name": "Heartland Trophy",
+   "trophy": "Heartland Trophy",
+   "logo": ""
+  },
+  "Iowa|Nebraska": {
+   "name": "Heroes Trophy",
+   "trophy": "Heroes Game",
+   "logo": ""
+  },
+  "Indiana|Purdue": {
+   "name": "Old Oaken Bucket",
+   "trophy": "Old Oaken Bucket",
+   "logo": ""
+  },
+  "Illinois|Northwestern": {
+   "name": "Land of Lincoln Trophy",
+   "trophy": "Land of Lincoln Trophy",
+   "logo": ""
+  },
+  "Illinois|Purdue": {
+   "name": "Purdue Cannon",
+   "trophy": "Purdue Cannon",
+   "logo": ""
+  },
+  "Penn St.|Pittsburgh": {
+   "name": "Keystone Classic",
+   "trophy": "",
+   "logo": ""
+  },
+  "Pittsburgh|West Virginia": {
+   "name": "Backyard Brawl",
+   "trophy": "",
+   "logo": ""
+  },
+  "Virginia|Virginia Tech": {
+   "name": "Commonwealth Cup",
+   "trophy": "Commonwealth Cup",
+   "logo": ""
+  },
+  "Duke|North Carolina": {
+   "name": "Carolina–Duke Rivalry",
+   "trophy": "Victory Bell",
+   "logo": ""
+  },
+  "North Carolina|North Carolina St.": {
+   "name": "Carolina–NC State Rivalry",
+   "trophy": "",
+   "logo": ""
+  },
+  "Clemson|South Carolina": {
+   "name": "Palmetto Bowl",
+   "trophy": "",
+   "logo": ""
+  },
+  "Nebraska|Wisconsin": {
+   "name": "Freedom Trophy",
+   "trophy": "Freedom Trophy",
+   "logo": ""
+  },
+  "LSU|Texas A&M": {
+   "name": "Texas A&M–LSU Rivalry",
+   "trophy": "",
+   "logo": ""
+  },
+  "LSU|Tulane": {
+   "name": "Battle for the Rag",
+   "trophy": "The Rag",
+   "logo": ""
+  },
+  "Arkansas|LSU": {
+   "name": "The Boot",
+   "trophy": "Golden Boot",
+   "logo": ""
+  },
+  "Mississippi St.|Ole Miss": {
+   "name": "Egg Bowl",
+   "trophy": "Golden Egg",
+   "logo": ""
+  },
+  "Cincinnati|Miami (OH)": {
+   "name": "Victory Bell",
+   "trophy": "Victory Bell",
+   "logo": ""
+  },
+  "Army|Navy": {
+   "name": "Army–Navy Game",
+   "trophy": "Commander-in-Chief’s Trophy",
+   "logo": ""
+  },
+  "Air Force|Army": {
+   "name": "Commander-in-Chief’s Trophy",
+   "trophy": "Commander-in-Chief’s Trophy",
+   "logo": ""
+  },
+  "Air Force|Navy": {
+   "name": "Commander-in-Chief’s Trophy",
+   "trophy": "Commander-in-Chief’s Trophy",
+   "logo": ""
+  },
+  "BYU|Utah": {
+   "name": "Holy War",
+   "trophy": "",
+   "logo": ""
+  },
+  "Utah|Utah St.": {
+   "name": "Battle of the Brothers",
+   "trophy": "Old Wagon Wheel",
+   "logo": ""
+  },
+  "Colorado|Colorado St.": {
+   "name": "Rocky Mountain Showdown",
+   "trophy": "",
+   "logo": ""
+  },
+  "Arizona|Arizona St.": {
+   "name": "Territorial Cup",
+   "trophy": "Territorial Cup",
+   "logo": ""
+  },
+  "Boston College|Notre Dame": {
+   "name": "Holy War",
+   "trophy": "Frank Leahy Memorial Bowl",
+   "logo": ""
+  },
+  "Fresno St.|San Jose St.": {
+   "name": "Valley Trophy",
+   "trophy": "Valley Trophy",
+   "logo": ""
+  },
+  "Nevada|UNLV": {
+   "name": "Battle for Nevada",
+   "trophy": "Fremont Cannon",
+   "logo": ""
+  },
+  "Marshall|Ohio": {
+   "name": "Marshall–Ohio Rivalry",
+   "trophy": "",
+   "logo": ""
+  },
+  "Bowling Green|Toledo": {
+   "name": "Battle of I-75",
+   "trophy": "Peace Pipe",
+   "logo": ""
+  },
+  "Memphis|Mississippi St.": {
+   "name": "Memphis–Mississippi State Rivalry",
+   "trophy": "",
+   "logo": ""
+  },
+  "SMU|TCU": {
+   "name": "Battle for the Iron Skillet",
+   "trophy": "Iron Skillet",
+   "logo": ""
+  },
+  "Houston|Rice": {
+   "name": "Bayou Bucket Classic",
+   "trophy": "Bayou Bucket",
+   "logo": ""
+  },
+  "South Florida|UCF": {
+   "name": "War on I-4",
+   "trophy": "",
+   "logo": ""
+  },
+  "Kentucky|Louisville": {
+   "name": "Governor’s Cup",
+   "trophy": "Governor’s Cup",
+   "logo": ""
+  },
+  "Baylor|TCU": {
+   "name": "Bluebonnet Battle",
+   "trophy": "",
+   "logo": "rivalry-logos/bluebonnet-battle.png"
+  }
+ }
+}
