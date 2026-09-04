@@ -2,925 +2,943 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://frontporchsports.com/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://frontporchsports.com/scoreboard</loc>
+    <lastmod>2026-09-03</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://frontporchsports.com/teams</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/compare</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rankings</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/games</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/heisman</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Air%20Force</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Akron</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Alabama</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Appalachian%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Arizona</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Arizona%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Arkansas</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Arkansas%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Army</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Auburn</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=BYU</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Ball%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Baylor</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Boise%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Boston%20College</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Bowling%20Green</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Buffalo</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=California</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Central%20Michigan</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Charlotte</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Cincinnati</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Clemson</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Coastal%20Carolina</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Colorado</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Colorado%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Connecticut</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Delaware</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Duke</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=East%20Carolina</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Eastern%20Michigan</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=FAU</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=FIU</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Florida</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Florida%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Fresno%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Georgia</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Georgia%20Southern</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Georgia%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Georgia%20Tech</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Hawaii</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Houston</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Illinois</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Indiana</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Iowa</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Iowa%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Jacksonville%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=James%20Madison</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Kansas</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Kansas%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Kennesaw%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Kent%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Kentucky</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=LSU</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Liberty</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Louisiana%20Lafayette</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Louisiana%20Monroe</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Louisiana%20Tech</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Louisville</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Marshall</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Maryland</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Memphis</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Miami</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Miami%20%28OH%29</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Michigan</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Michigan%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Middle%20Tennessee</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Minnesota</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Mississippi%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Missouri</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Missouri%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Navy</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Nebraska</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Nevada</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=New%20Mexico</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=New%20Mexico%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=North%20Carolina</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=North%20Carolina%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://frontporchsports.com/team?team=North%20Dakota%20St.</loc>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=North%20Texas</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Northern%20Illinois</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Northwestern</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Notre%20Dame</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Ohio</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Ohio%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Oklahoma</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Oklahoma%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Old%20Dominion</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Ole%20Miss</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Oregon</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Oregon%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Penn%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Pittsburgh</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Purdue</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Rice</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Rutgers</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=SMU</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://frontporchsports.com/team?team=Sacramento%20St.</loc>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Sam%20Houston%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=San%20Diego%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=San%20Jos%C3%A9%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=South%20Alabama</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=South%20Carolina</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=South%20Florida</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Southern%20Miss</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Stanford</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Syracuse</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=TCU</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Temple</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Tennessee</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Texas</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Texas%20A%26M</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Texas%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Texas%20Tech</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Toledo</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Troy</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Tulane</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Tulsa</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=UAB</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=UCF</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=UCLA</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=UMass</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=UNLV</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=USC</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=UTEP</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=UTSA</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Utah</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Utah%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Vanderbilt</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Virginia</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Virginia%20Tech</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Wake%20Forest</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Washington</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Washington%20St.</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=West%20Virginia</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Western%20Kentucky</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Western%20Michigan</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Wisconsin</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/team?team=Wyoming</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=all-time-record</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=claimed-national-championships</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=recognized-national-championships</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=conference-championships</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=bowl-games</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=all-time-wins</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=all-americans</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=heisman-winners</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=nfl-draft-picks</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=first-round-nfl-draft-picks</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=weeks-in-poll</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://frontporchsports.com/rank?cat=weeks-at-ap-number-one</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

@@ -22,6 +22,9 @@ opinion, and no paywall.
 
 - https://frontporchsports.com/ - Home. Rivalry lookup and featured matchups.
 - https://frontporchsports.com/teams - Directory of all 136 FBS programs.
+- https://frontporchsports.com/scoreboard - Live college football scoreboard for
+  the current season: in-progress scores with quarter and clock, final results and
+  upcoming kickoff times, filterable by week and conference.
 - https://frontporchsports.com/team?team=NAME - One program: all-time record,
   head-to-head record against every opponent it has played, season-by-season
   results, conference and national ranking context.
