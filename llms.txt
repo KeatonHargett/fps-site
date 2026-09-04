@@ -13,7 +13,7 @@ opinion, and no paywall.
 
 - 54,000+ completed games through the 2025 season (the count grows each season).
 - Coverage: 1887 through the present.
-- 136 current FBS programs have full profile pages; historical and FCS opponents
+- Every current FBS program has a full profile page; historical and FCS opponents
   appear in head-to-head records where they played an FBS program.
 - Refreshed weekly during the season (August-January) from live results.
 - The raw data is public: https://frontporchsports.com/front_porch_games.json
@@ -21,7 +21,7 @@ opinion, and no paywall.
 ## Site structure
 
 - https://frontporchsports.com/ - Home. Rivalry lookup and featured matchups.
-- https://frontporchsports.com/teams - Directory of all 136 FBS programs.
+- https://frontporchsports.com/teams - Directory of every FBS program.
 - https://frontporchsports.com/schedules - Full season schedules for every FBS
   team, 2022-2026, including FCS and other non-FBS opponents that the head-to-head
   dataset does not cover. /schedules?team=NAME&year=YYYY for one team-season.
