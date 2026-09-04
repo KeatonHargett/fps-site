@@ -886,6 +886,7 @@
     <div class="results" id="results">
       <div class="loading"><div class="spinner"></div><div>Loading game data&hellip;</div></div>
     </div>
+    <!-- v50: the year-range control above is driven by js/range-filter.js (see below). -->
   </div>
 </main>
 <footer>
@@ -916,6 +917,8 @@
     <p class="footer-copy">&copy; 2025 Front Porch Sports</p>
   </div>
 </footer>
+<!-- Shared year-range filter. Plain script, no build step; defines window.FPSRangeFilter. -->
+<script src="js/range-filter.js"></script>
 <script>
   // v29: school+mascot text mapping for the Winsipedia-style selector bar
   const TEAM_DISPLAY = {
@@ -1638,22 +1641,30 @@
     .catch(() => {});
   const COMPARE_START_MODE = 'default';
   const LOGO_URL = id => `https://a.espncdn.com/i/teamlogos/ncaa/500/${id}.png`;
-  const MIN_YEAR = 1887;
-  let MAX_YEAR = 2024;  // updated from JSON max season after fetch
-  let PRESETS = {};
-  function rebuildPresets() {
-    PRESETS = {
-      all:      {start: MIN_YEAR,   end: MAX_YEAR},
-      past5:    {start: MAX_YEAR-4, end: MAX_YEAR},
-      past10:   {start: MAX_YEAR-9, end: MAX_YEAR},
-      past20:   {start: MAX_YEAR-19,end: MAX_YEAR},
-      cfp:      {start: 2014,       end: MAX_YEAR},
-      bcs:      {start: 1998,       end: 2013},
-      modern:   {start: 1969,       end: 1997},
-      premodern:{start: MIN_YEAR,   end: 1968}
-    };
+  /* v50: the dual slider + Time Period dropdown moved to js/range-filter.js so a second
+     page (conference-wide comparison) can mount the same control without another copy.
+     This page binds the module to the markup it already has, so the DOM and CSS above
+     are untouched and it renders exactly as it did before the extraction. */
+  const MIN_YEAR = FPSRangeFilter.MIN_YEAR;
+  const RANGE = FPSRangeFilter.create({
+    container: document,
+    minYear: MIN_YEAR,
+    maxYear: 2024,  // floor only - raised to the dataset's real max season after fetch
+    initialPreset: 'all',
+    // "Last N Matchups" moves the sliders to the span those N games happen to cover;
+    // the games themselves are still cut by COUNT, in getRivalryGames().
+    lastNResolver: n => getLastNAllTime(n).map(g => g.season),
+    onChange: () => { syncRangeState(); render(); }
+  });
+
+  // Mirror the module's range onto `state` so every existing read site keeps working.
+  function syncRangeState() {
+    const r = RANGE.state;
+    state.startYear = r.startYear;
+    state.endYear = r.endYear;
+    state.activePreset = r.activePreset;
+    state.lastN = r.lastN;
   }
-  rebuildPresets();
 
   // ===== Tweak 1: drive the large logo/name display above the dropdowns =====
   function updateExpandedTeamDisplay(ddId, team) {
@@ -1826,20 +1837,10 @@
     return `${ordinal(rank)} of ${total}`;
   }
 
+  // The ceiling is always derived from the data, never hardcoded: the module raises
+  // the sliders' max, rebuilds the year presets against it, and pins the end year.
   function applyMaxSeasonFromData(data) {
-    let maxSeason = 0;
-    for (const g of data) { if ((g.season|0) > maxSeason) maxSeason = g.season|0; }
-    if (maxSeason > MAX_YEAR) {
-      MAX_YEAR = maxSeason;
-      rebuildPresets();
-      const ss = document.getElementById('start-slider');
-      const es = document.getElementById('end-slider');
-      if (ss) ss.max = MAX_YEAR;
-      if (es) { es.max = MAX_YEAR; if (parseInt(es.value) <= maxSeason) es.value = MAX_YEAR; }
-      const de = document.getElementById('display-end');
-      if (de) de.textContent = MAX_YEAR;
-      state.endYear = MAX_YEAR;
-    }
+    if (RANGE.applyMaxSeasonFrom(data)) syncRangeState();
   }
   let GAMES = [], TEAMS = [];
   let charts = { margin: null, lead: null };
@@ -1848,9 +1849,10 @@
   let state = {
     team1: START_MODE === 'empty' ? null : 'Oklahoma St.',
     team2: START_MODE === 'empty' ? null : 'Texas Tech',
-    startYear: MIN_YEAR, endYear: MAX_YEAR,
-    activePreset: 'all',
-    lastN: null  // Tweak 4: when set, getRivalryGames() returns only the most recent N matchups
+    // Range fields are mirrored from RANGE (js/range-filter.js) by syncRangeState().
+    startYear: RANGE.state.startYear, endYear: RANGE.state.endYear,
+    activePreset: RANGE.state.activePreset,
+    lastN: RANGE.state.lastN  // Tweak 4: when set, getRivalryGames() returns only the most recent N matchups
   };
 
   const params = new URLSearchParams(location.search);
@@ -1924,6 +1926,7 @@
   ])
     .then(([data, fbsData]) => {
       GAMES = data;
+      buildGameIndexes();
       _allTimeGamesCache = null;
       FBS_NAMES = new Set((fbsData.teams || []).map(t => fpsKey(t.name)));
       const allTeams = [...new Set(data.flatMap(g => [g.team_a, g.team_b]))];
@@ -1941,7 +1944,6 @@
       }
       initDropdown('dd1', 'team1');
       initDropdown('dd2', 'team2');
-      initControls();
       updateSliderColors();
       updateRangeFill();
       render();
@@ -2036,86 +2038,15 @@
     updateToggle();
   }
 
-  function setSliders(start, end, fromPreset = false) {
-    state.startYear = start; state.endYear = end;
-    document.getElementById('start-slider').value = start;
-    document.getElementById('end-slider').value = end;
-    document.getElementById('display-start').textContent = start;
-    document.getElementById('display-end').textContent = end;
-    updateRangeFill();
-    if (!fromPreset) {
-      // Tweak 1 (v26): manual slider drag drops out of any preset — reset the dropdown
-      const ps = document.getElementById('preset-select');
-      if (ps) ps.value = '';
-      state.activePreset = null;
-      state.lastN = null;
-    }
-    render();
-  }
-
-  function updateRangeFill() {
-    const span = MAX_YEAR - MIN_YEAR;
-    const lpct = ((state.startYear - MIN_YEAR) / span) * 100;
-    const rpct = ((state.endYear - MIN_YEAR) / span) * 100;
-    const fill = document.getElementById('range-fill');
-    if (fill) { fill.style.left = lpct + '%'; fill.style.width = (rpct - lpct) + '%'; }
-  }
+  // Slider drag, clamping, the Custom-range reset and the preset dropdown are all
+  // owned by RANGE now; these stay as thin wrappers because the page still decides
+  // what the thumb colors mean (the two selected teams) and calls them from elsewhere.
+  function updateRangeFill() { RANGE.updateRangeFill(); }
 
   function updateSliderColors() {
     const c1 = (state.team1 && TEAM_META[state.team1] && TEAM_META[state.team1].color) || '#fe5c00';
     const c2 = (state.team2 && TEAM_META[state.team2] && TEAM_META[state.team2].color) || '#003594';
-    let styleEl = document.getElementById('slider-thumb-style');
-    if (!styleEl) {
-      styleEl = document.createElement('style');
-      styleEl.id = 'slider-thumb-style';
-      document.head.appendChild(styleEl);
-    }
-    styleEl.textContent =
-      '#start-slider::-webkit-slider-thumb{background:' + c1 + ';}' +
-      '#start-slider::-moz-range-thumb{background:' + c1 + ';}' +
-      '#end-slider::-webkit-slider-thumb{background:' + c2 + ';}' +
-      '#end-slider::-moz-range-thumb{background:' + c2 + ';}' +
-      '#range-fill{background:linear-gradient(90deg,' + c1 + ',' + c2 + ');opacity:0.5;}';
-  }
-
-  function initControls() {
-    const startSlider = document.getElementById('start-slider');
-    const endSlider = document.getElementById('end-slider');
-    startSlider.addEventListener('input', e => {
-      let s = parseInt(e.target.value);
-      if (s > state.endYear) { s = state.endYear; e.target.value = s; }
-      state.activePreset = null;
-      setSliders(s, state.endYear, false);
-    });
-    endSlider.addEventListener('input', e => {
-      let end = parseInt(e.target.value);
-      if (end < state.startYear) { end = state.startYear; e.target.value = end; }
-      state.activePreset = null;
-      setSliders(state.startYear, end, false);
-    });
-    // Tweak 1 (v26): dropdown drives presets
-    const presetSelect = document.getElementById('preset-select');
-    if (presetSelect) {
-      presetSelect.addEventListener('change', () => {
-        const preset = presetSelect.value;
-        state.activePreset = preset;
-        if (preset === 'last5' || preset === 'last10') {
-          const n = preset === 'last5' ? 5 : 10;
-          state.lastN = n;
-          const lastGames = getLastNAllTime(n);
-          if (lastGames.length === 0) {
-            setSliders(MIN_YEAR, MAX_YEAR, true);
-          } else {
-            const seasons = lastGames.map(g => g.season);
-            setSliders(Math.min(...seasons), Math.max(...seasons), true);
-          }
-          return;
-        }
-        state.lastN = null;
-        const p = PRESETS[preset];
-        setSliders(p.start, p.end, true);
-      });
-    }
+    RANGE.setThumbColors(c1, c2);
   }
 
 
@@ -2131,10 +2062,42 @@
     if (typeof render === 'function' && state.team1 && state.team2 && GAMES.length) render();
   }
 
+  /* Perf (v50): render() used to make six separate full passes over the ~54k-game
+     dataset - H2H list, current streak, "have they ever met", last-N, closest series
+     (x2) and season win% (x2) - and every one of them re-ran on every slider `input`
+     event. Two order-preserving indexes, built once when the data lands, turn all of
+     them into a Map lookup. Same games, same order, same output: pairGames() returns
+     exactly what GAMES.filter(<pair match>) returned, so nothing downstream changes. */
+  let PAIR_INDEX = null, TEAM_INDEX = null;
+  const EMPTY_GAMES = [];
+  // NUL separator: it cannot occur in a team name, so "A B"+"C" and "A"+"B C" can't collide.
+  const pairKey = (a, b) => (a < b ? a + '\u0000' + b : b + '\u0000' + a);
+  function buildGameIndexes() {
+    PAIR_INDEX = new Map();
+    TEAM_INDEX = new Map();
+    for (const g of GAMES) {
+      const pk = pairKey(g.team_a, g.team_b);
+      let pl = PAIR_INDEX.get(pk);
+      if (!pl) PAIR_INDEX.set(pk, pl = []);
+      pl.push(g);
+      let ta = TEAM_INDEX.get(g.team_a);
+      if (!ta) TEAM_INDEX.set(g.team_a, ta = []);
+      ta.push(g);
+      // A game lists a team once even if both sides somehow match, mirroring the old
+      // `if (g.team_a!==team && g.team_b!==team) return;` single-count behavior.
+      if (g.team_b !== g.team_a) {
+        let tb = TEAM_INDEX.get(g.team_b);
+        if (!tb) TEAM_INDEX.set(g.team_b, tb = []);
+        tb.push(g);
+      }
+    }
+  }
+  // Shared, cached arrays - copy before sorting.
+  const pairGames = (a, b) => (a && b && PAIR_INDEX && PAIR_INDEX.get(pairKey(a, b))) || EMPTY_GAMES;
+  const teamGames = t => (t && TEAM_INDEX && TEAM_INDEX.get(t)) || EMPTY_GAMES;
+
   function getRivalryGames() {
-    let games = GAMES.filter(g =>
-      ((g.team_a===state.team1 && g.team_b===state.team2) || (g.team_a===state.team2 && g.team_b===state.team1)) &&
-      g.season >= state.startYear && g.season <= state.endYear);
+    let games = pairGames(state.team1, state.team2).filter(g => RANGE.matchesSeason(g.season));
     // Tweak 4: when last5/last10 preset is active, return only the most recent N matchups
     if (state.lastN) {
       games = [...games].sort((a, b) => b.game_date.localeCompare(a.game_date)).slice(0, state.lastN);
@@ -2144,8 +2107,8 @@
   // Most recent N games between the two selected teams across full history (used to set slider range)
   function getLastNAllTime(n) {
     if (!state.team1 || !state.team2) return [];
-    return GAMES
-      .filter(g => (g.team_a===state.team1 && g.team_b===state.team2) || (g.team_a===state.team2 && g.team_b===state.team1))
+    return pairGames(state.team1, state.team2)
+      .slice()
       .sort((a, b) => b.game_date.localeCompare(a.game_date))
       .slice(0, n);
   }
@@ -2190,8 +2153,7 @@
   // Find opponents a team has the most even all-time series against
   function closestSeries(team, exclude, minGames) {
     const recs = {};
-    GAMES.forEach(g => {
-      if (g.team_a!==team && g.team_b!==team) return;
+    teamGames(team).forEach(g => {
       const opp = g.team_a===team ? g.team_b : g.team_a;
       if (opp===exclude || opp===team) return;
       const r = recs[opp] = recs[opp]||{w:0,l:0,t:0};
@@ -2261,10 +2223,9 @@
   // v29: current H2H win streak between the two selected teams (from full data)
   function currentH2HStreak() {
     if (!state.team1 || !state.team2) return null;
-    const all = GAMES.filter(g =>
-      (g.team_a === state.team1 && g.team_b === state.team2) ||
-      (g.team_a === state.team2 && g.team_b === state.team1)
-    ).sort((a, b) => b.game_date.localeCompare(a.game_date));
+    const all = pairGames(state.team1, state.team2)
+      .slice()
+      .sort((a, b) => b.game_date.localeCompare(a.game_date));
     if (all.length === 0) return null;
     if (all[0].is_tie) return { count: 0, team: null, startYear: all[0].season, endYear: all[0].season, tied: true };
     const streakTeam = all[0].winner;
@@ -2316,7 +2277,7 @@
     const games = getRivalryGames();
     if (games.length === 0) {
       // v45 Change 2: check if these teams have NEVER played at all
-      const allTimeAny = GAMES.some(g => (g.team_a===state.team1 && g.team_b===state.team2) || (g.team_a===state.team2 && g.team_b===state.team1));
+      const allTimeAny = pairGames(state.team1, state.team2).length > 0;
       if (!allTimeAny) {
         // Never met: hide H2H-only blocks; show neutral line + Program Comparison only
         if (topEl) topEl.innerHTML = `<div class="no-h2h-line">No previous meetings on record.</div>`;
@@ -2521,8 +2482,10 @@
     // Full Games List opens its own page (mobile-friendly)
     const gl = document.getElementById('games-link');
     if (gl) {
+      // ?start=/?end= is the contract games.html reads; RANGE.queryString() is the one
+      // place that emits it, so a second page linking to games.html cannot drift from it.
       gl.href = `games.html?team1=${encodeURIComponent(state.team1)}&team2=${encodeURIComponent(state.team2)}`
-              + `&start=${state.startYear}&end=${state.endYear}`;
+              + `&${RANGE.queryString()}`;
     }
 
     drawCharts(games);
@@ -2766,8 +2729,7 @@
   // Build per-season win% for a team from the full dataset (all opponents)
   function seasonWinPct(team) {
     const bySeason = {};
-    GAMES.forEach(g => {
-      if (g.team_a !== team && g.team_b !== team) return;
+    teamGames(team).forEach(g => {
       const s = g.season;
       const r = bySeason[s] = bySeason[s] || {w:0,l:0,t:0};
       if (g.is_tie) r.t++;
