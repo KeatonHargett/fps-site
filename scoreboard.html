@@ -338,6 +338,7 @@
   </div>
 </footer>
 
+<script src="/vendor/gsap.min.js"></script>
 <script>
   const TEAM_META = {
   'Air Force': {id:'2005',color:'#003594',alt:'#ffffff',abbr:'AF'},
@@ -692,12 +693,14 @@
       ['away', 'home'].forEach(side => {
         const el = document.getElementById(`sc-${n.id}-${side}`);
         if (!el) return;
-        const wasLive = prev.state === 'in';
+        const before = el.textContent;
         const next = n.state === 'pre' ? '' : String(n[side].score);
-        if (el.textContent !== next) {
+        if (before !== next) {
           el.textContent = next;
-          // only a live game's score movement is worth flagging
-          if (n.state === 'in' && (wasLive || prev.state === 'pre')) changed.push(el);
+          // Flag only a genuine score movement inside a game that was already in
+          // progress: never a final, never an upcoming game, and never the blank
+          // -> 0 transition when a game first kicks off.
+          if (n.state === 'in' && prev.state === 'in' && before !== '' && next !== '') changed.push(el);
         }
         const row = el.closest('.sb-team');
         if (row) row.classList.toggle('loser', n.state === 'post' && !n[side].winner);
@@ -795,6 +798,40 @@
     document.getElementById('sb-by-conf').classList.add('active');
     document.getElementById('sb-by-date').classList.remove('active');
     render();
+  };
+
+  /* ===== Live score pulse (GSAP core only) =====
+     Fires on the specific score node whose value changed during the 60s poll of a
+     game that is in progress. Animates scale (compositor-friendly transform) plus a
+     brief brand-orange colour flash, then hands the styling back to CSS. No layout
+     properties are touched, so a burst of simultaneous score updates cannot thrash
+     layout. Oklahoma State uses this same treatment - there is no separate variant. */
+  const PULSE_ORANGE = '#fe5c00';
+  let prefersReducedMotion = false;
+  if (window.gsap) {
+    gsap.matchMedia().add('(prefers-reduced-motion: reduce)', () => {
+      prefersReducedMotion = true;
+      return () => { prefersReducedMotion = false; };
+    });
+  }
+
+  window.fpsPulse = function (el) {
+    if (!el || !window.gsap) return;
+    // single read before any write, so a batch of pulses cannot interleave
+    // reads and writes and force repeated style recalculation
+    const restColor = getComputedStyle(el).color;
+    if (prefersReducedMotion) {
+      gsap.timeline({ overwrite: true })
+        .set(el, { color: PULSE_ORANGE })
+        .to(el, { color: restColor, duration: 0.3, ease: 'none', clearProps: 'color' }, '+=0.1');
+      return;
+    }
+    gsap.timeline({ overwrite: true })
+      .fromTo(el,
+        { scale: 1, transformOrigin: 'right center' },
+        { scale: 1.45, color: PULSE_ORANGE, duration: 0.16, ease: 'back.out(2.5)' })
+      .to(el,
+        { scale: 1, color: restColor, duration: 0.2, ease: 'power2.out', clearProps: 'transform,transformOrigin,color' });
   };
 
   async function load(first) {
