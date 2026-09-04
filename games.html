@@ -667,9 +667,11 @@
     return (team || '').toUpperCase();
   }
 
-  function teamLogo(t, cls='') {
+  // altText defaults to the team name. Pass '' where a visible name sits beside the
+  // logo, so screen readers do not announce the team twice.
+  function teamLogo(t, cls='', altText=t) {
     const m = TEAM_META[t];
-    return m ? `<img class="${cls}" src="${LOGO_URL(m.id)}" alt="${t}" loading="lazy" onerror="this.style.display='none'">` : '';
+    return m ? `<img class="${cls}" src="${LOGO_URL(m.id)}" alt="${altText}" loading="lazy" onerror="this.style.display='none'">` : '';
   }
 
   if (!TEAM1 || !TEAM2) {
@@ -727,7 +729,7 @@
       const t1Win = g.winner===TEAM1, t2Win = g.winner===TEAM2;
       const wCell = g.is_tie
         ? '<span class="tie-cell">Tie</span>'
-        : `<span class="winner-cell">${teamLogo(g.winner)}<span class="wname">${g.winner}</span></span>`;
+        : `<span class="winner-cell">${teamLogo(g.winner, '', '')}<span class="wname">${g.winner}</span></span>`;
       const loc = g.city ? `${g.city}${g.state?', '+g.state:''}` : '\u2014';
       // v35: winner color indicator on the left
       const tblT1Color = TEAM_META[TEAM1]?.color || '#003594';
@@ -773,9 +775,9 @@
       <div class="page-head">
         <div class="ph-title">FULL GAMES LIST</div>
         <div class="matchup">
-          ${teamLogo(TEAM1)}<span class="tname">${TEAM1}</span>
+          ${teamLogo(TEAM1)}
           <span class="vs">VS</span>
-          ${teamLogo(TEAM2)}<span class="tname">${TEAM2}</span>
+          ${teamLogo(TEAM2)}
         </div>
         <div class="sub">${games.length} meetings &middot; ${START}\u2013${END}</div>
       </div>

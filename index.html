@@ -535,10 +535,13 @@
     </div>`;
   }
 
-  function fmSide(name, id, color, rank, right) {
-    const logo = id ? `<img src="${LOGO_URL(id)}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
+  function fmSide(name, id, color, rank, right, showName) {
+    // The card title already prints "A vs B" unless the matchup has a rivalry name
+    // ("Apple Cup"), which names neither school. So the visible name is dropped only
+    // when the title carries it, and the logo takes over the label via alt.
+    const logo = id ? `<img src="${LOGO_URL(id)}" alt="${showName ? '' : esc(name)}" loading="lazy" onerror="this.style.display='none'">` : '';
     return `<span class="fm-team${right ? ' right' : ''}" data-team="${esc(name)}">${logo}<span>
-        <span class="fm-name" style="color:${color}">${esc(name)}</span>
+        ${showName ? `<span class="fm-name" style="color:${color}">${esc(name)}</span>` : ''}
         ${rank ? `<span class="fm-rank">AP #${rank}</span>` : ''}
       </span></span>`;
   }
@@ -557,7 +560,8 @@
     }
     box.innerHTML = list.map(m => {
       const hasOsu = (m.a === 'Oklahoma St.' || m.b === 'Oklahoma St.') ? '1' : '0';
-      const title = m.rivalry && m.rivalry.name ? m.rivalry.name : `${m.a} vs ${m.b}`;
+      const hasRivalryName = !!(m.rivalry && m.rivalry.name);
+      const title = hasRivalryName ? m.rivalry.name : `${m.a} vs ${m.b}`;
       const kick = m.kickoff ? new Date(m.kickoff + 'T12:00:00Z')
         .toLocaleDateString(undefined, { timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric' }) : '';
       return `<div class="fm-card" data-has-osu="${hasOsu}">
@@ -566,8 +570,8 @@
           <a class="fm-link" href="${m.url}">Full Matchup Page &rarr;</a>
         </div>
         <div class="fm-teams">
-          ${fmSide(m.a, m.aId, m.aColor, m.aRank, false)}
-          ${fmSide(m.b, m.bId, m.bColor, m.bRank, true)}
+          ${fmSide(m.a, m.aId, m.aColor, m.aRank, false, hasRivalryName)}
+          ${fmSide(m.b, m.bId, m.bColor, m.bRank, true, hasRivalryName)}
         </div>
         <div class="fm-labels">
           <div class="fm-wins" style="color:${m.aColor}">${m.w} ${fmWins(m.w)}<span class="fm-pct">(${m.aPct})</span></div>

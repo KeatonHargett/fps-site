@@ -1106,7 +1106,7 @@
     const fcsCount = Object.keys(fcsHistRecords).length;
 
     const confLogoHtml = CONF_LOGOS[conf]
-      ? `<img src="${CONF_LOGOS[conf]}" alt="${conf}" onerror="this.style.display='none'">` : '';
+      ? `<img src="${CONF_LOGOS[conf]}" alt="" onerror="this.style.display='none'">` : '';
 
     fpsMeta({
       title: `${TEAM} Football — All-Time Record, Rivalries & History | Front Porch Sports`,
@@ -1120,7 +1120,6 @@
       <div class="team-hero">
         ${teamLogo(TEAM, 'team-logo')}
         <div class="th-info">
-          <div class="th-name" style="color:${tColor}">${TEAM}</div>
           <div class="th-conf">${confLogoHtml}${conf}</div>
         </div>
         <div class="th-record">
@@ -1284,7 +1283,7 @@
       }).join('');
 
       const confLogo = CONF_LOGOS[conf]
-        ? `<img src="${CONF_LOGOS[conf]}" alt="${conf}" loading="lazy" onerror="this.style.display='none'">` : '';
+        ? `<img src="${CONF_LOGOS[conf]}" alt="" loading="lazy" onerror="this.style.display='none'">` : '';
 
       return `<div class="h2h-conf-group">
         <div class="h2h-conf-title">
