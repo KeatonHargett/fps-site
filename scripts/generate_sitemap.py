@@ -29,6 +29,18 @@ def lastmod(*paths):
 
 
 @lru_cache(maxsize=1)
+def conferences():
+    """Conference comparison pages, one per conference.
+
+    Like /team and /rank, bare /conference self-canonicalises to the first
+    conference, so the bare path is deliberately not listed - only the real
+    per-conference URLs are.
+    """
+    teams_json = json.load(io.open(os.path.join(ROOT, "fbs_teams.json"), encoding="utf-8"))["teams"]
+    return sorted({t["conference"] for t in teams_json if t.get("conference")})
+
+
+@lru_cache(maxsize=1)
 def teams():
     """Team pages worth submitting: ones team.html actually renders as a real program.
 
@@ -96,6 +108,10 @@ def main():
     rank_mod = lastmod("rank.html", "program_stats.json")
     urls += [("/rank?cat=" + slug, rank_mod, "monthly", "0.6")
              for slug in categories()]
+    # one entry per conference comparison page
+    conf_mod = lastmod("conference.html", "program_stats.json")
+    urls += [("/conference?conf=" + quote(c, safe=""), conf_mod, "weekly", "0.8")
+             for c in conferences()]
 
     out = ['<?xml version="1.0" encoding="UTF-8"?>',
            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']

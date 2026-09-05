@@ -252,7 +252,7 @@
   @media (max-width: 420px) { .nat-stats-grid { grid-template-columns: 1fr; } }
 
   /* Improvement 1C (v27): + Compare Team dashed-border button */
-  .compare-cta-row { display: flex; justify-content: center; margin: 0.25rem 0 2rem; }
+  .compare-cta-row { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; margin: 0.25rem 0 2rem; }
   .compare-cta { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1.5rem; border-radius: 999px; border: 2px dashed var(--gray); color: var(--dark); text-decoration: none; font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.06em; background: white; transition: border-color 0.15s, color 0.15s, transform 0.12s; }
   .compare-cta:hover { border-color: var(--orange); color: var(--orange); transform: translateY(-1px); }
   .compare-cta .cta-plus { font-size: 1.4rem; line-height: 0.9; }
@@ -416,6 +416,7 @@
       <a href='/rankings'>Rankings</a>
       <a class='active' href='/teams'>Teams</a>
       <a href='/compare'>Compare</a>
+      <a href='/conference'>Conference</a>
       <a class="nav-store" href="https://frontporchsports.shop" rel="noopener">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
         <span>Store</span>
@@ -1133,6 +1134,7 @@
       <!-- Improvement 1C (v27): Compare Team CTA -->
       <div class="compare-cta-row">
         <a class="compare-cta" href="compare.html?team1=${encodeURIComponent(TEAM)}"><span class="cta-plus">+</span> Compare Team</a>
+        <a class="compare-cta" href="conference.html?team=${encodeURIComponent(TEAM)}"><span class="cta-plus">+</span> Compare vs ${conf}</a>
       </div>
       <!-- Improvement 1B (v27): national rank stat cards -->
       ${renderNationalStatCards(tColor)}
