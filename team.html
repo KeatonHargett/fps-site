@@ -1034,9 +1034,11 @@
     document.getElementById('content').innerHTML = `<div class="loading">Failed to load: ${err.message}</div>`;
   });
 
-  function teamLogo(t, cls='') {
+  // altText defaults to the team name. Pass '' where a visible name sits beside the
+  // logo, so screen readers do not announce the team twice.
+  function teamLogo(t, cls='', altText=t) {
     const m = TEAM_META[t];
-    return m ? `<img class="${cls}" src="${LOGO_URL(m.id)}" alt="${t}"${cls === 'team-logo' ? '' : ' loading="lazy"'} onerror="this.style.display='none'">` : '';
+    return m ? `<img class="${cls}" src="${LOGO_URL(m.id)}" alt="${altText}"${cls === 'team-logo' ? '' : ' loading="lazy"'} onerror="this.style.display='none'">` : '';
   }
 
   function renderTeam() {
@@ -1276,7 +1278,7 @@
         const wpctStr = ((r.w + r.t*0.5)/games).toFixed(3).replace(/^0/,'');
         const cmpUrl = `compare.html?team1=${encodeURIComponent(TEAM)}&team2=${encodeURIComponent(opp)}`;
         return `<tr>
-          <td class="col-opp"><div class="h2h-opp">${teamLogo(opp)}<a href="team.html?team=${encodeURIComponent(opp)}">${opp}</a></div></td>
+          <td class="col-opp"><div class="h2h-opp">${teamLogo(opp, '', '')}<a href="team.html?team=${encodeURIComponent(opp)}">${opp}</a></div></td>
           <td class="col-record"><span class="h2h-record ${cls}">${recStr} <span class="wpct">(${wpctStr})</span></span></td>
           <td class="col-compare h2h-compare-link"><a href="${cmpUrl}">Compare &rarr;</a></td>
         </tr>`;
