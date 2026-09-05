@@ -123,6 +123,52 @@
   /* v36: nav — logo top-left, tabs left-aligned right next to logo, no socials in nav */
   .navbar-social { display: none !important; }
   .navbar-links { margin-left: 0 !important; }
+  /* === v51 mobile nav (plain text row) - start === */
+  /* Winsipedia-style plain text nav for phones. Everything here is scoped to
+     max-width:640px, so the desktop bar is untouched. Removing the pill
+     background, border-radius and horizontal padding is what lets all 8 items
+     sit on one row; the vertical padding keeps a full-height tap target even
+     though the visible text is small. */
+  @media (max-width: 640px) {
+    .navbar { padding: 0.6rem 0.5rem; }
+    .navbar-inner { flex-direction: column; gap: 0.45rem; }
+    .navbar-links {
+      width: 100%; order: 99;
+      display: flex; flex-wrap: nowrap; justify-content: space-between; align-items: stretch;
+      gap: 0;
+    }
+    .navbar-links a,
+    .navbar-links a.active,
+    .navbar-links a.nav-store {
+      background: none !important;
+      border: 0; border-radius: 0;
+      padding: 0.55rem 0.12rem;
+      margin: 0;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.01em;
+      line-height: 1;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #fff;
+      flex: 0 1 auto;
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 40px;
+    }
+    .navbar-links a.active { color: var(--orange); }
+    .navbar-links a:hover { background: none !important; }
+    /* Store matches the others as plain text; the cart glyph is redundant here */
+    .navbar-links a.nav-store { flex-direction: row; gap: 0; }
+    .navbar-links a.nav-store svg { display: none; }
+    .navbar-links a.nav-store span { font-size: inherit; letter-spacing: inherit; line-height: inherit; }
+  }
+  @media (max-width: 360px) {
+    .navbar { padding: 0.6rem 0.3rem; }
+    .navbar-links a,
+    .navbar-links a.active,
+    .navbar-links a.nav-store { font-size: 0.70rem; padding: 0.55rem 0.08rem; }
+  }
+  /* === v51 mobile nav - end === */
 
   /* v36: social icons cluster in center between team selectors */
   .sb-vs.sb-socials {
