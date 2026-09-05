@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conference Comparison — Front Porch Sports</title>
+<link rel="canonical" href="https://frontporchsports.com/conference">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#003594">
+<meta property="og:title" content="Conference Comparison — Front Porch Sports">
+<meta property="og:description" content="Compare every program in a conference side by side on all-time record, championships, All-Americans, draft picks and Heisman winners.">
+<meta property="og:image" content="https://frontporchsports.com/og-image.png">
+<meta property="og:url" content="https://frontporchsports.com/conference">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Front Porch Sports">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Conference Comparison — Front Porch Sports">
+<meta name="twitter:description" content="Compare every program in a conference side by side on all-time record, championships, All-Americans, draft picks and Heisman winners.">
+<meta name="twitter:image" content="https://frontporchsports.com/og-image.png">
+<meta name="description" content="Compare every program in a conference side by side on all-time record, championships, All-Americans, draft picks and Heisman winners.">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #fe5c00;
+    --blue: #003594;
+    --dark: #0d1117;
+    --gray: #6b7280;
+    --light: #f3f4f6;
+    --border: #e5e7eb;
+    --win-green: #16a34a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #fafafa; color: var(--dark); line-height: 1.5; }
+  a { color: inherit; }
+
+  /* Navbar */
+  .navbar { background: var(--blue); padding: 0.75rem 1.5rem; border-bottom: 4px solid var(--orange); }
+  .navbar-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .navbar-logo img { height: 52px; display: block; }
+  .navbar-links { display: flex; gap: 0.5rem; align-items: center; }
+  .navbar-links a {
+    color: white; text-decoration: none; font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.35rem; letter-spacing: 0.05em; padding: 0.4rem 1rem; border-radius: 6px;
+    transition: background 0.15s;
+  }
+  .navbar-links a:hover { background: rgba(255,255,255,0.12); }
+  .navbar-links a.active { background: var(--orange); }
+  /* v46: Store tab — stacked cart icon above label */
+  .navbar-links { flex-wrap: wrap; }
+  .navbar-links a.nav-store {
+    display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 0.12rem; padding: 0.2rem 0.7rem; line-height: 1;
+  }
+  .navbar-links a.nav-store svg { width: 20px; height: 20px; display: block; }
+  .navbar-links a.nav-store span { font-size: 0.95rem; line-height: 1; }
+  @media (max-width: 480px) {
+    .navbar-links a.nav-store { padding: 0.2rem 0.5rem; }
+    .navbar-links a.nav-store svg { width: 16px; height: 16px; }
+    .navbar-links a.nav-store span { font-size: 0.8rem; }
+  }
+  /* v29 Tweak 3: nav layout — logo + social on left, nav-links on right */
+  .navbar-inner { justify-content: flex-start; }
+  .navbar-brand { display: flex; align-items: center; gap: 0.6rem; margin-right: 0.6rem; }
+  .navbar-brand .nb-logo { height: 44px; width: auto; display: block; }
+  /* v34: navbar — logo + social on left, links right, even gaps */
+  .navbar-social { display: flex; gap: 0.5rem; align-items: center; margin-left: 0; }
+  .navbar-links { margin-left: auto; }
+  @media (max-width: 700px) {
+    .navbar-brand .nb-logo { height: 36px; }
+    .navbar-social { gap: 0.4rem; }
+    .navbar-social .nav-soc { width: 30px; height: 30px; }
+    .navbar-social .nav-soc svg { width: 16px; height: 16px; }
+  }
+  @media (max-width: 480px) {
+    .navbar-inner { gap: 0.5rem; }
+    .navbar-brand .nb-logo { height: 32px; }
+    .navbar-links { width: 100%; justify-content: center; order: 99; }
+    .navbar-links a { font-size: 1rem; padding: 0.3rem 0.55rem; }
+  }
+
+  /* v34: keep social cluster adjacent to logo (was forcing it to the right edge) */
+  .navbar-social { display: flex; gap: 0.5rem; align-items: center; margin-left: 0; }
+  .navbar-social .nav-soc { width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; text-decoration: none; transition: color 0.15s ease, background 0.15s ease; }
+  .navbar-social .nav-soc:hover { color: var(--orange); background: rgba(255,255,255,0.08); }
+  .navbar-social .nav-soc svg { width: 20px; height: 20px; }
+  @media (max-width: 640px) {
+    .navbar-social { gap: 0.35rem; }
+    .navbar-social .nav-soc { width: 32px; height: 32px; }
+  }
+  main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  footer { background: var(--dark); color: #9ca3af; padding: 2rem 1.5rem; margin-top: 4rem; text-align: center; font-size: 0.85rem; }
+  footer a { color: var(--orange); text-decoration: none; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; }
+  .footer-social { display: flex; justify-content: center; gap: 0.85rem; margin-bottom: 1.1rem; }
+  .footer-social .fs-icon {
+    width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.08); color: #cbd5e1;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  }
+  .footer-social .fs-icon:hover { background: var(--orange); color: #fff; transform: translateY(-2px); }
+  .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem 1.35rem; margin-bottom: 1.1rem; font-size: 0.85rem; line-height: 1.9; }
+  .footer-links a { color: #9ca3af; text-decoration: none; }
+  .footer-links a:hover { color: var(--orange); text-decoration: underline; }
+  .footer-credit { font-size: 0.9rem; color: #9ca3af; }
+  .footer-credit a { font-weight: 700; }
+  .footer-credit a:hover { text-decoration: underline; }
+  .footer-copy { margin-top: 0.4rem; font-size: 0.8rem; color: #6b7280; }
+
+  @media (max-width: 640px) {
+    .navbar-inner { flex-direction: column; }
+    .navbar-links a { font-size: 1.1rem; padding: 0.35rem 0.7rem; }
+  }
+
+  /* v36: nav — logo top-left, tabs left-aligned right next to logo, no socials in nav */
+  .navbar-social { display: none !important; }
+  .navbar-links { margin-left: 0 !important; }
+
+</style>
+<style>
+  .page-head { padding: 2rem 0 0.5rem; }
+  .page-head h1 { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--dark); line-height: 1; }
+  .page-head p { color: var(--gray); font-size: 1.05rem; margin-top: 0.4rem; }
+
+  .cf-controls { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; margin: 1.25rem 0 0.5rem; }
+  .cf-select {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; letter-spacing: 0.03em;
+    padding: 0.55rem 1rem; border: 2px solid var(--border); border-radius: 8px;
+    background: white; color: var(--dark); cursor: pointer; min-width: 220px;
+  }
+  .cf-select:focus { outline: none; border-color: var(--orange); }
+  .cf-label { font-size: 0.8rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .cf-confbar { display: flex; align-items: center; gap: 0.6rem; margin: 1.25rem 0 0.75rem; border-bottom: 2px solid var(--border); padding-bottom: 0.45rem; }
+  .cf-confbar img { width: 34px; height: 34px; object-fit: contain; }
+  .cf-confbar .cb-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.9rem; color: var(--blue); line-height: 1; }
+  .cf-confbar .cb-count { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--gray); }
+
+  .cf-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: 10px; background: white; }
+  table.cf-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 900px; }
+  .cf-table th {
+    background: var(--dark); color: white; font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.95rem; letter-spacing: 0.05em; padding: 0.6rem 0.7rem; text-align: right;
+    white-space: nowrap; cursor: pointer; user-select: none; position: sticky; top: 0;
+  }
+  .cf-table th:first-child { text-align: left; }
+  .cf-table th:hover { background: #1b2430; }
+  .cf-table th .sort-ind { opacity: 0.45; font-size: 0.8rem; margin-left: 0.25rem; }
+  .cf-table th.sorted .sort-ind { opacity: 1; color: var(--orange); }
+  .cf-table td { padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; }
+  .cf-table td:first-child { text-align: left; }
+  .cf-table tbody tr:hover { background: var(--light); }
+
+  .cf-team { display: flex; align-items: center; gap: 0.55rem; }
+  .cf-team img { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; }
+  .cf-team a { color: var(--blue); font-weight: 600; text-decoration: none; }
+  .cf-team a:hover { text-decoration: underline; }
+  .cf-abbr { display: none; }
+
+  /* the team the page was opened for */
+  .cf-table tr.cf-self { background: rgba(0,53,148,0.06); }
+  .cf-table tr.cf-self td { font-weight: 700; }
+  /* Oklahoma State keeps its orange highlight, matching rank.html */
+  .cf-table tr[data-team="Oklahoma St."] { background: rgba(254,92,0,0.05); }
+  .cf-table tr[data-team="Oklahoma St."] .cf-team a { color: var(--orange); }
+
+  .cf-na { color: var(--gray); opacity: 0.55; font-style: italic; font-size: 0.82rem; }
+  .cf-note { margin-top: 0.85rem; font-size: 0.85rem; color: var(--gray); }
+  .cf-note strong { color: var(--dark); }
+  .cf-empty { padding: 2rem 0; text-align: center; color: var(--gray); }
+
+  @media (max-width: 640px) {
+    .page-head h1 { font-size: 2.1rem; }
+    .cf-confbar .cb-name { font-size: 1.45rem; }
+    .cf-select { width: 100%; min-width: 0; }
+    .cf-table { font-size: 0.85rem; min-width: 820px; }
+    .cf-team a { font-size: 0; }
+    .cf-abbr { display: inline; font-size: 0.85rem; font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.03em; }
+  }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a class="navbar-brand" href="/" aria-label="Front Porch Sports home">
+      <img class="nb-logo" src="logo.png" alt="Front Porch Sports">
+    </a>
+    <div class="navbar-social">
+      <a href="https://x.com/FrontPorchU" target="_blank" rel="noopener" aria-label="X" class="nav-soc"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a href="https://www.instagram.com/frontporchsports/" target="_blank" rel="noopener" aria-label="Instagram" class="nav-soc"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zm0 1.62c-3.15 0-3.5.01-4.74.07-2.5.11-3.6 1.23-3.71 3.71-.06 1.23-.07 1.6-.07 4.74s.01 3.5.07 4.74c.11 2.48 1.21 3.6 3.71 3.71 1.23.06 1.6.07 4.74.07s3.5-.01 4.74-.07c2.5-.11 3.6-1.23 3.71-3.71.06-1.23.07-1.6.07-4.74s-.01-3.5-.07-4.74c-.11-2.48-1.21-3.6-3.71-3.71-1.23-.06-1.6-.07-4.74-.07zm0 4.32a3.9 3.9 0 110 7.8 3.9 3.9 0 010-7.8zm0 6.43a2.53 2.53 0 100-5.06 2.53 2.53 0 000 5.06zm4.96-6.6a.91.91 0 11-1.82 0 .91.91 0 011.82 0z"/></svg></a>
+      <a href="https://www.facebook.com/p/Front-Porch-Sports-61575902150695/" target="_blank" rel="noopener" aria-label="Facebook" class="nav-soc"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.03 4.39 11.03 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.49 0-1.95.93-1.95 1.89v2.26h3.32l-.53 3.49h-2.79v8.44C19.61 23.1 24 18.1 24 12.07z"/></svg></a>
+    </div>
+    <div class="navbar-links">
+      <a href='/'>Home</a>
+      <a href='/scoreboard'>Scoreboard</a>
+      <a href='/schedules'>Schedules</a>
+      <a href='/rankings'>Rankings</a>
+      <a href='/teams'>Teams</a>
+      <a href='/compare'>Compare</a>
+      <a class='active' href='/conference'>Conference</a>
+      <a class="nav-store" href="https://frontporchsports.shop" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        <span>Store</span>
+      </a>
+    </div>
+  </div>
+</nav>
+<main>
+  <div class="page-head">
+    <h1 id="cf-h1">CONFERENCE COMPARISON</h1>
+    <p id="cf-sub">Compare every program in a conference side by side across all-time record, championships and accolades.</p>
+  </div>
+
+  <div class="cf-controls">
+    <span class="cf-label" id="cf-select-label">Conference</span>
+    <select class="cf-select" id="cf-conf" aria-labelledby="cf-select-label"></select>
+  </div>
+
+  <div id="cf-body"></div>
+</main>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-social">
+      <a href="https://x.com/FrontPorchU" target="_blank" rel="noopener" aria-label="X" class="fs-icon">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/frontporchsports/" target="_blank" rel="noopener" aria-label="Instagram" class="fs-icon">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zm0 1.62c-3.15 0-3.5.01-4.74.07-2.5.11-3.6 1.23-3.71 3.71-.06 1.23-.07 1.6-.07 4.74s.01 3.5.07 4.74c.11 2.48 1.21 3.6 3.71 3.71 1.23.06 1.6.07 4.74.07s3.5-.01 4.74-.07c2.5-.11 3.6-1.23 3.71-3.71.06-1.23.07-1.6.07-4.74s-.01-3.5-.07-4.74c-.11-2.48-1.21-3.6-3.71-3.71-1.23-.06-1.6-.07-4.74-.07zm0 4.32a3.9 3.9 0 110 7.8 3.9 3.9 0 010-7.8zm0 6.43a2.53 2.53 0 100-5.06 2.53 2.53 0 000 5.06zm4.96-6.6a.91.91 0 11-1.82 0 .91.91 0 011.82 0z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/p/Front-Porch-Sports-61575902150695/" target="_blank" rel="noopener" aria-label="Facebook" class="fs-icon">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.03 4.39 11.03 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.49 0-1.95.93-1.95 1.89v2.26h3.32l-.53 3.49h-2.79v8.44C19.61 23.1 24 18.1 24 12.07z"/></svg>
+      </a>
+    </div>
+    <nav class="footer-links" aria-label="Site sections">
+      <a href="/">Rivalry database home</a>
+      <a href="/scoreboard">Live college football scoreboard</a>
+      <a href="/schedules">Team schedules by season</a>
+      <a href="/teams">All FBS teams</a>
+      <a href="/compare">Compare two programs</a>
+      <a href="/games">Full game archive since 1887</a>
+      <a href="/rankings">All-time program rankings</a>
+      <a href="/heisman">Heisman Trophy winners by program</a>
+      <a href="https://frontporchsports.shop" rel="noopener">Front Porch Sports store</a>
+    </nav>
+    <p class="footer-credit">Website Built By <a href="https://keatonhargett.com" target="_blank" rel="noopener">Keaton Hargett</a></p>
+    <p class="footer-copy">&copy; 2025 Front Porch Sports</p>
+  </div>
+</footer>
+<script>
+  /* Conference-wide comparison.
+     Data: fbs_teams.json (grouping + logos) and program_stats.json (pre-aggregated
+     stats). This page deliberately never fetches front_porch_games.json - that file
+     is ~16MB and a per-team scan across an 18-team conference would block the main
+     thread. Everything rendered here is already aggregated in program_stats.json. */
+
+  const LOGO_URL = id => id ? `https://a.espncdn.com/i/teamlogos/ncaa/500/${id}.png` : '';
+  const CONF_LOGOS = {
+    'ACC':'https://a.espncdn.com/i/teamlogos/ncaa_conf/500/acc.png',
+    'American':'https://a.espncdn.com/i/teamlogos/ncaa_conf/500/american.png',
+    'Big 12':'https://a.espncdn.com/i/teamlogos/ncaa_conf/500/big_12.png',
+    'Big Ten':'https://a.espncdn.com/i/teamlogos/ncaa_conf/500/big_ten.png',
+    'Conference USA':'https://a.espncdn.com/i/teamlogos/ncaa_conf/500/conference_usa.png',
+    'Independent':'https://a.espncdn.com/i/teamlogos/ncaa_conf/500/fbs_independents.png',
+    'MAC':'https://a.espncdn.com/i/teamlogos/ncaa_conf/500/mid_american.png',
+    'Mountain West':'https://a.espncdn.com/i/teamlogos/ncaa_conf/500/mountain_west.png',
+    'Pac-12':'https://a.espncdn.com/i/teamlogos/ncaa_conf/500/pac_12.png',
+    'SEC':'https://a.espncdn.com/i/teamlogos/ncaa_conf/500/sec.png',
+    'Sun Belt':'https://a.espncdn.com/i/teamlogos/ncaa_conf/500/sun_belt.png'
+  };
+  const CONF_ORDER = ["ACC","American","Big 12","Big Ten","Conference USA","Independent","MAC","Mountain West","Pac-12","SEC","Sun Belt"];
+  // Matches rank.html: the dataset abbreviation is overridden for these two.
+  const ABBR_OVERRIDES = { 'Oklahoma St.': 'OSU', 'Ohio St.': 'OHST' };
+
+  const params = new URLSearchParams(location.search);
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  function fpsMeta(o) {
+    const B = 'https://frontporchsports.com';
+    const set = (sel, attr, val) => { const el = document.head.querySelector(sel); if (el && val) el.setAttribute(attr, val); };
+    if (o.title) { document.title = o.title; set('meta[property="og:title"]','content',o.title); set('meta[name="twitter:title"]','content',o.title); }
+    if (o.description) { set('meta[name="description"]','content',o.description); set('meta[property="og:description"]','content',o.description); set('meta[name="twitter:description"]','content',o.description); }
+    if (o.path) { set('link[rel="canonical"]','href',B+o.path); set('meta[property="og:url"]','content',B+o.path); }
+  }
+
+  let TEAMS = [];      // [{name, espn_id, abbreviation, conference}]
+  let STATS = {};      // name -> program_stats row
+  let BY_CONF = {};    // conference -> [team]
+  let selfTeam = params.get('team') || '';
+  let currentConf = '';
+  let sortKey = 'winPct';
+  let sortAsc = false;
+
+  const NA = '<span class="cf-na">Not yet available</span>';
+  const recStr = r => r ? `${r.wins}-${r.losses}${r.ties ? '-' + r.ties : ''}` : null;
+  const pct3 = v => (v == null) ? null : v.toFixed(3).replace(/^0/, '');
+  const abbrOf = t => ABBR_OVERRIDES[t.name] || t.abbreviation || t.name;
+
+  /* Column definitions. `get` pulls straight from the pre-aggregated program_stats
+     row; `val` is the sort value and is null when the program has no row at all -
+     which is a different state from a real zero and must not sort as one. */
+  const COLS = [
+    { key:'team',       label:'Team',            get:null,                                                    val:t => t.name, str:true },
+    { key:'record',     label:'All-Time Record', get:s => recStr(s.record),                                   val:s => (s.record ? s.record.wins : null) },
+    { key:'winPct',     label:'Win %',           get:s => pct3(s.winPct),                                     val:s => s.winPct },
+    { key:'bowlRecord', label:'Bowl Record',     get:s => recStr(s.bowlRecord),                               val:s => (s.bowlRecord ? s.bowlRecord.wins : null) },
+    { key:'claimedNatChamps',    label:'Claimed NC',     get:s => s.claimedNatChamps,    val:s => s.claimedNatChamps },
+    { key:'recognizedNatChamps', label:'Recognized NC',  get:s => s.recognizedNatChamps, val:s => s.recognizedNatChamps },
+    { key:'confChamps',          label:'Conf Titles',    get:s => s.confChamps,          val:s => s.confChamps },
+    { key:'allAmericans',        label:'All-Americans',  get:s => s.allAmericans,        val:s => s.allAmericans },
+    { key:'nflDraftPicks',       label:'Draft Picks',    get:s => s.nflDraftPicks,       val:s => s.nflDraftPicks },
+    { key:'heismanWinners',      label:'Heismans',       get:s => s.heismanWinners,      val:s => s.heismanWinners }
+  ];
+
+  function sortValue(team, col) {
+    if (col.key === 'team') return team.name.toLowerCase();
+    const s = STATS[team.name];
+    if (!s) return null;                     // no row at all -> always sorts last
+    const v = col.val(s);
+    return (v === undefined) ? null : v;
+  }
+
+  function render() {
+    const box = document.getElementById('cf-body');
+    const list = (BY_CONF[currentConf] || []).slice();
+    if (!list.length) { box.innerHTML = '<div class="cf-empty">No teams found for this conference.</div>'; return; }
+
+    const col = COLS.find(c => c.key === sortKey) || COLS[2];
+    list.sort((a, b) => {
+      const av = sortValue(a, col), bv = sortValue(b, col);
+      // teams with no program_stats row sink to the bottom regardless of direction
+      if (av == null && bv == null) return a.name.localeCompare(b.name);
+      if (av == null) return 1;
+      if (bv == null) return -1;
+      if (typeof av === 'string') return sortAsc ? av.localeCompare(bv) : bv.localeCompare(av);
+      return sortAsc ? av - bv : bv - av;
+    });
+
+    const head = COLS.map(c => {
+      const on = c.key === sortKey;
+      const ind = on ? (sortAsc ? '▲' : '▼') : '↕';
+      return `<th class="${on ? 'sorted' : ''}" data-col="${c.key}" scope="col" title="Sort by ${esc(c.label)}">${esc(c.label)}<span class="sort-ind">${ind}</span></th>`;
+    }).join('');
+
+    const missing = [];
+    const rows = list.map(t => {
+      const s = STATS[t.name];
+      const isSelf = t.name === selfTeam;
+      if (!s) missing.push(t.name);
+      const cells = COLS.slice(1).map(c => {
+        if (!s) return `<td>${NA}</td>`;
+        const v = c.get(s);
+        return `<td>${(v === null || v === undefined || v === '') ? NA : esc(v)}</td>`;
+      }).join('');
+      return `<tr data-team="${esc(t.name)}" class="${isSelf ? 'cf-self' : ''}">
+        <td><div class="cf-team">
+          <img src="${LOGO_URL(t.espn_id)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+          <a href="team.html?team=${encodeURIComponent(t.name)}">${esc(t.name)}</a><span class="cf-abbr">${esc(abbrOf(t))}</span>
+        </div></td>${cells}
+      </tr>`;
+    }).join('');
+
+    const logo = CONF_LOGOS[currentConf];
+    box.innerHTML = `
+      <div class="cf-confbar">
+        ${logo ? `<img src="${logo}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
+        <span class="cb-name">${esc(currentConf)}</span>
+        <span class="cb-count">${list.length} ${list.length === 1 ? 'team' : 'teams'}</span>
+      </div>
+      <div class="cf-scroll"><table class="cf-table">
+        <thead><tr>${head}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+      ${missing.length ? `<p class="cf-note"><strong>Not yet available:</strong> ${missing.map(esc).join(', ')} ${missing.length === 1 ? 'has' : 'have'} no row in the program stats dataset yet, so ${missing.length === 1 ? 'its' : 'their'} cells are blank rather than zero.</p>` : ''}
+    `;
+
+    box.querySelectorAll('th[data-col]').forEach(th => {
+      th.addEventListener('click', () => {
+        const k = th.getAttribute('data-col');
+        if (k === sortKey) { sortAsc = !sortAsc; }
+        else { sortKey = k; sortAsc = (k === 'team'); }
+        render();
+      });
+    });
+  }
+
+  function setConference(conf, pushUrl) {
+    currentConf = conf;
+    const sel = document.getElementById('cf-conf');
+    if (sel.value !== conf) sel.value = conf;
+    const h1 = document.getElementById('cf-h1');
+    const sub = document.getElementById('cf-sub');
+    if (selfTeam && (BY_CONF[conf] || []).some(t => t.name === selfTeam)) {
+      h1.textContent = `${selfTeam} vs the ${conf}`;
+      sub.textContent = `How ${selfTeam} stacks up against every other ${conf} program, all-time.`;
+      fpsMeta({ title: `${selfTeam} vs the ${conf} — Conference Comparison | Front Porch Sports`,
+                description: `Compare ${selfTeam} against every ${conf} program on all-time record, championships, All-Americans, draft picks and Heisman winners.`,
+                path: `/conference?team=${encodeURIComponent(selfTeam)}` });
+    } else {
+      h1.textContent = `${conf} Comparison`;
+      sub.textContent = `Every ${conf} program side by side across all-time record, championships and accolades.`;
+      fpsMeta({ title: `${conf} All-Time Comparison — Front Porch Sports`,
+                description: `Compare every ${conf} program on all-time record, championships, All-Americans, draft picks and Heisman winners.`,
+                path: `/conference?conf=${encodeURIComponent(conf)}` });
+    }
+    if (pushUrl) {
+      const q = selfTeam ? `?team=${encodeURIComponent(selfTeam)}` : `?conf=${encodeURIComponent(conf)}`;
+      history.replaceState(null, '', 'conference.html' + q);
+    }
+    render();
+  }
+
+  Promise.all([
+    fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] })),
+    fetch('program_stats.json').then(r => r.ok ? r.json() : {}).catch(() => ({}))
+  ]).then(([fbs, stats]) => {
+    TEAMS = fbs.teams || [];
+    STATS = stats || {};
+    delete STATS._meta;                       // metadata key, not a program
+
+    BY_CONF = {};
+    TEAMS.forEach(t => { (BY_CONF[t.conference] = BY_CONF[t.conference] || []).push(t); });
+    Object.keys(BY_CONF).forEach(c => BY_CONF[c].sort((a, b) => a.name.localeCompare(b.name)));
+
+    const order = CONF_ORDER.filter(c => BY_CONF[c]).concat(Object.keys(BY_CONF).filter(c => !CONF_ORDER.includes(c)).sort());
+    const sel = document.getElementById('cf-conf');
+    sel.innerHTML = order.map(c => `<option value="${esc(c)}">${esc(c)} (${BY_CONF[c].length})</option>`).join('');
+    sel.addEventListener('change', () => { selfTeam = ''; setConference(sel.value, true); });
+
+    // ?team= wins; fall back to ?conf=; then the first conference in canonical order.
+    let start = order[0];
+    if (selfTeam) {
+      const hit = TEAMS.find(t => t.name === selfTeam);
+      if (hit) start = hit.conference; else selfTeam = '';
+    }
+    if (!selfTeam && params.get('conf') && BY_CONF[params.get('conf')]) start = params.get('conf');
+    setConference(start, false);
+  }).catch(err => {
+    document.getElementById('cf-body').innerHTML = `<div class="cf-empty">Failed to load data: ${esc(err.message)}</div>`;
+  });
+</script>
+</body>
+</html>

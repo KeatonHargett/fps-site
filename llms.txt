@@ -22,6 +22,11 @@ opinion, and no paywall.
 
 - https://frontporchsports.com/ - Home. Rivalry lookup and featured matchups.
 - https://frontporchsports.com/teams - Directory of every FBS program.
+- https://frontporchsports.com/conference - One program compared against every
+  other team in its conference at once: all-time record, win percentage, bowl
+  record, national and conference titles, All-Americans, draft picks and Heisman
+  winners. /conference?team=NAME for a team's own conference, or /conference?conf=NAME
+  for a conference directly. Example: /conference?team=Oklahoma%20St.
 - https://frontporchsports.com/schedules - Full season schedules for every FBS
   team, 2022-2026, including FCS and other non-FBS opponents that the head-to-head
   dataset does not cover. /schedules?team=NAME&year=YYYY for one team-season.
