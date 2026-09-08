@@ -252,13 +252,6 @@
   .chart-reveal-row .rev-meta .rev-pct { color: var(--gray); margin-left: 0.3rem; font-weight: 600; }
   .chart-reveal-row .rev-pill { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 999px; color: white; font-size: 0.75rem; letter-spacing: 0.04em; font-weight: 600; }
 
-  /* v38: ranked-row desktop styling - inherits v38 winner highlight (win% based) */
-  .stat-card-compare.ranked-row .scc-record { font-size: 2.3rem; letter-spacing: 0.02em; }
-  @media (max-width: 700px) {
-    .stat-card-compare.ranked-row .scc-side { background: var(--light) !important; }
-    .stat-card-compare.ranked-row .scc-record { font-size: 1.1rem; }
-    .stat-card-compare.ranked-row .scc-rank-of { display: block; font-size: 0.62rem; }
-  }
   .stat-comparison-footnote { text-align: center; color: var(--gray); font-size: 0.78rem; margin: 1rem 0 0; letter-spacing: 0.02em; padding: 0 0.5rem; }
 
   /* v37: Upcoming Matchup spread block (only visible when ESPN has a scheduled spread) */
@@ -304,15 +297,19 @@
   .dd-option img { width: 26px; height: 26px; flex-shrink: 0; }
   .dd-empty { padding: 1rem; text-align: center; color: var(--gray); font-size: 0.9rem; }
 
-  .year-range-section { border-top: 1px solid var(--border); padding-top: 1.5rem; margin-bottom: 1.5rem; }
-  .year-range-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
-  .year-range-title { font-size: 0.85rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.05em; }
+  /* v52: the range control now sits directly under the Record (Winning %) chart, so
+     it reads as that chart's control rather than as a separate section - no top rule,
+     tighter lead-in. Only presentation changed; js/range-filter.js is untouched and
+     still binds to the same six ids. */
+  .year-range-section { padding-top: 0.25rem; margin-bottom: 1.25rem; }
+  .year-range-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem; }
+  .year-range-title { font-size: 0.72rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; }
   .year-range-display { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
   .year-range-display .year { color: var(--orange); }
   /* Single-bar dual-range slider */
-  .range-wrap { position: relative; height: 44px; margin: 0.5rem 0 1rem; }
-  .range-track { position: absolute; top: 50%; transform: translateY(-50%); left: 0; right: 0; height: 6px; background: var(--light); border-radius: 3px; }
-  .range-fill { position: absolute; top: 50%; transform: translateY(-50%); height: 6px; background: var(--border); border-radius: 3px; }
+  .range-wrap { position: relative; height: 36px; margin: 0.2rem 0 0.5rem; }
+  .range-track { position: absolute; top: 50%; transform: translateY(-50%); left: 0; right: 0; height: 4px; background: var(--light); border-radius: 999px; }
+  .range-fill { position: absolute; top: 50%; transform: translateY(-50%); height: 4px; background: var(--border); border-radius: 999px; }
   .range-wrap input[type="range"] {
     position: absolute; top: 50%; transform: translateY(-50%); left: 0;
     width: 100%; height: 24px; margin: 0;
@@ -323,17 +320,17 @@
   }
   .range-wrap input[type="range"]::-moz-range-track { background: none; height: 24px; border: none; }
   .range-wrap input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none; appearance: none; width: 24px; height: 24px;
-    border: 3px solid white; box-shadow: 0 1px 5px rgba(0,0,0,0.3); border-radius: 50%;
+    -webkit-appearance: none; appearance: none; width: 18px; height: 18px;
+    border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.22); border-radius: 50%;
     cursor: grab; pointer-events: auto; margin-top: 0;
   }
   .range-wrap input[type="range"]::-webkit-slider-thumb:active { cursor: grabbing; }
   .range-wrap input[type="range"]::-moz-range-thumb {
-    width: 24px; height: 24px; border: 3px solid white; box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+    width: 18px; height: 18px; border: 2px solid white; box-shadow: 0 1px 3px rgba(0,0,0,0.22);
     border-radius: 50%; cursor: grab; pointer-events: auto;
   }
   /* thumb colors set inline via JS to team colors */
-  .range-labels { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.05em; }
+  .range-labels { display: flex; justify-content: space-between; font-size: 0.68rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; }
   .filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); }
   .filter-label { font-size: 0.85rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.05em; align-self: center; margin-right: 0.5rem; }
   /* Tweak 1 (v26): preset row is now a single dropdown */
@@ -377,8 +374,22 @@
   .h2h-bar-segment.ties { background: var(--gray); font-size: 1rem; }
   .chart-box { margin: 2.5rem 0; }
   .chart-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; text-align: center; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem; }
+  /* v52: chart category title gets the reference's small vertical accent rule.
+     Scoped to .chart-box on purpose - .chart-title is ALSO the "Program Comparison"
+     section heading, which must keep the plain treatment. */
+  .chart-box > .chart-title {
+    display: flex; align-items: center; justify-content: center; gap: 0.55rem;
+    font-size: 1.6rem; letter-spacing: 0.06em; margin-bottom: 1.1rem;
+  }
+  .chart-box > .chart-title::before {
+    content: ''; display: block; width: 4px; height: 1.05em;
+    border-radius: 999px; background: var(--orange); flex-shrink: 0;
+  }
   .chart-canvas-wrap { position: relative; height: 300px; width: 100%; }
-  @media (max-width: 640px) { .chart-canvas-wrap { height: 240px; } }
+  @media (max-width: 640px) {
+    .chart-canvas-wrap { height: 240px; }
+    .chart-box > .chart-title { font-size: 1.35rem; }
+  }
   .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 2rem; }
   /* v36: clean Largest Margin / Longest Win Streak - no heavy bubble */
   .stat-card { background: transparent; padding: 0.8rem 0.5rem; border-radius: 0; border-right: 1px solid var(--border); text-align: center; }
@@ -445,179 +456,109 @@
   .sel-team-placeholder { width: 110px; height: 110px; border: 2px dashed var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gray); font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 0.05em; }
   .sel-team-vs { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--orange); padding-bottom: 0.5rem; align-self: center; }
 
-  /* Tweak 4 (v26): Winsipedia style stat cards — split team color halves, distinct gaps */
+  /* ===== v52 Program Comparison: two columns of team-coloured cards =====
+     Was 15 white cards, each split into two halves with only the WINNING half
+     filled. Now one card per team per category, every card carrying its team's
+     brand colour, led by a large rank ordinal. Ink is chosen by measured
+     luminance (inkOn) rather than the curated `alt` field, because 49 of the 138
+     TEAM_META entries have an `alt` that fails AA against their own primary. */
   .stat-comparison-section { margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--border); }
   .stat-comparison-section .chart-title { margin-bottom: 0.25rem; }
   .stat-comparison-sub { text-align: center; color: var(--gray); font-size: 0.85rem; margin: -0.25rem 0 1.5rem; }
-  .stat-comparison-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.1rem; }
-  /* v38: desktop Program Comparison cards - winner half fills team color + secondary text */
-  .stat-card-compare {
-    background: white;
-    border: 1px solid var(--border);
+
+  .scc-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem 1rem; }
+
+  .scc-col-head {
+    display: flex; align-items: center; justify-content: center; gap: 0.45rem;
+    padding: 0 0.4rem 0.6rem;
+    font-family: 'Bebas Neue', sans-serif; font-weight: bold;
+    font-size: 1.5rem; line-height: 1.05; letter-spacing: 0.03em;
+    text-transform: uppercase; text-align: center;
+    color: var(--tc, var(--dark));
+    border-bottom: 3px solid var(--tc, var(--border));
+  }
+  .scc-col-head img { width: 26px; height: 26px; flex-shrink: 0; }
+  .scc-col-name { min-width: 0; overflow-wrap: anywhere; }
+
+  .scc-card {
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    text-align: center;
+    padding: 0.8rem 0.6rem 0.7rem;
     border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    display: flex;
-    flex-direction: column;
-    position: relative;
+    height: 100%;
+    background: var(--tc, var(--light));
+    color: var(--tink, #fff);
+    text-decoration: none;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
   }
-  /* v38: title is clean text - no gray pill background, larger font */
-  .stat-card-compare .scc-title {
-    background: transparent;
-    color: var(--dark);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    text-align: center;
-    padding: 0.85rem 0.6rem 0.4rem;
-    letter-spacing: 0.08em;
-    line-height: 1.15;
-    min-height: 2.6rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: none;
-    text-transform: uppercase;
-    font-weight: 700;
+  /* Leader cue: a brighter shade of the same brand colour (mixed 16% toward white
+     in JS) PLUS an inset ring. The ring matters - for a black-primary team like
+     Appalachian St. the brightening is nearly imperceptible on its own. */
+  .scc-card.is-leader { box-shadow: inset 0 0 0 2px var(--tink), 0 2px 12px rgba(0, 0, 0, 0.14); }
+  a.scc-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); }
+  a.scc-card.is-leader:hover { box-shadow: inset 0 0 0 2px var(--tink), 0 6px 16px rgba(0, 0, 0, 0.2); }
+  a.scc-card:focus-visible { outline: 3px solid var(--dark); outline-offset: 2px; }
+
+  .scc-card-value {
+    font-family: 'Bebas Neue', sans-serif; font-weight: bold;
+    font-size: 2.25rem; line-height: 1; letter-spacing: 0.02em;
   }
-  .stat-card-compare .scc-body { display: grid; grid-template-columns: 1fr 1fr; flex: 1; }
-  .stat-card-compare .scc-side {
-    padding: 1.1rem 0.5rem 1.3rem;
-    text-align: center;
-    color: var(--dark);
-    text-shadow: none;
-    background: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.15s;
+  .scc-card-value-rec { font-size: 1.7rem; letter-spacing: 0.01em; }
+  .scc-card-na { opacity: 0.5; }
+  .scc-card-sub {
+    font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 500;
+    letter-spacing: 0.02em; opacity: 0.9; margin-top: 0.15rem;
   }
-  /* v38: soften the center divider - no hard border between halves on desktop */
-  .stat-card-compare .scc-side.left { border-right: none; }
-  /* Loser/neutral half stays white with team primary text (matches current look) */
-  .stat-card-compare .scc-side.left .scc-value, .stat-card-compare .scc-side.left .scc-rank-ord { color: var(--t1c, var(--dark)); }
-  .stat-card-compare .scc-side.right .scc-value, .stat-card-compare .scc-side.right .scc-rank-ord { color: var(--t2c, var(--dark)); }
-  /* v38: WINNER half - fill with team primary, all text in team secondary */
-  .stat-card-compare.a-wins .scc-side.left {
-    background: var(--t1c, var(--orange));
-    color: var(--t1alt, #fff);
+  .scc-card-label {
+    font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em; line-height: 1.25;
+    opacity: 1; margin: 0.35rem 0 0.25rem;
   }
-  .stat-card-compare.a-wins .scc-side.left .scc-value,
-  .stat-card-compare.a-wins .scc-side.left .scc-rank-ord,
-  .stat-card-compare.a-wins .scc-side.left .scc-rank-of,
-  .stat-card-compare.a-wins .scc-side.left .scc-value-sub {
-    color: var(--t1alt, #fff);
+  .scc-card-rank {
+    font-family: 'Bebas Neue', sans-serif; font-weight: bold;
+    font-size: 3.25rem; line-height: 1; letter-spacing: 0.01em; margin-top: 0.1rem;
   }
-  .stat-card-compare.b-wins .scc-side.right {
-    background: var(--t2c, var(--blue));
-    color: var(--t2alt, #fff);
+  /* Bebas has a tall cap and no descender here, so the default `super` offset lifts
+     the suffix clear off the numeral and into the label above it. Keep it just
+     below the cap line instead. */
+  .scc-card-rank sup { font-size: 0.42em; position: relative; top: -0.42em; vertical-align: baseline; letter-spacing: 0; }
+  .scc-card-winpct { font-size: 2.5rem; }
+  .scc-card-of {
+    font-family: 'Inter', sans-serif; font-size: 0.68rem; font-weight: 500;
+    letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.85; margin-top: 0.15rem;
   }
-  .stat-card-compare.b-wins .scc-side.right .scc-value,
-  .stat-card-compare.b-wins .scc-side.right .scc-rank-ord,
-  .stat-card-compare.b-wins .scc-side.right .scc-rank-of,
-  .stat-card-compare.b-wins .scc-side.right .scc-value-sub {
-    color: var(--t2alt, #fff);
+
+  @media (max-width: 900px) {
+    .scc-columns { gap: 0.7rem; }
+    .scc-card-rank { font-size: 2.75rem; }
+    .scc-card-winpct { font-size: 2.1rem; }
+    .scc-card-value { font-size: 2rem; }
   }
-  .stat-card-compare .scc-value {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 3rem;
-    line-height: 1;
-    letter-spacing: 0.02em;
-  }
-  .stat-card-compare .scc-rank-ord {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.75rem;
-    line-height: 1;
-    margin-top: 0.6rem;
-    letter-spacing: 0.04em;
-  }
-  .stat-card-compare .scc-rank-of {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.72rem;
-    margin-top: 0.3rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--gray);
-    opacity: 1;
-  }
-  .stat-card-compare .scc-na {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 3rem;
-    line-height: 1;
-    color: var(--gray);
-    opacity: 0.45;
-  }
-  @media (max-width: 900px) { .stat-comparison-grid { grid-template-columns: repeat(2, 1fr); gap: 0.85rem; } }
+  /* Both columns stay side by side on mobile - the reference does the same, and it
+     keeps the two teams directly comparable without scrolling between them. */
   @media (max-width: 700px) {
-    /* v33: mobile Winsipedia row layout — slim rows, better side highlighted in team color */
     .stat-comparison-section { margin-top: 1.75rem; padding-top: 1.25rem; }
     .stat-comparison-sub { margin-bottom: 0.85rem; }
-    .stat-comparison-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-    .stat-card-compare {
-      box-shadow: none;
-      border-radius: 0;
-      border-bottom: 1px solid var(--border);
-      background: transparent;
-      overflow: visible;
-      display: grid;
-      grid-template-columns: 1fr 1.4fr 1fr;
-      grid-template-areas: "left title right";
-      align-items: stretch;
-    }
-    .stat-card-compare:last-child { border-bottom: none; }
-    .stat-card-compare .scc-title {
-      grid-area: title;
-      background: var(--light);
-      color: var(--dark);
-      padding: 0.55rem 0.3rem;
-      min-height: 0;
-      font-size: 0.78rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      line-height: 1.15;
-    }
-    .stat-card-compare .scc-body { display: contents; }
-    .stat-card-compare .scc-side {
-      padding: 0.5rem 0.35rem;
-      background: var(--light) !important;
-      color: var(--dark);
-      text-shadow: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.05rem;
-    }
-    .stat-card-compare .scc-side.left { grid-area: left; border-right: none; }
-    .stat-card-compare .scc-side.right { grid-area: right; }
-    .stat-card-compare.a-wins .scc-side.left {
-      background: var(--t1c, var(--orange)) !important;
-      color: #fff !important;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.45) !important;
-    }
-    .stat-card-compare.a-wins .scc-side.left .scc-value,
-    .stat-card-compare.a-wins .scc-side.left .scc-rank-ord {
-      color: #fff !important;
-    }
-    .stat-card-compare.b-wins .scc-side.right {
-      background: var(--t2c, #da291c) !important;
-      color: #fff !important;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.45) !important;
-    }
-    .stat-card-compare.b-wins .scc-side.right .scc-value,
-    .stat-card-compare.b-wins .scc-side.right .scc-rank-ord {
-      color: #fff !important;
-    }
-    .stat-card-compare .scc-value { font-size: 1.35rem; line-height: 1; order: 2; }
-    .stat-card-compare .scc-rank-ord { font-size: 0.85rem; line-height: 1; margin-top: 0; order: 1; letter-spacing: 0.03em; }
-    .stat-card-compare .scc-rank-of { display: none; }
-    .stat-card-compare .scc-na { font-size: 1.35rem; }
+    .scc-columns { gap: 0.45rem 0.5rem; }
+    .scc-col-head { font-size: 1.15rem; gap: 0.3rem; padding-bottom: 0.45rem; }
+    .scc-col-head img { width: 20px; height: 20px; }
+    .scc-card { padding: 0.6rem 0.4rem 0.55rem; border-radius: 10px; }
+    .scc-card-value { font-size: 1.6rem; }
+    .scc-card-value-rec { font-size: 1.25rem; }
+    .scc-card-sub { font-size: 0.62rem; }
+    .scc-card-label { font-size: 0.6rem; letter-spacing: 0.05em; margin: 0.25rem 0 0.15rem; }
+    .scc-card-rank { font-size: 2.3rem; }
+    .scc-card-winpct { font-size: 1.8rem; }
+    .scc-card-of { font-size: 0.6rem; letter-spacing: 0.04em; }
+  }
+  @media (max-width: 380px) {
+    .scc-col-head { font-size: 1rem; }
+    .scc-card { padding: 0.55rem 0.3rem 0.5rem; }
+    .scc-card-value { font-size: 1.4rem; }
+    .scc-card-label { font-size: 0.62rem; letter-spacing: 0.03em; }
+    .scc-card-rank { font-size: 2rem; }
+    .scc-card-winpct { font-size: 1.55rem; }
+    .scc-card-of { font-size: 0.6rem; }
   }
   @media (max-width: 700px) {
     .sel-team-logo, .sel-team-placeholder { width: 78px; height: 78px; }
@@ -783,7 +724,7 @@
   .streak-block .streak-value { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; line-height: 1; margin-top: 0.25rem; letter-spacing: 0.03em; }
 
   /* v29 Tweak 1E: Full Games button + Time Period dropdown side-by-side */
-  .controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: center; padding-top: 1.25rem; margin-bottom: 1.5rem; border-top: 1px solid var(--border); }
+  .controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: center; padding-top: 1rem; margin-bottom: 0; border-top: 1px solid var(--border); }
   .controls-row .games-btn-cell { display: flex; justify-content: flex-start; }
   .controls-row .time-period-cell { display: flex; justify-content: flex-end; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
   .controls-row .time-period-cell label { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; color: var(--gray); letter-spacing: 0.07em; }
@@ -923,8 +864,15 @@
         <img id="dd2-logo" alt="" style="display:none"><span id="dd2-label" style="display:none"></span>
       </div>
     </div>
-    <!-- Tweak 3: H2H matchup result renders here, directly under the dropdowns and ABOVE Year Range -->
+    <!-- Tweak 3: H2H matchup result renders here, directly under the dropdowns. -->
     <div class="results-top" id="top-results"></div>
+    <div class="results" id="results">
+      <div class="loading"><div class="spinner"></div><div>Loading game data&hellip;</div></div>
+    </div>
+    <!-- v52: the year-range control sits directly beneath the Record (Winning %) chart,
+         matching the reference layout. It stays in STATIC markup on purpose - js/range-filter.js
+         binds to these six ids once at init, so re-rendering it inside #results would detach
+         its listeners. Program Comparison therefore renders into its own #results-stats below. -->
     <div class="year-range-section">
       <div class="year-range-header">
         <span class="year-range-title">Year Range</span>
@@ -960,10 +908,7 @@
         </select>
       </div>
     </div>
-    <div class="results" id="results">
-      <div class="loading"><div class="spinner"></div><div>Loading game data&hellip;</div></div>
-    </div>
-    <!-- v50: the year-range control above is driven by js/range-filter.js (see below). -->
+    <div class="results-stats" id="results-stats"></div>
   </div>
 </main>
 <footer>
@@ -1913,6 +1858,49 @@
     return `${ordinal(rank)} of ${total}`;
   }
 
+  /* ---- v52 colour helpers -------------------------------------------------
+     Filling every Program Comparison card with a team colour makes contrast a real
+     problem, and this repo has no colour utility anywhere. The hand-curated `alt`
+     field is NOT a safe answer: 49 of the 138 TEAM_META entries have an `alt` that
+     fails WCAG AA 4.5:1 against their own `color` (Kansas 1.54:1, Coastal Carolina
+     1.51:1, BYU 1.69:1), and four teams have near-white primaries (Arizona St.
+     #ffc627, Southern Miss #FFB81C, Kennesaw St. #fdbb30, Missouri #f1b82d) where
+     white ink is unreadable. So pick the ink from measured luminance instead.
+     `alt` is left alone - the H2H hero bar still uses it. */
+  function _rgb(hex) {
+    const h = String(hex || '').replace('#', '');
+    const f = h.length === 3 ? h.split('').map(c => c + c).join('') : h;
+    if (!/^[0-9a-fA-F]{6}$/.test(f)) return null;
+    return [parseInt(f.slice(0, 2), 16), parseInt(f.slice(2, 4), 16), parseInt(f.slice(4, 6), 16)];
+  }
+  /* WCAG 2.x relative luminance and contrast ratio. */
+  function _lum(hex) {
+    const c = _rgb(hex);
+    if (!c) return 0;
+    const ch = c.map(v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+    return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0722 * ch[2];
+  }
+  function _contrast(a, b) {
+    const x = _lum(a), y = _lum(b);
+    return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
+  }
+  /* Mix `hex` toward white by `amt` (0-1) - the leader card's brighter shade. */
+  function brighten(hex, amt) {
+    const c = _rgb(hex);
+    if (!c) return hex;
+    return '#' + c.map(v => Math.round(v + (255 - v) * amt).toString(16).padStart(2, '0')).join('');
+  }
+  /* ONE ink per team, not one per card: pick whichever of the two site inks holds up
+     best across BOTH the base and the brightened shade. Choosing per shade instead
+     would flip some cards to dark text and others to white inside the same column,
+     which reads as a bug. Measured over all 138 TEAM_META colours the worst case is
+     ~3.9:1, and every value clears 3:1 - the card's numerals are WCAG large text. */
+  function inkFor() {
+    const shades = Array.prototype.slice.call(arguments);
+    const score = k => Math.min.apply(null, shades.map(sh => _contrast(sh, k)));
+    return score('#0d1117') >= score('#ffffff') ? '#0d1117' : '#ffffff';
+  }
+
   // The ceiling is always derived from the data, never hardcoded: the module raises
   // the sliders' max, rebuilds the year presets against it, and pins the end year.
   function applyMaxSeasonFromData(data) {
@@ -2320,6 +2308,10 @@
     if (!GAMES.length) return;
     const topEl = document.getElementById('top-results');
     const resEl = document.getElementById('results');
+    // v52: Program Comparison lives in its own static container so the year-range
+    // control can sit between the charts and the cards without being re-rendered.
+    const statsEl = document.getElementById('results-stats');
+    const clearStats = () => { if (statsEl) statsEl.innerHTML = ''; };
 
     if (!state.team1 || !state.team2) {
       // no matchup chosen yet: this variant is not its own page, point at /compare
@@ -2329,11 +2321,13 @@
         path: '/compare'
       });
       if (topEl) topEl.innerHTML = '';
+      clearStats();
       resEl.innerHTML = `<div class="empty-state"><h3>Select two teams to compare</h3><p>Pick a team from each dropdown above to see their head-to-head history.</p></div>`;
       return;
     }
     if (state.team1 === state.team2) {
       if (topEl) topEl.innerHTML = '';
+      clearStats();
       resEl.innerHTML = `<div class="empty-state"><h3>Pick two different teams</h3></div>`;
       return;
     }
@@ -2359,13 +2353,15 @@
         if (topEl) topEl.innerHTML = `<div class="no-h2h-line">No previous meetings on record.</div>`;
         const t1ColorFB = TEAM_META[state.team1]?.color || '#fe5c00';
         const t2ColorFB = TEAM_META[state.team2]?.color || '#003594';
-        resEl.innerHTML = renderStatComparison(t1ColorFB, t2ColorFB);
+        resEl.innerHTML = '';
+        if (statsEl) statsEl.innerHTML = renderStatComparison(t1ColorFB, t2ColorFB);
         // Hide static H2H-only controls (Full Games List + Time Period) when no prior meetings
         const _cr = document.querySelector('.controls-row'); if (_cr) _cr.style.display = 'none';
         const _yr = document.querySelector('.year-range-section'); if (_yr) _yr.style.display = 'none';
         return;
       }
       if (topEl) topEl.innerHTML = '';
+      clearStats();
       resEl.innerHTML =
         `<div class="empty-state"><h3>No games found</h3><p>${state.team1} and ${state.team2} haven't played between ${state.startYear} and ${state.endYear}.</p></div>`;
       return;
@@ -2536,10 +2532,11 @@
         <div class="chart-canvas-wrap"><canvas id="winPctChart"></canvas></div>
         <div id="winPctReveal" class="chart-reveal"></div>
       </div>
-
-      ${renderStatComparison(t1Color, t2Color)}
       <!-- v29 Tweak 1G: Suggested Matchups removed -->
     `;
+
+    // ...and into its own container, below the year-range control.
+    if (statsEl) statsEl.innerHTML = renderStatComparison(t1Color, t2Color);
 
     // --- Animations ---
     animateNumber(document.getElementById('total-num'), total);
@@ -2572,18 +2569,18 @@
     const t1 = state.team1, t2 = state.team2;
     const ps1 = (PROGRAM_STATS && PROGRAM_STATS[t1]) || null;
     const ps2 = (PROGRAM_STATS && PROGRAM_STATS[t2]) || null;
-    // v38: secondary color (alt) for winner-half text on desktop cards
-    const t1Alt = TEAM_META[t1]?.alt || '#ffffff';
-    const t2Alt = TEAM_META[t2]?.alt || '#ffffff';
     const s1 = TEAM_STATS[t1] || {};
     const s2 = TEAM_STATS[t2] || {};
-    const TOTAL = PROGRAM_STATS ? Object.keys(PROGRAM_STATS).length : TOTAL_FBS;
+    // program_stats.json carries a non-team "_meta" key; counting it made every card
+    // read "of 137". The real ranked population is 136, which is exactly the set
+    // rank.html ranks over (verified: 6 teams x 12 categories, 72/72 identical ranks).
+    const TOTAL = PROGRAM_STATS
+      ? Object.keys(PROGRAM_STATS).filter(k => k !== '_meta').length
+      : TOTAL_FBS;
     const wr = buildWinsRank();
     const pr = buildWinPctRank();
 
     const fmtPct = v => '.' + Math.round(v * 1000).toString().padStart(3, '0');
-    const valHtml = v => (v == null || v === undefined ? '<div class="scc-na">&mdash;</div>' : `<div class="scc-value">${v}</div>`);
-    const rankHtml = (r, total) => (r == null || r === 0) ? '' : `<div class="scc-rank-ord">${ordinal(r)}</div><div class="scc-rank-of">of ${total}</div>`;
 
     const pick = (ps, sLegacy, psKey, legacyKey, legacyRankKey) => {
       if (ps && ps[psKey] !== undefined && ps[psKey] !== null) {
@@ -2598,7 +2595,13 @@
       return { v: e ? e.value : null, r: e ? e.rank : null, total: wr.total };
     };
     const pctOf = (team, ps) => {
-      if (ps) return { v: fmtPct(ps.winPct), r: ps.ranks.winPct, total: TOTAL };
+      if (ps) {
+        const rc = ps.record;
+        return {
+          v: fmtPct(ps.winPct), r: ps.ranks.winPct, total: TOTAL,
+          sub: `${rc.wins.toLocaleString()}-${rc.losses.toLocaleString()}${rc.ties ? '-' + rc.ties : ''}`
+        };
+      }
       const e = pr.rank[team];
       return { v: e ? fmtPct(e.value) : null, r: e ? e.rank : null, total: pr.total };
     };
@@ -2682,37 +2685,96 @@
       if (bn > an) return ' b-wins';
       return ''; // tie -> highlight neither
     };
+    // recRow() already set winnerCls on the Vs Top N rows (win%-based); fill in the rest.
+    rows.forEach(r => { if (!r.isRecord) r.winnerCls = winnerClass(r.a.v, r.b.v); });
+
+    /* v52: each category label links through to the page that ranks it, so the
+       "Nth of 136" on a card and the rank.html table it points at are the same
+       number from the same source (program_stats.json -> ranks). The three
+       Vs Top N rows have no rank.html category, so they stay unlinked. */
+    const CAT_SLUG = {
+      'All-Time Win %':                       'all-time-record',
+      'Total Wins':                           'all-time-wins',
+      'National Championships (Claimed)':     'claimed-national-championships',
+      'National Championships (Recognized)':  'recognized-national-championships',
+      'Conference Championships':             'conference-championships',
+      'Bowl Games':                           'bowl-games',
+      'Consensus All-Americans':              'all-americans',
+      'Heisman Winners':                      'heisman-winners',
+      'NFL Draft Picks':                      'nfl-draft-picks',
+      'First Round Draft Picks':              'first-round-nfl-draft-picks',
+      'Weeks in AP Poll':                     'weeks-in-poll',
+      'Weeks at #1':                          'weeks-at-ap-number-one'
+    };
+
+    /* "4th" -> "4<sup>th</sup>" so the suffix can ride high next to a 3rem numeral. */
+    const ordSup = r => {
+      const o = ordinal(r);
+      const m = /^(\d+)(\D+)$/.exec(o);
+      return m ? `${m[1]}<sup>${m[2]}</sup>` : o;
+    };
+
+    /* One card = one team, one category. The leading team's card keeps the brand
+       colour at full strength; the other is mixed toward white. Saturation and the
+       ring both point at the leader, so the cue survives light primaries (Arizona
+       St. yellow) where "lighter = leader" would read backwards. */
+    const LEAD_WASH = 0.16;
+    const t1Lead = brighten(t1Color, LEAD_WASH), t2Lead = brighten(t2Color, LEAD_WASH);
+    const t1Ink  = inkFor(t1Color, t1Lead),      t2Ink  = inkFor(t2Color, t2Lead);
+
+    const card = (row, side) => {
+      const d       = side === 'a' ? row.a : row.b;
+      const base    = side === 'a' ? t1Color : t2Color;
+      const leads   = row.winnerCls === (side === 'a' ? ' a-wins' : ' b-wins');
+      const bg      = leads ? (side === 'a' ? t1Lead : t2Lead) : base;
+      const ink     = side === 'a' ? t1Ink : t2Ink;
+      const slug    = CAT_SLUG[row.title];
+      const team    = side === 'a' ? t1 : t2;
+      const cls     = `scc-card${leads ? ' is-leader' : ''}`;
+      const style   = `--tc:${bg};--tink:${ink}`;
+      const label   = `<div class="scc-card-label">${row.title}</div>`;
+
+      let body;
+      if (row.isRecord) {
+        const o = d.recObj;
+        body = o
+          ? `<div class="scc-card-value scc-card-value-rec">${o.rec}</div>${label}` +
+            `<div class="scc-card-rank scc-card-winpct">${o.pct == null ? '' : '.' + (o.pct * 1000).toFixed(0).padStart(3, '0')}</div>` +
+            `<div class="scc-card-of">win %</div>`
+          : `<div class="scc-card-value scc-card-na">&mdash;</div>${label}`;
+      } else if (d.v == null) {
+        body = `<div class="scc-card-value scc-card-na">&mdash;</div>${label}`;
+      } else {
+        body = `<div class="scc-card-value">${d.v}</div>` +
+               (d.sub ? `<div class="scc-card-sub">${d.sub}</div>` : '') +
+               label +
+               (d.r == null || d.r === 0
+                 ? ''
+                 : `<div class="scc-card-rank">${ordSup(d.r)}</div><div class="scc-card-of">of ${d.total}</div>`);
+      }
+
+      if (!slug || row.isRecord) return `<div class="${cls}" style="${style}">${body}</div>`;
+      /* Single accessible name: the visible value, label and rank all appear in it
+         (WCAG 2.5.3), and nothing is announced twice. */
+      const aria = d.v == null
+        ? `${team} ${row.title}: not available. See the full ranking.`
+        : `${team} ${row.title}: ${d.v}` +
+          (d.r == null || d.r === 0 ? '' : `, ranked ${ordinal(d.r)} of ${d.total}`) +
+          '. See the full ranking.';
+      return `<a class="${cls}" style="${style}" href="rank.html?cat=${slug}" aria-label="${aria}">${body}</a>`;
+    };
+
+    const head = side => `<div class="scc-col-head" style="--tc:${side === 'a' ? t1Color : t2Color}">
+        <span class="scc-col-logo" aria-hidden="true">${teamLogo(side === 'a' ? t1 : t2)}</span>
+        <span class="scc-col-name">${side === 'a' ? t1 : t2}</span>
+      </div>`;
 
     return `<div class="stat-comparison-section">
       <div class="chart-title">Program Comparison</div>
       <p class="stat-comparison-sub">All-time program totals with national rank</p>
-      <div class="stat-comparison-grid">
-        ${rows.map(s => {
-          if (s.isRecord) {
-            // v37/v38: record-style row (Vs Top N) - win% wins; styled like other cards on desktop
-            const fmtRec = obj => obj ? `<div class="scc-value scc-record">${obj.rec}</div><div class="scc-rank-of">${obj.pct == null ? '' : '.' + (obj.pct * 1000).toFixed(0).padStart(3,'0') + ' WIN%'}</div>` : '<div class="scc-na">&mdash;</div>';
-            return `<div class="stat-card-compare ranked-row${s.winnerCls || ''}" style="--t1c:${t1Color};--t2c:${t2Color};--t1alt:${t1Alt};--t2alt:${t2Alt}">
-              <div class="scc-title">${s.title}</div>
-              <div class="scc-body">
-                <div class="scc-side left">${fmtRec(s.a.recObj)}</div>
-                <div class="scc-side right">${fmtRec(s.b.recObj)}</div>
-              </div>
-            </div>`;
-          }
-          return `<div class="stat-card-compare${winnerClass(s.a.v, s.b.v)}" style="--t1c:${t1Color};--t2c:${t2Color};--t1alt:${t1Alt};--t2alt:${t2Alt}">
-            <div class="scc-title">${s.title}</div>
-            <div class="scc-body">
-              <div class="scc-side left">
-                ${valHtml(s.a.v)}
-                ${rankHtml(s.a.r, s.a.total)}
-              </div>
-              <div class="scc-side right">
-                ${valHtml(s.b.v)}
-                ${rankHtml(s.b.r, s.b.total)}
-              </div>
-            </div>
-          </div>`;
-        }).join('')}
+      <div class="scc-columns">
+        ${head('a')}${head('b')}
+        ${rows.map(r => card(r, 'a') + card(r, 'b')).join('')}
       </div>
       <p class="stat-comparison-footnote">Vs Ranked Opponents: AP poll era records, since 1936. Computed from CFBD games + rankings.</p>
     </div>`;
