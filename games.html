@@ -123,52 +123,82 @@
   /* v36: nav — logo top-left, tabs left-aligned right next to logo, no socials in nav */
   .navbar-social { display: none !important; }
   .navbar-links { margin-left: 0 !important; }
-  /* === v51 mobile nav (plain text row) - start === */
-  /* Winsipedia-style plain text nav for phones. Everything here is scoped to
-     max-width:640px, so the desktop bar is untouched. Removing the pill
-     background, border-radius and horizontal padding is what lets all 8 items
-     sit on one row; the vertical padding keeps a full-height tap target even
-     though the visible text is small. */
+  /* === v52 mobile nav (scrolling text row) - start === */
+  /* Barstool-style mobile nav: all 8 items stay on ONE row, but the row SCROLLS
+     horizontally instead of shrinking to fit. Replaces v51's shrink-to-fit, which
+     forced ~12px type and 3px gaps to cram everything on screen. Type is back to
+     1.1rem because overflow is a scroll problem now, not a font-size problem.
+     Everything is scoped to max-width:640px, so the desktop bar is untouched.
+
+     .navbar's horizontal padding is zeroed rather than bled through with negative
+     margins: the `.navbar-links { margin-left: 0 !important }` rule above would beat
+     any margin-inline set here, and .navbar-inner's inherited align-items:center
+     would absorb the bleed anyway. Nothing else in the bar needs that inset --
+     .navbar-social is display:none site-wide and .navbar-brand is centred by
+     .navbar-inner. Do NOT add align-items:stretch to .navbar-inner; it would
+     left-align that centred logo. */
   @media (max-width: 640px) {
-    .navbar { padding: 0.6rem 0.5rem; }
+    .navbar { padding: 0.6rem 0; }
     .navbar-inner { flex-direction: column; gap: 0.45rem; }
+
     .navbar-links {
       width: 100%; order: 99;
-      display: flex; flex-wrap: nowrap; justify-content: space-between; align-items: stretch;
-      gap: 0;
+      display: flex; flex-wrap: nowrap;
+      justify-content: flex-start;   /* Home sits at scrollLeft 0. NOT center: a
+                                        centred overflowing flex row puts its first
+                                        item at a negative offset that scrollLeft
+                                        clamps away -- Home would be unreachable. */
+      align-items: stretch;
+      gap: 0;                        /* spacing lives in per-item padding, so the
+                                        row has no dead un-tappable gaps */
+      overflow-x: auto; overflow-y: hidden;
+      scrollbar-width: none;
+      /* replaces the inset removed from .navbar above; start padding sits in the
+         scrollable overflow area in every engine, so Home is never flush. */
+      padding-inline-start: 0.5rem;
+      /* right-edge fade = the "there is more" cue. It reveals .navbar's blue
+         because this element has no background of its own -- no hardcoded colour,
+         tracks --blue automatically. */
+      -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+              mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent 100%);
+      -webkit-mask-repeat: no-repeat;
+              mask-repeat: no-repeat;
     }
+    .navbar-links::-webkit-scrollbar { display: none; }
+    /* trailing spacer, width-matched to the fade, so Store clears it at max scroll.
+       A flex container's ::after is a flex item; padding-inline-end is not reliably
+       included in the scrollable overflow area across older engines. */
+    .navbar-links::after { content: ''; flex: 0 0 28px; }
+
     .navbar-links a,
     .navbar-links a.active,
     .navbar-links a.nav-store {
       background: none !important;
       border: 0; border-radius: 0;
-      padding: 0.55rem 0.12rem;
+      padding: 0.65rem 0.6rem;       /* 1.2rem between adjacent text runs */
       margin: 0;
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 0.78rem;
-      letter-spacing: 0.01em;
+      font-size: 1.1rem;             /* was 0.78rem / 0.70rem @360 */
+      letter-spacing: 0.05em;        /* was 0.01em; 0.05em is the pre-shrink value */
       line-height: 1;
       text-transform: uppercase;
       white-space: nowrap;
       color: #fff;
-      flex: 0 1 auto;
+      flex: 0 0 auto;                /* was 0 1 auto -- must NOT shrink any more */
       display: inline-flex; align-items: center; justify-content: center;
-      min-height: 40px;
+      min-height: 44px;              /* was 40px */
     }
     .navbar-links a.active { color: var(--orange); }
     .navbar-links a:hover { background: none !important; }
+    /* inset ring: an outside outline would be clipped by overflow-y:hidden */
+    .navbar-links a:focus-visible { outline: 2px solid #fff; outline-offset: -3px; }
     /* Store matches the others as plain text; the cart glyph is redundant here */
     .navbar-links a.nav-store { flex-direction: row; gap: 0; }
     .navbar-links a.nav-store svg { display: none; }
     .navbar-links a.nav-store span { font-size: inherit; letter-spacing: inherit; line-height: inherit; }
   }
-  @media (max-width: 360px) {
-    .navbar { padding: 0.6rem 0.3rem; }
-    .navbar-links a,
-    .navbar-links a.active,
-    .navbar-links a.nav-store { font-size: 0.70rem; padding: 0.55rem 0.08rem; }
-  }
-  /* === v51 mobile nav - end === */
+  /* the max-width:360px shrink block is gone: scrolling handles narrow widths */
+  /* === v52 mobile nav - end === */
 </style>
 <style>
   .page-head { padding: 1.5rem 0 0.5rem; }
