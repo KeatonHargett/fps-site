@@ -176,6 +176,10 @@
   }
 
   .hero { text-align: center; padding: 2rem 0 1.5rem; }
+  /* Brand mark above the tagline. logo.png is 480x135, the only brand asset on
+     disk, so the max is capped under that to stay crisp on 2x displays. The
+     width/height attrs reserve space; height:auto stops them stretching it. */
+  .hero-logo { display: block; margin: 0 auto 1.25rem; width: clamp(200px, 42vw, 280px); height: auto; }
   .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; color: var(--dark); line-height: 1; }
   .hero p { color: var(--gray); font-size: 1.1rem; margin-top: 0.5rem; }
   .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; text-align: center; margin: 3rem 0 1.5rem; }
@@ -193,6 +197,9 @@
   .fm-head { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; margin-bottom: 0.9rem; }
   .fm-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; line-height: 1.1; letter-spacing: 0.02em; min-width: 0; }
   .fm-kick { display: block; font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 500; color: var(--gray); letter-spacing: 0; margin-top: 0.1rem; }
+  /* Cards whose title was just "A vs B" drop the title text; the date is then the
+     only child, so the offset that separated it from the title goes with it. */
+  .fm-title--date-only .fm-kick { margin-top: 0; }
   .fm-link { flex-shrink: 0; font-size: 0.72rem; color: var(--orange); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; text-decoration: none; white-space: nowrap; }
   .fm-link:hover { text-decoration: underline; }
   .fm-teams { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
@@ -328,6 +335,13 @@
 </nav>
 <main>
   <div class="hero">
+    <!-- logo-hero.png, not logo.png: the nav lockup's wordmark is pure white for the
+         blue navbar and is invisible on this light ground. This variant recolours ONLY
+         the wordmark to --blue and leaves the chip mark untouched.
+         alt="" on purpose: the nav brand link already carries
+         aria-label="Front Porch Sports home", so a populated alt would announce the
+         brand twice. Not lazy - this sits above the h1 and is an LCP candidate. -->
+    <img class="hero-logo" src="logo-hero.png" alt="" width="480" height="135" fetchpriority="high">
     <h1>EVERY RIVALRY. EVERY ERA.</h1>
     <p>Head-to-head college football records across <span id="header-game-count">54,000+</span> games &middot; 1887&ndash;<span id="header-end-year">2025</span></p>
   </div>
@@ -608,13 +622,19 @@
     box.innerHTML = list.map(m => {
       const hasOsu = (m.a === 'Oklahoma St.' || m.b === 'Oklahoma St.') ? '1' : '0';
       const hasRivalryName = !!(m.rivalry && m.rivalry.name);
-      const title = hasRivalryName ? m.rivalry.name : `${m.a} vs ${m.b}`;
+      // A rivalry name ("Apple Cup") tells you something the two logos below cannot.
+      // A plain "A vs B" only restates them, so those cards show the date alone. The
+      // wrapper is still emitted when empty: .fm-head is justify-content:space-between,
+      // and with a single child that would pull the link to the LEFT edge.
+      const kickSpan = k => k ? `<span class="fm-kick">${esc(k)}</span>` : '';
       const kick = m.kickoff ? new Date(m.kickoff + 'T12:00:00Z')
         .toLocaleDateString(undefined, { timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric' }) : '';
       return `<div class="fm-card" data-has-osu="${hasOsu}">
         <div class="fm-head">
-          <div class="fm-title">${esc(title)}${kick ? `<span class="fm-kick">${esc(kick)}</span>` : ''}</div>
-          <a class="fm-link" href="${m.url}">Full Matchup Page &rarr;</a>
+          ${hasRivalryName
+            ? `<div class="fm-title">${esc(m.rivalry.name)}${kickSpan(kick)}</div>`
+            : `<div class="fm-title fm-title--date-only">${kickSpan(kick)}</div>`}
+          <a class="fm-link" href="${m.url}" aria-label="Full matchup page: ${esc(m.a)} vs ${esc(m.b)}">Full Matchup Page &rarr;</a>
         </div>
         <div class="fm-teams">
           ${fmSide(m.a, m.aId, m.aColor, m.aRank, false, hasRivalryName)}
