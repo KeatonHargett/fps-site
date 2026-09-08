@@ -248,7 +248,9 @@
   .chart-reveal-row { display: flex; flex-direction: column; gap: 0.3rem; align-items: center; text-align: center; }
   .chart-reveal-row .rev-year { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--dark); letter-spacing: 0.04em; }
   .chart-reveal-row .rev-score { font-size: 0.92rem; }
-  .chart-reveal-row .rev-meta { font-size: 0.82rem; color: var(--dark); }
+  .chart-reveal-row .rev-meta { font-size: 0.82rem; color: var(--dark); display: flex; align-items: center; gap: 0.4rem; }
+  .chart-reveal-row .rev-meta .rev-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .chart-reveal-row .rev-meta .rev-team { font-weight: 700; }
   .chart-reveal-row .rev-meta .rev-pct { color: var(--gray); margin-left: 0.3rem; font-weight: 600; }
   .chart-reveal-row .rev-pill { display: inline-block; padding: 0.15rem 0.55rem; border-radius: 999px; color: white; font-size: 0.75rem; letter-spacing: 0.04em; font-weight: 600; }
 
@@ -386,6 +388,40 @@
     border-radius: 999px; background: var(--orange); flex-shrink: 0;
   }
   .chart-canvas-wrap { position: relative; height: 300px; width: 100%; }
+  /* v52 mobile legibility: 140 seasons squeezed into ~330px is an unreadable tangle.
+     Rather than shrink the desktop chart, give each season a floor of horizontal
+     space and let the plot scroll. Every data point survives and tap-to-reveal keeps
+     working; cutting the DEFAULT year range instead would change the page's headline
+     record and the Full Games List link, not just the chart. */
+  .chart-scroll { position: relative; }
+  .chart-scroll-outer { position: relative; }
+  /* When the plot scrolls, the canvas-drawn y axis and legend scroll away with it.
+     Both are re-rendered as fixed HTML outside the scroller instead - the axis
+     labels are positioned from the live scale (getPixelForValue), not guessed. */
+  .chart-axis { position: absolute; left: 0; top: 0; width: 34px; pointer-events: none; z-index: 2; }
+  .chart-axis span {
+    position: absolute; right: 4px; transform: translateY(-50%);
+    font-size: 11px; color: var(--gray); background: white;
+    padding: 0 2px; line-height: 1;
+  }
+  .chart-legend {
+    display: none; justify-content: center; gap: 1.1rem; flex-wrap: wrap;
+    margin-top: 0.55rem; font-size: 0.8rem; font-weight: 600;
+  }
+  .chart-legend:not([hidden]) { display: flex; }
+  .chart-legend .cl-item { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .chart-legend .cl-line { width: 26px; height: 0; border-top-width: 3px; border-top-style: solid; border-radius: 2px; }
+  .chart-scroll-hint {
+    display: none; text-align: center; color: var(--gray); font-size: 0.72rem;
+    letter-spacing: 0.04em; margin-top: 0.45rem;
+  }
+  @media (max-width: 700px) {
+    .chart-scroll { overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+    .chart-scroll-outer.is-scrolling .chart-scroll { padding-left: 34px; }
+    .chart-scroll::-webkit-scrollbar { height: 4px; }
+    .chart-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
+    .chart-scroll-hint:not([hidden]) { display: block; }
+  }
   @media (max-width: 640px) {
     .chart-canvas-wrap { height: 240px; }
     .chart-box > .chart-title { font-size: 1.35rem; }
@@ -2529,7 +2565,14 @@
 
       <div class="chart-box">
         <div class="chart-title">Record (Winning %)</div>
-        <div class="chart-canvas-wrap"><canvas id="winPctChart"></canvas></div>
+        <div class="chart-scroll-outer" id="winPctOuter">
+          <div class="chart-axis" id="winPctAxis" hidden></div>
+          <div class="chart-scroll" id="winPctScroll">
+            <div class="chart-canvas-wrap"><canvas id="winPctChart"></canvas></div>
+          </div>
+        </div>
+        <div class="chart-legend" id="winPctLegend" hidden></div>
+        <div class="chart-scroll-hint" id="winPctScrollHint" hidden>Swipe the chart sideways to scan every season</div>
         <div id="winPctReveal" class="chart-reveal"></div>
       </div>
       <!-- v29 Tweak 1G: Suggested Matchups removed -->
@@ -2900,23 +2943,56 @@
     const rec1 = allSeasons.map(yr => { const x = recordOf(s1,yr); return x?x.rec:''; });
     const rec2 = allSeasons.map(yr => { const x = recordOf(s2,yr); return x?x.rec:''; });
 
+    /* --- v52 mobile legibility ------------------------------------------------
+       Below 700px the full 1887-2026 span is ~140 points in ~330px: about 2px per
+       season, which is a tangle no amount of restyling fixes. Give each season a
+       floor of horizontal room and let the plot scroll instead of compressing it.
+       Set before `new Chart` so the responsive sizing picks the width up first. */
+    const narrow = window.innerWidth <= 700;
+    const PX_PER_SEASON = 10;
+    const scroller = document.getElementById('winPctScroll');
+    const scrollHint = document.getElementById('winPctScrollHint');
+    let scrolls = false;
+    if (scroller) {
+      const wrap = scroller.querySelector('.chart-canvas-wrap');
+      const needed = allSeasons.length * PX_PER_SEASON;
+      scrolls = narrow && needed > scroller.clientWidth;
+      wrap.style.minWidth = scrolls ? needed + 'px' : '';
+      scroller.scrollLeft = 0;
+      if (scrollHint) scrollHint.hidden = !scrolls;
+    }
+
+    /* Two teams can own near-identical colours (Ohio St. #ba0c2f vs Oklahoma
+       #841617). Below ~1.8:1 against each other the two lines are impossible to
+       tell apart, so dash the second one. The legend uses pointStyle 'line', so it
+       picks the dash up automatically and stays self-explanatory. */
+    const tooAlike = _contrast(t1Color, t2Color) < 1.8;
+    const dash2 = tooAlike ? [7, 4] : [];
+    /* Once the range is narrow enough that seasons are far apart, mark them - it
+       makes individual seasons visible and gives a bigger tap target. */
+    const perSeasonPx = (scrolls ? allSeasons.length * PX_PER_SEASON
+                                 : (scroller ? scroller.clientWidth : 600)) / Math.max(allSeasons.length, 1);
+    const markSeasons = perSeasonPx >= 12;
+
     charts.winpct = new Chart(document.getElementById('winPctChart'), {
       type: 'line',
       data: { labels: allSeasons, datasets: [
         { label: state.team1, data: d1, borderColor: t1Color, backgroundColor: 'transparent',
-          fill: false, tension: 0.35, pointRadius: 0, pointHoverRadius: 5,
-          pointHoverBackgroundColor: t1Color, pointHoverBorderColor: '#fff', pointHoverBorderWidth: 2,
+          fill: false, tension: narrow ? 0.15 : 0.35,
+          pointRadius: markSeasons ? 2.5 : 0, pointBackgroundColor: t1Color, pointBorderWidth: 0,
+          pointHoverRadius: 5, pointHoverBackgroundColor: t1Color, pointHoverBorderColor: '#fff', pointHoverBorderWidth: 2,
           borderWidth: 2.5, spanGaps: true, _recs: rec1 },
         { label: state.team2, data: d2, borderColor: t2Color, backgroundColor: 'transparent',
-          fill: false, tension: 0.35, pointRadius: 0, pointHoverRadius: 5,
-          pointHoverBackgroundColor: t2Color, pointHoverBorderColor: '#fff', pointHoverBorderWidth: 2,
+          fill: false, tension: narrow ? 0.15 : 0.35, borderDash: dash2,
+          pointRadius: markSeasons ? 2.5 : 0, pointBackgroundColor: t2Color, pointBorderWidth: 0,
+          pointHoverRadius: 5, pointHoverBackgroundColor: t2Color, pointHoverBorderColor: '#fff', pointHoverBorderWidth: 2,
           borderWidth: 2.5, spanGaps: true, _recs: rec2 }
       ]},
       options: {
         responsive: true, maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
         plugins: {
-          legend: { display: true, position: 'bottom',
+          legend: { display: !scrolls, position: 'bottom',
             labels: { usePointStyle: true, pointStyle: 'line', boxWidth: 28, padding: 18,
               font: { size: 13, weight: '600' } } },
           tooltip: {
@@ -2935,14 +3011,14 @@
         },
         scales: {
           x: {
-            ticks: { maxTicksLimit: 10, maxRotation: 0, autoSkip: true,
-              font: { size: window.innerWidth <= 700 ? 11 : 12 }, color: '#6b7280' },
+            ticks: { maxTicksLimit: scrolls ? 14 : (narrow ? 6 : 10), maxRotation: 0, autoSkip: true,
+              font: { size: narrow ? 11 : 12 }, color: '#6b7280' },
             grid: { display: false },
             border: { color: '#e5e7eb' }
           },
           y: {
             min: 0, max: 1,
-            ticks: { stepSize: 0.25, callback: v => (v*100)+'%',
+            ticks: { display: !scrolls, stepSize: 0.25, callback: v => (v*100)+'%',
               font: { size: 11 }, color: '#6b7280' },
             grid: { color: '#f0f0f0' },
             border: { display: false }
@@ -2950,6 +3026,32 @@
         }
       }
     });
+    /* Fixed axis + legend, positioned from the rendered scale so the labels line up
+       with the real gridlines rather than an assumed plot area. */
+    (function paintFixedChrome() {
+      const outer  = document.getElementById('winPctOuter');
+      const axis   = document.getElementById('winPctAxis');
+      const legend = document.getElementById('winPctLegend');
+      if (!outer || !axis || !legend) return;
+      outer.classList.toggle('is-scrolling', scrolls);
+      axis.hidden = !scrolls;
+      legend.hidden = !scrolls;
+      if (!scrolls) { axis.innerHTML = ''; legend.innerHTML = ''; return; }
+
+      const yScale = charts.winpct.scales.y;
+      axis.style.height = charts.winpct.canvas.clientHeight + 'px';
+      axis.innerHTML = [0, 0.25, 0.5, 0.75, 1]
+        .map(v => `<span style="top:${Math.round(yScale.getPixelForValue(v))}px">${v * 100}%</span>`)
+        .join('');
+
+      legend.innerHTML = charts.winpct.data.datasets.map(d => {
+        const dashed = Array.isArray(d.borderDash) && d.borderDash.length;
+        return `<span class="cl-item"><span class="cl-line" style="border-top-color:${d.borderColor};` +
+               `border-top-style:${dashed ? 'dashed' : 'solid'}"></span>` +
+               `<span style="color:${d.borderColor}">${d.label}</span></span>`;
+      }).join('');
+    })();
+
     // v36: tap to reveal season record on mobile (chart-reveal box under winPct)
     const winPctCanvas = document.getElementById('winPctChart');
     if (winPctCanvas) {
@@ -2963,12 +3065,22 @@
         const fmtPct = v => v == null ? '\u2014' : '.' + (v*1000).toFixed(0).padStart(3,'0');
         const box = document.getElementById('winPctReveal');
         if (box) {
+          const line = (team, colour, rec, pct) =>
+            `<div class="rev-meta"><span class="rev-dot" style="background:${colour}"></span>` +
+            `<span class="rev-team" style="color:${colour}">${team}</span> ` +
+            `${rec || 'did not play'}${rec ? '<span class="rev-pct">' + fmtPct(pct) + '</span>' : ''}</div>`;
           box.innerHTML = `<div class="chart-reveal-row">
             <div class="rev-year">${yr}</div>
-            <div class="rev-meta"><span style="color:${t1Color};font-weight:700">${state.team1}:</span> ${r1 || 'did not play'} ${r1?'<span class=\"rev-pct\">'+fmtPct(p1)+'</span>':''}</div>
-            <div class="rev-meta"><span style="color:${t2Color};font-weight:700">${state.team2}:</span> ${r2 || 'did not play'} ${r2?'<span class=\"rev-pct\">'+fmtPct(p2)+'</span>':''}</div>
+            ${line(state.team1, t1Color, r1, p1)}
+            ${line(state.team2, t2Color, r2, p2)}
           </div>`;
         }
+        /* Mark the tapped season on the line. With 140 points in a scrolling plot
+           there is otherwise no way to tell which one the reveal belongs to. */
+        try {
+          charts.winpct.setActiveElements([{ datasetIndex: 0, index: idx }, { datasetIndex: 1, index: idx }]);
+          charts.winpct.update('none');
+        } catch (e) { /* active-element marking is a nicety, never break the reveal */ }
       };
     }
   }
