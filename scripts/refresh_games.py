@@ -100,7 +100,7 @@ def fetch(year, stype, week):
     return None
 
 
-def parse_event(event):
+def parse_event(event, stype):
     try:
         season = int(event["season"]["year"])
         date_str = (event.get("date") or "")[:10]
@@ -125,6 +125,10 @@ def parse_event(event):
             "game_date": date_str,
             "date_estimated": False,
             "era": era_for(season),
+            # ESPN season type: 2 = regular, 3 = postseason. Kept as a boolean to match
+            # the "postseason" flag refresh_schedules.py already writes into
+            # schedules_data.json, so the two datasets share one vocabulary.
+            "postseason": stype == 3,
             "team_a": home_team, "team_b": away_team,
             "team_a_score": home_pts, "team_b_score": away_pts,
             "winner": winner, "is_tie": is_tie,
@@ -145,7 +149,7 @@ def fetch_season(year):
             if not data:
                 time.sleep(HTTP_SLEEP); continue
             for ev in data.get("events", []):
-                g = parse_event(ev)
+                g = parse_event(ev, stype)
                 if g and g["season"] == year: games.append(g)
             time.sleep(HTTP_SLEEP)
     seen, unique = set(), []
