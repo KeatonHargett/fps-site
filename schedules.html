@@ -36,7 +36,7 @@
     --win-green: #16a34a;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #fafafa; color: var(--dark); line-height: 1.5; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #ffffff; color: var(--dark); line-height: 1.5; }
   a { color: inherit; }
 
   /* Navbar */
@@ -237,6 +237,58 @@
   /* v36: nav — logo top-left, tabs left-aligned right next to logo, no socials in nav */
   .navbar-social { display: none !important; }
   .navbar-links { margin-left: 0 !important; }
+  /* === v52 schedules cards: white page, shadowed cards, orange hover/focus === */
+
+  /* A-Z index: team cards sit directly on the page background, so they carry
+     the elevation. Two-layer shadow - a tight contact shadow plus a soft
+     ambient one - so they read against #fff without looking heavy. */
+  .sc-team {
+    box-shadow: 0 1px 2px rgba(13, 17, 23, 0.04), 0 4px 12px rgba(13, 17, 23, 0.08);
+    transition: box-shadow 0.15s ease;
+  }
+
+  /* Team view: the game rows share one container, so the container is what
+     sits on the page background and takes the shadow. The rows stay flat. */
+  .sc-games,
+  .sc-controls,
+  .sc-head {
+    box-shadow: 0 1px 2px rgba(13, 17, 23, 0.04), 0 4px 12px rgba(13, 17, 23, 0.08);
+  }
+
+  /* Brand-orange hover. outline (not border) so it costs no layout and cannot
+     shift the grid; the negative offset keeps it inside the border-radius. */
+  .sc-team:hover,
+  .sc-game:hover {
+    outline: 2px solid var(--orange);
+    outline-offset: -2px;
+  }
+  .sc-team:hover {
+    box-shadow: 0 2px 4px rgba(13, 17, 23, 0.06), 0 8px 20px rgba(254, 92, 0, 0.18);
+  }
+
+  /* Keyboard parity. Kept in SEPARATE rules from the :hover ones above:
+     :has() or :focus-visible sharing a selector list would invalidate the
+     WHOLE list on an engine that cannot parse them, silently killing the
+     hover too. Split like this, an unsupported rule drops on its own.
+     .sc-team is a <div> with no tabindex - its focusable children are the
+     .st-name anchor and the .sc-years year chips - so the card lights up via
+     :has(). .sc-game is an <a> whenever the opponent has a page, so it takes
+     :focus-visible directly. */
+  .sc-team:has(:focus-visible) {
+    outline: 2px solid var(--orange);
+    outline-offset: -2px;
+    box-shadow: 0 2px 4px rgba(13, 17, 23, 0.06), 0 8px 20px rgba(254, 92, 0, 0.18);
+  }
+  .sc-game:focus-visible {
+    outline: 2px solid var(--orange);
+    outline-offset: -2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sc-team { transition: none; }
+  }
+  /* === v52 schedules cards - end === */
+
   /* === v51 mobile nav (plain text row) - start === */
   /* Winsipedia-style plain text nav for phones. Everything here is scoped to
      max-width:640px, so the desktop bar is untouched. Removing the pill
@@ -355,6 +407,7 @@
       </a>
     </div>
   </div>
+</nav>
 
 <section class="rk-hero">
   <h1>COLLEGE FOOTBALL <span class="accent">SCHEDULES</span></h1>
