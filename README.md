@@ -18,6 +18,7 @@ Netlify site ID: ba621860-d998-4c7e-a858-94c100312b49
 |-- 404.html                            branded not-found page (Netlify serves it automatically)
 |-- front_porch_games.json              dataset the pages fetch
 |-- fbs_teams.json  program_stats.json  supporting datasets
+|-- heisman_winners.json               canonical Heisman winners (source of truth)
 |-- historical_opponents.json  upcoming_lines.json
 |-- robots.txt  sitemap.xml  llms.txt   crawler files
 |-- favicon.ico  favicon-16/32.png      brand icons (generated from the poker chip mark)
@@ -30,11 +31,41 @@ Netlify site ID: ba621860-d998-4c7e-a858-94c100312b49
 |   |-- refresh_fbs_teams.py            ESPN standings -> fbs_teams.json
 |   |-- refresh_schedules.py            CFBD pull -> schedules_data.json (needs CFBD_API_KEY)
 |   |-- generate_sitemap.py             regenerates sitemap.xml
+|   |-- rebuild_heisman.py              heisman_winners.json -> every Heisman number
 |   |-- requirements.txt
 |-- .github/
     |-- workflows/
         |-- weekly_refresh.yml          weekly auto refresh during season
 ```
+
+## Heisman data
+
+`heisman_winners.json` is the single source of truth: one record per award,
+1935 to present, verified against heisman.com and Wikipedia. Every Heisman
+number on the site is derived from it by `scripts/rebuild_heisman.py`:
+
+- `program_stats.json` -> `heismanWinners` + `ranks.heismanWinners` (136 teams).
+  This is what `/compare`, `/team`, `/rank` and `/conference` actually read.
+- `heisman.html` -> the `HEISMAN_BY_TEAM` array, between sentinel comments.
+- `rankings.html` -> `cats[8]` only. `avg` and `rank` are a legacy composite
+  that is not reproducible from `cats`, so they are deliberately left alone.
+- the legacy `TEAM_STATS` fallback tables -> `heismans` / `heismansRank` only.
+
+These numbers used to be hand-typed into four places and had drifted apart from
+each other and from the record - 19 of 136 programs were wrong in both
+directions, including three credited with a Heisman they never won. Do not patch
+a number in any of those files; fix `heisman_winners.json` and re-run the script.
+
+To add next year's winner:
+
+```
+# append the winner to heisman_winners.json, bump _meta.lastYear and _meta.verified
+python scripts/rebuild_heisman.py
+python scripts/generate_sitemap.py
+```
+
+`python scripts/rebuild_heisman.py --check` exits non-zero if any derived copy has
+drifted, and rewrites nothing.
 
 ## SEO files
 

@@ -119,6 +119,8 @@
   .h-table td { padding: 0; border-bottom: 1px solid var(--border); }
   .h-row { display: grid; grid-template-columns: 60px 56px 1fr 100px; align-items: center; gap: 0.75rem; padding: 0.7rem 0.85rem; text-decoration: none; color: inherit; border-left: 6px solid transparent; transition: background 0.12s, transform 0.12s; }
   .h-row:hover { background: var(--light); transform: translateX(2px); }
+  .h-row.is-static, .h-row.is-static:hover { background: none; transform: none; cursor: default; }
+  .h-conf-label.is-nonfbs { white-space: nowrap; }
   .h-rank { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; line-height: 1; color: var(--gray); }
   .h-rank.top { color: var(--orange); }
   .h-logo { width: 44px; height: 44px; object-fit: contain; }
@@ -361,50 +363,57 @@
 </footer>
 
 <script>
-  // Heisman Trophy winners by program (all-time totals through 2024 season).
-  // Sourced from the Heisman Trophy Trust historical records.
+  /* >>> GENERATED heisman - scripts/rebuild_heisman.py - do not hand-edit.
+     Every Heisman Trophy winner by program, 1935-2025. Source of truth is
+     heisman_winners.json, verified 2026-09-09 against:
+       https://www.heisman.com/heisman-winners/
+       https://en.wikipedia.org/wiki/List_of_Heisman_Trophy_winners
+     Schools marked fbs:false no longer play FBS football and have no
+     team page, so the renderer leaves those rows unlinked. */
   const HEISMAN_BY_TEAM = [
-    { team: "Ohio St.",       count: 7 },
+    { team: "USC",            count: 8 },
     { team: "Notre Dame",     count: 7 },
+    { team: "Ohio St.",       count: 7 },
     { team: "Oklahoma",       count: 7 },
-    { team: "USC",            count: 7 },
     { team: "Alabama",        count: 4 },
     { team: "Army",           count: 3 },
     { team: "Auburn",         count: 3 },
     { team: "Florida",        count: 3 },
     { team: "Florida St.",    count: 3 },
+    { team: "LSU",            count: 3 },
     { team: "Michigan",       count: 3 },
     { team: "Nebraska",       count: 3 },
-    { team: "Stanford",       count: 3 },
+    { team: "Colorado",       count: 2 },
     { team: "Georgia",        count: 2 },
-    { team: "LSU",            count: 2 },
-    { team: "Miami (FL)",     count: 2 },
+    { team: "Miami",          count: 2 },
     { team: "Navy",           count: 2 },
-    { team: "Pittsburgh",     count: 2 },
-    { team: "TCU",            count: 2 },
     { team: "Texas",          count: 2 },
     { team: "Texas A&M",      count: 2 },
-    { team: "Yale",           count: 2 },
+    { team: "Wisconsin",      count: 2 },
+    { team: "Yale",           count: 2, fbs: false },
+    { team: "BYU",            count: 1 },
     { team: "Baylor",         count: 1 },
     { team: "Boston College", count: 1 },
-    { team: "BYU",            count: 1 },
-    { team: "Cincinnati",     count: 1 },
-    { team: "Colorado",       count: 1 },
+    { team: "Chicago",        count: 1, fbs: false },
     { team: "Houston",        count: 1 },
+    { team: "Indiana",        count: 1 },
     { team: "Iowa",           count: 1 },
     { team: "Louisville",     count: 1 },
     { team: "Minnesota",      count: 1 },
-    { team: "Mississippi St.",count: 1 },
     { team: "Oklahoma St.",   count: 1 },
     { team: "Oregon",         count: 1 },
+    { team: "Oregon St.",     count: 1 },
     { team: "Penn St.",       count: 1 },
-    { team: "South Carolina", count: 1 },
+    { team: "Pittsburgh",     count: 1 },
+    { team: "Princeton",      count: 1, fbs: false },
     { team: "SMU",            count: 1 },
+    { team: "South Carolina", count: 1 },
+    { team: "Stanford",       count: 1 },
     { team: "Syracuse",       count: 1 },
-    { team: "Texas Tech",     count: 1 },
-    { team: "UCLA",           count: 1 },
-    { team: "Wisconsin",      count: 1 }
+    { team: "TCU",            count: 1 },
+    { team: "UCLA",           count: 1 }
   ];
+  /* <<< END GENERATED heisman */
 
   // Compute ranks with tied-rank handling (1, 1, 1, 1, 5, 6, ...)
   let prevCount = null, prevRank = 0;
@@ -444,15 +453,23 @@
       const conf = TEAM_CONF[r.team] || '';
       const isTop = r.rank <= 3;
       const logoSrc = meta ? LOGO_URL(meta.id) : '';
-      return `<a class="h-row" data-team="${r.team}" href="team.html?team=${encodeURIComponent(r.team)}" style="border-left-color:${color}">
+      // Chicago, Yale and Princeton no longer play FBS football and have no team
+      // page - team.html silently falls back to a default team for any name it
+      // does not know, so those rows render as a plain div, not a link.
+      const linked = r.fbs !== false;
+      const open = linked
+        ? `<a class="h-row" data-team="${r.team}" href="team.html?team=${encodeURIComponent(r.team)}"`
+        : `<div class="h-row is-static" data-team="${r.team}"`;
+      return `${open} style="border-left-color:${color}">
         <div class="h-rank ${isTop ? 'top' : ''}">${ordinal(r.rank)}</div>
         ${logoSrc ? `<img class="h-logo" src="${logoSrc}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<div class="h-logo"></div>'}
         <div>
           <div class="h-team" style="color:${color}">${r.team}</div>
           ${conf ? `<div class="h-conf-label">${conf}</div>` : ''}
+          ${linked ? '' : '<div class="h-conf-label is-nonfbs">Non-FBS</div>'}
         </div>
         <div class="h-count-big" style="color:${color}">${r.count}</div>
-      </a>`;
+      ${linked ? '</a>' : '</div>'}`;
     }).join('');
   }
 

@@ -1,0 +1,654 @@
+{
+  "_meta": {
+    "description": "Canonical list of every Heisman Trophy winner. Single source of truth for every Heisman number on the site; scripts/rebuild_heisman.py derives all downstream copies from this file.",
+    "sources": [
+      "https://www.heisman.com/heisman-winners/",
+      "https://en.wikipedia.org/wiki/List_of_Heisman_Trophy_winners"
+    ],
+    "verified": "2026-09-09",
+    "firstYear": 1935,
+    "lastYear": 2025,
+    "notes": "team is the exact team key used in program_stats.json and fbs_teams.json - the rebuild script hard-fails if an fbs:true team does not resolve. Chicago, Yale and Princeton no longer play FBS football, have no program_stats.json row, and are marked fbs:false; their 4 awards are real and counted in the 91 total but never enter a program count or rank. The 2005 award was forfeited in 2010 and reinstated in 2024, so it counts for USC.",
+    "howToUpdate": "Append the new winner, bump lastYear and verified, then run: python scripts/rebuild_heisman.py"
+  },
+  "winners": [
+    {
+      "year": 1935,
+      "player": "Jay Berwanger",
+      "position": "HB",
+      "team": "Chicago",
+      "fbs": false
+    },
+    {
+      "year": 1936,
+      "player": "Larry Kelley",
+      "position": "E",
+      "team": "Yale",
+      "fbs": false
+    },
+    {
+      "year": 1937,
+      "player": "Clint Frank",
+      "position": "HB",
+      "team": "Yale",
+      "fbs": false
+    },
+    {
+      "year": 1938,
+      "player": "Davey O'Brien",
+      "position": "QB",
+      "team": "TCU",
+      "fbs": true
+    },
+    {
+      "year": 1939,
+      "player": "Nile Kinnick",
+      "position": "HB",
+      "team": "Iowa",
+      "fbs": true
+    },
+    {
+      "year": 1940,
+      "player": "Tom Harmon",
+      "position": "HB",
+      "team": "Michigan",
+      "fbs": true
+    },
+    {
+      "year": 1941,
+      "player": "Bruce Smith",
+      "position": "HB",
+      "team": "Minnesota",
+      "fbs": true
+    },
+    {
+      "year": 1942,
+      "player": "Frank Sinkwich",
+      "position": "HB",
+      "team": "Georgia",
+      "fbs": true
+    },
+    {
+      "year": 1943,
+      "player": "Angelo Bertelli",
+      "position": "QB",
+      "team": "Notre Dame",
+      "fbs": true
+    },
+    {
+      "year": 1944,
+      "player": "Les Horvath",
+      "position": "QB",
+      "team": "Ohio St.",
+      "fbs": true
+    },
+    {
+      "year": 1945,
+      "player": "Doc Blanchard",
+      "position": "FB",
+      "team": "Army",
+      "fbs": true
+    },
+    {
+      "year": 1946,
+      "player": "Glenn Davis",
+      "position": "HB",
+      "team": "Army",
+      "fbs": true
+    },
+    {
+      "year": 1947,
+      "player": "Johnny Lujack",
+      "position": "QB",
+      "team": "Notre Dame",
+      "fbs": true
+    },
+    {
+      "year": 1948,
+      "player": "Doak Walker",
+      "position": "HB",
+      "team": "SMU",
+      "fbs": true
+    },
+    {
+      "year": 1949,
+      "player": "Leon Hart",
+      "position": "E",
+      "team": "Notre Dame",
+      "fbs": true
+    },
+    {
+      "year": 1950,
+      "player": "Vic Janowicz",
+      "position": "HB",
+      "team": "Ohio St.",
+      "fbs": true
+    },
+    {
+      "year": 1951,
+      "player": "Dick Kazmaier",
+      "position": "HB",
+      "team": "Princeton",
+      "fbs": false
+    },
+    {
+      "year": 1952,
+      "player": "Billy Vessels",
+      "position": "HB",
+      "team": "Oklahoma",
+      "fbs": true
+    },
+    {
+      "year": 1953,
+      "player": "Johnny Lattner",
+      "position": "HB",
+      "team": "Notre Dame",
+      "fbs": true
+    },
+    {
+      "year": 1954,
+      "player": "Alan Ameche",
+      "position": "FB",
+      "team": "Wisconsin",
+      "fbs": true
+    },
+    {
+      "year": 1955,
+      "player": "Howard Cassady",
+      "position": "HB",
+      "team": "Ohio St.",
+      "fbs": true
+    },
+    {
+      "year": 1956,
+      "player": "Paul Hornung",
+      "position": "QB",
+      "team": "Notre Dame",
+      "fbs": true
+    },
+    {
+      "year": 1957,
+      "player": "John David Crow",
+      "position": "HB",
+      "team": "Texas A&M",
+      "fbs": true
+    },
+    {
+      "year": 1958,
+      "player": "Pete Dawkins",
+      "position": "HB",
+      "team": "Army",
+      "fbs": true
+    },
+    {
+      "year": 1959,
+      "player": "Billy Cannon",
+      "position": "HB",
+      "team": "LSU",
+      "fbs": true
+    },
+    {
+      "year": 1960,
+      "player": "Joe Bellino",
+      "position": "HB",
+      "team": "Navy",
+      "fbs": true
+    },
+    {
+      "year": 1961,
+      "player": "Ernie Davis",
+      "position": "HB",
+      "team": "Syracuse",
+      "fbs": true
+    },
+    {
+      "year": 1962,
+      "player": "Terry Baker",
+      "position": "QB",
+      "team": "Oregon St.",
+      "fbs": true
+    },
+    {
+      "year": 1963,
+      "player": "Roger Staubach",
+      "position": "QB",
+      "team": "Navy",
+      "fbs": true
+    },
+    {
+      "year": 1964,
+      "player": "John Huarte",
+      "position": "QB",
+      "team": "Notre Dame",
+      "fbs": true
+    },
+    {
+      "year": 1965,
+      "player": "Mike Garrett",
+      "position": "HB",
+      "team": "USC",
+      "fbs": true
+    },
+    {
+      "year": 1966,
+      "player": "Steve Spurrier",
+      "position": "QB",
+      "team": "Florida",
+      "fbs": true
+    },
+    {
+      "year": 1967,
+      "player": "Gary Beban",
+      "position": "QB",
+      "team": "UCLA",
+      "fbs": true
+    },
+    {
+      "year": 1968,
+      "player": "O.J. Simpson",
+      "position": "RB",
+      "team": "USC",
+      "fbs": true
+    },
+    {
+      "year": 1969,
+      "player": "Steve Owens",
+      "position": "RB",
+      "team": "Oklahoma",
+      "fbs": true
+    },
+    {
+      "year": 1970,
+      "player": "Jim Plunkett",
+      "position": "QB",
+      "team": "Stanford",
+      "fbs": true
+    },
+    {
+      "year": 1971,
+      "player": "Pat Sullivan",
+      "position": "QB",
+      "team": "Auburn",
+      "fbs": true
+    },
+    {
+      "year": 1972,
+      "player": "Johnny Rodgers",
+      "position": "WR",
+      "team": "Nebraska",
+      "fbs": true
+    },
+    {
+      "year": 1973,
+      "player": "John Cappelletti",
+      "position": "RB",
+      "team": "Penn St.",
+      "fbs": true
+    },
+    {
+      "year": 1974,
+      "player": "Archie Griffin",
+      "position": "RB",
+      "team": "Ohio St.",
+      "fbs": true
+    },
+    {
+      "year": 1975,
+      "player": "Archie Griffin",
+      "position": "RB",
+      "team": "Ohio St.",
+      "fbs": true
+    },
+    {
+      "year": 1976,
+      "player": "Tony Dorsett",
+      "position": "RB",
+      "team": "Pittsburgh",
+      "fbs": true
+    },
+    {
+      "year": 1977,
+      "player": "Earl Campbell",
+      "position": "RB",
+      "team": "Texas",
+      "fbs": true
+    },
+    {
+      "year": 1978,
+      "player": "Billy Sims",
+      "position": "RB",
+      "team": "Oklahoma",
+      "fbs": true
+    },
+    {
+      "year": 1979,
+      "player": "Charles White",
+      "position": "RB",
+      "team": "USC",
+      "fbs": true
+    },
+    {
+      "year": 1980,
+      "player": "George Rogers",
+      "position": "RB",
+      "team": "South Carolina",
+      "fbs": true
+    },
+    {
+      "year": 1981,
+      "player": "Marcus Allen",
+      "position": "RB",
+      "team": "USC",
+      "fbs": true
+    },
+    {
+      "year": 1982,
+      "player": "Herschel Walker",
+      "position": "RB",
+      "team": "Georgia",
+      "fbs": true
+    },
+    {
+      "year": 1983,
+      "player": "Mike Rozier",
+      "position": "RB",
+      "team": "Nebraska",
+      "fbs": true
+    },
+    {
+      "year": 1984,
+      "player": "Doug Flutie",
+      "position": "QB",
+      "team": "Boston College",
+      "fbs": true
+    },
+    {
+      "year": 1985,
+      "player": "Bo Jackson",
+      "position": "RB",
+      "team": "Auburn",
+      "fbs": true
+    },
+    {
+      "year": 1986,
+      "player": "Vinny Testaverde",
+      "position": "QB",
+      "team": "Miami",
+      "fbs": true
+    },
+    {
+      "year": 1987,
+      "player": "Tim Brown",
+      "position": "WR",
+      "team": "Notre Dame",
+      "fbs": true
+    },
+    {
+      "year": 1988,
+      "player": "Barry Sanders",
+      "position": "RB",
+      "team": "Oklahoma St.",
+      "fbs": true
+    },
+    {
+      "year": 1989,
+      "player": "Andre Ware",
+      "position": "QB",
+      "team": "Houston",
+      "fbs": true
+    },
+    {
+      "year": 1990,
+      "player": "Ty Detmer",
+      "position": "QB",
+      "team": "BYU",
+      "fbs": true
+    },
+    {
+      "year": 1991,
+      "player": "Desmond Howard",
+      "position": "WR",
+      "team": "Michigan",
+      "fbs": true
+    },
+    {
+      "year": 1992,
+      "player": "Gino Torretta",
+      "position": "QB",
+      "team": "Miami",
+      "fbs": true
+    },
+    {
+      "year": 1993,
+      "player": "Charlie Ward",
+      "position": "QB",
+      "team": "Florida St.",
+      "fbs": true
+    },
+    {
+      "year": 1994,
+      "player": "Rashaan Salaam",
+      "position": "RB",
+      "team": "Colorado",
+      "fbs": true
+    },
+    {
+      "year": 1995,
+      "player": "Eddie George",
+      "position": "RB",
+      "team": "Ohio St.",
+      "fbs": true
+    },
+    {
+      "year": 1996,
+      "player": "Danny Wuerffel",
+      "position": "QB",
+      "team": "Florida",
+      "fbs": true
+    },
+    {
+      "year": 1997,
+      "player": "Charles Woodson",
+      "position": "CB",
+      "team": "Michigan",
+      "fbs": true
+    },
+    {
+      "year": 1998,
+      "player": "Ricky Williams",
+      "position": "RB",
+      "team": "Texas",
+      "fbs": true
+    },
+    {
+      "year": 1999,
+      "player": "Ron Dayne",
+      "position": "RB",
+      "team": "Wisconsin",
+      "fbs": true
+    },
+    {
+      "year": 2000,
+      "player": "Chris Weinke",
+      "position": "QB",
+      "team": "Florida St.",
+      "fbs": true
+    },
+    {
+      "year": 2001,
+      "player": "Eric Crouch",
+      "position": "QB",
+      "team": "Nebraska",
+      "fbs": true
+    },
+    {
+      "year": 2002,
+      "player": "Carson Palmer",
+      "position": "QB",
+      "team": "USC",
+      "fbs": true
+    },
+    {
+      "year": 2003,
+      "player": "Jason White",
+      "position": "QB",
+      "team": "Oklahoma",
+      "fbs": true
+    },
+    {
+      "year": 2004,
+      "player": "Matt Leinart",
+      "position": "QB",
+      "team": "USC",
+      "fbs": true
+    },
+    {
+      "year": 2005,
+      "player": "Reggie Bush",
+      "position": "RB",
+      "team": "USC",
+      "fbs": true,
+      "note": "Forfeited in September 2010, reinstated by the Heisman Trust on 24 April 2024."
+    },
+    {
+      "year": 2006,
+      "player": "Troy Smith",
+      "position": "QB",
+      "team": "Ohio St.",
+      "fbs": true
+    },
+    {
+      "year": 2007,
+      "player": "Tim Tebow",
+      "position": "QB",
+      "team": "Florida",
+      "fbs": true
+    },
+    {
+      "year": 2008,
+      "player": "Sam Bradford",
+      "position": "QB",
+      "team": "Oklahoma",
+      "fbs": true
+    },
+    {
+      "year": 2009,
+      "player": "Mark Ingram II",
+      "position": "RB",
+      "team": "Alabama",
+      "fbs": true
+    },
+    {
+      "year": 2010,
+      "player": "Cam Newton",
+      "position": "QB",
+      "team": "Auburn",
+      "fbs": true
+    },
+    {
+      "year": 2011,
+      "player": "Robert Griffin III",
+      "position": "QB",
+      "team": "Baylor",
+      "fbs": true
+    },
+    {
+      "year": 2012,
+      "player": "Johnny Manziel",
+      "position": "QB",
+      "team": "Texas A&M",
+      "fbs": true
+    },
+    {
+      "year": 2013,
+      "player": "Jameis Winston",
+      "position": "QB",
+      "team": "Florida St.",
+      "fbs": true
+    },
+    {
+      "year": 2014,
+      "player": "Marcus Mariota",
+      "position": "QB",
+      "team": "Oregon",
+      "fbs": true
+    },
+    {
+      "year": 2015,
+      "player": "Derrick Henry",
+      "position": "RB",
+      "team": "Alabama",
+      "fbs": true
+    },
+    {
+      "year": 2016,
+      "player": "Lamar Jackson",
+      "position": "QB",
+      "team": "Louisville",
+      "fbs": true
+    },
+    {
+      "year": 2017,
+      "player": "Baker Mayfield",
+      "position": "QB",
+      "team": "Oklahoma",
+      "fbs": true
+    },
+    {
+      "year": 2018,
+      "player": "Kyler Murray",
+      "position": "QB",
+      "team": "Oklahoma",
+      "fbs": true
+    },
+    {
+      "year": 2019,
+      "player": "Joe Burrow",
+      "position": "QB",
+      "team": "LSU",
+      "fbs": true
+    },
+    {
+      "year": 2020,
+      "player": "DeVonta Smith",
+      "position": "WR",
+      "team": "Alabama",
+      "fbs": true
+    },
+    {
+      "year": 2021,
+      "player": "Bryce Young",
+      "position": "QB",
+      "team": "Alabama",
+      "fbs": true
+    },
+    {
+      "year": 2022,
+      "player": "Caleb Williams",
+      "position": "QB",
+      "team": "USC",
+      "fbs": true
+    },
+    {
+      "year": 2023,
+      "player": "Jayden Daniels",
+      "position": "QB",
+      "team": "LSU",
+      "fbs": true
+    },
+    {
+      "year": 2024,
+      "player": "Travis Hunter",
+      "position": "WR/CB",
+      "team": "Colorado",
+      "fbs": true
+    },
+    {
+      "year": 2025,
+      "player": "Fernando Mendoza",
+      "position": "QB",
+      "team": "Indiana",
+      "fbs": true
+    }
+  ]
+}
