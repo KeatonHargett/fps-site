@@ -8,12 +8,12 @@
   "Oklahoma|Oklahoma St.": {
    "name": "Bedlam",
    "trophy": "Bedlam Bell",
-   "logo": "rivalry-logos/bedlam.png"
+   "logo": ""
   },
   "Oklahoma|Texas": {
    "name": "Red River Rivalry",
    "trophy": "Golden Hat",
-   "logo": "rivalry-logos/red-river.png"
+   "logo": ""
   },
   "Nebraska|Oklahoma": {
    "name": "Nebraska–Oklahoma Rivalry",
@@ -88,7 +88,7 @@
   "Texas|Texas A&M": {
    "name": "Lone Star Showdown",
    "trophy": "",
-   "logo": "rivalry-logos/lone-star-showdown.png"
+   "logo": ""
   },
   "Arkansas|Texas": {
    "name": "Texas–Arkansas Rivalry",
@@ -238,7 +238,7 @@
   "Army|Navy": {
    "name": "Army–Navy Game",
    "trophy": "Commander-in-Chief’s Trophy",
-   "logo": "rivalry-logos/army-navy.png"
+   "logo": ""
   },
   "Air Force|Army": {
    "name": "Commander-in-Chief’s Trophy",
