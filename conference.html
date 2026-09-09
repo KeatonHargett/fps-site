@@ -212,6 +212,17 @@
   }
   .cf-select:focus { outline: none; border-color: var(--orange); }
   .cf-label { font-size: 0.8rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.06em; }
+  /* v2: season scrubber. A dual-thumb FPSRangeFilter would be the wrong control here -
+     this picks one season, not a span, and its presets ("Last 5 Matchups") are
+     meaningless for conference membership. */
+  .cf-year { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+  .cf-year input[type=range] { width: 190px; accent-color: var(--orange); cursor: pointer; }
+  .cf-year-out { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; letter-spacing: 0.05em; color: var(--dark); min-width: 3.2ch; text-align: center; }
+  .cf-year-now { font: inherit; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--blue); background: none; border: 1px solid var(--border); border-radius: 999px; padding: 0.25rem 0.7rem; cursor: pointer; }
+  .cf-year-now:hover { border-color: var(--blue); }
+  .cf-year-now[disabled] { opacity: 0.4; cursor: default; border-color: var(--border); }
+  .cb-years { font-size: 0.8rem; color: var(--gray); font-weight: 600; margin-left: 0.5rem; }
+  .cf-lineage { font-size: 0.8rem; color: var(--gray); margin: 0.5rem 0 0; }
 
   .cf-confbar { display: flex; align-items: center; gap: 0.6rem; margin: 1.25rem 0 0.75rem; border-bottom: 2px solid var(--border); padding-bottom: 0.45rem; }
   .cf-confbar img { width: 34px; height: 34px; object-fit: contain; }
@@ -255,6 +266,8 @@
     .page-head h1 { font-size: 2.1rem; }
     .cf-confbar .cb-name { font-size: 1.45rem; }
     .cf-select { width: 100%; min-width: 0; }
+    .cf-year { width: 100%; }
+    .cf-year input[type=range] { flex: 1 1 auto; width: auto; min-width: 0; }
     .cf-table { font-size: 0.85rem; min-width: 820px; }
     .cf-team a { font-size: 0; }
     .cf-abbr { display: inline; font-size: 0.85rem; font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.03em; }
@@ -295,6 +308,13 @@
   <div class="cf-controls">
     <span class="cf-label" id="cf-select-label">Conference</span>
     <select class="cf-select" id="cf-conf" aria-labelledby="cf-select-label"></select>
+    <div class="cf-year">
+      <label class="cf-label" for="cf-year-input">Season</label>
+      <input type="range" id="cf-year-input" min="1887" max="2026" step="1" value="2026"
+             aria-describedby="cf-year-out">
+      <output class="cf-year-out" id="cf-year-out" for="cf-year-input">2026</output>
+      <button type="button" class="cf-year-now" id="cf-year-now">Present</button>
+    </div>
   </div>
 
   <div id="cf-body"></div>
@@ -365,11 +385,64 @@
 
   let TEAMS = [];      // [{name, espn_id, abbreviation, conference}]
   let STATS = {};      // name -> program_stats row
-  let BY_CONF = {};    // conference -> [team]
+  let BY_CONF = {};    // conference -> [team]   (present-day, from fbs_teams.json)
   let selfTeam = params.get('team') || '';
   let currentConf = '';
   let sortKey = 'winPct';
   let sortAsc = false;
+
+  /* v2: season-by-season membership, from conference_history.json (CFBD /teams?year=).
+     Before this the page read one flat `conference` string per team, so the Big 12
+     table showed today's members against all of history and there was no way to look
+     up a conference that no longer exists. */
+  const IND = '__independent';            // sentinel: CFBD stores independents as null
+  const IND_LABEL = 'Independent';
+  let CONF_META = {};                         // conf -> {abbr, full}
+  let MEMBERS = {};                           // conf -> {year: [team name]}
+  let CONF_SPAN = {};                         // conf -> {min, max, teams:Set}
+  let TEAM_META_BY_NAME = {};                 // name -> fbs_teams.json row
+  let MIN_YEAR = 1887, MAX_YEAR = 2026;
+  let currentYear = MAX_YEAR;
+
+  const confLabel = c => (c === IND ? IND_LABEL : c);
+
+  /* CFBD spells two of these differently from the CONF_LOGOS keys this page has always
+     used ("American Athletic" vs "American", "Mid-American" vs "MAC"). Without the
+     alias those two conferences would silently lose their crest. */
+  const CONF_LOGO_ALIAS = { 'American Athletic': 'American', 'Mid-American': 'MAC', [IND]: 'Independent' };
+  const confLogo = c => CONF_LOGOS[CONF_LOGO_ALIAS[c] || c] || '';
+
+  function buildHistory(hist) {
+    if (!hist || !hist.teams) return;
+    CONF_META = hist.conferences || {};
+    const yrs = hist._meta && hist._meta.years;
+    if (yrs) { MIN_YEAR = yrs[0]; MAX_YEAR = yrs[1]; }
+    Object.keys(hist.teams).forEach(team => {
+      hist.teams[team].forEach(sp => {
+        const c = sp.conf == null ? IND : sp.conf;
+        const m = MEMBERS[c] || (MEMBERS[c] = {});
+        const s = CONF_SPAN[c] || (CONF_SPAN[c] = { min: Infinity, max: -Infinity, teams: new Set() });
+        for (let y = sp.start; y <= sp.end; y++) (m[y] || (m[y] = [])).push(team);
+        if (sp.start < s.min) s.min = sp.start;
+        if (sp.end > s.max) s.max = sp.end;
+        s.teams.add(team);
+      });
+    });
+    Object.keys(MEMBERS).forEach(c =>
+      Object.keys(MEMBERS[c]).forEach(y => MEMBERS[c][y].sort((a, b) => a.localeCompare(b))));
+  }
+
+  /* A row for the table. Present-day FBS teams carry a logo and abbreviation from
+     fbs_teams.json; a defunct or non-FBS program has neither, so the logo is omitted
+     rather than requested and broken. */
+  function teamRow(name) {
+    const meta = TEAM_META_BY_NAME[name];
+    return meta || { name: name, espn_id: '', abbreviation: '', conference: '' };
+  }
+
+  function membersOf(conf, year) {
+    return ((MEMBERS[conf] || {})[year] || []).map(teamRow);
+  }
 
   const NA = '<span class="cf-na">Not yet available</span>';
   const recStr = r => r ? `${r.wins}-${r.losses}${r.ties ? '-' + r.ties : ''}` : null;
@@ -402,8 +475,13 @@
 
   function render() {
     const box = document.getElementById('cf-body');
-    const list = (BY_CONF[currentConf] || []).slice();
-    if (!list.length) { box.innerHTML = '<div class="cf-empty">No teams found for this conference.</div>'; return; }
+    const list = membersOf(currentConf, currentYear);
+    if (!list.length) {
+      const s = CONF_SPAN[currentConf];
+      const span = s ? `The ${esc(confLabel(currentConf))} has members in this dataset from ${s.min} to ${s.max}.` : '';
+      box.innerHTML = `<div class="cf-empty">No ${esc(confLabel(currentConf))} members in ${currentYear}. ${span}</div>`;
+      return;
+    }
 
     const col = COLS.find(c => c.key === sortKey) || COLS[2];
     list.sort((a, b) => {
@@ -434,18 +512,23 @@
       }).join('');
       return `<tr data-team="${esc(t.name)}" class="${isSelf ? 'cf-self' : ''}">
         <td><div class="cf-team">
-          <img src="${LOGO_URL(t.espn_id)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+          ${t.espn_id ? `<img src="${LOGO_URL(t.espn_id)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : ''}
           <a href="team.html?team=${encodeURIComponent(t.name)}">${esc(t.name)}</a><span class="cf-abbr">${esc(abbrOf(t))}</span>
         </div></td>${cells}
       </tr>`;
     }).join('');
 
-    const logo = CONF_LOGOS[currentConf];
+    // Only show a conference crest when it is that conference's own current mark -
+    // stamping today's Big 12 logo on the 1996 table would be wrong.
+    const logo = (currentYear === MAX_YEAR) ? confLogo(currentConf) : '';
+    const span = CONF_SPAN[currentConf];
+    const meta = CONF_META[currentConf];
     box.innerHTML = `
       <div class="cf-confbar">
         ${logo ? `<img src="${logo}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
-        <span class="cb-name">${esc(currentConf)}</span>
-        <span class="cb-count">${list.length} ${list.length === 1 ? 'team' : 'teams'}</span>
+        <span class="cb-name">${esc(meta && meta.full ? meta.full : confLabel(currentConf))}</span>
+        <span class="cb-count">${list.length} ${list.length === 1 ? 'team' : 'teams'} in ${currentYear}</span>
+        ${span ? `<span class="cb-years">${span.min}–${span.max}</span>` : ''}
       </div>
       <div class="cf-scroll"><table class="cf-table">
         <thead><tr>${head}</tr></thead>
@@ -470,51 +553,117 @@
     if (sel.value !== conf) sel.value = conf;
     const h1 = document.getElementById('cf-h1');
     const sub = document.getElementById('cf-sub');
-    if (selfTeam && (BY_CONF[conf] || []).some(t => t.name === selfTeam)) {
-      h1.textContent = `${selfTeam} vs the ${conf}`;
-      sub.textContent = `How ${selfTeam} stacks up against every other ${conf} program, all-time.`;
-      fpsMeta({ title: `${selfTeam} vs the ${conf} — Conference Comparison | Front Porch Sports`,
-                description: `Compare ${selfTeam} against every ${conf} program on all-time record, championships, All-Americans, draft picks and Heisman winners.`,
+    const label = confLabel(conf);
+    const inYear = membersOf(conf, currentYear).some(t => t.name === selfTeam);
+    // "in YEAR" only when the user has actually moved off the present day, so the
+    // default view reads exactly as it did before this feature.
+    const suffix = currentYear === MAX_YEAR ? '' : ` in ${currentYear}`;
+    if (selfTeam && inYear) {
+      h1.textContent = `${selfTeam} vs the ${label}${suffix}`;
+      sub.textContent = `How ${selfTeam} stacks up against every other ${label} program, all-time.`;
+      fpsMeta({ title: `${selfTeam} vs the ${label} — Conference Comparison | Front Porch Sports`,
+                description: `Compare ${selfTeam} against every ${label} program on all-time record, championships, All-Americans, draft picks and Heisman winners.`,
                 path: `/conference?team=${encodeURIComponent(selfTeam)}` });
     } else {
-      h1.textContent = `${conf} Comparison`;
-      sub.textContent = `Every ${conf} program side by side across all-time record, championships and accolades.`;
-      fpsMeta({ title: `${conf} All-Time Comparison — Front Porch Sports`,
-                description: `Compare every ${conf} program on all-time record, championships, All-Americans, draft picks and Heisman winners.`,
+      h1.textContent = `${label} Comparison${suffix}`;
+      sub.textContent = `Every ${label} program side by side across all-time record, championships and accolades.`;
+      fpsMeta({ title: `${label} All-Time Comparison — Front Porch Sports`,
+                description: `Compare every ${label} program on all-time record, championships, All-Americans, draft picks and Heisman winners.`,
                 path: `/conference?conf=${encodeURIComponent(conf)}` });
     }
     if (pushUrl) {
-      const q = selfTeam ? `?team=${encodeURIComponent(selfTeam)}` : `?conf=${encodeURIComponent(conf)}`;
-      history.replaceState(null, '', 'conference.html' + q);
+      const q = new URLSearchParams();
+      if (selfTeam) q.set('team', selfTeam); else q.set('conf', conf);
+      if (currentYear !== MAX_YEAR) q.set('year', currentYear);
+      history.replaceState(null, '', 'conference.html?' + q.toString());
     }
     render();
   }
 
+  function setYear(year, pushUrl) {
+    currentYear = Math.min(MAX_YEAR, Math.max(MIN_YEAR, year | 0));
+    const input = document.getElementById('cf-year-input');
+    const out = document.getElementById('cf-year-out');
+    const now = document.getElementById('cf-year-now');
+    if (input && +input.value !== currentYear) input.value = currentYear;
+    if (out) out.textContent = currentYear;
+    if (now) now.disabled = currentYear === MAX_YEAR;
+    setConference(currentConf, pushUrl);
+  }
+
+  /* Dropdown: conferences that actually held members of this dataset, split into the
+     ones still active and the ones that are gone. Filtered to 3+ programs so the list
+     is browsable - CFBD knows 150 conferences here, most of them D3 leagues with one
+     or two teams that ever met an FBS opponent. */
+  function buildConfOptions() {
+    const names = Object.keys(CONF_SPAN).filter(c => CONF_SPAN[c].teams.size >= 3);
+    const live = names.filter(c => CONF_SPAN[c].max >= MAX_YEAR);
+    const dead = names.filter(c => CONF_SPAN[c].max < MAX_YEAR);
+    live.sort((a, b) => (CONF_ORDER.indexOf(a) + 1 || 99) - (CONF_ORDER.indexOf(b) + 1 || 99)
+                        || confLabel(a).localeCompare(confLabel(b)));
+    dead.sort((a, b) => CONF_SPAN[b].max - CONF_SPAN[a].max || confLabel(a).localeCompare(confLabel(b)));
+    const opt = c => {
+      const s = CONF_SPAN[c];
+      return `<option value="${esc(c)}">${esc(confLabel(c))} (${s.min}–${s.max})</option>`;
+    };
+    return `<optgroup label="Current">${live.map(opt).join('')}</optgroup>` +
+           `<optgroup label="Former">${dead.map(opt).join('')}</optgroup>`;
+  }
+
   Promise.all([
     fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] })),
-    fetch('program_stats.json').then(r => r.ok ? r.json() : {}).catch(() => ({}))
-  ]).then(([fbs, stats]) => {
+    fetch('program_stats.json').then(r => r.ok ? r.json() : {}).catch(() => ({})),
+    fetch('conference_history.json').then(r => r.ok ? r.json() : null).catch(() => null)
+  ]).then(([fbs, stats, hist]) => {
     TEAMS = fbs.teams || [];
     STATS = stats || {};
     delete STATS._meta;                       // metadata key, not a program
+    TEAMS.forEach(t => { TEAM_META_BY_NAME[t.name] = t; });
 
     BY_CONF = {};
     TEAMS.forEach(t => { (BY_CONF[t.conference] = BY_CONF[t.conference] || []).push(t); });
     Object.keys(BY_CONF).forEach(c => BY_CONF[c].sort((a, b) => a.name.localeCompare(b.name)));
 
-    const order = CONF_ORDER.filter(c => BY_CONF[c]).concat(Object.keys(BY_CONF).filter(c => !CONF_ORDER.includes(c)).sort());
+    buildHistory(hist);
     const sel = document.getElementById('cf-conf');
-    sel.innerHTML = order.map(c => `<option value="${esc(c)}">${esc(c)} (${BY_CONF[c].length})</option>`).join('');
+    const haveHistory = Object.keys(CONF_SPAN).length > 0;
+    if (!haveHistory) {
+      // conference_history.json missing or malformed: fall back to the present-day
+      // grouping this page used before, rather than rendering an empty shell.
+      const order = CONF_ORDER.filter(c => BY_CONF[c])
+        .concat(Object.keys(BY_CONF).filter(c => !CONF_ORDER.includes(c)).sort());
+      order.forEach(c => {
+        MEMBERS[c] = { [MAX_YEAR]: BY_CONF[c].map(t => t.name) };
+        CONF_SPAN[c] = { min: MAX_YEAR, max: MAX_YEAR, teams: new Set(BY_CONF[c].map(t => t.name)) };
+      });
+      document.querySelector('.cf-year').hidden = true;
+    }
+    sel.innerHTML = buildConfOptions();
     sel.addEventListener('change', () => { selfTeam = ''; setConference(sel.value, true); });
 
+    const yearInput = document.getElementById('cf-year-input');
+    const yearNow = document.getElementById('cf-year-now');
+    yearInput.min = MIN_YEAR; yearInput.max = MAX_YEAR;
+    yearInput.addEventListener('input', () => setYear(+yearInput.value, false));
+    yearInput.addEventListener('change', () => setYear(+yearInput.value, true));
+    yearNow.addEventListener('click', () => setYear(MAX_YEAR, true));
+
+    const wanted = parseInt(params.get('year'), 10);
+    currentYear = (wanted >= MIN_YEAR && wanted <= MAX_YEAR) ? wanted : MAX_YEAR;
+
     // ?team= wins; fall back to ?conf=; then the first conference in canonical order.
-    let start = order[0];
+    const options = [...sel.options].map(o => o.value);
+    let start = options[0];
     if (selfTeam) {
-      const hit = TEAMS.find(t => t.name === selfTeam);
-      if (hit) start = hit.conference; else selfTeam = '';
+      const hit = Object.keys(MEMBERS).find(c => (MEMBERS[c][currentYear] || []).includes(selfTeam));
+      if (hit) start = hit; else selfTeam = '';
     }
-    if (!selfTeam && params.get('conf') && BY_CONF[params.get('conf')]) start = params.get('conf');
-    setConference(start, false);
+    const wantConf = params.get('conf');
+    if (!selfTeam && wantConf && MEMBERS[wantConf]) start = wantConf;
+    // Set the conference first: setYear() re-renders through setConference(currentConf),
+    // which would otherwise paint an empty table for one frame.
+    currentConf = start;
+    setYear(currentYear, false);
   }).catch(err => {
     document.getElementById('cf-body').innerHTML = `<div class="cf-empty">Failed to load data: ${esc(err.message)}</div>`;
   });

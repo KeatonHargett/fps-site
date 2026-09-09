@@ -48,6 +48,18 @@
   [headers.values]
     Cache-Control = "public, max-age=86400, must-revalidate"
 
+# Conference affiliation and coaching tenures change once a season at most, so they
+# cache alongside historical_opponents.json rather than the live game data.
+[[headers]]
+  for = "/conference_history.json"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
+[[headers]]
+  for = "/coaching_history.json"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, must-revalidate"
+
 [[headers]]
   for = "/upcoming_lines.json"
   [headers.values]

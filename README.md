@@ -20,6 +20,8 @@ Netlify site ID: ba621860-d998-4c7e-a858-94c100312b49
 |-- fbs_teams.json  program_stats.json  supporting datasets
 |-- heisman_winners.json               canonical Heisman winners (source of truth)
 |-- historical_opponents.json  upcoming_lines.json
+|-- conference_history.json             conference affiliation per team per season
+|-- coaching_history.json               head-coach tenures per team (FBS-only source)
 |-- robots.txt  sitemap.xml  llms.txt   crawler files
 |-- favicon.ico  favicon-16/32.png      brand icons (generated from the poker chip mark)
 |-- apple-touch-icon.png  icon-192/512.png
@@ -30,6 +32,8 @@ Netlify site ID: ba621860-d998-4c7e-a858-94c100312b49
 |   |-- refresh_games.py                ESPN pull (keyless), current season only
 |   |-- refresh_fbs_teams.py            ESPN standings -> fbs_teams.json
 |   |-- refresh_schedules.py            CFBD pull -> schedules_data.json (needs CFBD_API_KEY)
+|   |-- refresh_conference_history.py   CFBD pull -> conference_history.json (needs CFBD_API_KEY)
+|   |-- refresh_coaching_history.py     CFBD pull -> coaching_history.json (needs CFBD_API_KEY)
 |   |-- generate_sitemap.py             regenerates sitemap.xml
 |   |-- rebuild_heisman.py              heisman_winners.json -> every Heisman number
 |   |-- requirements.txt
@@ -122,6 +126,20 @@ Add secrets at GitHub -> repo -> Settings -> Secrets and variables -> Actions ->
 - refresh_schedules.py rebuilds schedules_data.json (2022-present) from CFBD. This is a
   separate, additive file and the only place FCS and other non-FBS opponents appear;
   front_porch_games.json stays FBS-vs-FBS and is never written by it.
+- refresh_conference_history.py rebuilds conference_history.json from CFBD /teams?year=,
+  one conference per team per season, 1887-present. Additive; never writes
+  front_porch_games.json. It cross-checks itself against the cached CFBD /games
+  conference fields in .cfbd_cache/ and prints any disagreement (currently zero out of
+  161,457 team-seasons). Independents are stored as null, because CFBD's "FBS
+  Independents" bucket is a classification and would be an anachronism on a 1901 row.
+- refresh_coaching_history.py rebuilds coaching_history.json from CFBD /coaches.
+  Hire and departure YEARS only: CFBD carries no fired/resigned/retired field, so that
+  distinction is deliberately absent rather than inferred. Tenures can overlap when a
+  coach is replaced mid-season, and both are kept. The source is FBS-only, so 157 of the
+  dataset's 239 teams have coaching data and the rest render an empty band.
+- Both are seasonal, not weekly - conference membership and head coaches change once a
+  year - so neither runs in weekly_refresh.yml. Re-run them by hand after realignment or
+  the coaching carousel.
 - If the resulting JSON is identical to the existing one, no commit is made.
 
 ## Local dev
