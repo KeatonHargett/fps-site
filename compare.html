@@ -492,17 +492,31 @@
   .sel-team-placeholder { width: 110px; height: 110px; border: 2px dashed var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--gray); font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 0.05em; }
   .sel-team-vs { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--orange); padding-bottom: 0.5rem; align-self: center; }
 
-  /* ===== v52 Program Comparison: two columns of team-coloured cards =====
-     Was 15 white cards, each split into two halves with only the WINNING half
-     filled. Now one card per team per category, every card carrying its team's
-     brand colour, led by a large rank ordinal. Ink is chosen by measured
-     luminance (inkOn) rather than the curated `alt` field, because 49 of the 138
-     TEAM_META entries have an `alt` that fails AA against their own primary. */
+  /* ===== v53 Program Comparison: one dense grid per team, leader-filled =====
+     v52 stacked one full-width card per team per category - 30 cards at 536x175,
+     2478px of grid - and filled EVERY card with its own team's colour, so colour
+     said "this is Oklahoma St." rather than "Oklahoma St. wins this."
+
+     v53 takes both halves of the reference (Winsipedia) instead: an outer two-panel
+     split with a dense multi-column grid inside each panel, and a fill that is
+     earned per category. Only the leader's card carries the brand colour; the
+     trailing team's card is white with the brand colour as ink. An exact tie on the
+     rank ordinal fills both - a shared win. Ink on the filled card is chosen by
+     measured luminance (inkFor) rather than the curated `alt` field, because 49 of
+     the 138 TEAM_META entries have an `alt` that fails AA against their own primary;
+     ink on the white card is the brand colour stepped toward black until it clears
+     AA (inkOnWhite), because 24 of those primaries fail 4.5:1 against white. */
   .stat-comparison-section { margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--border); }
   .stat-comparison-section .chart-title { margin-bottom: 0.25rem; }
   .stat-comparison-sub { text-align: center; color: var(--gray); font-size: 0.85rem; margin: -0.25rem 0 1.5rem; }
 
-  .scc-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem 1rem; }
+  /* Outer: one panel per team. Inner: that team's 15 cards, 3 across on desktop.
+     The panels are separate grids, so nothing forces row N on the left to line up
+     with row N on the right - `.scc-card`'s min-height does that instead, by making
+     every card in every row exactly as tall as the tallest possible card. */
+  .scc-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; align-items: start; }
+  .scc-side { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; align-content: start; }
+  .scc-side .scc-col-head { grid-column: 1 / -1; margin-bottom: 0.35rem; }
 
   .scc-col-head {
     display: flex; align-items: center; justify-content: center; gap: 0.45rem;
@@ -519,82 +533,95 @@
   .scc-card {
     display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
     text-align: center;
-    padding: 0.8rem 0.6rem 0.7rem;
-    border-radius: 12px;
-    height: 100%;
+    padding: 0.55rem 0.4rem 0.5rem;
+    border-radius: 8px;
+    /* Uniform height is what keeps the two panels' rows aligned - see .scc-columns.
+       Sized to the tallest card: value + two-line label + rank + "of 136". */
+    min-height: 118px;
     background: var(--tc, var(--light));
     color: var(--tink, #fff);
+    border: 1px solid transparent;
     text-decoration: none;
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
   }
-  /* Leader cue: a brighter shade of the same brand colour (mixed 16% toward white
-     in JS) PLUS an inset ring. The ring matters - for a black-primary team like
-     Appalachian St. the brightening is nearly imperceptible on its own. */
-  .scc-card.is-leader { box-shadow: inset 0 0 0 2px var(--tink), 0 2px 12px rgba(0, 0, 0, 0.14); }
+  /* The fill IS the leader cue now, so `.is-leader` needs no decoration of its own.
+     The trailing card drops to white and takes the brand colour as ink; on a white
+     page it would have no edge at all without the hairline. */
+  .scc-card.is-trailing { background: #fff; border-color: var(--border); }
   a.scc-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); }
-  a.scc-card.is-leader:hover { box-shadow: inset 0 0 0 2px var(--tink), 0 6px 16px rgba(0, 0, 0, 0.2); }
+  a.scc-card.is-trailing:hover { border-color: var(--tink); }
   a.scc-card:focus-visible { outline: 3px solid var(--dark); outline-offset: 2px; }
 
   .scc-card-value {
     font-family: 'Bebas Neue', sans-serif; font-weight: bold;
-    font-size: 2.25rem; line-height: 1; letter-spacing: 0.02em;
+    font-size: 1.5rem; line-height: 1; letter-spacing: 0.02em;
   }
-  .scc-card-value-rec { font-size: 1.7rem; letter-spacing: 0.01em; }
+  .scc-card-value-rec { font-size: 1.15rem; letter-spacing: 0.01em; }
   .scc-card-na { opacity: 0.5; }
   .scc-card-sub {
-    font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 500;
-    letter-spacing: 0.02em; opacity: 0.9; margin-top: 0.15rem;
+    font-family: 'Inter', sans-serif; font-size: 0.6rem; font-weight: 500;
+    letter-spacing: 0.02em; opacity: 0.9; margin-top: 0.1rem;
   }
   .scc-card-label {
-    font-family: 'Inter', sans-serif; font-size: 0.7rem; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.08em; line-height: 1.25;
-    opacity: 1; margin: 0.35rem 0 0.25rem;
+    font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.05em; line-height: 1.2;
+    opacity: 1; margin: 0.25rem 0 0.15rem;
   }
   .scc-card-rank {
     font-family: 'Bebas Neue', sans-serif; font-weight: bold;
-    font-size: 3.25rem; line-height: 1; letter-spacing: 0.01em; margin-top: 0.1rem;
+    font-size: 2rem; line-height: 1; letter-spacing: 0.01em; margin-top: auto;
   }
   /* Bebas has a tall cap and no descender here, so the default `super` offset lifts
      the suffix clear off the numeral and into the label above it. Keep it just
      below the cap line instead. */
   .scc-card-rank sup { font-size: 0.42em; position: relative; top: -0.42em; vertical-align: baseline; letter-spacing: 0; }
-  .scc-card-winpct { font-size: 2.5rem; }
+  .scc-card-winpct { font-size: 1.6rem; }
   .scc-card-of {
-    font-family: 'Inter', sans-serif; font-size: 0.68rem; font-weight: 500;
-    letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.85; margin-top: 0.15rem;
+    font-family: 'Inter', sans-serif; font-size: 0.6rem; font-weight: 500;
+    letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.85; margin-top: 0.1rem;
   }
 
-  @media (max-width: 900px) {
-    .scc-columns { gap: 0.7rem; }
-    .scc-card-rank { font-size: 2.75rem; }
-    .scc-card-winpct { font-size: 2.1rem; }
-    .scc-card-value { font-size: 2rem; }
+  /* 3 across per team down to 1100, then 2, then 1. The last step lands well above
+     375px, so the narrowest phones get the same one-column-per-team stack the page
+     already shipped - no separate mobile design. */
+  @media (max-width: 1100px) {
+    .scc-side { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 860px) {
+    .scc-side { grid-template-columns: minmax(0, 1fr); }
+    /* One card per row is wide again, so the type can come back up. */
+    .scc-card { min-height: 0; padding: 0.6rem 0.5rem 0.55rem; }
+    .scc-card-value { font-size: 1.7rem; }
+    .scc-card-value-rec { font-size: 1.3rem; }
+    .scc-card-rank { font-size: 2.3rem; }
+    .scc-card-winpct { font-size: 1.85rem; }
   }
   /* Both columns stay side by side on mobile - the reference does the same, and it
      keeps the two teams directly comparable without scrolling between them. */
   @media (max-width: 700px) {
     .stat-comparison-section { margin-top: 1.75rem; padding-top: 1.25rem; }
     .stat-comparison-sub { margin-bottom: 0.85rem; }
-    .scc-columns { gap: 0.45rem 0.5rem; }
+    .scc-columns { gap: 0 0.5rem; }
+    .scc-side { gap: 0.45rem; }
     .scc-col-head { font-size: 1.15rem; gap: 0.3rem; padding-bottom: 0.45rem; }
     .scc-col-head img { width: 20px; height: 20px; }
-    .scc-card { padding: 0.6rem 0.4rem 0.55rem; border-radius: 10px; }
-    .scc-card-value { font-size: 1.6rem; }
-    .scc-card-value-rec { font-size: 1.25rem; }
-    .scc-card-sub { font-size: 0.62rem; }
-    .scc-card-label { font-size: 0.6rem; letter-spacing: 0.05em; margin: 0.25rem 0 0.15rem; }
-    .scc-card-rank { font-size: 2.3rem; }
-    .scc-card-winpct { font-size: 1.8rem; }
-    .scc-card-of { font-size: 0.6rem; letter-spacing: 0.04em; }
+    .scc-card { padding: 0.55rem 0.35rem 0.5rem; }
+    .scc-card-value { font-size: 1.5rem; }
+    .scc-card-value-rec { font-size: 1.15rem; }
+    .scc-card-sub { font-size: 0.6rem; }
+    .scc-card-label { font-size: 0.6rem; letter-spacing: 0.04em; }
+    .scc-card-rank { font-size: 2.1rem; }
+    .scc-card-winpct { font-size: 1.7rem; }
   }
   @media (max-width: 380px) {
     .scc-col-head { font-size: 1rem; }
-    .scc-card { padding: 0.55rem 0.3rem 0.5rem; }
-    .scc-card-value { font-size: 1.4rem; }
-    .scc-card-label { font-size: 0.62rem; letter-spacing: 0.03em; }
-    .scc-card-rank { font-size: 2rem; }
-    .scc-card-winpct { font-size: 1.55rem; }
-    .scc-card-of { font-size: 0.6rem; }
+    .scc-card { padding: 0.5rem 0.25rem 0.45rem; }
+    .scc-card-value { font-size: 1.35rem; }
+    .scc-card-value-rec { font-size: 1.05rem; }
+    .scc-card-label { font-size: 0.58rem; letter-spacing: 0.02em; }
+    .scc-card-rank { font-size: 1.9rem; }
+    .scc-card-winpct { font-size: 1.5rem; }
+    .scc-card-of { font-size: 0.56rem; }
   }
   @media (max-width: 700px) {
     .sel-team-logo, .sel-team-placeholder { width: 78px; height: 78px; }
@@ -1919,17 +1946,32 @@
     const x = _lum(a), y = _lum(b);
     return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
   }
-  /* Mix `hex` toward white by `amt` (0-1) - the leader card's brighter shade. */
-  function brighten(hex, amt) {
+  /* Mix `hex` toward black by `amt` (0-1). Scaling all three channels by the same
+     factor leaves the hue exactly where it was, which is the point below. */
+  function darken(hex, amt) {
     const c = _rgb(hex);
     if (!c) return hex;
-    return '#' + c.map(v => Math.round(v + (255 - v) * amt).toString(16).padStart(2, '0')).join('');
+    return '#' + c.map(v => Math.round(v * (1 - amt)).toString(16).padStart(2, '0')).join('');
   }
-  /* ONE ink per team, not one per card: pick whichever of the two site inks holds up
-     best across BOTH the base and the brightened shade. Choosing per shade instead
-     would flip some cards to dark text and others to white inside the same column,
-     which reads as a bug. Measured over all 138 TEAM_META colours the worst case is
-     ~3.9:1, and every value clears 3:1 - the card's numerals are WCAG large text. */
+  /* v53: the brand colour as ink on a TRAILING card's white ground. The raw hex is not
+     safe here - 14 of the 138 TEAM_META primaries fail even 3:1 against white and 24
+     fail 4.5:1 (Arizona St. #ffc627 is 1.57:1, Kennesaw St. #fdbb30 1.70, Southern
+     Miss #FFB81C 1.73, Tennessee #ff8200 2.49), so those cards would be unreadable.
+     Step toward black until it clears AA. 4.5:1 rather than 3:1 because the label and
+     the "of 136" are ~10px, which is small text - the large numerals are the easy case.
+     Darkening keeps the hue, so Tennessee still reads orange, just a deeper one. */
+  function inkOnWhite(hex) {
+    if (!_rgb(hex)) return '#0d1117';
+    for (let i = 0; i <= 20; i++) {
+      const c = darken(hex, i * 0.05);
+      if (_contrast(c, '#ffffff') >= 4.5) return c;
+    }
+    return '#0d1117';
+  }
+  /* Ink for a FILLED card: whichever of the two site inks holds up best on the brand
+     colour. Measured over all 138 TEAM_META colours the worst case is ~3.9:1, and
+     every value clears 3:1 - the card's numerals are WCAG large text. Variadic
+     because it scores the worst case across however many shades it is handed. */
   function inkFor() {
     const shades = Array.prototype.slice.call(arguments);
     const score = k => Math.min.apply(null, shades.map(sh => _contrast(sh, k)));
@@ -2696,11 +2738,14 @@
         return { rec: recStr, pct };
       };
       const a = recOf(ps1); const b = recOf(ps2);
-      // v38: ranked rows use WIN % as the winner comparator
+      /* v38: ranked rows use WIN % as the winner comparator - they are the only three
+         rows with no rank ordinal to compare, so v53 leaves this comparator alone and
+         only adds the shared-win case. */
       let winnerCls = '';
       if (a && b && a.pct != null && b.pct != null) {
         if (a.pct > b.pct) winnerCls = ' a-wins';
         else if (b.pct > a.pct) winnerCls = ' b-wins';
+        else winnerCls = ' both-win';
       }
       return {
         title: label,
@@ -2714,21 +2759,24 @@
     rows.push(recRow('Vs Top 10 Ranked', 'top10'));
     rows.push(recRow('Vs Top 5 Ranked', 'top5'));
 
-    // v33: compute numeric value for each side so we can highlight the better one on mobile
-    const numFor = v => {
-      if (v == null) return null;
-      const n = parseFloat(String(v).replace(/,/g, ''));
-      return isFinite(n) ? n : null;
-    };
-    const winnerClass = (av, bv) => {
-      const an = numFor(av), bn = numFor(bv);
-      if (an == null || bn == null) return '';
-      if (an > bn) return ' a-wins';
-      if (bn > an) return ' b-wins';
-      return ''; // tie -> highlight neither
+    /* v53: the leader is decided by the RANK ORDINAL already printed on the card -
+       lower wins - not by the raw value the v33 comparator parsed. The two agree
+       almost everywhere, but tying them together means the fill and the "Nth of 136"
+       a reader is looking at can never contradict each other.
+
+       An exact tie is a shared win and fills BOTH cards. Ties are not rare here:
+       program_stats.json ranks by competition rank, so all 103 teams with no Heisman
+       share one rank. Two mid-majors can therefore tie most of the grid and light up
+       both sides - that is the intended reading, not a bug. */
+    const leadFromRank = (a, b) => {
+      const ar = a && a.r, br = b && b.r;
+      if (!ar || !br) return '';  // no rank on one side -> nothing to compare, fill neither
+      if (ar < br) return ' a-wins';
+      if (br < ar) return ' b-wins';
+      return ' both-win';
     };
     // recRow() already set winnerCls on the Vs Top N rows (win%-based); fill in the rest.
-    rows.forEach(r => { if (!r.isRecord) r.winnerCls = winnerClass(r.a.v, r.b.v); });
+    rows.forEach(r => { if (!r.isRecord) r.winnerCls = leadFromRank(r.a, r.b); });
 
     /* v52: each category label links through to the page that ranks it, so the
        "Nth of 136" on a card and the rank.html table it points at are the same
@@ -2756,24 +2804,23 @@
       return m ? `${m[1]}<sup>${m[2]}</sup>` : o;
     };
 
-    /* One card = one team, one category. The leading team's card keeps the brand
-       colour at full strength; the other is mixed toward white. Saturation and the
-       ring both point at the leader, so the cue survives light primaries (Arizona
-       St. yellow) where "lighter = leader" would read backwards. */
-    const LEAD_WASH = 0.16;
-    const t1Lead = brighten(t1Color, LEAD_WASH), t2Lead = brighten(t2Color, LEAD_WASH);
-    const t1Ink  = inkFor(t1Color, t1Lead),      t2Ink  = inkFor(t2Color, t2Lead);
+    /* One card = one team, one category. The leader's card is filled with the brand
+       colour at full strength; the trailing team's is white with the brand colour as
+       ink, so it still reads as that team's card without claiming the category. */
+    const t1Ink   = inkFor(t1Color),     t2Ink   = inkFor(t2Color);
+    const t1White = inkOnWhite(t1Color), t2White = inkOnWhite(t2Color);
 
     const card = (row, side) => {
       const d       = side === 'a' ? row.a : row.b;
       const base    = side === 'a' ? t1Color : t2Color;
-      const leads   = row.winnerCls === (side === 'a' ? ' a-wins' : ' b-wins');
-      const bg      = leads ? (side === 'a' ? t1Lead : t2Lead) : base;
-      const ink     = side === 'a' ? t1Ink : t2Ink;
+      const leads   = row.winnerCls === ' both-win' ||
+                      row.winnerCls === (side === 'a' ? ' a-wins' : ' b-wins');
+      const ink     = leads ? (side === 'a' ? t1Ink : t2Ink)
+                            : (side === 'a' ? t1White : t2White);
       const slug    = CAT_SLUG[row.title];
       const team    = side === 'a' ? t1 : t2;
-      const cls     = `scc-card${leads ? ' is-leader' : ''}`;
-      const style   = `--tc:${bg};--tink:${ink}`;
+      const cls     = `scc-card${leads ? ' is-leader' : ' is-trailing'}`;
+      const style   = `--tc:${base};--tink:${ink}`;
       const label   = `<div class="scc-card-label">${row.title}</div>`;
 
       let body;
@@ -2815,8 +2862,8 @@
       <div class="chart-title">Program Comparison</div>
       <p class="stat-comparison-sub">All-time program totals with national rank</p>
       <div class="scc-columns">
-        ${head('a')}${head('b')}
-        ${rows.map(r => card(r, 'a') + card(r, 'b')).join('')}
+        <div class="scc-side">${head('a')}${rows.map(r => card(r, 'a')).join('')}</div>
+        <div class="scc-side">${head('b')}${rows.map(r => card(r, 'b')).join('')}</div>
       </div>
       <p class="stat-comparison-footnote">Vs Ranked Opponents: AP poll era records, since 1936. Computed from CFBD games + rankings.</p>
     </div>`;
