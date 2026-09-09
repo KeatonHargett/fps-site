@@ -205,13 +205,44 @@
     body, main { overflow-x: hidden; }
   }
 
-  .hero { text-align: center; padding: 2rem 0 1.5rem; }
+  /* === v53 home banner - start ===
+     Ported from rankings.html:213-239 (the ALL-TIME RANKINGS banner), which is the
+     only diagonal-cut hero in the repo. There is no shared stylesheet, so this is a
+     copy, not a class reuse. Same 135deg navy gradient, same twin orange radial
+     wash, same 60px clip-path wedge filled with the body's own #fafafa.
+     Like the reference, this band lives INSIDE <main> (max-width 1200 / padding
+     2rem 1.5rem), so it is a contained ~1152px band with a light gutter, NOT a
+     full-bleed. Do not "fix" that with negative margins - @media (max-width:700px)
+     puts overflow-x:hidden on body+main and would clip the bleed anyway. */
+  .hero {
+    background: linear-gradient(135deg, #001a4a 0%, var(--blue) 55%, #00245f 100%);
+    position: relative; overflow: hidden;
+    padding: 3.5rem 1.5rem 13rem;   /* bottom padding is the .fm-section counterweight */
+    text-align: center;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image: radial-gradient(circle at 20% 30%, rgba(254,92,0,0.18) 0%, transparent 45%),
+                      radial-gradient(circle at 85% 70%, rgba(254,92,0,0.12) 0%, transparent 40%);
+  }
+  .hero::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 60px;
+    background: #fafafa;
+    clip-path: polygon(0 100%, 100% 100%, 100% 0, 0 65%);
+  }
+  /* Lifts the logo/h1/p over ::before. Stands in for the reference's .rk-hero-inner
+     wrapper so no markup is added around the LCP image. */
+  .hero > * { position: relative; z-index: 2; }
   /* Brand mark above the tagline. logo.png is 480x135, the only brand asset on
      disk, so the max is capped under that to stay crisp on 2x displays. The
      width/height attrs reserve space; height:auto stops them stretching it. */
   .hero-logo { display: block; margin: 0 auto 1.25rem; width: clamp(200px, 42vw, 280px); height: auto; }
-  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; color: var(--dark); line-height: 1; }
-  .hero p { color: var(--gray); font-size: 1.1rem; margin-top: 0.5rem; }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; color: #fff; line-height: 1; }
+  /* nowrap keeps the two-colour split reading as two phrases: without it 375px
+     breaks it as "EVERY RIVALRY. EVERY / ERA.", splitting the orange half. */
+  .hero h1 .accent { color: var(--orange); white-space: nowrap; }
+  .hero p { color: #b9c5dd; font-size: 1.1rem; margin-top: 0.5rem; }
+  /* === v53 home banner - end === */
   .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; text-align: center; margin: 3rem 0 1.5rem; }
   .section-title .accent { color: var(--orange); }
   .rivalry-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 1.5rem; }
@@ -220,9 +251,27 @@
      Segments use .fm-seg rather than .h2h-bar-segment on purpose: index.html runs a
      global querySelectorAll('.h2h-bar-segment') animation sweep on every compare
      re-render, which would otherwise drag all six cards into it. */
+  /* === v53 featured overlap - start ===
+     Same mechanism as the reference podium (rankings.html:242-246): negative top
+     margin + position:relative + z-index, counterweighted by .hero's big
+     padding-bottom. NOT transform, NOT top.
+     margin-top:0 on the title is load-bearing: .section-title ships margin:3rem 0
+     1.5rem, and left alone that 48px collapses through this wrapper and adjoins
+     the negative margin (48 + -176 = -128px), quietly dropping the whole group
+     48px from wherever you computed it. Killing it puts the entire offset here.
+     Every recolour is scoped to .fm-section so the BLUE BLOOD title, which shares
+     .section-title, is untouched. */
+  .fm-section { position: relative; z-index: 5; margin-top: -10rem; }
+  .fm-section .section-title { color: #fff; margin-top: 0; }
+  /* Wider than the base 1.5rem: the sub has to stay clear of the 60px wedge while
+     the cards start well inside it, and this gap is the only slack between them. */
+  .fm-section .fm-sub { color: #cfd9ea; margin-bottom: 2.25rem; }
   .fm-sub { text-align: center; color: var(--gray); font-size: 0.9rem; margin: -1rem 0 1.5rem; }
   .fm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-  .fm-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.25rem 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
+  /* position:relative unconditionally - .fm-card:hover applies translateY(-3px),
+     which creates a stacking context on hover only, so without this a hovered card
+     jumps above the banner while its neighbours stay under it. */
+  .fm-card { position: relative; background: white; border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.25rem 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
   .fm-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); border-color: var(--orange); }
   .fm-head { display: flex; justify-content: space-between; align-items: baseline; gap: 0.75rem; margin-bottom: 0.9rem; }
   .fm-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; line-height: 1.1; letter-spacing: 0.02em; min-width: 0; }
@@ -270,6 +319,14 @@
   .rc-bar-seg.rc-bar-tie { background: var(--gray); }
   .rc-ties { text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; letter-spacing: 0.08em; color: var(--gray); margin-top: 0.4rem; }
   @media (max-width: 640px) { .hero h1 { font-size: 2.5rem; } .rivalry-grid { grid-template-columns: 1fr; } }
+  /* v53: soften the overlap on mobile, the way rankings.html:400-405 does. The
+     clip-path itself gets NO override - the reference keeps one diagonal at every
+     width, and at 375px the polygon is a ~6deg slope that resolves cleanly. */
+  @media (max-width: 640px) {
+    .hero { padding: 2.5rem 1.25rem 13rem; }
+    .fm-section { margin-top: -11.5rem; }
+  }
+  /* === v53 featured overlap - end === */
 
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
@@ -365,19 +422,26 @@
 </nav>
 <main>
   <div class="hero">
-    <!-- logo-hero.png, not logo.png: the nav lockup's wordmark is pure white for the
-         blue navbar and is invisible on this light ground. This variant recolours ONLY
-         the wordmark to --blue and leaves the chip mark untouched.
+    <!-- logo.png, not logo-hero.png: the hero is a blue band as of v53, and this is
+         the lockup built for blue - its wordmark is pure white, the same asset the
+         navbar and the rankings.html banner use. logo-hero.png is the inverse
+         variant, with the wordmark recoloured to --blue for a light ground; on this
+         band it would be invisible. Swap them back together if the band ever goes.
          alt="" on purpose: the nav brand link already carries
          aria-label="Front Porch Sports home", so a populated alt would announce the
          brand twice. Not lazy - this sits above the h1 and is an LCP candidate. -->
-    <img class="hero-logo" src="logo-hero.png" alt="" width="480" height="135" fetchpriority="high">
-    <h1>EVERY RIVALRY. EVERY ERA.</h1>
+    <img class="hero-logo" src="logo.png" alt="" width="480" height="135" fetchpriority="high">
+    <h1>EVERY RIVALRY. <span class="accent">EVERY ERA.</span></h1>
     <p>Head-to-head college football records across <span id="header-game-count">54,000+</span> games &middot; 1887&ndash;<span id="header-end-year">2025</span></p>
   </div>
-  <div class="section-title">FEATURED <span class="accent">MATCHUPS</span></div>
-  <p class="fm-sub" id="fm-sub">This week's biggest games, ranked by poll position, rivalry and series history.</p>
-  <div class="fm-grid" id="fm-grid"></div>
+  <!-- v53: wrapper exists only to pull this group up over the banner's diagonal cut.
+       The three children are unchanged - renderFeatured() reaches #fm-sub and
+       #fm-grid by id, so the wrapper is invisible to it. -->
+  <section class="fm-section">
+    <div class="section-title">FEATURED <span class="accent">MATCHUPS</span></div>
+    <p class="fm-sub" id="fm-sub">This week's biggest games, ranked by poll position, rivalry and series history.</p>
+    <div class="fm-grid" id="fm-grid"></div>
+  </section>
 
   <div class="section-title">BLUE BLOOD <span class="accent">RIVALRIES</span></div>
   <div class="rivalry-grid" id="rivalry-grid"></div>
