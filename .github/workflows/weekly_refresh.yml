@@ -122,6 +122,25 @@ jobs:
         run: |
           python scripts/compute_featured.py
 
+      # Slim derived data for the pages (data/derived/), regenerated from the refreshed
+      # front_porch_games.json, then proven identical to it. If either step fails the job
+      # stops HERE: nothing is committed or deployed, the previous derived files stay in
+      # the repo, and the run is red. The parity check also runs on push-to-main deploys,
+      # so a data change that skipped the rebuild can never reach production.
+      - name: Build derived data
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          python scripts/build_derived_data.py
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Parity check (derived data vs front_porch_games.json)
+        run: |
+          node scripts/parity_check.js
+
       - name: Commit refreshed data
         if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.event.inputs.dry_run != 'true'
         run: |
@@ -130,23 +149,18 @@ jobs:
           if [ -n "$(git status --porcelain fbs_teams.json)"        ]; then CHANGED="$CHANGED fbs_teams.json"; fi
           if [ -n "$(git status --porcelain schedules_data.json)"   ]; then CHANGED="$CHANGED schedules_data.json"; fi
           if [ -n "$(git status --porcelain featured_matchups.json)" ]; then CHANGED="$CHANGED featured_matchups.json"; fi
-          for f in game_sites.json game_venues.json coaches_data.json; do
+          for f in game_sites.json game_venues.json coaches_data.json data/derived; do
             if [ -n "$(git status --porcelain $f)" ]; then CHANGED="$CHANGED $f"; fi
           done
           if [ -n "$CHANGED" ]; then
             git config user.name  "fps-refresh-bot"
             git config user.email "fps-refresh-bot@users.noreply.github.com"
-            git add $CHANGED
+            git add -A $CHANGED
             git commit -m "chore(data): weekly ESPN refresh $(date -u +'%Y-%m-%dT%H:%MZ')"
             git push
           else
             echo "No data changes to commit."
           fi
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
 
       - name: Deploy to Netlify
         # Production only from main, and never on a manual dry run.

@@ -97,6 +97,35 @@
   [headers.values]
     Cache-Control = "public, max-age=3600, must-revalidate"
 
+# Derived data (scripts/build_derived_data.py). Every file except the manifest has a
+# content hash in its name, so it can be cached for a year: new data means a new name.
+# The manifest points at the current names, so it stays short-lived. The patterns
+# below never overlap the manifest rule. Netlify serves JSON brotli-compressed.
+[[headers]]
+  for = "/data/derived/manifest.json"
+  [headers.values]
+    Cache-Control = "public, max-age=300"
+
+[[headers]]
+  for = "/data/derived/teams/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/data/derived/teams_index.*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/data/derived/league.*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/data/derived/home.*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 # Brand images and icons. Filenames are not content-hashed, so this is a week
 # rather than a year - long enough to help repeat visits, short enough that a
 # logo swap still propagates without a rename.
