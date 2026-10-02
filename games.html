@@ -418,6 +418,8 @@
   </div>
 </footer>
 
+<!-- Shared filter pipeline + URL contract (same file compare.html uses). -->
+<script src="js/matchup-filter.js"></script>
 <script>
   const TEAM_META = {
   'Air Force': {id:'2005',color:'#003594',alt:'#ffffff',abbr:'AF'},
@@ -586,8 +588,18 @@
       set('meta[property="og:url"]', 'content', B + o.path);
     }
   }
-  const TEAM1 = params.get('team1');
-  const TEAM2 = params.get('team2');
+  // Resolved to the dataset's spelling after load (?team1=Oklahoma State / osu -> "Oklahoma St.").
+  let VENUE_OF = () => null;   // game -> stadium name, from game_venues.json
+  let TEAM1 = params.get('team1');
+  let TEAM2 = params.get('team2');
+  // Location / "last N" use the same pipeline and URL contract as compare.html
+  // (js/matchup-filter.js), so this list is exactly the games behind its numbers.
+  const MF = FPSMatchupFilter;
+  const FILTERS = MF.readParams(params);
+  const SITE = FILTERS.site;
+  const COACH1 = FILTERS.coach1;
+  const COACH2 = FILTERS.coach2;
+  const LAST_N = FILTERS.lastN;
   const START = parseInt(params.get('start')) || 1869;
   const endParam = parseInt(params.get('end'));
   // END is finalized after data load if not in URL params; placeholder for now.
@@ -753,15 +765,43 @@
   if (!TEAM1 || !TEAM2) {
     document.getElementById('content').innerHTML = '<div class="loading">No matchup specified.</div>';
   } else {
-    document.getElementById('back-link').href =
-      `compare.html?team1=${encodeURIComponent(TEAM1)}&team2=${encodeURIComponent(TEAM2)}`;
-    fetch('front_porch_games.json')
-      .then(r => r.json())
-      .then(data => {
+    // Back to Compare reopens the same filtered view.
+    const back = new URLSearchParams(location.search);
+    back.delete('last');
+    if (LAST_N === 5 || LAST_N === 10) { back.delete('start'); back.delete('end'); back.set('preset', 'last' + LAST_N); }
+    document.getElementById('back-link').href = `compare.html?${back.toString()}`;
+    // Location / coach data only when this link actually filters on them. Venue names
+    // (game_venues.json) are this page's alone - compare.html never loads them.
+    const needCoaches = COACH1 !== 'all' || COACH2 !== 'all';
+    Promise.all([
+      fetch('front_porch_games.json').then(r => r.json()),
+      SITE !== 'all' ? MF.loadSites() : null,
+      needCoaches ? MF.loadCoaches() : null,
+      MF.loadVenues()
+    ])
+      .then(([data, sitesDoc, coachesDoc, venuesDoc]) => {
+        if (sitesDoc) MF.annotateSites(data, sitesDoc);
+        if (coachesDoc) MF.annotateCoaches(data, coachesDoc);
+        VENUE_OF = MF.venueLookup(venuesDoc);
         if (END === null) {
           let maxSeason = 0;
           for (const g of data) { if ((g.season|0) > maxSeason) maxSeason = g.season|0; }
           END = maxSeason || new Date().getFullYear();
+        }
+        // Same alias rules as compare.html (js/matchup-filter.js): site abbreviations
+        // first (OSU = Oklahoma St., OHST = Ohio St.), then every TEAM_META abbreviation.
+        const aliases = { 'OSU': 'Oklahoma St.', 'OHST': 'Ohio St.' };
+        for (const [team, m] of Object.entries(TEAM_META)) if (m && m.abbr && !(m.abbr in aliases)) aliases[m.abbr] = team;
+        const resolve = MF.teamResolver([...new Set(data.flatMap(g => [g.team_a, g.team_b]))], aliases);
+        const r1 = resolve(TEAM1) || TEAM1, r2 = resolve(TEAM2) || TEAM2;
+        if (r1 !== TEAM1 || r2 !== TEAM2) {
+          TEAM1 = r1; TEAM2 = r2;
+          const canon = new URLSearchParams(location.search);
+          canon.set('team1', TEAM1); canon.set('team2', TEAM2);
+          history.replaceState(null, '', `${location.pathname}?${canon.toString()}`);
+          const back = new URLSearchParams(document.getElementById('back-link').search);
+          back.set('team1', TEAM1); back.set('team2', TEAM2);
+          document.getElementById('back-link').href = `compare.html?${back.toString()}`;
         }
         renderGames(data);
       })
@@ -779,14 +819,20 @@
         path: `/games?team1=${encodeURIComponent(TEAM1)}&team2=${encodeURIComponent(TEAM2)}`
       });
     }
-    let games = GAMES.filter(g =>
-      ((g.team_a===TEAM1 && g.team_b===TEAM2) || (g.team_a===TEAM2 && g.team_b===TEAM1)) &&
-      g.season >= START && g.season <= END);
+    const pair = GAMES.filter(g =>
+      (g.team_a===TEAM1 && g.team_b===TEAM2) || (g.team_a===TEAM2 && g.team_b===TEAM1));
+    const f = { team1: TEAM1, team2: TEAM2, startYear: START, endYear: END, site: SITE,
+                coach1: COACH1, coach2: COACH2, lastN: LAST_N };
+    const res = MF.filterGames(pair, f);
+    let games = res.games;
     games.sort((a,b) => b.game_date.localeCompare(a.game_date));
+    const viewLabel = MF.summary(f, { team1: TEAM1, team2: TEAM2, abbr1: getTeamAbbr(TEAM1), abbr2: getTeamAbbr(TEAM2) });
+    const note = [MF.missingNote(res.missingSite, 'site'), MF.missingNote(res.missingCoach, 'coach')]
+      .filter(Boolean).join(' \u00b7 ');
 
     if (games.length === 0) {
       document.getElementById('content').innerHTML =
-        `<div class="loading">${TEAM1} and ${TEAM2} have no games between ${START} and ${END}.</div>`;
+        `<div class="loading">${TEAM1} and ${TEAM2} have no games for ${viewLabel}.</div>`;
       return;
     }
 
@@ -806,7 +852,9 @@
       const wCell = g.is_tie
         ? '<span class="tie-cell">Tie</span>'
         : `<span class="winner-cell">${teamLogo(g.winner, '', '')}<span class="wname">${g.winner}</span></span>`;
-      const loc = g.city ? `${g.city}${g.state?', '+g.state:''}` : '\u2014';
+      const city = g.city ? `${g.city}${g.state?', '+g.state:''}` : '';
+      const venue = VENUE_OF(g);
+      const loc = venue && city ? `${venue} &middot; ${city}` : (venue || city || '\u2014');
       // v35: winner color indicator on the left
       const tblT1Color = TEAM_META[TEAM1]?.color || '#003594';
       const tblT2Color = TEAM_META[TEAM2]?.color || '#003594';
@@ -855,7 +903,8 @@
           <span class="vs">VS</span>
           ${teamLogo(TEAM2)}
         </div>
-        <div class="sub">${games.length} meetings &middot; ${START}\u2013${END}</div>
+        <div class="sub">${games.length} meetings &middot; ${viewLabel}</div>
+        ${note ? `<div class="sub sub-note">${note}</div>` : ''}
       </div>
       <div class="summary-bar"><strong>${recStr}</strong></div>
       <table class="games-table">

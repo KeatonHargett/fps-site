@@ -204,11 +204,15 @@
   .sb-vs.sb-socials {
     padding: 0 0.2rem 0.4rem;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
+    justify-content: flex-end;
+    gap: 0.35rem;
     color: var(--gray);
   }
+  /* FPS logo centred above the share icons, so every screenshot carries the brand. */
+  .sb-vs.sb-socials .sb-logo { display: block; height: 32px; width: auto; max-width: none; flex: none; pointer-events: none; user-select: none; }
+  .sb-vs.sb-socials .sb-soc-row { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
   .sb-vs.sb-socials .sb-soc {
     width: 28px;
     height: 28px;
@@ -223,7 +227,9 @@
   }
   .sb-vs.sb-socials .sb-soc:hover { background: var(--orange); color: white; }
   @media (max-width: 700px) {
-    .sb-vs.sb-socials { gap: 0.35rem; padding: 0 0.1rem 0.4rem; }
+    .sb-vs.sb-socials { gap: 0.3rem; padding: 0 0.1rem 0.4rem; }
+    .sb-vs.sb-socials .sb-logo { height: 26px; }
+    .sb-vs.sb-socials .sb-soc-row { gap: 0.35rem; }
     .sb-vs.sb-socials .sb-soc { width: 24px; height: 24px; }
     .sb-vs.sb-socials .sb-soc svg { width: 14px; height: 14px; }
   }
@@ -272,6 +278,7 @@
 
   /* v45: neutral line shown when two teams have no prior meetings */
   .no-h2h-line { text-align: center; padding: 2rem 1rem; color: var(--gray); font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.04em; }
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -299,11 +306,49 @@
   .dd-option img { width: 26px; height: 26px; flex-shrink: 0; }
   .dd-empty { padding: 1rem; text-align: center; color: var(--gray); font-size: 0.9rem; }
 
-  /* v52: the range control now sits directly under the Record (Winning %) chart, so
-     it reads as that chart's control rather than as a separate section - no top rule,
-     tighter lead-in. Only presentation changed; js/range-filter.js is untouched and
-     still binds to the same six ids. */
-  .year-range-section { padding-top: 0.25rem; margin-bottom: 1.25rem; }
+  /* The filter block sits directly under the stacked win/loss/tie bar so the numbers it
+     drives stay in view: ~16px above it, and it closes with a rule (on .controls-row)
+     and ~20px before the streak line. js/range-filter.js still binds to the same ids. */
+  #top-results > .hero-bar:last-child { margin-bottom: 1rem; }
+  .year-range-section { padding-top: 0; margin-bottom: 1.25rem; }
+  .results-top-after:not(:empty) { padding-top: 1.25rem; }
+  /* Location filter: segmented buttons from Team 1's point of view. Active = orange
+     fill, inactive = outlined blue. One row at every width; padding shrinks first. */
+  .site-filter-wrap { margin-bottom: 1rem; }
+  .filter-block { margin: 0; }
+  .site-filter { display: flex; gap: 0.4rem; }
+  .site-btn {
+    flex: 1 1 auto; min-width: 0; white-space: nowrap; cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; letter-spacing: 0.05em; line-height: 1;
+    padding: 0.55rem 0.75rem; border-radius: 8px;
+    border: 2px solid var(--blue); background: white; color: var(--blue);
+    transition: background 0.12s, color 0.12s, border-color 0.12s;
+  }
+  .site-btn:hover { background: rgba(0,53,148,0.06); }
+  .site-btn[aria-pressed="true"] { background: var(--orange); border-color: var(--orange); color: white; }
+  .site-btn:disabled, .coach-select:disabled { opacity: 0.45; cursor: progress; }
+  .site-btn:focus-visible { outline: 3px solid rgba(0,53,148,0.45); outline-offset: 2px; }
+  .site-note { margin-top: 0.4rem; text-align: center; font-size: 0.75rem; color: var(--gray); }
+  .filter-summary {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 0.08em;
+    color: var(--gray); margin-top: 0.2rem;
+  }
+  .reset-filters {
+    background: none; border: none; padding: 0.25rem 0.1rem; margin-left: 1rem; cursor: pointer;
+    font-family: 'Inter', sans-serif; font-size: 0.8rem; color: var(--blue);
+    text-decoration: underline; text-underline-offset: 2px;
+  }
+  .reset-filters:hover { color: var(--orange); }
+  .empty-state .reset-filters { margin: 0.5rem 0 0; font-size: 0.9rem; }
+  @media (max-width: 700px) {
+    .site-filter { gap: 0.3rem; }
+    .site-btn { font-size: 1rem; padding: 0.5rem 0.35rem; letter-spacing: 0.03em; }
+  }
+  @media (max-width: 400px) {
+    .site-filter { gap: 0.25rem; }
+    .site-btn { font-size: 0.95rem; padding: 0.5rem 0.15rem; letter-spacing: 0.02em; border-width: 1.5px; }
+    .filter-summary { font-size: 0.95rem; margin-top: 0.1rem; }
+  }
   .year-range-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem; }
   .year-range-title { font-size: 0.72rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; }
   .year-range-display { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
@@ -348,7 +393,7 @@
   .chip:hover { background: #e5e7eb; }
   .chip.active { background: var(--blue); color: white; border-color: var(--blue); }
   .results { padding-top: 1rem; }
-  .h2h-summary { text-align: center; margin-bottom: 2rem; }
+  .h2h-summary { text-align: center; margin-bottom: 1.5rem; }
   .h2h-summary .total { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; line-height: 1; }
   .h2h-summary .total-label { font-size: 0.9rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; }
   .record-line { font-family: 'Bebas Neue', sans-serif; font-size: 1.75rem; margin-top: 0.5rem; }
@@ -388,6 +433,22 @@
     border-radius: 999px; background: var(--orange); flex-shrink: 0;
   }
   .chart-canvas-wrap { position: relative; height: 300px; width: 100%; }
+  /* H2H margin chart: desktop keeps the canvas's own aspect ratio. On a phone that ratio
+     left ~90px for legend + axes + bars, so the plot collapsed; give it a real height. */
+  .margin-canvas-wrap { position: relative; width: 100%; }
+  /* Site watermark, bottom-right inside both charts. Each chart reserves an empty
+     WATERMARK_STRIP-px band below its legend and axis labels (Chart.js layout
+     padding), and the mark sits only in that band, so it can never touch a bar,
+     line or label. In the scrolling Record chart it sits on the fixed outer box,
+     above the 4px scrollbar. */
+  .chart-watermark {
+    position: absolute; right: 2px; bottom: 2px; z-index: 3;
+    font-family: 'Bebas Neue', sans-serif; font-size: 10px; line-height: 10px; letter-spacing: 0.06em;
+    color: rgba(0, 53, 148, 0.35); pointer-events: none; user-select: none; white-space: nowrap;
+  }
+  .chart-scroll-outer .chart-watermark { bottom: 3px; }
+  .chart-scroll-outer.is-scrolling .chart-watermark { bottom: 7px; }
+  @media (max-width: 700px) { .margin-canvas-wrap { height: 220px; } }
   /* v52 mobile legibility: 140 seasons squeezed into ~330px is an unreadable tangle.
      Rather than shrink the desktop chart, give each season a floor of horizontal
      space and let the plot scroll. Every data point survives and tap-to-reveal keeps
@@ -478,7 +539,7 @@
     .dd-toggle img { width: 24px; height: 24px; }
     .selector label { font-size: 0.72rem; }
     .compare-card h1, .compare-card h2 { font-size: 2rem; }
-    .h2h-summary .total { font-size: 3rem; }
+    .h2h-summary .total { font-size: 2.6rem; }
     .stats-grid { grid-template-columns: 1fr 1fr; }
     .games-table { font-size: 0.8rem; }
   }
@@ -781,22 +842,76 @@
     .hb-seg { font-size: 1rem; }
   }
 
-  /* v29 Tweak 1C: Current Win Streak block */
-  .streak-block { text-align: center; margin: 1rem 0 1.5rem; }
-  .streak-block .streak-label { font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; letter-spacing: 0.12em; color: var(--gray); }
-  .streak-block .streak-value { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; line-height: 1; margin-top: 0.25rem; letter-spacing: 0.03em; }
-
-  /* v29 Tweak 1E: Full Games button + Time Period dropdown side-by-side */
-  .controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: center; padding-top: 1rem; margin-bottom: 0; border-top: 1px solid var(--border); }
-  .controls-row .games-btn-cell { display: flex; justify-content: flex-start; }
-  .controls-row .time-period-cell { display: flex; justify-content: flex-end; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
-  .controls-row .time-period-cell label { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; color: var(--gray); letter-spacing: 0.07em; }
-  .controls-row .time-period-cell select { min-width: 200px; padding: 0.55rem 2.25rem 0.55rem 0.8rem; }
+  /* Current streak: one compact line in the summary, in the streak team's colour */
+  .streak-line { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; line-height: 1.1; letter-spacing: 0.05em; margin-top: 0.3rem; }
+  .streak-line .sl-abbr { display: none; }
   @media (max-width: 700px) {
-    /* v33: stack — Time Period dropdown on top, Full Games List button beneath */
-    .controls-row { grid-template-columns: 1fr; }
-    .controls-row .time-period-cell { order: 1; justify-content: center; }
-    .controls-row .games-btn-cell { order: 2; justify-content: center; }
+    .streak-line { white-space: nowrap; }
+    .streak-line .sl-full { display: none; }
+    .streak-line .sl-abbr { display: inline; }
+  }
+
+  /* Controls row: Time Period + both coach dropdowns on one row, Full Games List
+     (and Reset) on the row beneath. Labels sit above their selects. */
+  .controls-row {
+    display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.9rem 1rem; align-items: end; padding: 1rem 0 1.25rem; margin-bottom: 0;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  }
+  .controls-row .time-period-cell, .controls-row .coach-cell { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+  .controls-row .coach-cell[hidden], .coach-note[hidden] { display: none; }
+  .controls-row .time-period-cell label, .controls-row .coach-cell label {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--gray); letter-spacing: 0.07em;
+  }
+  .controls-row select.preset-select { width: 100%; min-width: 0; padding: 0.55rem 2.25rem 0.55rem 0.8rem; text-overflow: ellipsis; }
+  .controls-row .coach-note { grid-column: 1 / -1; font-size: 0.75rem; color: var(--gray); text-align: center; margin-top: -0.3rem; }
+  .controls-row .games-btn-cell { grid-column: 1 / -1; display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap; }
+  .more-filters { display: none; }
+  @media (max-width: 700px) {
+    /* Phones: one grid for the whole block, so Location and the coaches can share the
+       "More filters" panel. The controls row dissolves into it (display: contents);
+       its rules move onto the first and last cells. */
+    .filter-block { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 0.6rem; }
+    .filter-block > *, .controls-row > * { grid-column: 1 / -1; }
+    .controls-row { display: contents; }
+    /* Time Period and the More filters toggle share one row; the rule that opened
+       the controls row now closes the slider section instead. */
+    .year-range-section { order: 1; padding-bottom: 0.65rem; margin-bottom: 0.65rem; border-bottom: 1px solid var(--border); }
+    /* Tighter vertical rhythm inside the block on phones: readout, slider and labels. */
+    .year-range-header { margin-bottom: 0.2rem; }
+    .year-range-display { font-size: 1.35rem; line-height: 1.1; }
+    .range-wrap { height: 30px; margin: 0 0 0.3rem; }
+    .controls-row .time-period-cell { order: 2; grid-column: 1 / 2; gap: 0.2rem; }
+    .more-filters { order: 3; grid-column: 2 / 3; align-self: end; }
+    .filter-block:has(> .more-filters[hidden]) .time-period-cell { grid-column: 1 / -1; }
+    .site-filter-wrap { order: 4; margin: 0.75rem 0 0; }
+    .controls-row .coach-cell { order: 5; grid-column: auto; margin-top: 0.75rem; }
+    .controls-row .coach-note { order: 6; margin-top: 0.4rem; }
+    .controls-row .games-btn-cell { order: 7; justify-content: center; padding: 0.75rem 0 0.85rem; border-bottom: 1px solid var(--border); }
+    .more-filters {
+      position: relative; display: flex; align-items: center; justify-content: center; gap: 0.25rem; width: 100%;
+      margin-top: 0; padding: 0 0.35rem; height: 44px; cursor: pointer; white-space: nowrap;
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 0.04em;
+      color: var(--blue); background: white; border: 2px solid var(--blue); border-radius: 8px;
+    }
+    .more-filters .mf-caret { width: 15px; height: 15px; flex: none; transition: transform 0.15s; }
+    .more-filters[aria-expanded="true"] .mf-caret { transform: rotate(180deg); }
+    /* Count of active hidden filters, as a corner bubble so it never costs the label width. */
+    .more-filters .mf-badge {
+      position: absolute; top: -9px; right: -7px;
+      display: inline-flex; align-items: center; justify-content: center; min-width: 1.3rem; height: 1.3rem;
+      padding: 0 0.3rem; border-radius: 999px; background: var(--orange); color: white; font-size: 0.9rem;
+      border: 2px solid white;
+    }
+    .more-filters .mf-badge[hidden] { display: none; }
+    .more-filters:focus-visible { outline: 3px solid rgba(0,53,148,0.45); outline-offset: 2px; }
+    .controls-row .coach-cell select.preset-select {
+      font-size: 0.95rem; letter-spacing: 0.02em; padding: 0.55rem 1.5rem 0.55rem 0.55rem;
+      background-position: right 0.35rem center; background-size: 16px;
+    }
+    .filter-block:not(.is-open) > .site-filter-wrap,
+    .filter-block:not(.is-open) .coach-cell,
+    .filter-block:not(.is-open) .coach-note { display: none !important; }
   }
 
   /* Suggested matchups */
@@ -817,6 +932,24 @@
   .sc-record .sc-sub { display: block; font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 500; color: var(--gray); letter-spacing: 0; text-transform: none; margin-top: 0.15rem; }
   @media (max-width: 640px) { .suggested-grid { grid-template-columns: 1fr; } }
 
+  /* Mobile header: tightened so meetings, record, streak and the series bar fit above
+     the fold on a 375px phone. Kept last so it wins over the earlier mobile rules. */
+  @media (max-width: 700px) {
+    main { padding-top: 1rem; }
+    .compare-card { padding-top: 1.1rem; }
+    .compare-card h1 { margin-bottom: 0.9rem; }
+    .selector-bar { margin-bottom: 0.9rem; }
+    .h2h-summary { margin-bottom: 0.6rem; }
+    .h2h-summary .total-label { font-size: 0.78rem; }
+    .record-line { font-size: 1.45rem; margin-top: 0.2rem; }
+    .streak-line { font-size: 1.05rem; margin-top: 0.15rem; }
+    .rivalry-badge { margin-bottom: 0.4rem; }
+    .rivalry-badge .rb-logo { height: 60px; margin-bottom: 0.25rem; }
+    .rivalry-badge .rb-pill { font-size: 1.15rem; padding: 0.25rem 1rem; }
+    .rivalry-badge .rb-trophy { margin-top: 0.2rem; font-size: 0.7rem; }
+    .hero-bar { margin: 0.6rem 0 1rem; }
+    .hero-bar-row { row-gap: 0.6rem; }
+  }
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
      crossorigin="anonymous"></script><script type="application/ld+json">
@@ -908,9 +1041,13 @@
         <img id="dd1-logo" alt="" style="display:none"><span id="dd1-label" style="display:none"></span>
       </div>
       <div class="sb-vs sb-socials">
-        <a href="https://x.com/FrontPorchU" target="_blank" rel="noopener" aria-label="X" class="sb-soc"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-        <a href="https://www.instagram.com/frontporchsports/" target="_blank" rel="noopener" aria-label="Instagram" class="sb-soc"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zm0 1.62c-3.15 0-3.5.01-4.74.07-2.5.11-3.6 1.23-3.71 3.71-.06 1.23-.07 1.6-.07 4.74s.01 3.5.07 4.74c.11 2.48 1.21 3.6 3.71 3.71 1.23.06 1.6.07 4.74.07s3.5-.01 4.74-.07c2.5-.11 3.6-1.23 3.71-3.71.06-1.23.07-1.6.07-4.74s-.01-3.5-.07-4.74c-.11-2.48-1.21-3.6-3.71-3.71-1.23-.06-1.6-.07-4.74-.07zm0 4.32a3.9 3.9 0 110 7.8 3.9 3.9 0 010-7.8zm0 6.43a2.53 2.53 0 100-5.06 2.53 2.53 0 000 5.06zm4.96-6.6a.91.91 0 11-1.82 0 .91.91 0 011.82 0z"/></svg></a>
-        <a href="https://www.facebook.com/p/Front-Porch-Sports-61575902150695/" target="_blank" rel="noopener" aria-label="Facebook" class="sb-soc"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.03 4.39 11.03 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.49 0-1.95.93-1.95 1.89v2.26h3.32l-.53 3.49h-2.79v8.44C19.61 23.1 24 18.1 24 12.07z"/></svg></a>
+        <!-- Brand mark for screenshots: decorative position, not a link, not focusable. -->
+        <img class="sb-logo" src="logo-hero.png" alt="Front Porch Sports" width="480" height="135" decoding="async">
+        <div class="sb-soc-row">
+          <a href="https://x.com/FrontPorchU" target="_blank" rel="noopener" aria-label="X" class="sb-soc"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a href="https://www.instagram.com/frontporchsports/" target="_blank" rel="noopener" aria-label="Instagram" class="sb-soc"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zm0 1.62c-3.15 0-3.5.01-4.74.07-2.5.11-3.6 1.23-3.71 3.71-.06 1.23-.07 1.6-.07 4.74s.01 3.5.07 4.74c.11 2.48 1.21 3.6 3.71 3.71 1.23.06 1.6.07 4.74.07s3.5-.01 4.74-.07c2.5-.11 3.6-1.23 3.71-3.71.06-1.23.07-1.6.07-4.74s-.01-3.5-.07-4.74c-.11-2.48-1.21-3.6-3.71-3.71-1.23-.06-1.6-.07-4.74-.07zm0 4.32a3.9 3.9 0 110 7.8 3.9 3.9 0 010-7.8zm0 6.43a2.53 2.53 0 100-5.06 2.53 2.53 0 000 5.06zm4.96-6.6a.91.91 0 11-1.82 0 .91.91 0 011.82 0z"/></svg></a>
+          <a href="https://www.facebook.com/p/Front-Porch-Sports-61575902150695/" target="_blank" rel="noopener" aria-label="Facebook" class="sb-soc"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07c0 6.03 4.39 11.03 10.13 11.93v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.69.24 2.69.24v2.97h-1.52c-1.49 0-1.95.93-1.95 1.89v2.26h3.32l-.53 3.49h-2.79v8.44C19.61 23.1 24 18.1 24 12.07z"/></svg></a>
+        </div>
       </div>
       <div class="sb-side right dd" id="dd2">
         <button class="sb-btn dd-toggle" id="dd2-toggle" type="button">
@@ -926,15 +1063,28 @@
         <img id="dd2-logo" alt="" style="display:none"><span id="dd2-label" style="display:none"></span>
       </div>
     </div>
-    <!-- Tweak 3: H2H matchup result renders here, directly under the dropdowns. -->
+    <!-- Tweak 3: H2H matchup result renders here, directly under the dropdowns:
+         meetings count, series leader, rivalry badge and the stacked win/loss/tie bar. -->
     <div class="results-top" id="top-results"></div>
-    <div class="results" id="results">
-      <div class="loading"><div class="spinner"></div><div>Loading game data&hellip;</div></div>
+    <!-- The filter block sits directly beneath the stacked bar, so changing it updates the
+         numbers right above it without scrolling. It stays in STATIC markup on purpose -
+         js/range-filter.js binds to these ids once at init, so re-rendering it inside a
+         results container would detach its listeners. Everything below it renders into
+         #top-results-after (streak, upcoming line), #results (charts, stat tiles) and
+         #results-stats (Program Comparison). -->
+    <div class="filter-block" id="filter-block">
+    <!-- Phones only: Location + coach filters live behind this toggle (collapsed by default,
+         auto-opened when the URL carries one of them). Hidden on wider screens. -->
+    <button type="button" class="more-filters" id="more-filters" aria-expanded="false" aria-controls="site-filter-wrap coach1-cell coach2-cell">
+      <span class="mf-text">More filters</span><span class="mf-badge" id="more-filters-badge" hidden></span>
+      <svg class="mf-caret" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="m6 8 4 4 4-4"/></svg>
+    </button>
+    <!-- Location filter (js/matchup-filter.js builds the buttons into #site-filter). Hidden
+         until game_sites.json has loaded and the pair has met. -->
+    <div class="site-filter-wrap" id="site-filter-wrap" hidden>
+      <div id="site-filter"></div>
+      <div class="site-note" id="site-note" hidden></div>
     </div>
-    <!-- v52: the year-range control sits directly beneath the Record (Winning %) chart,
-         matching the reference layout. It stays in STATIC markup on purpose - js/range-filter.js
-         binds to these six ids once at init, so re-rendering it inside #results would detach
-         its listeners. Program Comparison therefore renders into its own #results-stats below. -->
     <div class="year-range-section">
       <div class="year-range-header">
         <span class="year-range-title">Year Range</span>
@@ -948,11 +1098,9 @@
       </div>
       <div class="range-labels"><span>Start Year</span><span>End Year</span></div>
     </div>
-    <!-- v29 Tweak 1E: Full Games button (left) + Time Period dropdown (right) side by side -->
+    <!-- Time Period + one head-coach dropdown per team on one row, Full Games List beneath.
+         DOM order is the visual (and tab) order. -->
     <div class="controls-row">
-      <div class="games-btn-cell">
-        <a class="btn btn-secondary" id="games-link" href="#">Full Games List &rarr;</a>
-      </div>
       <div class="time-period-cell">
         <label for="preset-select">Time Period</label>
         <select id="preset-select" class="preset-select" data-preset-select="">
@@ -969,6 +1117,24 @@
           <option value="premodern">Pre-Modern (&lt;1969)</option>
         </select>
       </div>
+      <div class="coach-cell" id="coach1-cell" hidden>
+        <label for="coach1-select" id="coach1-label">Coach</label>
+        <select id="coach1-select" class="preset-select coach-select"></select>
+      </div>
+      <div class="coach-cell" id="coach2-cell" hidden>
+        <label for="coach2-select" id="coach2-label">Coach</label>
+        <select id="coach2-select" class="preset-select coach-select"></select>
+      </div>
+      <div class="coach-note" id="coach-note" hidden></div>
+      <div class="games-btn-cell">
+        <a class="btn btn-secondary" id="games-link" href="#">Full Games List &rarr;</a>
+        <button type="button" class="reset-filters" id="reset-filters" hidden>Reset filters</button>
+      </div>
+    </div>
+    </div>
+    <div class="results-top-after" id="top-results-after"></div>
+    <div class="results" id="results">
+      <div class="loading"><div class="spinner"></div><div>Loading game data&hellip;</div></div>
     </div>
     <div class="results-stats" id="results-stats"></div>
   </div>
@@ -1003,6 +1169,8 @@
 </footer>
 <!-- Shared year-range filter. Plain script, no build step; defines window.FPSRangeFilter. -->
 <script src="js/range-filter.js"></script>
+<!-- Shared location filter, filter pipeline and URL contract; defines window.FPSMatchupFilter. -->
+<script src="js/matchup-filter.js"></script>
 <script>
   // v29: school+mascot text mapping for the Winsipedia-style selector bar
   const TEAM_DISPLAY = {
@@ -1737,8 +1905,10 @@
     // "Last N Matchups" moves the sliders to the span those N games happen to cover;
     // the games themselves are still cut by COUNT, in getRivalryGames().
     lastNResolver: n => getLastNAllTime(n).map(g => g.season),
-    onChange: () => { syncRangeState(); render(); }
+    onChange: () => { syncRangeState(); if (!BOOTING) render(); }
   });
+  // True until the first render; lets URL restore move the range without rendering twice.
+  let BOOTING = true;
 
   // Mirror the module's range onto `state` so every existing read site keeps working.
   function syncRangeState() {
@@ -1999,8 +2169,23 @@
     // Range fields are mirrored from RANGE (js/range-filter.js) by syncRangeState().
     startYear: RANGE.state.startYear, endYear: RANGE.state.endYear,
     activePreset: RANGE.state.activePreset,
-    lastN: RANGE.state.lastN  // Tweak 4: when set, getRivalryGames() returns only the most recent N matchups
+    lastN: RANGE.state.lastN,  // Tweak 4: when set, getRivalryGames() returns only the most recent N matchups
+    site: 'all',                // location filter, from team1's point of view (js/matchup-filter.js)
+    coach1: 'all', coach2: 'all'  // head-coach filters, by coach name (team1's, team2's)
   };
+  const MF = FPSMatchupFilter;
+  let SITES_READY = false;      // game_sites.json loaded and folded into GAMES as g._site
+  let SITE_CTRL = null;
+  let LAST_MISSING_SITE = 0;    // games the current location view had to drop for lack of site data
+  let COACHES_READY = false;    // coaches_data.json loaded and folded into GAMES as g._ca / g._cb
+  // Site + coach data load AFTER the first paint (they are not needed to draw the
+  // header or charts). 'loading' until both settle, then 'done'. While loading the
+  // location and coach controls are shown disabled; the range filter works throughout.
+  let EXTRAS = 'loading';
+  // Location / coach filters a shared link asked for, held until their data arrives.
+  let PENDING = { site: 'all', coach1: 'all', coach2: 'all' };
+  let LAST_MISSING_COACH = 0;   // games the current coach view had to drop for lack of coach data
+  let COACH_PAIR = '';          // which pair the coach dropdowns were last built for
 
   const params = new URLSearchParams(location.search);
 
@@ -2032,6 +2217,21 @@
   if (params.get('team2')) state.team2 = params.get('team2');
 
   let FBS_NAMES = new Set();
+
+  // Aliases the URL may use for a team: the site's own abbreviations first (OSU is
+  // Oklahoma St. here, OHST is Ohio St.), then every TEAM_META abbreviation and the
+  // display school name ("OKLAHOMA STATE"). Dataset names and "X State" -> "X St."
+  // are handled inside MF.teamResolver.
+  function teamAliases() {
+    const a = { 'OSU': 'Oklahoma St.', 'OHST': 'Ohio St.' };
+    for (const [team, m] of Object.entries(TEAM_META)) {
+      if (m && m.abbr && !(m.abbr in a)) a[m.abbr] = team;
+    }
+    for (const [team, d] of Object.entries(TEAM_DISPLAY)) {
+      if (d && d.school && !(d.school in a)) a[d.school] = team;
+    }
+    return a;
+  }
   function fpsKey(s) {
     return (s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
   }
@@ -2081,6 +2281,13 @@
       const inFbs = FBS_NAMES.size > 0 ? allTeams.filter(t => FBS_NAMES.has(fpsKey(t))) : allTeams;
       TEAMS = [...new Set(inFbs.map(fpsCanon))].sort();
       applyMaxSeasonFromData(data);
+      // ?team1=Oklahoma State / osu / oklahoma st. all mean the dataset's "Oklahoma St.".
+      // Resolve once here; syncUrl() then rewrites the address bar to the canonical name.
+      const resolveTeam = MF.teamResolver([...TEAMS, ...allTeams], teamAliases());
+      if (_hadUrlTeams) {
+        if (params.get('team1')) state.team1 = resolveTeam(params.get('team1')) || state.team1;
+        if (params.get('team2')) state.team2 = resolveTeam(params.get('team2')) || state.team2;
+      }
       // v40: when loaded without URL params, pick a random FBS pair with a prior matchup
       if (!_hadUrlTeams) {
         const pair = pickRandomMatchup();
@@ -2092,8 +2299,11 @@
       initDropdown('dd1', 'team1');
       initDropdown('dd2', 'team2');
       updateSliderColors();
+      initFilters();
       updateRangeFill();
+      BOOTING = false;
       render();
+      loadExtras();
     })
     .catch(err => {
       document.getElementById('results').innerHTML =
@@ -2243,21 +2453,150 @@
   const pairGames = (a, b) => (a && b && PAIR_INDEX && PAIR_INDEX.get(pairKey(a, b))) || EMPTY_GAMES;
   const teamGames = t => (t && TEAM_INDEX && TEAM_INDEX.get(t)) || EMPTY_GAMES;
 
-  function getRivalryGames() {
-    let games = pairGames(state.team1, state.team2).filter(g => RANGE.matchesSeason(g.season));
-    // Tweak 4: when last5/last10 preset is active, return only the most recent N matchups
-    if (state.lastN) {
-      games = [...games].sort((a, b) => b.game_date.localeCompare(a.game_date)).slice(0, state.lastN);
-    }
-    return games;
+  // The filters every number on the page shares: year range AND location AND coaches,
+  // then "Last N" by count. The pipeline lives in js/matchup-filter.js so games.html
+  // applies exactly the same cut.
+  function filterState() {
+    return {
+      team1: state.team1, team2: state.team2,
+      startYear: state.startYear, endYear: state.endYear,
+      minYear: RANGE.minYear, maxYear: RANGE.maxYear,
+      preset: state.activePreset, lastN: state.lastN,
+      site: SITES_READY ? state.site : 'all',
+      coach1: COACHES_READY ? state.coach1 : 'all',
+      coach2: COACHES_READY ? state.coach2 : 'all'
+    };
   }
-  // Most recent N games between the two selected teams across full history (used to set slider range)
+  function getRivalryGames() {
+    const res = MF.filterGames(pairGames(state.team1, state.team2), filterState());
+    LAST_MISSING_SITE = res.missingSite;
+    LAST_MISSING_COACH = res.missingCoach;
+    return res.games;
+  }
+  // Most recent N games in the current location + coach view, across full history
+  // (sets the slider span for the "Last N Matchups" presets).
   function getLastNAllTime(n) {
     if (!state.team1 || !state.team2) return [];
-    return pairGames(state.team1, state.team2)
-      .slice()
+    return MF.filterLocationOnly(pairGames(state.team1, state.team2), filterState())
       .sort((a, b) => b.game_date.localeCompare(a.game_date))
       .slice(0, n);
+  }
+
+  // A count preset's span depends on the location / coach view, so re-resolve it.
+  function refilter() {
+    if (state.lastN && state.activePreset) RANGE.setPreset(state.activePreset);
+    else render();
+  }
+
+  function initFilters() {
+    SITE_CTRL = MF.createSiteControl({
+      container: '#site-filter',
+      onChange: v => { state.site = v; refilter(); }
+    });
+    SITE_CTRL.setDisabled(true);
+    ['1', '2'].forEach(n => {
+      document.getElementById(`coach${n}-select`).addEventListener('change', e => {
+        state['coach' + n] = e.target.value;
+        refilter();
+      });
+    });
+    document.getElementById('reset-filters').addEventListener('click', resetFilters);
+    document.getElementById('more-filters').addEventListener('click', () => setMoreOpen(!MORE_OPEN));
+    // Restore a shared view from the URL: ?preset= or ?start=&end= now (the range works
+    // immediately); ?site= and ?c1=/?c2= are held until their data has loaded.
+    const f = MF.readParams(params);
+    PENDING = { site: f.site, coach1: f.coach1, coach2: f.coach2 };
+    SITE_CTRL.setValue(PENDING.site);
+    // A link that carries a hidden filter opens the panel so the filter is visible.
+    setMoreOpen(MF.hiddenActiveCount(PENDING) > 0);
+    if (f.preset && RANGE.presets[f.preset] || f.preset === 'last5' || f.preset === 'last10') {
+      RANGE.setPreset(f.preset);
+    } else if (f.start || f.end) {
+      const lo = Math.max(RANGE.minYear, Math.min(f.start || RANGE.minYear, RANGE.maxYear));
+      const hi = Math.min(RANGE.maxYear, Math.max(f.end || RANGE.maxYear, lo));
+      RANGE.setRange(lo, hi);
+    }
+    syncRangeState();
+  }
+
+  // Fetch site + coach data after the first paint, fold it into GAMES once, enable
+  // the controls and apply any location / coach filters the URL asked for.
+  function loadExtras() {
+    Promise.all([MF.loadSites(), MF.loadCoaches()]).then(([sitesDoc, coachesDoc]) => {
+      SITES_READY = MF.annotateSites(GAMES, sitesDoc);
+      COACHES_READY = MF.annotateCoaches(GAMES, coachesDoc);
+      EXTRAS = 'done';
+      COACH_PAIR = '';
+      if (COACHES_READY && state.team1 && state.team2) buildCoachOptions();
+      const wanted = MF.hiddenActiveCount(PENDING) > 0;
+      if (SITES_READY && PENDING.site !== 'all') { state.site = PENDING.site; SITE_CTRL.setValue(PENDING.site); }
+      if (COACHES_READY) {
+        state.coach1 = coachValid(1, PENDING.coach1) ? PENDING.coach1 : 'all';
+        state.coach2 = coachValid(2, PENDING.coach2) ? PENDING.coach2 : 'all';
+        paintCoachSelects();
+      }
+      PENDING = { site: 'all', coach1: 'all', coach2: 'all' };
+      // Only redraw when the view actually changes; otherwise just switch the controls on.
+      if (wanted) refilter();
+      else syncFilterControls(pairGames(state.team1, state.team2));
+    });
+  }
+
+  function resetFilters() {
+    PENDING = { site: 'all', coach1: 'all', coach2: 'all' };
+    state.site = 'all';
+    state.coach1 = state.coach2 = 'all';
+    if (SITE_CTRL) SITE_CTRL.setValue('all');
+    paintCoachSelects();
+    RANGE.setPreset('all');  // fires onChange -> render
+  }
+
+  // ---- head-coach dropdowns ----
+  let COACH_OPTS = { 1: [], 2: [] };
+  function coachValid(n, name) { return name !== 'all' && COACH_OPTS[n].some(o => o.value === name); }
+  // Rebuild both lists when the pair changes: only coaches who led their team in at
+  // least one meeting, most recent tenure first, each with their series record.
+  function buildCoachOptions() {
+    const key = `${state.team1}|${state.team2}`;
+    if (key === COACH_PAIR) return;
+    COACH_PAIR = key;
+    const all = pairGames(state.team1, state.team2);
+    COACH_OPTS = { 1: MF.coachOptions(all, state.team1), 2: MF.coachOptions(all, state.team2) };
+    [1, 2].forEach(n => {
+      const team = n === 1 ? state.team1 : state.team2;
+      const sel = document.getElementById(`coach${n}-select`);
+      sel.innerHTML = `<option value="all">All</option>` + COACH_OPTS[n]
+        .map(o => `<option value="${o.value.replace(/"/g, '&quot;')}">${o.label}</option>`).join('');
+      document.getElementById(`coach${n}-label`).textContent = `${getTeamAbbr(team)} Coach`;
+      if (!coachValid(n, state['coach' + n])) state['coach' + n] = 'all';
+    });
+    paintCoachSelects();
+  }
+  function paintCoachSelects() {
+    [1, 2].forEach(n => {
+      const sel = document.getElementById(`coach${n}-select`);
+      if (sel) sel.value = state['coach' + n] || 'all';
+    });
+  }
+
+  // ---- "More filters" (phones): Location + coaches behind one toggle ----
+  let MORE_OPEN = false;
+  function setMoreOpen(open) {
+    MORE_OPEN = !!open;
+    document.getElementById('filter-block').classList.toggle('is-open', MORE_OPEN);
+    document.getElementById('more-filters').setAttribute('aria-expanded', MORE_OPEN ? 'true' : 'false');
+  }
+
+  // Keep the address bar in step with the filters so a shared link reopens this view.
+  // A random demo matchup (no teams in the URL) only gets written once a filter is on.
+  function syncUrl(f) {
+    const p = new URLSearchParams(location.search);
+    if (EXTRAS === 'loading') f = Object.assign({}, f, PENDING);  // don't drop ?site= / ?c1= mid-load
+    MF.writeParams(p, f);
+    if (MF.isActive(f) || _hadUrlTeams) { p.set('team1', state.team1); p.set('team2', state.team2); }
+    const qs = p.toString();
+    const next = location.pathname + (qs ? '?' + qs : '') + location.hash;
+    if (next !== location.pathname + location.search + location.hash) history.replaceState(null, '', next);
   }
 
   function teamLogo(team, large=false) {
@@ -2367,10 +2706,11 @@
     return _allTimeGamesCache[team] || 0;
   }
 
-  // v29: current H2H win streak between the two selected teams (from full data)
-  function currentH2HStreak() {
+  // Current H2H win streak within the games the filters leave in view, so it moves
+  // with every filter (range, location, coach) like the rest of the header.
+  function currentH2HStreak(games) {
     if (!state.team1 || !state.team2) return null;
-    const all = pairGames(state.team1, state.team2)
+    const all = games
       .slice()
       .sort((a, b) => b.game_date.localeCompare(a.game_date));
     if (all.length === 0) return null;
@@ -2387,14 +2727,66 @@
     return { count, team: streakTeam, startYear, endYear, tied: false };
   }
 
+  // Location + coach controls: labels follow the teams; disabled while their data
+  // loads; hidden for a pair that never met or if the data failed to load.
+  function syncFilterControls(allPair) {
+    if (!state.team1 || !state.team2) return;
+    const met = allPair.length > 0;
+    const loading = EXTRAS === 'loading';
+    const abbr1 = getTeamAbbr(state.team1), abbr2 = getTeamAbbr(state.team2);
+    SITE_CTRL.setTeams(abbr1, abbr2, SITES_READY ? MF.hasNeutral(allPair) : true);
+    SITE_CTRL.setDisabled(!SITES_READY);
+    if (SITES_READY) state.site = SITE_CTRL.value;
+    const siteWrap = document.getElementById('site-filter-wrap');
+    siteWrap.hidden = !met || (!loading && !SITES_READY);
+    const siteNote = document.getElementById('site-note');
+    if (loading) { siteNote.textContent = 'Loading location and coach data\u2026'; siteNote.hidden = !met; }
+    else if (siteNote.textContent.startsWith('Loading')) siteNote.hidden = true;
+    const showCoaches = met && (loading || COACHES_READY);
+    if (COACHES_READY && met) buildCoachOptions();
+    [1, 2].forEach(n => {
+      const sel = document.getElementById(`coach${n}-select`);
+      if (!COACHES_READY) {
+        // Placeholder while loading: just the URL's coach (if any) so it reads right.
+        const want = PENDING['coach' + n];
+        sel.innerHTML = `<option value="all">All</option>` +
+          (want !== 'all' ? `<option value="${want.replace(/"/g, '&quot;')}" selected>${MF.coachLabel(want)}</option>` : '');
+        document.getElementById(`coach${n}-label`).textContent = `${n === 1 ? abbr1 : abbr2} Coach`;
+        COACH_PAIR = '';
+      }
+      sel.disabled = !COACHES_READY;
+      document.getElementById(`coach${n}-cell`).hidden = !showCoaches;
+    });
+    document.getElementById('more-filters').hidden = !(showCoaches || !siteWrap.hidden);
+    const hiddenOn = MF.hiddenActiveCount(loading ? PENDING : filterState());
+    const badge = document.getElementById('more-filters-badge');
+    badge.textContent = hiddenOn;
+    badge.hidden = !hiddenOn;
+    document.getElementById('more-filters').setAttribute('aria-label',
+      hiddenOn ? `More filters, ${hiddenOn} active` : 'More filters');
+  }
+
+  // School names for the filter summary line ("At Auburn"; "Saban (ALA)").
+  function siteNames() {
+    const nm = t => (TEAM_DISPLAY[t] && TEAM_DISPLAY[t].school)
+      ? TEAM_DISPLAY[t].school.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) : t;
+    return { team1: nm(state.team1), team2: nm(state.team2),
+             abbr1: getTeamAbbr(state.team1), abbr2: getTeamAbbr(state.team2) };
+  }
+
   function render() {
     if (!GAMES.length) return;
     const topEl = document.getElementById('top-results');
     const resEl = document.getElementById('results');
-    // v52: Program Comparison lives in its own static container so the year-range
-    // control can sit between the charts and the cards without being re-rendered.
+    // The static filter block sits between #top-results (summary + stacked bar) and
+    // #top-results-after (streak + upcoming line); charts and Program Comparison render
+    // below those, so the filter itself is never re-rendered.
+    const afterEl = document.getElementById('top-results-after');
     const statsEl = document.getElementById('results-stats');
-    const clearStats = () => { if (statsEl) statsEl.innerHTML = ''; };
+    const clearStats = () => {
+      if (afterEl) afterEl.innerHTML = '';
+      if (statsEl) statsEl.innerHTML = '';
+    };
 
     if (!state.team1 || !state.team2) {
       // no matchup chosen yet: this variant is not its own page, point at /compare
@@ -2427,7 +2819,27 @@
     });
     const _cr0 = document.querySelector('.controls-row'); if (_cr0 && _cr0.style.display === 'none') _cr0.style.display = '';
     const _yr0 = document.querySelector('.year-range-section'); if (_yr0 && _yr0.style.display === 'none') _yr0.style.display = '';
+    const allPair = pairGames(state.team1, state.team2);
+    syncFilterControls(allPair);
     const games = getRivalryGames();
+    const fNow = filterState();
+    const filtersOn = MF.isActive(fNow);
+    syncUrl(fNow);
+    document.getElementById('reset-filters').hidden = !filtersOn;
+    const coachNote = document.getElementById('coach-note');
+    coachNote.textContent = MF.missingNote(LAST_MISSING_COACH, 'coach');
+    coachNote.hidden = !LAST_MISSING_COACH;
+    const gl = document.getElementById('games-link');
+    if (gl) {
+      // games.html reads the same params and runs the same pipeline (js/matchup-filter.js),
+      // so its list is exactly the games behind these numbers.
+      gl.href = `games.html?${MF.gamesListQuery(fNow)}`;
+    }
+    const siteNote = document.getElementById('site-note');
+    if (siteNote && EXTRAS !== 'loading') {
+      siteNote.textContent = MF.missingNote(LAST_MISSING_SITE);
+      siteNote.hidden = !LAST_MISSING_SITE;
+    }
     if (games.length === 0) {
       // v45 Change 2: check if these teams have NEVER played at all
       const allTimeAny = pairGames(state.team1, state.team2).length > 0;
@@ -2437,16 +2849,21 @@
         const t1ColorFB = TEAM_META[state.team1]?.color || '#fe5c00';
         const t2ColorFB = TEAM_META[state.team2]?.color || '#003594';
         resEl.innerHTML = '';
+        if (afterEl) afterEl.innerHTML = '';
         if (statsEl) statsEl.innerHTML = renderStatComparison(t1ColorFB, t2ColorFB);
         // Hide static H2H-only controls (Full Games List + Time Period) when no prior meetings
         const _cr = document.querySelector('.controls-row'); if (_cr) _cr.style.display = 'none';
         const _yr = document.querySelector('.year-range-section'); if (_yr) _yr.style.display = 'none';
+        document.getElementById('reset-filters').hidden = true;
+        document.getElementById('more-filters').hidden = true;
         return;
       }
       if (topEl) topEl.innerHTML = '';
       clearStats();
       resEl.innerHTML =
-        `<div class="empty-state"><h3>No games found</h3><p>${state.team1} and ${state.team2} haven't played between ${state.startYear} and ${state.endYear}.</p></div>`;
+        `<div class="empty-state"><h3>No meetings match these filters</h3><p>${state.team1} and ${state.team2} have no games for ${MF.summary(fNow, siteNames())}.</p>
+          <button type="button" class="reset-filters" data-reset>Reset filters</button></div>`;
+      resEl.querySelector('[data-reset]').addEventListener('click', resetFilters);
       return;
     }
     const t1Wins = games.filter(g => g.winner===state.team1).length;
@@ -2473,10 +2890,10 @@
     const t1Streak = longestStreak(games, state.team1);
     const t2Streak = longestStreak(games, state.team2);
 
-    // ===== v29 TOP container: hero H2H bar + current streak =====
+    // ===== v29 TOP container: summary, streak, trophy, hero H2H bar =====
     const t1Games = totalGamesAllTime(state.team1);
     const t2Games = totalGamesAllTime(state.team2);
-    const streak = currentH2HStreak();
+    const streak = currentH2HStreak(games);
     topEl.innerHTML = `
       <div class="h2h-summary">
         ${isPastPreset && !isLastN
@@ -2484,6 +2901,19 @@
           : `<div class="total" id="total-num">${total}</div>
              <div class="total-label">${totalLabel}</div>`}
         <div class="record-line">${leader?`<span class="leader" style="color:${leaderColor}">${recordStr}</span>`:recordStr}</div>
+        ${filtersOn ? `<div class="filter-summary">${MF.summary(fNow, siteNames())}</div>` : ''}
+        ${(() => {
+          if (!streak) return '';
+          if (streak.tied) {
+            return `<div class="streak-line" style="color:var(--gray)">Last Meeting: Tie (${streak.startYear})</div>`;
+          }
+          if (streak.count === 0) return '';
+          const sColor = TEAM_META[streak.team]?.color || 'var(--dark)';
+          const sDisp = (TEAM_DISPLAY[streak.team] && TEAM_DISPLAY[streak.team].school) || streak.team.toUpperCase();
+          const yr = streak.startYear === streak.endYear ? `${streak.startYear}` : `${streak.startYear}-${streak.endYear}`;
+          // Full school name on desktop, abbreviation on phones so the line never wraps.
+          return `<div class="streak-line" style="color:${sColor}">Current Streak: <span class="sl-full">${sDisp}</span><span class="sl-abbr">${getTeamAbbr(streak.team)}</span> ${streak.count} (${yr})</div>`;
+        })()}
       </div>
       ${(() => {
         const riv = getRivalry();
@@ -2525,23 +2955,10 @@
           </div>
         </div>
       </div>
-      ${(() => {
-        if (!streak) return '';
-        if (streak.tied) {
-          return `<div class="streak-block">
-            <div class="streak-label">Last Meeting</div>
-            <div class="streak-value" style="color:var(--gray)">TIE (${streak.startYear})</div>
-          </div>`;
-        }
-        if (streak.count === 0) return '';
-        const sColor = TEAM_META[streak.team]?.color || 'var(--dark)';
-        const sDisp = (TEAM_DISPLAY[streak.team] && TEAM_DISPLAY[streak.team].school) || streak.team.toUpperCase();
-        const yr = streak.startYear === streak.endYear ? `${streak.startYear}` : `${streak.startYear}-${streak.endYear}`;
-        return `<div class="streak-block">
-          <div class="streak-label">Current Win Streak</div>
-          <div class="streak-value" style="color:${sColor}">${streak.count} &middot; ${sDisp} (${yr})</div>
-        </div>`;
-      })()}
+    `;
+
+    // ===== Below the filter block: upcoming matchup line (only when ESPN has one) =====
+    if (afterEl) afterEl.innerHTML = `
       ${(() => {
         // v37: Upcoming Matchup spread (only shown when ESPN has a future game between the two selected teams)
         if (!UPCOMING_LINES || !UPCOMING_LINES.matchups) return '';
@@ -2573,13 +2990,13 @@
           ${asOf ? `<div class="um-asof">Current line as of ${asOf}</div>` : ''}
         </div>`;
       })()}
-    `;
+    `.trim();
 
-    // ===== BOTTOM container: charts, stat grid, program comparison, games link, suggested matchups =====
+    // ===== Charts + stat grid =====
     resEl.innerHTML = `
       <div class="chart-box">
         <div class="chart-title">Head-to-Head Results</div>
-        <canvas id="marginChart" height="110"></canvas>
+        <div class="margin-canvas-wrap"><canvas id="marginChart" height="110"></canvas><span class="chart-watermark" aria-hidden="true">frontporchsports.com</span></div>
         <div id="marginReveal" class="chart-reveal"></div>
       </div>
 
@@ -2617,6 +3034,7 @@
           <div class="chart-scroll" id="winPctScroll">
             <div class="chart-canvas-wrap"><canvas id="winPctChart"></canvas></div>
           </div>
+          <span class="chart-watermark" aria-hidden="true">frontporchsports.com</span>
         </div>
         <div class="chart-legend" id="winPctLegend" hidden></div>
         <div class="chart-scroll-hint" id="winPctScrollHint" hidden>Swipe the chart sideways to scan every season</div>
@@ -2625,7 +3043,7 @@
       <!-- v29 Tweak 1G: Suggested Matchups removed -->
     `;
 
-    // ...and into its own container, below the year-range control.
+    // Program Comparison renders into its own container below the charts.
     if (statsEl) statsEl.innerHTML = renderStatComparison(t1Color, t2Color);
 
     // --- Animations ---
@@ -2643,14 +3061,6 @@
     });
 
     // Full Games List opens its own page (mobile-friendly)
-    const gl = document.getElementById('games-link');
-    if (gl) {
-      // ?start=/?end= is the contract games.html reads; RANGE.queryString() is the one
-      // place that emits it, so a second page linking to games.html cannot drift from it.
-      gl.href = `games.html?team1=${encodeURIComponent(state.team1)}&team2=${encodeURIComponent(state.team2)}`
-              + `&${RANGE.queryString()}`;
-    }
-
     drawCharts(games);
   }
 
@@ -2875,6 +3285,20 @@
     </div>`;
   }
 
+  // Empty band (px) every chart reserves at its bottom for the frontporchsports.com mark.
+  const WATERMARK_STRIP = 14;
+
+  // Clean symmetric axis for a +/- max value: pick a round step that gives about
+  // `perSide` ticks on each side of zero, then round the bound up to a multiple of it.
+  function niceAxis(max, perSide) {
+    if (!(max > 0)) return { bound: 5, step: 5 };
+    const raw = max / perSide;
+    const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+    const f = [1, 2, 2.5, 3, 4, 5, 10].find(f => raw <= f * mag);
+    const step = f * mag;
+    return { bound: Math.ceil(max / step) * step, step };
+  }
+
   function drawCharts(games) {
     if (charts.margin) charts.margin.destroy();
     if (charts.lead) charts.lead.destroy();
@@ -2891,6 +3315,9 @@
     });
     // v36: mobile-friendly chart + tap to reveal game detail
     const isMobile = window.innerWidth <= 700;
+    // Symmetric y axis sized to the biggest margin in the filtered games, rounded up to a
+    // clean value, so the bars fill the plot and it rescales whenever the filters change.
+    const yAxis = niceAxis(Math.max(0, ...marginData.map(Math.abs)), isMobile ? 2 : 3);
     const marginReveal = document.getElementById('marginReveal');
     if (marginReveal) marginReveal.innerHTML = '<div class="chart-reveal-hint">Tap a year to see the game detail</div>';
     charts.margin = new Chart(document.getElementById('marginChart'), {
@@ -2903,8 +3330,8 @@
         barPercentage: isMobile ? 0.9 : 0.85
       }] },
       options: {
-        responsive: true, maintainAspectRatio: true,
-        layout: { padding: { top: 4, bottom: 0 } },
+        responsive: true, maintainAspectRatio: !isMobile,
+        layout: { padding: { top: 4, bottom: WATERMARK_STRIP } },
         plugins: {
           legend: {
             display: true, position: 'bottom',
@@ -2927,12 +3354,13 @@
         },
         scales: {
           x: {
-            ticks: { maxTicksLimit: isMobile ? 8 : 12, font: { size: isMobile ? 11 : 12 }, color: '#6b7280' },
+            ticks: { maxTicksLimit: isMobile ? 6 : 12, maxRotation: isMobile ? 0 : 50, font: { size: isMobile ? 11 : 12 }, color: '#6b7280' },
             grid: { display: false }
           },
           y: {
+            min: -yAxis.bound, max: yAxis.bound,
             title: { display: !isMobile, text: `\u2190 ${t2Abbr}    |    ${t1Abbr} \u2192`, font: { size: 12 } },
-            ticks: { font: { size: isMobile ? 10 : 12 }, color: '#6b7280' },
+            ticks: { stepSize: yAxis.step, font: { size: isMobile ? 10 : 12 }, color: '#6b7280' },
             grid: { color: 'rgba(0,0,0,0.06)' }
           }
         },
@@ -3042,6 +3470,7 @@
       ]},
       options: {
         responsive: true, maintainAspectRatio: false,
+        layout: { padding: { bottom: WATERMARK_STRIP } },
         interaction: { mode: 'index', intersect: false },
         plugins: {
           legend: { display: !scrolls, position: 'bottom',

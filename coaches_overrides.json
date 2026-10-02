@@ -1,0 +1,54 @@
+{
+  "_rule": "STANDING RULE: when an official school or conference source (school media guide, official athletics site, conference media guide) conflicts with CFBD, the official source wins. CFBD fills only what the official sources do not cover.",
+  "_comment": "Head coaches CFBD has no record of (or gets wrong), applied on top of CFBD by scripts/build_coaches_data.py. Every entry cites its source and the name exactly as that source spells it (source_name). coach is the label shown in the dropdown; it differs from source_name only to match CFBD's spelling of the same coach in neighbouring seasons (so one coach is one option), to join co-coaches into one label, or to store a season with no head coach as \"No coach\". A season-level entry replaces CFBD for that school-season; an entry with game_id applies to that one game only. Seasons no source covers are left missing on purpose.",
+  "sources": {
+    "sec2023": "https://a.espncdn.com/sec/football/2023/Coaches.pdf",
+    "ou": "https://soonersports.com/sports/2019/8/14/208798710",
+    "osu2026": "https://okstate.com/documents/2026/7/6/2026_Oklahoma_State_Football_Media_Guide.pdf"
+  },
+  "overrides": [
+    { "school": "Alabama", "season": 1892, "coach": "E.B. Beaumont", "source_name": "E.B. Beaumont", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Alabama all-time coaches)" },
+    { "school": "Alabama", "season": 1893, "coach": "Eli Abbott", "source_name": "Eli Abbott (1893-95, 1902)", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Alabama all-time coaches)" },
+    { "school": "Alabama", "season": 1894, "coach": "Eli Abbott", "source_name": "Eli Abbott (1893-95, 1902)", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Alabama all-time coaches)" },
+    { "school": "Alabama", "season": 1895, "coach": "Eli Abbott", "source_name": "Eli Abbott (1893-95, 1902)", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Alabama all-time coaches)" },
+    { "school": "Alabama", "season": 1896, "coach": "Otto Wagonhurst", "source_name": "Otto Wagonhurst", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Alabama all-time coaches)" },
+    { "school": "Alabama", "season": 1897, "coach": "Allen McCants", "source_name": "Allen McCants", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Alabama all-time coaches)" },
+    { "school": "Alabama", "season": 1899, "coach": "W.A. Martin", "source_name": "W.A. Martin", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Alabama all-time coaches)" },
+    { "school": "Alabama", "season": 1901, "coach": "M.H. Harvey", "source_name": "M.H. Harvey", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Alabama all-time coaches)", "note": "Official source over CFBD, which has \"G.H. Harvey\" (the name of Auburn's 1893 co-coach). Same man as Auburn 1902 and Ole Miss 1903-04 (the SEC guide's \"Mike Harvey\"; Michael Smith Harvey): matching records 2-1-2 / 0-2-0 / 6-4-1. CFBD already calls him \"M.H. Harvey\" at Auburn and Ole Miss, so this one label covers all three schools." },
+    { "school": "Alabama", "season": 1902, "coach": "Eli Abbott", "source_name": "Eli Abbott (1893-95, 1902)", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Alabama all-time coaches)", "note": "Official source over CFBD, which also credits J.O. Heyworth with the full 1902 season." },
+
+    { "school": "Auburn", "season": 1892, "coach": "Dr. George Petrie", "source_name": "Dr. George Petrie", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Auburn all-time coaches)" },
+    { "school": "Auburn", "season": 1893, "coach": "Harvey / Balliet", "source_name": "G.H. Harvey, D.M. Balliet", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Auburn all-time coaches)", "note": "Listed on one line as joint coaches for 1893 (3-0-2)." },
+    { "school": "Auburn", "season": 1894, "coach": "F.M. Hall", "source_name": "F.M. Hall", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Auburn all-time coaches)" },
+    { "school": "Auburn", "season": 1895, "coach": "John Heisman", "source_name": "John Heisman (1895-99)", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Auburn all-time coaches)" },
+    { "school": "Auburn", "season": 1896, "coach": "John Heisman", "source_name": "John Heisman (1895-99)", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Auburn all-time coaches)" },
+    { "school": "Auburn", "season": 1897, "coach": "John Heisman", "source_name": "John Heisman (1895-99)", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Auburn all-time coaches)" },
+    { "school": "Auburn", "season": 1898, "coach": "John Heisman", "source_name": "John Heisman (1895-99)", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Auburn all-time coaches)" },
+    { "school": "Auburn", "season": 1899, "coach": "John Heisman", "source_name": "John Heisman (1895-99)", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Auburn all-time coaches)" },
+    { "school": "Auburn", "season": 1900, "coach": "Billy Watkins", "source_name": "Billy Watkins (1900-01)", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Auburn all-time coaches)" },
+    { "school": "Auburn", "season": 1901, "coach": "Billy Watkins", "source_name": "Billy Watkins (1900-01)", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Auburn all-time coaches)" },
+    { "school": "Auburn", "season": 1902, "game_id": "19021018_Alabama_vs_Auburn", "coach": "Robert Kent", "source_name": "R.S. Kent", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Auburn all-time coaches)", "note": "1902 had two coaches: R.S. Kent 2-2-1 and Mike Harvey 0-2-0. Auburn won this game 23-0 and Harvey has no wins, so it is Kent's. Label matches CFBD's \"Robert Kent\". CFBD's own split put this game under Harvey." },
+
+    { "school": "Oklahoma", "season": 1904, "coach": "Fred Ewing", "source_name": "Fred Ewing", "source": "ou", "source_title": "Head Coaches - University of Oklahoma (soonersports.com)" },
+    { "school": "Oklahoma", "season": 1905, "coach": "Bennie Owen", "source_name": "Bennie Owen (1905-1926)", "source": "ou", "source_title": "Head Coaches - University of Oklahoma (soonersports.com)" },
+    { "school": "Oklahoma", "season": 1906, "coach": "Bennie Owen", "source_name": "Bennie Owen (1905-1926)", "source": "ou", "source_title": "Head Coaches - University of Oklahoma (soonersports.com)" },
+    { "school": "Oklahoma", "season": 1907, "coach": "Bennie Owen", "source_name": "Bennie Owen (1905-1926)", "source": "ou", "source_title": "Head Coaches - University of Oklahoma (soonersports.com)" },
+    { "school": "Oklahoma", "season": 1908, "coach": "Bennie Owen", "source_name": "Bennie Owen (1905-1926)", "source": "ou", "source_title": "Head Coaches - University of Oklahoma (soonersports.com)" },
+    { "school": "Oklahoma", "season": 1909, "coach": "Bennie Owen", "source_name": "Bennie Owen (1905-1926)", "source": "ou", "source_title": "Head Coaches - University of Oklahoma (soonersports.com)" },
+    { "school": "Oklahoma", "season": 1910, "coach": "Bennie Owen", "source_name": "Bennie Owen (1905-1926)", "source": "ou", "source_title": "Head Coaches - University of Oklahoma (soonersports.com)" },
+    { "school": "Oklahoma", "season": 1911, "coach": "Bennie Owen", "source_name": "Bennie Owen (1905-1926)", "source": "ou", "source_title": "Head Coaches - University of Oklahoma (soonersports.com)" },
+    { "school": "Oklahoma", "season": 1912, "coach": "Bennie Owen", "source_name": "Bennie Owen (1905-1926)", "source": "ou", "source_title": "Head Coaches - University of Oklahoma (soonersports.com)" },
+    { "school": "Oklahoma", "season": 1913, "coach": "Bennie Owen", "source_name": "Bennie Owen (1905-1926)", "source": "ou", "source_title": "Head Coaches - University of Oklahoma (soonersports.com)" },
+
+    { "school": "Oklahoma St.", "season": 1904, "coach": "No coach", "source_name": "No Coach | J.E. Woodworth, manager", "source": "osu2026", "source_title": "2026 Oklahoma State Football Media Guide, p. 201 (year-by-year head coaches)" },
+    { "school": "Oklahoma St.", "season": 1905, "coach": "Frank A. McCoy", "source_name": "Frank A. McCoy (Oklahoma/Kansas)", "source": "osu2026", "source_title": "2026 Oklahoma State Football Media Guide, p. 201" },
+    { "school": "Oklahoma St.", "season": 1906, "coach": "Boyd A. Hill", "source_name": "Boyd A. Hill (Central Oklahoma)", "source": "osu2026", "source_title": "2026 Oklahoma State Football Media Guide, p. 201" },
+    { "school": "Oklahoma St.", "season": 1907, "coach": "Boyd A. Hill", "source_name": "Boyd A. Hill (Central Oklahoma)", "source": "osu2026", "source_title": "2026 Oklahoma State Football Media Guide, p. 201" },
+    { "school": "Oklahoma St.", "season": 1908, "coach": "Ed Parry", "source_name": "Ed Parry (Chicago)", "source": "osu2026", "source_title": "2026 Oklahoma State Football Media Guide, p. 201" },
+    { "school": "Oklahoma St.", "season": 1909, "coach": "Paul Davis", "source_name": "Paul J. Davis (Dickinson)", "source": "osu2026", "source_title": "2026 Oklahoma State Football Media Guide, p. 201", "note": "Label matches CFBD's \"Paul Davis\" for his 1914 season." },
+    { "school": "Oklahoma St.", "season": 1910, "coach": "Paul Davis", "source_name": "Paul J. Davis (Dickinson)", "source": "osu2026", "source_title": "2026 Oklahoma State Football Media Guide, p. 201" },
+    { "school": "Oklahoma St.", "season": 1911, "coach": "Paul Davis", "source_name": "Paul J. Davis (Dickinson)", "source": "osu2026", "source_title": "2026 Oklahoma State Football Media Guide, p. 201" },
+    { "school": "Oklahoma St.", "season": 1912, "coach": "Paul Davis", "source_name": "Paul J. Davis (Dickinson)", "source": "osu2026", "source_title": "2026 Oklahoma State Football Media Guide, p. 201" },
+    { "school": "Oklahoma St.", "season": 1913, "coach": "Paul Davis", "source_name": "Paul J. Davis (Dickinson)", "source": "osu2026", "source_title": "2026 Oklahoma State Football Media Guide, p. 201" }
+  ]
+}

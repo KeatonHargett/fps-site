@@ -1,0 +1,13 @@
+{
+  "_comment": "Known corrections applied on top of CFBD by scripts/build_game_sites.py. Each rule matches a team pair over an inclusive season range. site is \"neutral\" or the home team's name. An optional city only lets the rule fire when front_porch_games.json agrees on where the game was played (or has no city).",
+  "overrides": [
+    {
+      "teams": ["Alabama", "Auburn"],
+      "seasons": [1948, 1988],
+      "site": "neutral",
+      "venue": "Legion Field",
+      "city": "Birmingham",
+      "note": "Iron Bowl was played at Legion Field, Birmingham from the 1948 renewal through 1988; Auburn first hosted at Jordan-Hare in 1989."
+    }
+  ]
+}
