@@ -309,6 +309,7 @@
   /* Location filter: segmented buttons from Team 1's point of view. Active = orange
      fill, inactive = outlined blue. One row at every width; padding shrinks first. */
   .site-filter-wrap { margin-bottom: 1rem; }
+  .filter-block { margin: 0; }
   .site-filter { display: flex; gap: 0.4rem; }
   .site-btn {
     flex: 1 1 auto; min-width: 0; white-space: nowrap; cursor: pointer;
@@ -831,17 +832,57 @@
     .streak-line .sl-abbr { display: inline; }
   }
 
-  /* v29 Tweak 1E: Full Games button + Time Period dropdown side-by-side */
-  .controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: center; padding: 1rem 0 1.25rem; margin-bottom: 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .controls-row .games-btn-cell { display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap; }
-  .controls-row .time-period-cell { display: flex; justify-content: flex-end; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
-  .controls-row .time-period-cell label { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; color: var(--gray); letter-spacing: 0.07em; }
-  .controls-row .time-period-cell select { min-width: 200px; padding: 0.55rem 2.25rem 0.55rem 0.8rem; }
+  /* Controls row: Time Period + both coach dropdowns on one row, Full Games List
+     (and Reset) on the row beneath. Labels sit above their selects. */
+  .controls-row {
+    display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.9rem 1rem; align-items: end; padding: 1rem 0 1.25rem; margin-bottom: 0;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  }
+  .controls-row .time-period-cell, .controls-row .coach-cell { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+  .controls-row .coach-cell[hidden], .coach-note[hidden] { display: none; }
+  .controls-row .time-period-cell label, .controls-row .coach-cell label {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--gray); letter-spacing: 0.07em;
+  }
+  .controls-row select.preset-select { width: 100%; min-width: 0; padding: 0.55rem 2.25rem 0.55rem 0.8rem; text-overflow: ellipsis; }
+  .controls-row .coach-note { grid-column: 1 / -1; font-size: 0.75rem; color: var(--gray); text-align: center; margin-top: -0.3rem; }
+  .controls-row .games-btn-cell { grid-column: 1 / -1; display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap; }
+  .more-filters { display: none; }
   @media (max-width: 700px) {
-    /* v33: stack — Time Period dropdown on top, Full Games List button beneath */
-    .controls-row { grid-template-columns: 1fr; }
-    .controls-row .time-period-cell { order: 1; justify-content: center; }
-    .controls-row .games-btn-cell { order: 2; justify-content: center; }
+    /* Phones: one grid for the whole block, so Location and the coaches can share the
+       "More filters" panel. The controls row dissolves into it (display: contents);
+       its rules move onto the first and last cells. */
+    .filter-block { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 0.6rem; }
+    .filter-block > *, .controls-row > * { grid-column: 1 / -1; }
+    .controls-row { display: contents; }
+    .year-range-section { order: 1; }
+    .controls-row .time-period-cell { order: 2; border-top: 1px solid var(--border); padding-top: 0.9rem; }
+    .more-filters { order: 3; }
+    .site-filter-wrap { order: 4; margin: 0.75rem 0 0; }
+    .controls-row .coach-cell { order: 5; grid-column: auto; margin-top: 0.75rem; }
+    .controls-row .coach-note { order: 6; margin-top: 0.4rem; }
+    .controls-row .games-btn-cell { order: 7; justify-content: center; padding: 0.9rem 0 1.1rem; border-bottom: 1px solid var(--border); }
+    .more-filters {
+      display: flex; align-items: center; justify-content: center; gap: 0.4rem; width: 100%;
+      margin-top: 0.75rem; padding: 0.55rem 0.75rem; cursor: pointer;
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.06em;
+      color: var(--blue); background: white; border: 2px solid var(--blue); border-radius: 8px;
+    }
+    .more-filters .mf-caret { width: 18px; height: 18px; transition: transform 0.15s; }
+    .more-filters[aria-expanded="true"] .mf-caret { transform: rotate(180deg); }
+    .more-filters .mf-badge {
+      display: inline-flex; align-items: center; justify-content: center; min-width: 1.35rem; height: 1.35rem;
+      padding: 0 0.35rem; border-radius: 999px; background: var(--orange); color: white; font-size: 0.95rem;
+    }
+    .more-filters .mf-badge[hidden] { display: none; }
+    .more-filters:focus-visible { outline: 3px solid rgba(0,53,148,0.45); outline-offset: 2px; }
+    .controls-row .coach-cell select.preset-select {
+      font-size: 0.95rem; letter-spacing: 0.02em; padding: 0.55rem 1.5rem 0.55rem 0.55rem;
+      background-position: right 0.35rem center; background-size: 16px;
+    }
+    .filter-block:not(.is-open) > .site-filter-wrap,
+    .filter-block:not(.is-open) .coach-cell,
+    .filter-block:not(.is-open) .coach-note { display: none !important; }
   }
 
   /* Suggested matchups */
@@ -998,6 +1039,13 @@
          results container would detach its listeners. Everything below it renders into
          #top-results-after (streak, upcoming line), #results (charts, stat tiles) and
          #results-stats (Program Comparison). -->
+    <div class="filter-block" id="filter-block">
+    <!-- Phones only: Location + coach filters live behind this toggle (collapsed by default,
+         auto-opened when the URL carries one of them). Hidden on wider screens. -->
+    <button type="button" class="more-filters" id="more-filters" aria-expanded="false" aria-controls="site-filter-wrap coach1-cell coach2-cell">
+      <span class="mf-text">More filters</span><span class="mf-badge" id="more-filters-badge" hidden></span>
+      <svg class="mf-caret" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="m6 8 4 4 4-4"/></svg>
+    </button>
     <!-- Location filter (js/matchup-filter.js builds the buttons into #site-filter). Hidden
          until game_sites.json has loaded and the pair has met. -->
     <div class="site-filter-wrap" id="site-filter-wrap" hidden>
@@ -1017,12 +1065,9 @@
       </div>
       <div class="range-labels"><span>Start Year</span><span>End Year</span></div>
     </div>
-    <!-- v29 Tweak 1E: Full Games button (left) + Time Period dropdown (right) side by side -->
+    <!-- Time Period + one head-coach dropdown per team on one row, Full Games List beneath.
+         DOM order is the visual (and tab) order. -->
     <div class="controls-row">
-      <div class="games-btn-cell">
-        <a class="btn btn-secondary" id="games-link" href="#">Full Games List &rarr;</a>
-        <button type="button" class="reset-filters" id="reset-filters" hidden>Reset filters</button>
-      </div>
       <div class="time-period-cell">
         <label for="preset-select">Time Period</label>
         <select id="preset-select" class="preset-select" data-preset-select="">
@@ -1039,6 +1084,20 @@
           <option value="premodern">Pre-Modern (&lt;1969)</option>
         </select>
       </div>
+      <div class="coach-cell" id="coach1-cell" hidden>
+        <label for="coach1-select" id="coach1-label">Coach</label>
+        <select id="coach1-select" class="preset-select coach-select"></select>
+      </div>
+      <div class="coach-cell" id="coach2-cell" hidden>
+        <label for="coach2-select" id="coach2-label">Coach</label>
+        <select id="coach2-select" class="preset-select coach-select"></select>
+      </div>
+      <div class="coach-note" id="coach-note" hidden></div>
+      <div class="games-btn-cell">
+        <a class="btn btn-secondary" id="games-link" href="#">Full Games List &rarr;</a>
+        <button type="button" class="reset-filters" id="reset-filters" hidden>Reset filters</button>
+      </div>
+    </div>
     </div>
     <div class="results-top-after" id="top-results-after"></div>
     <div class="results" id="results">
@@ -2078,12 +2137,16 @@
     startYear: RANGE.state.startYear, endYear: RANGE.state.endYear,
     activePreset: RANGE.state.activePreset,
     lastN: RANGE.state.lastN,  // Tweak 4: when set, getRivalryGames() returns only the most recent N matchups
-    site: 'all'                 // location filter, from team1's point of view (js/matchup-filter.js)
+    site: 'all',                // location filter, from team1's point of view (js/matchup-filter.js)
+    coach1: 'all', coach2: 'all'  // head-coach filters, by coach name (team1's, team2's)
   };
   const MF = FPSMatchupFilter;
   let SITES_READY = false;      // game_sites.json loaded and folded into GAMES as g._site
   let SITE_CTRL = null;
   let LAST_MISSING_SITE = 0;    // games the current location view had to drop for lack of site data
+  let COACHES_READY = false;    // coaches_data.json loaded and folded into GAMES as g._ca / g._cb
+  let LAST_MISSING_COACH = 0;   // games the current coach view had to drop for lack of coach data
+  let COACH_PAIR = '';          // which pair the coach dropdowns were last built for
 
   const params = new URLSearchParams(location.search);
 
@@ -2153,12 +2216,15 @@
     fetch('front_porch_games.json').then(r => r.json()),
     fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] })),
     _ulPromise,
-    MF.loadSites()
+    MF.loadSites(),
+    MF.loadCoaches()
   ])
-    .then(([data, fbsData, _ul, sitesDoc]) => {
+    .then(([data, fbsData, _ul, sitesDoc, coachesDoc]) => {
       GAMES = data;
-      // Precompute every game's site label once; filters only ever read g._site.
+      // Precompute every game's site label and both head coaches once; filters only
+      // ever read g._site / g._ca / g._cb.
       SITES_READY = MF.annotateSites(GAMES, sitesDoc);
+      COACHES_READY = MF.annotateCoaches(GAMES, coachesDoc);
       buildGameIndexes();
       _allTimeGamesCache = null;
       FBS_NAMES = new Set((fbsData.teams || []).map(t => fpsKey(t.name)));
@@ -2331,8 +2397,8 @@
   const pairGames = (a, b) => (a && b && PAIR_INDEX && PAIR_INDEX.get(pairKey(a, b))) || EMPTY_GAMES;
   const teamGames = t => (t && TEAM_INDEX && TEAM_INDEX.get(t)) || EMPTY_GAMES;
 
-  // The filters every number on the page shares: year range AND location, then
-  // "Last N" by count. The pipeline lives in js/matchup-filter.js so games.html
+  // The filters every number on the page shares: year range AND location AND coaches,
+  // then "Last N" by count. The pipeline lives in js/matchup-filter.js so games.html
   // applies exactly the same cut.
   function filterState() {
     return {
@@ -2340,15 +2406,18 @@
       startYear: state.startYear, endYear: state.endYear,
       minYear: RANGE.minYear, maxYear: RANGE.maxYear,
       preset: state.activePreset, lastN: state.lastN,
-      site: SITES_READY ? state.site : 'all'
+      site: SITES_READY ? state.site : 'all',
+      coach1: COACHES_READY ? state.coach1 : 'all',
+      coach2: COACHES_READY ? state.coach2 : 'all'
     };
   }
   function getRivalryGames() {
     const res = MF.filterGames(pairGames(state.team1, state.team2), filterState());
     LAST_MISSING_SITE = res.missingSite;
+    LAST_MISSING_COACH = res.missingCoach;
     return res.games;
   }
-  // Most recent N games in the current location view, across full history
+  // Most recent N games in the current location + coach view, across full history
   // (sets the slider span for the "Last N Matchups" presets).
   function getLastNAllTime(n) {
     if (!state.team1 || !state.team2) return [];
@@ -2357,7 +2426,7 @@
       .slice(0, n);
   }
 
-  // A count preset's span depends on the location view, so re-resolve it.
+  // A count preset's span depends on the location / coach view, so re-resolve it.
   function refilter() {
     if (state.lastN && state.activePreset) RANGE.setPreset(state.activePreset);
     else render();
@@ -2370,10 +2439,27 @@
         onChange: v => { state.site = v; refilter(); }
       });
     }
+    if (COACHES_READY) {
+      ['1', '2'].forEach(n => {
+        document.getElementById(`coach${n}-select`).addEventListener('change', e => {
+          state['coach' + n] = e.target.value;
+          refilter();
+        });
+      });
+    }
     document.getElementById('reset-filters').addEventListener('click', resetFilters);
-    // Restore a shared view from the URL: ?site=, and ?preset= or ?start=&end=.
+    document.getElementById('more-filters').addEventListener('click', () => setMoreOpen(!MORE_OPEN));
+    // Restore a shared view from the URL: ?site=, ?c1=/?c2=, and ?preset= or ?start=&end=.
     const f = MF.readParams(params);
     if (SITE_CTRL && f.site !== 'all') { state.site = f.site; SITE_CTRL.setValue(f.site); }
+    if (COACHES_READY) {
+      buildCoachOptions();  // validates the names against this pair's coaches
+      state.coach1 = coachValid(1, f.coach1) ? f.coach1 : 'all';
+      state.coach2 = coachValid(2, f.coach2) ? f.coach2 : 'all';
+      paintCoachSelects();
+    }
+    // A link that carries a hidden filter opens the panel so the filter is visible.
+    setMoreOpen(MF.hiddenActiveCount(filterState()) > 0);
     if (f.preset && RANGE.presets[f.preset] || f.preset === 'last5' || f.preset === 'last10') {
       RANGE.setPreset(f.preset);
     } else if (f.start || f.end) {
@@ -2386,8 +2472,46 @@
 
   function resetFilters() {
     state.site = 'all';
+    state.coach1 = state.coach2 = 'all';
     if (SITE_CTRL) SITE_CTRL.setValue('all');
+    paintCoachSelects();
     RANGE.setPreset('all');  // fires onChange -> render
+  }
+
+  // ---- head-coach dropdowns ----
+  let COACH_OPTS = { 1: [], 2: [] };
+  function coachValid(n, name) { return name !== 'all' && COACH_OPTS[n].some(o => o.value === name); }
+  // Rebuild both lists when the pair changes: only coaches who led their team in at
+  // least one meeting, most recent tenure first, each with their series record.
+  function buildCoachOptions() {
+    const key = `${state.team1}|${state.team2}`;
+    if (key === COACH_PAIR) return;
+    COACH_PAIR = key;
+    const all = pairGames(state.team1, state.team2);
+    COACH_OPTS = { 1: MF.coachOptions(all, state.team1), 2: MF.coachOptions(all, state.team2) };
+    [1, 2].forEach(n => {
+      const team = n === 1 ? state.team1 : state.team2;
+      const sel = document.getElementById(`coach${n}-select`);
+      sel.innerHTML = `<option value="all">All</option>` + COACH_OPTS[n]
+        .map(o => `<option value="${o.value.replace(/"/g, '&quot;')}">${o.label}</option>`).join('');
+      document.getElementById(`coach${n}-label`).textContent = `${getTeamAbbr(team)} Coach`;
+      if (!coachValid(n, state['coach' + n])) state['coach' + n] = 'all';
+    });
+    paintCoachSelects();
+  }
+  function paintCoachSelects() {
+    [1, 2].forEach(n => {
+      const sel = document.getElementById(`coach${n}-select`);
+      if (sel) sel.value = state['coach' + n] || 'all';
+    });
+  }
+
+  // ---- "More filters" (phones): Location + coaches behind one toggle ----
+  let MORE_OPEN = false;
+  function setMoreOpen(open) {
+    MORE_OPEN = !!open;
+    document.getElementById('filter-block').classList.toggle('is-open', MORE_OPEN);
+    document.getElementById('more-filters').setAttribute('aria-expanded', MORE_OPEN ? 'true' : 'false');
   }
 
   // Keep the address bar in step with the filters so a shared link reopens this view.
@@ -2529,11 +2653,12 @@
     return { count, team: streakTeam, startYear, endYear, tied: false };
   }
 
-  // School names for the filter summary line ("At Auburn").
+  // School names for the filter summary line ("At Auburn"; "Saban (ALA)").
   function siteNames() {
     const nm = t => (TEAM_DISPLAY[t] && TEAM_DISPLAY[t].school)
       ? TEAM_DISPLAY[t].school.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) : t;
-    return { team1: nm(state.team1), team2: nm(state.team2) };
+    return { team1: nm(state.team1), team2: nm(state.team2),
+             abbr1: getTeamAbbr(state.team1), abbr2: getTeamAbbr(state.team2) };
   }
 
   function render() {
@@ -2589,11 +2714,25 @@
       state.site = SITE_CTRL.value;
     }
     if (siteWrap) siteWrap.hidden = !SITE_CTRL || allPair.length === 0;
+    const showCoaches = COACHES_READY && allPair.length > 0;
+    if (showCoaches) buildCoachOptions();
+    document.getElementById('coach1-cell').hidden = !showCoaches;
+    document.getElementById('coach2-cell').hidden = !showCoaches;
+    document.getElementById('more-filters').hidden = !(showCoaches || (SITE_CTRL && allPair.length > 0));
     const games = getRivalryGames();
     const fNow = filterState();
     const filtersOn = MF.isActive(fNow);
     syncUrl(fNow);
     document.getElementById('reset-filters').hidden = !filtersOn;
+    const hiddenOn = MF.hiddenActiveCount(fNow);
+    const badge = document.getElementById('more-filters-badge');
+    badge.textContent = hiddenOn;
+    badge.hidden = !hiddenOn;
+    document.getElementById('more-filters').setAttribute('aria-label',
+      hiddenOn ? `More filters, ${hiddenOn} active` : 'More filters');
+    const coachNote = document.getElementById('coach-note');
+    coachNote.textContent = MF.missingNote(LAST_MISSING_COACH, 'coach');
+    coachNote.hidden = !LAST_MISSING_COACH;
     const gl = document.getElementById('games-link');
     if (gl) {
       // games.html reads the same params and runs the same pipeline (js/matchup-filter.js),
@@ -2620,6 +2759,7 @@
         const _cr = document.querySelector('.controls-row'); if (_cr) _cr.style.display = 'none';
         const _yr = document.querySelector('.year-range-section'); if (_yr) _yr.style.display = 'none';
         document.getElementById('reset-filters').hidden = true;
+        document.getElementById('more-filters').hidden = true;
         return;
       }
       if (topEl) topEl.innerHTML = '';

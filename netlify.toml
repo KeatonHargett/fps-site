@@ -67,6 +67,12 @@
   [headers.values]
     Cache-Control = "public, max-age=3600, must-revalidate"
 
+# Head coach(es) per school-season (scripts/build_coaches_data.py), same cadence.
+[[headers]]
+  for = "/coaches_data.json"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
 [[headers]]
   for = "/upcoming_lines.json"
   [headers.values]
