@@ -12,8 +12,9 @@
  *   - the location segmented control
  *
  * game_sites.json is grouped by team pair (the two names sorted, "A|B"); each pair
- * holds "<date8><H|A|N>" per game, where date8 is the date that starts the game_id,
- * H / A mean the first-named team was home / away and N a neutral site. Venue names
+ * holds "<key4><H|A|N>" per game, where key4 is gameKey(game_id) - the date that
+ * starts the game_id as base-36 days since 1869-01-01 - H / A mean the first-named
+ * team was home / away and N a neutral site. Venue names
  * live in game_venues.json, which only games.html loads. coaches_data.json holds
  * each school's coach(es) per season. annotateSites() / annotateCoaches() fold both
  * into precomputed fields on every game record (g._site, g._ca, g._cb), once, on
@@ -44,7 +45,18 @@
 
   function pairKey(a, b) { return a < b ? a + '|' + b : b + '|' + a; }
 
-  /* Parse one pair's "<date8><code>..." string into { date8: code }, once per pair. */
+  /* Compact per-pair game key: the date that starts game_id as days since 1869-01-01
+     in 4 base-36 digits ("zzzz" when undated). Mirrors key4() in
+     scripts/build_game_sites.py - change both together. */
+  var KEY_EPOCH = Date.UTC(1869, 0, 1);
+  function gameKey(gameId) {
+    var d = String(gameId).substr(0, 8);
+    if (d === '00000000') return 'zzzz';
+    var n = Math.round((Date.UTC(+d.substr(0, 4), +d.substr(4, 2) - 1, +d.substr(6, 2)) - KEY_EPOCH) / 864e5);
+    return ('0000' + n.toString(36)).slice(-4);
+  }
+
+  /* Parse one pair's "<key4><code>..." string into { key4: code }, once per pair. */
   function parsePairs(pairs, width) {
     var cache = {};
     return function (pk) {
@@ -52,8 +64,8 @@
       var s = pairs[pk], m = null;
       if (s) {
         m = {};
-        if (width) for (var i = 0; i + width <= s.length; i += width) m[s.substr(i, 8)] = s.substr(i + 8, width - 8);
-        else s.split(',').forEach(function (e) { if (e.length >= 9) m[e.substr(0, 8)] = e.substr(8); });
+        if (width) for (var i = 0; i + width <= s.length; i += width) m[s.substr(i, 4)] = s.substr(i + 4, width - 4);
+        else s.split(',').forEach(function (e) { if (e.length >= 5) m[e.substr(0, 4)] = e.substr(4); });
       }
       return (cache[pk] = m);
     };
@@ -65,10 +77,10 @@
       for (var j = 0; j < games.length; j++) games[j]._site = null;
       return false;
     }
-    var lookup = parsePairs(doc.pairs, 9);
+    var lookup = parsePairs(doc.pairs, 5);
     for (var i = 0; i < games.length; i++) {
       var g = games[i], pk = pairKey(g.team_a, g.team_b), m = lookup(pk);
-      var c = m && m[String(g.game_id).substr(0, 8)];
+      var c = m && m[gameKey(g.game_id)];
       if (!c) { g._site = null; continue; }
       if (c === 'N') { g._site = 'n'; continue; }
       var first = pk.split('|')[0];
@@ -89,7 +101,7 @@
     var lookup = parsePairs(doc.pairs, 0), venues = doc.venues || [];
     return function (g) {
       var m = lookup(pairKey(g.team_a, g.team_b));
-      var e = m && m[String(g.game_id).substr(0, 8)];
+      var e = m && m[gameKey(g.game_id)];
       return e && e.length > 1 ? venues[+e.substr(1)] || null : null;
     };
   }

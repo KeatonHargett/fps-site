@@ -34,15 +34,16 @@ City fill:
     the campus city of both, a team with no CFBD
     profile, or no city in the dataset           -> unresolved (never guessed)
 
-Outputs (both grouped by team pair; a game's key inside its pair is the 8-digit
-date that starts its game_id, unique per pair - the build checks):
+Outputs (both grouped by team pair). A game's key inside its pair is "key4": the
+date that starts its game_id as days since 1869-01-01 in 4 base-36 digits ("zzzz"
+for the undated 00000000 games). Dates are unique within a pair - the build checks.
   game_sites.json   - loaded by compare.html on every visit, so kept minimal:
-    { "_meta": {...}, "pairs": { "<A>|<B>": "<date8><H|A|N><date8><H|A|N>..." } }
+    { "_meta": {...}, "pairs": { "<A>|<B>": "<key4><H|A|N><key4><H|A|N>..." } }
     The pair key is the two team names sorted; H = the first-named team was home,
     A = the first-named team was away (the second was home), N = neutral site.
   game_venues.json  - loaded only by games.html:
     { "_meta": {...}, "sources": {...}, "venues": [...],
-      "pairs": { "<A>|<B>": "<date8><source>[<venue index>],..." } }
+      "pairs": { "<A>|<B>": "<key4><source>[<venue index>],..." } }
     source: c = cfbd, i = city_inferred, o = override.
 
 Modes:
@@ -87,6 +88,22 @@ DATE_TOLERANCE_DAYS = 1
 HOME_CITY_MIN_GAMES = 3
 SOURCE_NAMES = {"c": "cfbd", "i": "city_inferred", "o": "override"}
 SITE_TO_PAIR_CODE = {True: "H", False: "A"}
+KEY_EPOCH = dt.date(1869, 1, 1)
+B36 = "0123456789abcdefghijklmnopqrstuvwxyz"
+
+
+def key4(game_id: str) -> str:
+    """Compact per-pair game key: days since 1869-01-01 in 4 base-36 digits.
+    Mirrored by gameKey() in js/matchup-filter.js - change both together."""
+    d8 = game_id[:8]
+    if d8 == "00000000":
+        return "zzzz"
+    n = (dt.date(int(d8[:4]), int(d8[4:6]), int(d8[6:8])) - KEY_EPOCH).days
+    out = ""
+    for _ in range(4):
+        out = B36[n % 36] + out
+        n //= 36
+    return out
 
 
 class CFBDError(RuntimeError):
@@ -287,15 +304,15 @@ def decode_existing(games):
     venues, vpairs = vdoc.get("venues", []), vdoc.get("pairs", {})
     site_map, venue_map = {}, {}
     for pk, s in sites.items():
-        for i in range(0, len(s), 9):
-            site_map[(pk, s[i:i + 8])] = s[i + 8]
+        for i in range(0, len(s), 5):
+            site_map[(pk, s[i:i + 4])] = s[i + 4]
     for pk, s in vpairs.items():
         for e in s.split(","):
-            if len(e) >= 9:
-                venue_map[(pk, e[:8])] = (e[8], venues[int(e[9:])] if len(e) > 9 else "")
+            if len(e) >= 5:
+                venue_map[(pk, e[:4])] = (e[4], venues[int(e[5:])] if len(e) > 5 else "")
     out = {}
     for g in games:
-        k = (pair_key(g), g["game_id"][:8])
+        k = (pair_key(g), key4(g["game_id"]))
         pc = site_map.get(k)
         if not pc:
             continue
@@ -331,7 +348,7 @@ def main():
     overrides = json.loads(OVERRIDES_FILE.read_text(encoding="utf-8"))["overrides"] if OVERRIDES_FILE.exists() else []
     seen = set()
     for g in games:
-        k = (pair_key(g), g["game_id"][:8])
+        k = (pair_key(g), key4(g["game_id"]))
         if k in seen:
             sys.exit(f"FATAL: two games share pair+date key {k}; the compact format cannot hold them")
         seen.add(k)
@@ -421,12 +438,12 @@ def main():
         if not r:
             continue
         code, venue, src = r
-        pk, d8 = pair_key(g), g["game_id"][:8]
-        site_pairs[pk].append(d8 + pair_code(g, code))
+        pk, k4 = pair_key(g), key4(g["game_id"])
+        site_pairs[pk].append(k4 + pair_code(g, code))
         if venue and venue not in venue_ix:
             venue_ix[venue] = len(venues)
             venues.append(venue)
-        venue_pairs[pk].append(d8 + src + (str(venue_ix[venue]) if venue else ""))
+        venue_pairs[pk].append(k4 + src + (str(venue_ix[venue]) if venue else ""))
     stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
     meta = {
         "source": "CollegeFootballData /games (homeTeam, awayTeam, neutralSite, venue); city fill from "
@@ -436,12 +453,12 @@ def main():
         "by_source": {name: stats[k] for k, name in SOURCE_NAMES.items()},
     }
     sites_doc = {
-        "_meta": dict(meta, format="pairs[sorted 'A|B'] = concatenated <date8><H|A|N>; "
+        "_meta": dict(meta, format="pairs[sorted 'A|B'] = concatenated <key4><H|A|N> (key4 = base-36 days since 1869-01-01, zzzz = undated); "
                                    "H/A = first-named team home/away, N = neutral"),
         "pairs": {pk: "".join(v) for pk, v in sorted(site_pairs.items())},
     }
     venues_doc = {
-        "_meta": dict(meta, format="pairs[sorted 'A|B'] = comma-separated <date8><source>[venue index]"),
+        "_meta": dict(meta, format="pairs[sorted 'A|B'] = comma-separated <key4><source>[venue index]"),
         "sources": SOURCE_NAMES,
         "venues": venues,
         "pairs": {pk: ",".join(v) for pk, v in sorted(venue_pairs.items())},
