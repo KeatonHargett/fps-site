@@ -272,6 +272,7 @@
 
   /* v45: neutral line shown when two teams have no prior meetings */
   .no-h2h-line { text-align: center; padding: 2rem 1rem; color: var(--gray); font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.04em; }
+
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -305,7 +306,6 @@
   #top-results > .hero-bar:last-child { margin-bottom: 1rem; }
   .year-range-section { padding-top: 0; margin-bottom: 1.25rem; }
   .results-top-after:not(:empty) { padding-top: 1.25rem; }
-  .results-top-after > .streak-block:first-child { margin-top: 0; }
   .year-range-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem; }
   .year-range-title { font-size: 0.72rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; }
   .year-range-display { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
@@ -350,7 +350,7 @@
   .chip:hover { background: #e5e7eb; }
   .chip.active { background: var(--blue); color: white; border-color: var(--blue); }
   .results { padding-top: 1rem; }
-  .h2h-summary { text-align: center; margin-bottom: 2rem; }
+  .h2h-summary { text-align: center; margin-bottom: 1.5rem; }
   .h2h-summary .total { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; line-height: 1; }
   .h2h-summary .total-label { font-size: 0.9rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; }
   .record-line { font-family: 'Bebas Neue', sans-serif; font-size: 1.75rem; margin-top: 0.5rem; }
@@ -484,7 +484,7 @@
     .dd-toggle img { width: 24px; height: 24px; }
     .selector label { font-size: 0.72rem; }
     .compare-card h1, .compare-card h2 { font-size: 2rem; }
-    .h2h-summary .total { font-size: 3rem; }
+    .h2h-summary .total { font-size: 2.6rem; }
     .stats-grid { grid-template-columns: 1fr 1fr; }
     .games-table { font-size: 0.8rem; }
   }
@@ -787,10 +787,14 @@
     .hb-seg { font-size: 1rem; }
   }
 
-  /* v29 Tweak 1C: Current Win Streak block */
-  .streak-block { text-align: center; margin: 1rem 0 1.5rem; }
-  .streak-block .streak-label { font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; letter-spacing: 0.12em; color: var(--gray); }
-  .streak-block .streak-value { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; line-height: 1; margin-top: 0.25rem; letter-spacing: 0.03em; }
+  /* Current streak: one compact line in the summary, in the streak team's colour */
+  .streak-line { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; line-height: 1.1; letter-spacing: 0.05em; margin-top: 0.3rem; }
+  .streak-line .sl-abbr { display: none; }
+  @media (max-width: 700px) {
+    .streak-line { white-space: nowrap; }
+    .streak-line .sl-full { display: none; }
+    .streak-line .sl-abbr { display: inline; }
+  }
 
   /* v29 Tweak 1E: Full Games button + Time Period dropdown side-by-side */
   .controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: center; padding: 1rem 0 1.25rem; margin-bottom: 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
@@ -823,6 +827,24 @@
   .sc-record .sc-sub { display: block; font-family: 'Inter', sans-serif; font-size: 0.72rem; font-weight: 500; color: var(--gray); letter-spacing: 0; text-transform: none; margin-top: 0.15rem; }
   @media (max-width: 640px) { .suggested-grid { grid-template-columns: 1fr; } }
 
+  /* Mobile header: tightened so meetings, record, streak and the series bar fit above
+     the fold on a 375px phone. Kept last so it wins over the earlier mobile rules. */
+  @media (max-width: 700px) {
+    main { padding-top: 1rem; }
+    .compare-card { padding-top: 1.1rem; }
+    .compare-card h1 { margin-bottom: 0.9rem; }
+    .selector-bar { margin-bottom: 0.9rem; }
+    .h2h-summary { margin-bottom: 0.6rem; }
+    .h2h-summary .total-label { font-size: 0.78rem; }
+    .record-line { font-size: 1.45rem; margin-top: 0.2rem; }
+    .streak-line { font-size: 1.05rem; margin-top: 0.15rem; }
+    .rivalry-badge { margin-bottom: 0.4rem; }
+    .rivalry-badge .rb-logo { height: 60px; margin-bottom: 0.25rem; }
+    .rivalry-badge .rb-pill { font-size: 1.15rem; padding: 0.25rem 1rem; }
+    .rivalry-badge .rb-trophy { margin-top: 0.2rem; font-size: 0.7rem; }
+    .hero-bar { margin: 0.6rem 0 1rem; }
+    .hero-bar-row { row-gap: 0.6rem; }
+  }
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
      crossorigin="anonymous"></script><script type="application/ld+json">
@@ -2377,10 +2399,11 @@
     return _allTimeGamesCache[team] || 0;
   }
 
-  // v29: current H2H win streak between the two selected teams (from full data)
-  function currentH2HStreak() {
+  // Current H2H win streak within the games the filters leave in view, so it moves
+  // with every filter (range, location, coach) like the rest of the header.
+  function currentH2HStreak(games) {
     if (!state.team1 || !state.team2) return null;
-    const all = pairGames(state.team1, state.team2)
+    const all = games
       .slice()
       .sort((a, b) => b.game_date.localeCompare(a.game_date));
     if (all.length === 0) return null;
@@ -2489,10 +2512,10 @@
     const t1Streak = longestStreak(games, state.team1);
     const t2Streak = longestStreak(games, state.team2);
 
-    // ===== v29 TOP container: hero H2H bar + current streak =====
+    // ===== v29 TOP container: summary, streak, trophy, hero H2H bar =====
     const t1Games = totalGamesAllTime(state.team1);
     const t2Games = totalGamesAllTime(state.team2);
-    const streak = currentH2HStreak();
+    const streak = currentH2HStreak(games);
     topEl.innerHTML = `
       <div class="h2h-summary">
         ${isPastPreset && !isLastN
@@ -2500,6 +2523,18 @@
           : `<div class="total" id="total-num">${total}</div>
              <div class="total-label">${totalLabel}</div>`}
         <div class="record-line">${leader?`<span class="leader" style="color:${leaderColor}">${recordStr}</span>`:recordStr}</div>
+        ${(() => {
+          if (!streak) return '';
+          if (streak.tied) {
+            return `<div class="streak-line" style="color:var(--gray)">Last Meeting: Tie (${streak.startYear})</div>`;
+          }
+          if (streak.count === 0) return '';
+          const sColor = TEAM_META[streak.team]?.color || 'var(--dark)';
+          const sDisp = (TEAM_DISPLAY[streak.team] && TEAM_DISPLAY[streak.team].school) || streak.team.toUpperCase();
+          const yr = streak.startYear === streak.endYear ? `${streak.startYear}` : `${streak.startYear}-${streak.endYear}`;
+          // Full school name on desktop, abbreviation on phones so the line never wraps.
+          return `<div class="streak-line" style="color:${sColor}">Current Streak: <span class="sl-full">${sDisp}</span><span class="sl-abbr">${getTeamAbbr(streak.team)}</span> ${streak.count} (${yr})</div>`;
+        })()}
       </div>
       ${(() => {
         const riv = getRivalry();
@@ -2543,25 +2578,8 @@
       </div>
     `;
 
-    // ===== Below the filter block: current win streak + upcoming matchup =====
+    // ===== Below the filter block: upcoming matchup line (only when ESPN has one) =====
     if (afterEl) afterEl.innerHTML = `
-      ${(() => {
-        if (!streak) return '';
-        if (streak.tied) {
-          return `<div class="streak-block">
-            <div class="streak-label">Last Meeting</div>
-            <div class="streak-value" style="color:var(--gray)">TIE (${streak.startYear})</div>
-          </div>`;
-        }
-        if (streak.count === 0) return '';
-        const sColor = TEAM_META[streak.team]?.color || 'var(--dark)';
-        const sDisp = (TEAM_DISPLAY[streak.team] && TEAM_DISPLAY[streak.team].school) || streak.team.toUpperCase();
-        const yr = streak.startYear === streak.endYear ? `${streak.startYear}` : `${streak.startYear}-${streak.endYear}`;
-        return `<div class="streak-block">
-          <div class="streak-label">Current Win Streak</div>
-          <div class="streak-value" style="color:${sColor}">${streak.count} &middot; ${sDisp} (${yr})</div>
-        </div>`;
-      })()}
       ${(() => {
         // v37: Upcoming Matchup spread (only shown when ESPN has a future game between the two selected teams)
         if (!UPCOMING_LINES || !UPCOMING_LINES.matchups) return '';
