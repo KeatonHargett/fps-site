@@ -873,24 +873,34 @@
     .filter-block { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 0.6rem; }
     .filter-block > *, .controls-row > * { grid-column: 1 / -1; }
     .controls-row { display: contents; }
-    .year-range-section { order: 1; }
-    .controls-row .time-period-cell { order: 2; border-top: 1px solid var(--border); padding-top: 0.9rem; }
-    .more-filters { order: 3; }
+    /* Time Period and the More filters toggle share one row; the rule that opened
+       the controls row now closes the slider section instead. */
+    .year-range-section { order: 1; padding-bottom: 0.65rem; margin-bottom: 0.65rem; border-bottom: 1px solid var(--border); }
+    /* Tighter vertical rhythm inside the block on phones: readout, slider and labels. */
+    .year-range-header { margin-bottom: 0.2rem; }
+    .year-range-display { font-size: 1.35rem; line-height: 1.1; }
+    .range-wrap { height: 30px; margin: 0 0 0.3rem; }
+    .controls-row .time-period-cell { order: 2; grid-column: 1 / 2; gap: 0.2rem; }
+    .more-filters { order: 3; grid-column: 2 / 3; align-self: end; }
+    .filter-block:has(> .more-filters[hidden]) .time-period-cell { grid-column: 1 / -1; }
     .site-filter-wrap { order: 4; margin: 0.75rem 0 0; }
     .controls-row .coach-cell { order: 5; grid-column: auto; margin-top: 0.75rem; }
     .controls-row .coach-note { order: 6; margin-top: 0.4rem; }
-    .controls-row .games-btn-cell { order: 7; justify-content: center; padding: 0.9rem 0 1.1rem; border-bottom: 1px solid var(--border); }
+    .controls-row .games-btn-cell { order: 7; justify-content: center; padding: 0.75rem 0 0.85rem; border-bottom: 1px solid var(--border); }
     .more-filters {
-      display: flex; align-items: center; justify-content: center; gap: 0.4rem; width: 100%;
-      margin-top: 0.75rem; padding: 0.55rem 0.75rem; cursor: pointer;
-      font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.06em;
+      position: relative; display: flex; align-items: center; justify-content: center; gap: 0.25rem; width: 100%;
+      margin-top: 0; padding: 0 0.35rem; height: 44px; cursor: pointer; white-space: nowrap;
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 0.04em;
       color: var(--blue); background: white; border: 2px solid var(--blue); border-radius: 8px;
     }
-    .more-filters .mf-caret { width: 18px; height: 18px; transition: transform 0.15s; }
+    .more-filters .mf-caret { width: 15px; height: 15px; flex: none; transition: transform 0.15s; }
     .more-filters[aria-expanded="true"] .mf-caret { transform: rotate(180deg); }
+    /* Count of active hidden filters, as a corner bubble so it never costs the label width. */
     .more-filters .mf-badge {
-      display: inline-flex; align-items: center; justify-content: center; min-width: 1.35rem; height: 1.35rem;
-      padding: 0 0.35rem; border-radius: 999px; background: var(--orange); color: white; font-size: 0.95rem;
+      position: absolute; top: -9px; right: -7px;
+      display: inline-flex; align-items: center; justify-content: center; min-width: 1.3rem; height: 1.3rem;
+      padding: 0 0.3rem; border-radius: 999px; background: var(--orange); color: white; font-size: 0.9rem;
+      border: 2px solid white;
     }
     .more-filters .mf-badge[hidden] { display: none; }
     .more-filters:focus-visible { outline: 3px solid rgba(0,53,148,0.45); outline-offset: 2px; }
