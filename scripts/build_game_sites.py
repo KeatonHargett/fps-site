@@ -1,35 +1,32 @@
 """
-Front Porch Sports - build game_sites.json: where every game in
+Front Porch Sports - build game_sites.json (+ game_venues.json): where every game in
 front_porch_games.json was played (team_a home, team_b home, or neutral site).
 
-Why a separate file:
+Why separate files:
   front_porch_games.json has city/state but no home/away/neutral field, and it is
-  never modified by this script. game_sites.json is purely additive and keyed by
-  game_id, so the weekly games refresh can keep rewriting the main dataset without
-  touching it; new game_ids simply show up as unresolved until this is re-run.
+  never modified by this script. Both outputs are purely additive.
 
 Sources, in priority order:
   1. override       game_sites_overrides.json - known corrections (e.g. the Iron
                     Bowl at Legion Field, Birmingham, 1948-1988, which CFBD files as
-                    an Alabama home game).
+                    an Alabama home game). Official sources outrank CFBD.
   2. cfbd           CollegeFootballData /games (homeTeam, awayTeam, neutralSite,
-                    venue), cached per season in .cfbd_cache/ (shared with
-                    backfill_season_type.py). CFBD's home designation is trusted.
+                    venue), cached per season in .cfbd_cache/. CFBD's home
+                    designation is trusted unless an override says otherwise.
   3. city_inferred  for games CFBD has no record of (mostly pre-1930 and non-FBS
                     opponents), see "City fill" below.
 
 CFBD join (season + both teams, then date, then score):
   same season, same team pair, CFBD date within +/-1 day (CFBD startDate is UTC);
-  otherwise same season, same pair, same final score - catches early games whose
-  dates disagree between sources and the rows with no game_date. Team names go
-  through refresh_games.normalize(), the map the main dataset was built with.
+  otherwise same season, same pair, same final score. Team names go through
+  refresh_games.normalize(), the map the main dataset was built with.
 
 City fill:
-  Each school's home cities are its CFBD home-stadium city (teams cache, every
-  season) plus any city where CFBD lists it as the designated home team in at least
-  HOME_CITY_MIN_GAMES games. That second set is what makes a regular home venue
-  count as home (Alabama at Legion Field, Arkansas in Little Rock, Ole Miss in
-  Jackson). Using the game's city/state from front_porch_games.json:
+  Each school's home cities are its CFBD home-stadium city (teams cache) plus any
+  city where CFBD lists it as the designated home team in at least
+  HOME_CITY_MIN_GAMES games - so a regular home venue counts as home (Alabama at
+  Legion Field, Arkansas in Little Rock, Ole Miss in Jackson). Using the game's
+  city/state from front_porch_games.json:
     in only one team's home cities               -> that team was home
     in neither team's home cities                -> neutral
     a regular city of both, campus city of one   -> the campus team was home
@@ -37,25 +34,34 @@ City fill:
     the campus city of both, a team with no CFBD
     profile, or no city in the dataset           -> unresolved (never guessed)
 
-Output shape (compact on purpose - compare.html loads it on every visit):
-  {
-    "_meta":  {...},
-    "venues": ["Bryant-Denny Stadium", ...],
-    "games":  { "<game_id>": "<site><source>[<venue index>]", ... }
-  }
-  site:   "a" = team_a was the home team, "b" = team_b was home, "n" = neutral site
-  source: "c" = cfbd, "i" = city_inferred, "o" = override
-  e.g. "ac12" = team_a home per CFBD at venues[12]; "ni" = neutral, inferred.
-  home_team/away_team are recoverable from the game record plus the site code.
+Outputs (both grouped by team pair; a game's key inside its pair is the 8-digit
+date that starts its game_id, unique per pair - the build checks):
+  game_sites.json   - loaded by compare.html on every visit, so kept minimal:
+    { "_meta": {...}, "pairs": { "<A>|<B>": "<date8><H|A|N><date8><H|A|N>..." } }
+    The pair key is the two team names sorted; H = the first-named team was home,
+    A = the first-named team was away (the second was home), N = neutral site.
+  game_venues.json  - loaded only by games.html:
+    { "_meta": {...}, "sources": {...}, "venues": [...],
+      "pairs": { "<A>|<B>": "<date8><source>[<venue index>],..." } }
+    source: c = cfbd, i = city_inferred, o = override.
+
+Modes:
+  full (default)        rebuild every season from the CFBD cache.
+  --update-season Y...  CI / weekly refresh: re-fetch only these seasons from CFBD
+                        and recompute their games; every other game keeps what the
+                        current output files hold. Overrides are applied every run.
+  A CFBD error is fatal: the script exits non-zero and leaves both output files
+  untouched. Outputs are written to a temp file and swapped in only on success, and
+  never if they would cover fewer games than the files they replace.
 
 Env vars:
-  CFBD_API_KEY   CollegeFootballData key (env or repo .env). Only needed when a
-                 season is not cached or is passed to --refresh. Never printed.
+  CFBD_API_KEY   CollegeFootballData key (env or repo .env). Never printed.
+  FPS_DRY_RUN=1  compute and report, write nothing.
 
 Usage:
-  python scripts/build_game_sites.py                     # build from cache
-  python scripts/build_game_sites.py --refresh 2026      # re-fetch a season first
-  python scripts/build_game_sites.py --report "Alabama|Auburn" "Oklahoma St.|Oklahoma"
+  python scripts/build_game_sites.py                      # full build from cache
+  python scripts/build_game_sites.py --refresh 2026       # full build, re-fetch 2026
+  python scripts/build_game_sites.py --update-season 2026 # weekly incremental
 """
 from __future__ import annotations
 
@@ -75,10 +81,16 @@ REPO = Path(os.environ.get("FPS_REPO_ROOT", Path(__file__).resolve().parent.pare
 GAMES_FILE = REPO / "front_porch_games.json"
 OVERRIDES_FILE = REPO / "game_sites_overrides.json"
 OUT_FILE = REPO / "game_sites.json"
+VENUES_FILE = REPO / "game_venues.json"
 CACHE_DIR = Path(os.environ.get("FPS_CACHE_DIR", REPO / ".cfbd_cache"))
 DATE_TOLERANCE_DAYS = 1
 HOME_CITY_MIN_GAMES = 3
 SOURCE_NAMES = {"c": "cfbd", "i": "city_inferred", "o": "override"}
+SITE_TO_PAIR_CODE = {True: "H", False: "A"}
+
+
+class CFBDError(RuntimeError):
+    """A CFBD request failed. Fatal: nothing may be written after this."""
 
 
 def load_key() -> str | None:
@@ -93,21 +105,26 @@ def load_key() -> str | None:
     return None
 
 
+def cfbd_fetch(path: str, params: dict, key_holder: dict):
+    """One CFBD call. Raises CFBDError instead of returning partial data."""
+    if "key" not in key_holder:
+        key_holder["key"] = load_key()
+    if not key_holder["key"]:
+        raise CFBDError("CFBD_API_KEY is not set")
+    rows = api_get(path, params, key_holder["key"])  # never echoes the key
+    if rows is None:
+        raise CFBDError(f"CFBD {path} {params} failed")
+    return rows
+
+
 def season_rows(year: int, refresh: bool, key_holder: dict):
     cf = CACHE_DIR / f"cfbd_{year}.json"
     if cf.exists() and not refresh:
         return json.loads(cf.read_text(encoding="utf-8"))
-    if "key" not in key_holder:
-        key_holder["key"] = load_key()
-    if not key_holder["key"]:
-        print(f"  WARN: season {year} not cached and CFBD_API_KEY is not set", flush=True)
-        return []
-    rows = api_get("/games", {"year": year, "seasonType": "both"}, key_holder["key"])
-    if rows is None:
-        return []
+    rows = cfbd_fetch("/games", {"year": year, "seasonType": "both"}, key_holder)
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     cf.write_text(json.dumps(rows), encoding="utf-8")
-    print(f"  fetched {year}: {len(rows):,} CFBD rows", flush=True)
+    print(f"  fetched {year}: {len(rows):,} CFBD games", flush=True)
     return rows
 
 
@@ -169,11 +186,14 @@ def city_key(g):
     return (city, (g.get("state") or "").strip().upper()) if city else None
 
 
-def campus_cities():
-    """school -> {(city, state)} from the CFBD teams cache, every season."""
+def campus_cities(team_rows=None):
+    """school -> {(city, state)} from CFBD teams (the cache, plus any rows passed in)."""
     out = defaultdict(set)
-    for f in sorted(CACHE_DIR.glob("cfbd_teams_*.json")):
-        for t in json.loads(f.read_text(encoding="utf-8")):
+    batches = [json.loads(f.read_text(encoding="utf-8")) for f in sorted(CACHE_DIR.glob("cfbd_teams_*.json"))]
+    if team_rows:
+        batches.append(team_rows)
+    for rows in batches:
+        for t in rows:
             loc = t.get("location") or {}
             if loc.get("city"):
                 out[normalize(t.get("school") or "")].add(
@@ -225,13 +245,13 @@ def apply_overrides(game, overrides):
     return None
 
 
-def cfbd_join(games, refresh):
-    """game_id -> (cfbd_game, method) for every game CFBD can place. Shared with
+def cfbd_join(games, seasons, refresh, key_holder):
+    """game_id -> (cfbd_game, method) for the given seasons. Shared with
     build_coaches_data.py, which needs the CFBD game to date coaching changes."""
     by_season = defaultdict(list)
     for g in games:
-        by_season[g["season"]].append(g)
-    key_holder: dict = {}
+        if g["season"] in seasons:
+            by_season[g["season"]].append(g)
     joined, misses = {}, {}
     for season in sorted(by_season):
         idx = index_season(season_rows(season, season in refresh, key_holder))
@@ -244,124 +264,211 @@ def cfbd_join(games, refresh):
     return joined, misses
 
 
+# ---- output encoding ---------------------------------------------------------
+
+def pair_key(g):
+    return "|".join(sorted((g["team_a"], g["team_b"])))
+
+
+def pair_code(g, code):
+    """team_a/team_b code -> H/A/N from the point of view of the pair key's first team."""
+    if code == "n":
+        return "N"
+    home = g["team_a"] if code == "a" else g["team_b"]
+    return SITE_TO_PAIR_CODE[home == pair_key(g).split("|")[0]]
+
+
+def decode_existing(games):
+    """Read the current output files back into game_id -> (code, venue, src)."""
+    if not OUT_FILE.exists():
+        return {}
+    sites = json.loads(OUT_FILE.read_text(encoding="utf-8")).get("pairs", {})
+    vdoc = json.loads(VENUES_FILE.read_text(encoding="utf-8")) if VENUES_FILE.exists() else {}
+    venues, vpairs = vdoc.get("venues", []), vdoc.get("pairs", {})
+    site_map, venue_map = {}, {}
+    for pk, s in sites.items():
+        for i in range(0, len(s), 9):
+            site_map[(pk, s[i:i + 8])] = s[i + 8]
+    for pk, s in vpairs.items():
+        for e in s.split(","):
+            if len(e) >= 9:
+                venue_map[(pk, e[:8])] = (e[8], venues[int(e[9:])] if len(e) > 9 else "")
+    out = {}
+    for g in games:
+        k = (pair_key(g), g["game_id"][:8])
+        pc = site_map.get(k)
+        if not pc:
+            continue
+        first = k[0].split("|")[0]
+        if pc == "N":
+            code = "n"
+        else:
+            home = first if pc == "H" else [t for t in (g["team_a"], g["team_b"]) if t != first][0]
+            code = "a" if home == g["team_a"] else "b"
+        src, venue = venue_map.get(k, ("c", ""))
+        out[g["game_id"]] = (code, venue, src)
+    return out
+
+
+def write_atomic(path: Path, doc):
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(doc, separators=(",", ":"), ensure_ascii=False), encoding="utf-8")
+    os.replace(tmp, path)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--refresh", nargs="*", type=int, default=[], help="seasons to re-fetch from CFBD")
+    ap.add_argument("--refresh", nargs="*", type=int, default=[], help="seasons to re-fetch from CFBD (full build)")
+    ap.add_argument("--update-season", nargs="*", type=int, default=None,
+                    help="only recompute these seasons (fresh from CFBD); keep the rest from the current files")
     ap.add_argument("--report", nargs="*", default=["Alabama|Auburn", "Oklahoma St.|Oklahoma"],
                     help='matchups to report on, as "Team A|Team B"')
     args = ap.parse_args()
+    dry = os.environ.get("FPS_DRY_RUN") == "1"
 
     games = json.loads(GAMES_FILE.read_text(encoding="utf-8"))
-    overrides = json.loads(OVERRIDES_FILE.read_text(encoding="utf-8"))["overrides"] if OVERRIDES_FILE.exists() else []
-
-    # Pass 1: CFBD join.
-    joined, _ = cfbd_join(games, set(args.refresh))
-    cfbd = {}
     by_id = {g["game_id"]: g for g in games}
+    overrides = json.loads(OVERRIDES_FILE.read_text(encoding="utf-8"))["overrides"] if OVERRIDES_FILE.exists() else []
+    seen = set()
+    for g in games:
+        k = (pair_key(g), g["game_id"][:8])
+        if k in seen:
+            sys.exit(f"FATAL: two games share pair+date key {k}; the compact format cannot hold them")
+        seen.add(k)
+
+    key_holder: dict = {}
+    incremental = args.update_season is not None
+    try:
+        if incremental:
+            target = set(args.update_season)
+            if not target:
+                sys.exit("FATAL: --update-season needs at least one season")
+            baseline = decode_existing(games)
+            if not baseline:
+                sys.exit(f"FATAL: --update-season needs an existing {OUT_FILE.name} to build on")
+            # Fresh CFBD data for the target seasons only - a failed call raises.
+            joined, _ = cfbd_join(games, target, target, key_holder)
+            team_rows = []
+            for y in sorted(target):
+                team_rows += cfbd_fetch("/teams", {"year": y}, key_holder)
+            campus = campus_cities(team_rows)
+        else:
+            target = {g["season"] for g in games}
+            baseline = {}
+            joined, _ = cfbd_join(games, target, set(args.refresh), key_holder)
+            campus = campus_cities()
+    except CFBDError as e:
+        print(f"::error::{e}. Leaving {OUT_FILE.name} and {VENUES_FILE.name} untouched.", flush=True)
+        sys.exit(1)
+
+    # CFBD placements for the games being (re)computed.
+    cfbd = {}
     for gid, (c, how) in joined.items():
         code = code_for(by_id[gid], c)
         if code:
-            cfbd[gid] = (code, c["venue"], how)
+            cfbd[gid] = (code, c["venue"])
 
-    # Regular home cities, learned from CFBD's own home designations.
+    # Regular home cities, learned from CFBD's own home designations (in an
+    # incremental run the existing CFBD-sourced entries supply the history).
     city_counts = defaultdict(lambda: defaultdict(int))
-    for g in games:
-        r = cfbd.get(g["game_id"])
-        ck = city_key(g)
-        if r and r[0] in "ab" and ck:
-            city_counts[g["team_a"] if r[0] == "a" else g["team_b"]][ck] += 1
+    history = {gid: (v[0], v[1]) for gid, v in baseline.items() if v[2] == "c"}
+    history.update(cfbd)
+    for gid, (code, _) in history.items():
+        g = by_id.get(gid)
+        ck = city_key(g) if g else None
+        if g and code in "ab" and ck:
+            city_counts[g["team_a"] if code == "a" else g["team_b"]][ck] += 1
     regular = {t: {ck for ck, n in cs.items() if n >= HOME_CITY_MIN_GAMES} for t, cs in city_counts.items()}
-    campus = campus_cities()
 
-    # Pass 2: override > cfbd > city fill.
-    venues: list[str] = []
-    venue_ix: dict[str, int] = {}
-    out: dict[str, str] = {}
+    # Resolve: override > cfbd > city fill (target seasons); everything else from baseline.
+    result: dict[str, tuple] = {}
     stats = defaultdict(int)
     unresolved = []
-
-    def vix(name):
-        if not name:
-            return -1
-        if name not in venue_ix:
-            venue_ix[name] = len(venues)
-            venues.append(name)
-        return venue_ix[name]
-
     for g in games:
         gid = g["game_id"]
         ov = apply_overrides(g, overrides)
         if ov:
-            code, venue, src = ov[0], ov[1], "o"
+            result[gid] = (ov[0], ov[1], "o")
+        elif g["season"] not in target:
+            if gid in baseline:
+                result[gid] = baseline[gid]
+            else:
+                unresolved.append((g, "not in previous build"))
+            continue
         elif gid in cfbd:
-            code, venue, src = cfbd[gid][0], cfbd[gid][1], "c"
+            result[gid] = (cfbd[gid][0], cfbd[gid][1], "c")
         else:
             code, why = infer_from_city(g, campus, regular)
-            venue, src = "", "i"
             if code is None:
-                stats["unresolved"] += 1
                 unresolved.append((g, why))
                 continue
-        stats["matched"] += 1
+            result[gid] = (code, "", "i")
+    for code, _, src in result.values():
         stats[src] += 1
-        v = vix(venue)
-        out[gid] = code + src + (str(v) if v >= 0 else "")
 
     total = len(games)
-    doc = {
-        "_meta": {
-            "source": "CollegeFootballData /games (homeTeam, awayTeam, neutralSite, venue), "
-                      "city fill from front_porch_games.json city/state, game_sites_overrides.json",
-            "generated": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
-            "codes": {"a": "team_a home", "b": "team_b home", "n": "neutral site"},
-            "sources": SOURCE_NAMES,
-            "games_total": total, "games_resolved": stats["matched"],
-            "by_source": {name: stats[k] for k, name in SOURCE_NAMES.items()},
-        },
-        "venues": venues,
-        "games": out,
-    }
-    OUT_FILE.write_text(json.dumps(doc, separators=(",", ":"), ensure_ascii=False), encoding="utf-8")
+    resolved = len(result)
+    if incremental and resolved < len([g for g in games if g["game_id"] in baseline]):
+        print(f"::error::incremental build resolves {resolved:,} games, fewer than the "
+              f"{len(baseline):,} already on file. Not writing.", flush=True)
+        sys.exit(1)
 
-    print(f"\n==> wrote {OUT_FILE.name}: {OUT_FILE.stat().st_size:,} bytes, {len(venues):,} venues")
-    print(f"==> before (CFBD join only): {len(cfbd):,} / {total:,} ({len(cfbd) / total:.1%})")
-    print(f"==> after: {stats['matched']:,} / {total:,} ({stats['matched'] / total:.1%}), "
-          f"{stats['unresolved']:,} unresolved")
+    # Encode.
+    venues, venue_ix = [], {}
+    site_pairs, venue_pairs = defaultdict(list), defaultdict(list)
+    for g in sorted(games, key=lambda x: x["game_id"][:8]):
+        r = result.get(g["game_id"])
+        if not r:
+            continue
+        code, venue, src = r
+        pk, d8 = pair_key(g), g["game_id"][:8]
+        site_pairs[pk].append(d8 + pair_code(g, code))
+        if venue and venue not in venue_ix:
+            venue_ix[venue] = len(venues)
+            venues.append(venue)
+        venue_pairs[pk].append(d8 + src + (str(venue_ix[venue]) if venue else ""))
+    stamp = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
+    meta = {
+        "source": "CollegeFootballData /games (homeTeam, awayTeam, neutralSite, venue); city fill from "
+                  "front_porch_games.json city/state; game_sites_overrides.json (official sources outrank CFBD)",
+        "generated": stamp,
+        "games_total": total, "games_resolved": resolved,
+        "by_source": {name: stats[k] for k, name in SOURCE_NAMES.items()},
+    }
+    sites_doc = {
+        "_meta": dict(meta, format="pairs[sorted 'A|B'] = concatenated <date8><H|A|N>; "
+                                   "H/A = first-named team home/away, N = neutral"),
+        "pairs": {pk: "".join(v) for pk, v in sorted(site_pairs.items())},
+    }
+    venues_doc = {
+        "_meta": dict(meta, format="pairs[sorted 'A|B'] = comma-separated <date8><source>[venue index]"),
+        "sources": SOURCE_NAMES,
+        "venues": venues,
+        "pairs": {pk: ",".join(v) for pk, v in sorted(venue_pairs.items())},
+    }
+
+    print(f"\n==> mode: {'incremental ' + str(sorted(target)) if incremental else 'full'}{' (dry run)' if dry else ''}")
+    print(f"==> resolved {resolved:,} / {total:,} ({resolved / total:.1%}), {len(unresolved):,} unresolved")
     for k, name in SOURCE_NAMES.items():
         print(f"      {name}: {stats[k]:,}")
     reasons = defaultdict(int)
     for _, why in unresolved:
         reasons[why] += 1
-    print("==> unresolved by reason: " + ", ".join(f"{k}: {v:,}" for k, v in reasons.items()))
-    decade = defaultdict(lambda: [0, 0])
-    for g in games:
-        d = decade[g["season"] // 10 * 10]
-        d[0] += 1
-        d[1] += g["game_id"] in out
-    print("==> by decade: " + "  ".join(f"{k}s {v[1] / v[0]:.0%}" for k, v in sorted(decade.items())))
-
+    if reasons:
+        print("==> unresolved by reason: " + ", ".join(f"{k}: {v:,}" for k, v in reasons.items()))
     for spec in args.report:
         a, b = spec.split("|")
         pg = [g for g in games if {g["team_a"], g["team_b"]} == {a, b}]
-        before = sum(1 for g in pg if g["game_id"] in cfbd)
-        after = [g for g in pg if g["game_id"] in out]
-        cnt, srcs = defaultdict(int), defaultdict(int)
-        for g in after:
-            code, src = out[g["game_id"]][0], out[g["game_id"]][1]
-            cnt["neutral" if code == "n" else f"{g['team_a'] if code == 'a' else g['team_b']} home"] += 1
-            srcs[SOURCE_NAMES[src]] += 1
-        print(f"\n==> {a} vs {b}: before {before} / {len(pg)} ({before / max(1, len(pg)):.1%}), "
-              f"after {len(after)} / {len(pg)} ({len(after) / max(1, len(pg)):.1%})")
-        print("      " + ", ".join(f"{k}: {v}" for k, v in sorted(cnt.items()))
-              + "  |  " + ", ".join(f"{k}: {v}" for k, v in sorted(srcs.items())))
-        for g in sorted(pg, key=lambda g: g["season"]):
-            r = out.get(g["game_id"])
-            if r and r[1] == "i":
-                home = "neutral" if r[0] == "n" else (g["team_a"] if r[0] == "a" else g["team_b"]) + " home"
-                print(f"      city_inferred: {g['season']} {g['city']}, {g['state']} -> {home}")
-            elif not r:
-                why = next((w for u, w in unresolved if u is g), "?")
-                print(f"      unresolved: {g['season']} {g['game_date'] or '(no date)'}  [{why}]")
+        ok = sum(1 for g in pg if g["game_id"] in result)
+        print(f"==> {a} vs {b}: {ok} / {len(pg)} ({ok / max(1, len(pg)):.1%})")
+
+    if dry:
+        print("==> dry run: nothing written")
+        return
+    write_atomic(OUT_FILE, sites_doc)
+    write_atomic(VENUES_FILE, venues_doc)
+    print(f"==> wrote {OUT_FILE.name} ({OUT_FILE.stat().st_size:,} bytes) and "
+          f"{VENUES_FILE.name} ({VENUES_FILE.stat().st_size:,} bytes, {len(venues):,} venues)")
 
 
 if __name__ == "__main__":

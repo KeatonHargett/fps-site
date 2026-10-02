@@ -67,6 +67,13 @@
   [headers.values]
     Cache-Control = "public, max-age=3600, must-revalidate"
 
+# Venue name + data source per game, split out of game_sites.json so compare.html
+# never downloads it; only games.html reads it.
+[[headers]]
+  for = "/game_venues.json"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
 # Head coach(es) per school-season (scripts/build_coaches_data.py), same cadence.
 [[headers]]
   for = "/coaches_data.json"

@@ -11,8 +11,10 @@
  *   - team-name aliases (?team1=Oklahoma State / osu / Oklahoma St. -> "Oklahoma St.")
  *   - the location segmented control
  *
- * game_sites.json is keyed by game_id; each value is "<site><source>[venue]" where
- * site is a (team_a home) / b (team_b home) / n (neutral). coaches_data.json holds
+ * game_sites.json is grouped by team pair (the two names sorted, "A|B"); each pair
+ * holds "<date8><H|A|N>" per game, where date8 is the date that starts the game_id,
+ * H / A mean the first-named team was home / away and N a neutral site. Venue names
+ * live in game_venues.json, which only games.html loads. coaches_data.json holds
  * each school's coach(es) per season. annotateSites() / annotateCoaches() fold both
  * into precomputed fields on every game record (g._site, g._ca, g._cb), once, on
  * load, so toggling a filter never re-reads either file.
@@ -40,14 +42,56 @@
       .catch(function () { return null; });
   }
 
-  /* Precompute each game's site once: g._site = 'a' | 'b' | 'n' | null. */
+  function pairKey(a, b) { return a < b ? a + '|' + b : b + '|' + a; }
+
+  /* Parse one pair's "<date8><code>..." string into { date8: code }, once per pair. */
+  function parsePairs(pairs, width) {
+    var cache = {};
+    return function (pk) {
+      if (pk in cache) return cache[pk];
+      var s = pairs[pk], m = null;
+      if (s) {
+        m = {};
+        if (width) for (var i = 0; i + width <= s.length; i += width) m[s.substr(i, 8)] = s.substr(i + 8, width - 8);
+        else s.split(',').forEach(function (e) { if (e.length >= 9) m[e.substr(0, 8)] = e.substr(8); });
+      }
+      return (cache[pk] = m);
+    };
+  }
+
+  /* Precompute each game's site once: g._site = 'a' (team_a home) | 'b' | 'n' | null. */
   function annotateSites(games, doc) {
-    var map = (doc && doc.games) || {};
-    for (var i = 0; i < games.length; i++) {
-      var v = map[games[i].game_id];
-      games[i]._site = v ? v.charAt(0) : null;
+    if (!doc || !doc.pairs) {
+      for (var j = 0; j < games.length; j++) games[j]._site = null;
+      return false;
     }
-    return !!(doc && doc.games);
+    var lookup = parsePairs(doc.pairs, 9);
+    for (var i = 0; i < games.length; i++) {
+      var g = games[i], pk = pairKey(g.team_a, g.team_b), m = lookup(pk);
+      var c = m && m[String(g.game_id).substr(0, 8)];
+      if (!c) { g._site = null; continue; }
+      if (c === 'N') { g._site = 'n'; continue; }
+      var first = pk.split('|')[0];
+      var home = c === 'H' ? first : (first === g.team_a ? g.team_b : g.team_a);
+      g._site = home === g.team_a ? 'a' : 'b';
+    }
+    return true;
+  }
+
+  /* games.html only: venue name per game (null when unknown), from game_venues.json. */
+  function loadVenues(url) {
+    return fetch(url || 'game_venues.json')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .catch(function () { return null; });
+  }
+  function venueLookup(doc) {
+    if (!doc || !doc.pairs) return function () { return null; };
+    var lookup = parsePairs(doc.pairs, 0), venues = doc.venues || [];
+    return function (g) {
+      var m = lookup(pairKey(g.team_a, g.team_b));
+      var e = m && m[String(g.game_id).substr(0, 8)];
+      return e && e.length > 1 ? venues[+e.substr(1)] || null : null;
+    };
   }
 
   /* 'team1home' | 'team2home' | 'neutral' | null, from team1's point of view. */
@@ -364,6 +408,11 @@
       get value() { return value; },
       /* Silent set (no onChange) - for restoring state from the URL. */
       setValue: function (v) { value = SITES.indexOf(v) >= 0 ? v : 'all'; paint(); },
+      /* Shown but inert while the location data is still loading. */
+      setDisabled: function (off) {
+        buttons.forEach(function (b) { b.disabled = !!off; });
+        container.classList.toggle('is-loading', !!off);
+      },
       setTeams: function (abbr1, abbr2, neutralPlayed) {
         labels.team1home = abbr1 + ' Home';
         labels.team2home = abbr2 + ' Home';
@@ -379,6 +428,8 @@
     SITES: SITES,
     NO_COACH: NO_COACH,
     loadSites: loadSites,
+    loadVenues: loadVenues,
+    venueLookup: venueLookup,
     annotateSites: annotateSites,
     siteOf: siteOf,
     hasNeutral: hasNeutral,

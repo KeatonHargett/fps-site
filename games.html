@@ -589,6 +589,7 @@
     }
   }
   // Resolved to the dataset's spelling after load (?team1=Oklahoma State / osu -> "Oklahoma St.").
+  let VENUE_OF = () => null;   // game -> stadium name, from game_venues.json
   let TEAM1 = params.get('team1');
   let TEAM2 = params.get('team2');
   // Location / "last N" use the same pipeline and URL contract as compare.html
@@ -769,16 +770,19 @@
     back.delete('last');
     if (LAST_N === 5 || LAST_N === 10) { back.delete('start'); back.delete('end'); back.set('preset', 'last' + LAST_N); }
     document.getElementById('back-link').href = `compare.html?${back.toString()}`;
-    // Location / coach data only when this link actually filters on them.
+    // Location / coach data only when this link actually filters on them. Venue names
+    // (game_venues.json) are this page's alone - compare.html never loads them.
     const needCoaches = COACH1 !== 'all' || COACH2 !== 'all';
     Promise.all([
       fetch('front_porch_games.json').then(r => r.json()),
       SITE !== 'all' ? MF.loadSites() : null,
-      needCoaches ? MF.loadCoaches() : null
+      needCoaches ? MF.loadCoaches() : null,
+      MF.loadVenues()
     ])
-      .then(([data, sitesDoc, coachesDoc]) => {
+      .then(([data, sitesDoc, coachesDoc, venuesDoc]) => {
         if (sitesDoc) MF.annotateSites(data, sitesDoc);
         if (coachesDoc) MF.annotateCoaches(data, coachesDoc);
+        VENUE_OF = MF.venueLookup(venuesDoc);
         if (END === null) {
           let maxSeason = 0;
           for (const g of data) { if ((g.season|0) > maxSeason) maxSeason = g.season|0; }
@@ -848,7 +852,9 @@
       const wCell = g.is_tie
         ? '<span class="tie-cell">Tie</span>'
         : `<span class="winner-cell">${teamLogo(g.winner, '', '')}<span class="wname">${g.winner}</span></span>`;
-      const loc = g.city ? `${g.city}${g.state?', '+g.state:''}` : '\u2014';
+      const city = g.city ? `${g.city}${g.state?', '+g.state:''}` : '';
+      const venue = VENUE_OF(g);
+      const loc = venue && city ? `${venue} &middot; ${city}` : (venue || city || '\u2014');
       // v35: winner color indicator on the left
       const tblT1Color = TEAM_META[TEAM1]?.color || '#003594';
       const tblT2Color = TEAM_META[TEAM2]?.color || '#003594';

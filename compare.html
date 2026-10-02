@@ -326,6 +326,7 @@
   }
   .site-btn:hover { background: rgba(0,53,148,0.06); }
   .site-btn[aria-pressed="true"] { background: var(--orange); border-color: var(--orange); color: white; }
+  .site-btn:disabled, .coach-select:disabled { opacity: 0.45; cursor: progress; }
   .site-btn:focus-visible { outline: 3px solid rgba(0,53,148,0.45); outline-offset: 2px; }
   .site-note { margin-top: 0.4rem; text-align: center; font-size: 0.75rem; color: var(--gray); }
   .filter-summary {
@@ -2177,6 +2178,12 @@
   let SITE_CTRL = null;
   let LAST_MISSING_SITE = 0;    // games the current location view had to drop for lack of site data
   let COACHES_READY = false;    // coaches_data.json loaded and folded into GAMES as g._ca / g._cb
+  // Site + coach data load AFTER the first paint (they are not needed to draw the
+  // header or charts). 'loading' until both settle, then 'done'. While loading the
+  // location and coach controls are shown disabled; the range filter works throughout.
+  let EXTRAS = 'loading';
+  // Location / coach filters a shared link asked for, held until their data arrives.
+  let PENDING = { site: 'all', coach1: 'all', coach2: 'all' };
   let LAST_MISSING_COACH = 0;   // games the current coach view had to drop for lack of coach data
   let COACH_PAIR = '';          // which pair the coach dropdowns were last built for
 
@@ -2262,16 +2269,10 @@
     Promise.all([
     fetch('front_porch_games.json').then(r => r.json()),
     fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] })),
-    _ulPromise,
-    MF.loadSites(),
-    MF.loadCoaches()
+    _ulPromise
   ])
-    .then(([data, fbsData, _ul, sitesDoc, coachesDoc]) => {
+    .then(([data, fbsData]) => {
       GAMES = data;
-      // Precompute every game's site label and both head coaches once; filters only
-      // ever read g._site / g._ca / g._cb.
-      SITES_READY = MF.annotateSites(GAMES, sitesDoc);
-      COACHES_READY = MF.annotateCoaches(GAMES, coachesDoc);
       buildGameIndexes();
       _allTimeGamesCache = null;
       FBS_NAMES = new Set((fbsData.teams || []).map(t => fpsKey(t.name)));
@@ -2302,6 +2303,7 @@
       updateRangeFill();
       BOOTING = false;
       render();
+      loadExtras();
     })
     .catch(err => {
       document.getElementById('results').innerHTML =
@@ -2487,33 +2489,26 @@
   }
 
   function initFilters() {
-    if (SITES_READY) {
-      SITE_CTRL = MF.createSiteControl({
-        container: '#site-filter',
-        onChange: v => { state.site = v; refilter(); }
+    SITE_CTRL = MF.createSiteControl({
+      container: '#site-filter',
+      onChange: v => { state.site = v; refilter(); }
+    });
+    SITE_CTRL.setDisabled(true);
+    ['1', '2'].forEach(n => {
+      document.getElementById(`coach${n}-select`).addEventListener('change', e => {
+        state['coach' + n] = e.target.value;
+        refilter();
       });
-    }
-    if (COACHES_READY) {
-      ['1', '2'].forEach(n => {
-        document.getElementById(`coach${n}-select`).addEventListener('change', e => {
-          state['coach' + n] = e.target.value;
-          refilter();
-        });
-      });
-    }
+    });
     document.getElementById('reset-filters').addEventListener('click', resetFilters);
     document.getElementById('more-filters').addEventListener('click', () => setMoreOpen(!MORE_OPEN));
-    // Restore a shared view from the URL: ?site=, ?c1=/?c2=, and ?preset= or ?start=&end=.
+    // Restore a shared view from the URL: ?preset= or ?start=&end= now (the range works
+    // immediately); ?site= and ?c1=/?c2= are held until their data has loaded.
     const f = MF.readParams(params);
-    if (SITE_CTRL && f.site !== 'all') { state.site = f.site; SITE_CTRL.setValue(f.site); }
-    if (COACHES_READY) {
-      buildCoachOptions();  // validates the names against this pair's coaches
-      state.coach1 = coachValid(1, f.coach1) ? f.coach1 : 'all';
-      state.coach2 = coachValid(2, f.coach2) ? f.coach2 : 'all';
-      paintCoachSelects();
-    }
+    PENDING = { site: f.site, coach1: f.coach1, coach2: f.coach2 };
+    SITE_CTRL.setValue(PENDING.site);
     // A link that carries a hidden filter opens the panel so the filter is visible.
-    setMoreOpen(MF.hiddenActiveCount(filterState()) > 0);
+    setMoreOpen(MF.hiddenActiveCount(PENDING) > 0);
     if (f.preset && RANGE.presets[f.preset] || f.preset === 'last5' || f.preset === 'last10') {
       RANGE.setPreset(f.preset);
     } else if (f.start || f.end) {
@@ -2524,7 +2519,31 @@
     syncRangeState();
   }
 
+  // Fetch site + coach data after the first paint, fold it into GAMES once, enable
+  // the controls and apply any location / coach filters the URL asked for.
+  function loadExtras() {
+    Promise.all([MF.loadSites(), MF.loadCoaches()]).then(([sitesDoc, coachesDoc]) => {
+      SITES_READY = MF.annotateSites(GAMES, sitesDoc);
+      COACHES_READY = MF.annotateCoaches(GAMES, coachesDoc);
+      EXTRAS = 'done';
+      COACH_PAIR = '';
+      if (COACHES_READY && state.team1 && state.team2) buildCoachOptions();
+      const wanted = MF.hiddenActiveCount(PENDING) > 0;
+      if (SITES_READY && PENDING.site !== 'all') { state.site = PENDING.site; SITE_CTRL.setValue(PENDING.site); }
+      if (COACHES_READY) {
+        state.coach1 = coachValid(1, PENDING.coach1) ? PENDING.coach1 : 'all';
+        state.coach2 = coachValid(2, PENDING.coach2) ? PENDING.coach2 : 'all';
+        paintCoachSelects();
+      }
+      PENDING = { site: 'all', coach1: 'all', coach2: 'all' };
+      // Only redraw when the view actually changes; otherwise just switch the controls on.
+      if (wanted) refilter();
+      else syncFilterControls(pairGames(state.team1, state.team2));
+    });
+  }
+
   function resetFilters() {
+    PENDING = { site: 'all', coach1: 'all', coach2: 'all' };
     state.site = 'all';
     state.coach1 = state.coach2 = 'all';
     if (SITE_CTRL) SITE_CTRL.setValue('all');
@@ -2572,6 +2591,7 @@
   // A random demo matchup (no teams in the URL) only gets written once a filter is on.
   function syncUrl(f) {
     const p = new URLSearchParams(location.search);
+    if (EXTRAS === 'loading') f = Object.assign({}, f, PENDING);  // don't drop ?site= / ?c1= mid-load
     MF.writeParams(p, f);
     if (MF.isActive(f) || _hadUrlTeams) { p.set('team1', state.team1); p.set('team2', state.team2); }
     const qs = p.toString();
@@ -2707,6 +2727,45 @@
     return { count, team: streakTeam, startYear, endYear, tied: false };
   }
 
+  // Location + coach controls: labels follow the teams; disabled while their data
+  // loads; hidden for a pair that never met or if the data failed to load.
+  function syncFilterControls(allPair) {
+    if (!state.team1 || !state.team2) return;
+    const met = allPair.length > 0;
+    const loading = EXTRAS === 'loading';
+    const abbr1 = getTeamAbbr(state.team1), abbr2 = getTeamAbbr(state.team2);
+    SITE_CTRL.setTeams(abbr1, abbr2, SITES_READY ? MF.hasNeutral(allPair) : true);
+    SITE_CTRL.setDisabled(!SITES_READY);
+    if (SITES_READY) state.site = SITE_CTRL.value;
+    const siteWrap = document.getElementById('site-filter-wrap');
+    siteWrap.hidden = !met || (!loading && !SITES_READY);
+    const siteNote = document.getElementById('site-note');
+    if (loading) { siteNote.textContent = 'Loading location and coach data\u2026'; siteNote.hidden = !met; }
+    else if (siteNote.textContent.startsWith('Loading')) siteNote.hidden = true;
+    const showCoaches = met && (loading || COACHES_READY);
+    if (COACHES_READY && met) buildCoachOptions();
+    [1, 2].forEach(n => {
+      const sel = document.getElementById(`coach${n}-select`);
+      if (!COACHES_READY) {
+        // Placeholder while loading: just the URL's coach (if any) so it reads right.
+        const want = PENDING['coach' + n];
+        sel.innerHTML = `<option value="all">All</option>` +
+          (want !== 'all' ? `<option value="${want.replace(/"/g, '&quot;')}" selected>${MF.coachLabel(want)}</option>` : '');
+        document.getElementById(`coach${n}-label`).textContent = `${n === 1 ? abbr1 : abbr2} Coach`;
+        COACH_PAIR = '';
+      }
+      sel.disabled = !COACHES_READY;
+      document.getElementById(`coach${n}-cell`).hidden = !showCoaches;
+    });
+    document.getElementById('more-filters').hidden = !(showCoaches || !siteWrap.hidden);
+    const hiddenOn = MF.hiddenActiveCount(loading ? PENDING : filterState());
+    const badge = document.getElementById('more-filters-badge');
+    badge.textContent = hiddenOn;
+    badge.hidden = !hiddenOn;
+    document.getElementById('more-filters').setAttribute('aria-label',
+      hiddenOn ? `More filters, ${hiddenOn} active` : 'More filters');
+  }
+
   // School names for the filter summary line ("At Auburn"; "Saban (ALA)").
   function siteNames() {
     const nm = t => (TEAM_DISPLAY[t] && TEAM_DISPLAY[t].school)
@@ -2761,29 +2820,12 @@
     const _cr0 = document.querySelector('.controls-row'); if (_cr0 && _cr0.style.display === 'none') _cr0.style.display = '';
     const _yr0 = document.querySelector('.year-range-section'); if (_yr0 && _yr0.style.display === 'none') _yr0.style.display = '';
     const allPair = pairGames(state.team1, state.team2);
-    const siteWrap = document.getElementById('site-filter-wrap');
-    if (SITE_CTRL) {
-      // Labels follow the teams; Neutral only when the pair has ever met at one.
-      SITE_CTRL.setTeams(getTeamAbbr(state.team1), getTeamAbbr(state.team2), MF.hasNeutral(allPair));
-      state.site = SITE_CTRL.value;
-    }
-    if (siteWrap) siteWrap.hidden = !SITE_CTRL || allPair.length === 0;
-    const showCoaches = COACHES_READY && allPair.length > 0;
-    if (showCoaches) buildCoachOptions();
-    document.getElementById('coach1-cell').hidden = !showCoaches;
-    document.getElementById('coach2-cell').hidden = !showCoaches;
-    document.getElementById('more-filters').hidden = !(showCoaches || (SITE_CTRL && allPair.length > 0));
+    syncFilterControls(allPair);
     const games = getRivalryGames();
     const fNow = filterState();
     const filtersOn = MF.isActive(fNow);
     syncUrl(fNow);
     document.getElementById('reset-filters').hidden = !filtersOn;
-    const hiddenOn = MF.hiddenActiveCount(fNow);
-    const badge = document.getElementById('more-filters-badge');
-    badge.textContent = hiddenOn;
-    badge.hidden = !hiddenOn;
-    document.getElementById('more-filters').setAttribute('aria-label',
-      hiddenOn ? `More filters, ${hiddenOn} active` : 'More filters');
     const coachNote = document.getElementById('coach-note');
     coachNote.textContent = MF.missingNote(LAST_MISSING_COACH, 'coach');
     coachNote.hidden = !LAST_MISSING_COACH;
@@ -2794,7 +2836,7 @@
       gl.href = `games.html?${MF.gamesListQuery(fNow)}`;
     }
     const siteNote = document.getElementById('site-note');
-    if (siteNote) {
+    if (siteNote && EXTRAS !== 'loading') {
       siteNote.textContent = MF.missingNote(LAST_MISSING_SITE);
       siteNote.hidden = !LAST_MISSING_SITE;
     }
