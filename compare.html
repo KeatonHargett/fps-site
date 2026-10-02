@@ -25,6 +25,7 @@
 <meta name="twitter:image" content="https://frontporchsports.com/og-image.png">
 <meta name="description" content="Compare any two FBS programs head-to-head across every era.">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="data/derived/manifest.json" as="fetch" crossorigin="anonymous">
 <style>
   :root {
     --orange: #fe5c00;
@@ -1169,6 +1170,8 @@
 </footer>
 <!-- Shared year-range filter. Plain script, no build step; defines window.FPSRangeFilter. -->
 <script src="js/range-filter.js"></script>
+<!-- Slim per-team data (data/derived/); falls back to front_porch_games.json. -->
+<script src="js/derived-data.js"></script>
 <!-- Shared location filter, filter pipeline and URL contract; defines window.FPSMatchupFilter. -->
 <script src="js/matchup-filter.js"></script>
 <script>
@@ -2047,12 +2050,15 @@
     return (team || '').toUpperCase();
   }
 
-  // Live rank caches over the entire GAMES dataset
+  // Live rank caches over the entire GAMES dataset. With derived data the page holds only
+  // the two teams' games, so the same tallies come from league.json - built at deploy
+  // time by the identical loop, keys in the same first-seen order - and feed the same sort.
   let _winsRankCache = null;
   function buildWinsRank() {
     if (_winsRankCache) return _winsRankCache;
     const counts = {};
-    GAMES.forEach(g => {
+    if (LEAGUE) LEAGUE.wins.forEach(([team, w]) => { counts[team] = w; });
+    else GAMES.forEach(g => {
       if (g.is_tie) return;
       counts[g.winner] = (counts[g.winner] || 0) + 1;
     });
@@ -2067,7 +2073,8 @@
   function buildWinPctRank() {
     if (_winPctRankCache) return _winPctRankCache;
     const recs = {};
-    GAMES.forEach(g => {
+    if (LEAGUE) LEAGUE.records.forEach(([team, w, l, t]) => { recs[team] = { w, l, t }; });
+    else GAMES.forEach(g => {
       [g.team_a, g.team_b].forEach(t => {
         if (!recs[t]) recs[t] = { w: 0, l: 0, t: 0 };
       });
@@ -2160,6 +2167,10 @@
     if (RANGE.applyMaxSeasonFrom(data)) syncRangeState();
   }
   let GAMES = [], TEAMS = [];
+  // DERIVED: GAMES holds only the loaded teams' games (data/derived/ per-team files, merged
+  // in original order) and LEAGUE the league-wide tallies; false after a fallback to the
+  // full front_porch_games.json.
+  let DERIVED = false, LEAGUE = null;
   let charts = { margin: null, lead: null };
   // START_MODE is set by the page: 'empty' (homepage) or 'default' (compare page)
   const START_MODE = (typeof COMPARE_START_MODE !== 'undefined') ? COMPARE_START_MODE : 'default';
@@ -2266,44 +2277,136 @@
     return [a, b];
   }
 
-    Promise.all([
-    fetch('front_porch_games.json').then(r => r.json()),
+  function useGames(data) {
+    GAMES = data;
+    buildGameIndexes();
+    _allTimeGamesCache = null;
+    _winsRankCache = null;
+    _winPctRankCache = null;
+  }
+
+  // Derived-mode random demo pair: same draw as pickRandomMatchup() (a uniform FBS team
+  // with an FBS opponent, then a uniform FBS opponent), from that team's file alone.
+  function pickRandomMatchupDerived(names) {
+    const isFbs = t => FBS_NAMES.size === 0 || FBS_NAMES.has(fpsKey(t));
+    const pool = names.filter(isFbs);
+    if (!pool.length) return Promise.resolve(null);
+    const a = pool[Math.floor(Math.random() * pool.length)];
+    return FPSData.loadTeams([a]).then(games => {
+      const opps = new Set();
+      games.forEach(g => {
+        if (g.team_a === g.team_b || !isFbs(g.team_a) || !isFbs(g.team_b)) return;
+        if (g.team_a === a) opps.add(g.team_b); else if (g.team_b === a) opps.add(g.team_a);
+      });
+      if (!opps.size) return null;
+      const list = [...opps];
+      return [a, list[Math.floor(Math.random() * list.length)]];
+    });
+  }
+
+  // Derived boot: manifest -> both teams' files + league.json (tens of KB, not 17 MB).
+  // Resolves false when anything derived fails, and the caller loads the full file.
+  async function bootDerived() {
+    let man;
+    try { man = await FPSData.manifest(); } catch (err) { FPSData.warnFallback('compare', err); return false; }
+    const allTeams = man.names;
+    const inFbs = FBS_NAMES.size > 0 ? allTeams.filter(t => FBS_NAMES.has(fpsKey(t))) : allTeams;
+    TEAMS = [...new Set(inFbs.map(fpsCanon))].sort();
+    if (RANGE.setMaxYear(man.maxSeason)) syncRangeState();
+    const resolveTeam = MF.teamResolver([...TEAMS, ...allTeams], teamAliases());
+    if (_hadUrlTeams) {
+      if (params.get('team1')) state.team1 = resolveTeam(params.get('team1')) || state.team1;
+      if (params.get('team2')) state.team2 = resolveTeam(params.get('team2')) || state.team2;
+    } else {
+      try {
+        const pair = await pickRandomMatchupDerived(allTeams);
+        if (pair) { state.team1 = pair[0]; state.team2 = pair[1]; }
+      } catch (err) { FPSData.warnFallback('compare', err); return false; }
+    }
+    try {
+      const [games, league] = await Promise.all([FPSData.loadTeams([state.team1, state.team2]), FPSData.loadLeague()]);
+      LEAGUE = league;
+      DERIVED = true;
+      // Location, coaches and venue arrive inside the team files: filters are ready now.
+      MF.setCoachNames(FPSData.coachNames);
+      SITES_READY = COACHES_READY = true;
+      useGames(games);
+      return true;
+    } catch (err) {
+      FPSData.warnFallback('compare', err);
+      LEAGUE = null;
+      return false;
+    }
+  }
+
+  // Fallback boot: the full dataset, exactly as before derived data existed.
+  async function bootFull() {
+    const data = await FPSData.loadFull();
+    useGames(data);
+    const allTeams = [...new Set(data.flatMap(g => [g.team_a, g.team_b]))];
+    // Dropdown shows FBS-only when fbs_teams.json loaded; otherwise full list.
+    const inFbs = FBS_NAMES.size > 0 ? allTeams.filter(t => FBS_NAMES.has(fpsKey(t))) : allTeams;
+    TEAMS = [...new Set(inFbs.map(fpsCanon))].sort();
+    applyMaxSeasonFromData(data);
+    // ?team1=Oklahoma State / osu / oklahoma st. all mean the dataset's "Oklahoma St.".
+    // Resolve once here; syncUrl() then rewrites the address bar to the canonical name.
+    const resolveTeam = MF.teamResolver([...TEAMS, ...allTeams], teamAliases());
+    if (_hadUrlTeams) {
+      if (params.get('team1')) state.team1 = resolveTeam(params.get('team1')) || state.team1;
+      if (params.get('team2')) state.team2 = resolveTeam(params.get('team2')) || state.team2;
+    }
+    // v40: when loaded without URL params, pick a random FBS pair with a prior matchup
+    if (!_hadUrlTeams) {
+      const pair = pickRandomMatchup();
+      if (pair) {
+        state.team1 = pair[0];
+        state.team2 = pair[1];
+      }
+    }
+  }
+
+  // Switching to the full file mid-session (a team file failed to load later on).
+  function fallBackToFull(err) {
+    FPSData.warnFallback('compare', err);
+    return FPSData.loadFull().then(data => {
+      DERIVED = false; LEAGUE = null;
+      SITES_READY = COACHES_READY = false; EXTRAS = 'loading';
+      useGames(data);
+      loadExtras();
+    });
+  }
+
+  // Before rendering a newly picked team, make sure its games are loaded.
+  function withTeams(cb) {
+    if (!DERIVED) return cb();
+    return FPSData.loadTeams([state.team1, state.team2])
+      .then(games => { useGames(games); COACH_PAIR = ''; })
+      .catch(fallBackToFull)
+      .then(cb);
+  }
+
+  Promise.all([
     fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] })),
     _ulPromise
   ])
-    .then(([data, fbsData]) => {
-      GAMES = data;
-      buildGameIndexes();
-      _allTimeGamesCache = null;
+    .then(async ([fbsData]) => {
       FBS_NAMES = new Set((fbsData.teams || []).map(t => fpsKey(t.name)));
-      const allTeams = [...new Set(data.flatMap(g => [g.team_a, g.team_b]))];
-      // Dropdown shows FBS-only when fbs_teams.json loaded; otherwise full list.
-      const inFbs = FBS_NAMES.size > 0 ? allTeams.filter(t => FBS_NAMES.has(fpsKey(t))) : allTeams;
-      TEAMS = [...new Set(inFbs.map(fpsCanon))].sort();
-      applyMaxSeasonFromData(data);
-      // ?team1=Oklahoma State / osu / oklahoma st. all mean the dataset's "Oklahoma St.".
-      // Resolve once here; syncUrl() then rewrites the address bar to the canonical name.
-      const resolveTeam = MF.teamResolver([...TEAMS, ...allTeams], teamAliases());
-      if (_hadUrlTeams) {
-        if (params.get('team1')) state.team1 = resolveTeam(params.get('team1')) || state.team1;
-        if (params.get('team2')) state.team2 = resolveTeam(params.get('team2')) || state.team2;
-      }
-      // v40: when loaded without URL params, pick a random FBS pair with a prior matchup
-      if (!_hadUrlTeams) {
-        const pair = pickRandomMatchup();
-        if (pair) {
-          state.team1 = pair[0];
-          state.team2 = pair[1];
-        }
-      }
+      const derived = await bootDerived();
+      if (!derived) await bootFull();
       initDropdown('dd1', 'team1');
       initDropdown('dd2', 'team2');
       updateSliderColors();
       initFilters();
+      if (DERIVED) {
+        // Site / coach data came with the teams: apply any ?site= / ?c1= / ?c2= now,
+        // before the first paint, instead of after a second download.
+        EXTRAS = 'done';
+        applyPendingFilters();
+      }
       updateRangeFill();
       BOOTING = false;
       render();
-      loadExtras();
+      if (!DERIVED) loadExtras();
     })
     .catch(err => {
       document.getElementById('results').innerHTML =
@@ -2342,7 +2445,7 @@
       updateToggle();
       updateSliderColors();
       closePanel();
-      render();
+      withTeams(render);   // derived data: fetch just the new team's file first
     }
 
     function updateToggle() {
@@ -2526,20 +2629,29 @@
       SITES_READY = MF.annotateSites(GAMES, sitesDoc);
       COACHES_READY = MF.annotateCoaches(GAMES, coachesDoc);
       EXTRAS = 'done';
-      COACH_PAIR = '';
-      if (COACHES_READY && state.team1 && state.team2) buildCoachOptions();
-      const wanted = MF.hiddenActiveCount(PENDING) > 0;
-      if (SITES_READY && PENDING.site !== 'all') { state.site = PENDING.site; SITE_CTRL.setValue(PENDING.site); }
-      if (COACHES_READY) {
-        state.coach1 = coachValid(1, PENDING.coach1) ? PENDING.coach1 : 'all';
-        state.coach2 = coachValid(2, PENDING.coach2) ? PENDING.coach2 : 'all';
-        paintCoachSelects();
-      }
-      PENDING = { site: 'all', coach1: 'all', coach2: 'all' };
+      const wanted = applyPendingFilters();
       // Only redraw when the view actually changes; otherwise just switch the controls on.
       if (wanted) refilter();
       else syncFilterControls(pairGames(state.team1, state.team2));
     });
+  }
+
+  // Move the URL's held location / coach filters into state once their data is in.
+  // Returns whether any were applied. (During boot a "Last N" preset is re-resolved
+  // against them without rendering; BOOTING suppresses the redraw.)
+  function applyPendingFilters() {
+    COACH_PAIR = '';
+    if (COACHES_READY && state.team1 && state.team2) buildCoachOptions();
+    const wanted = MF.hiddenActiveCount(PENDING) > 0;
+    if (SITES_READY && PENDING.site !== 'all') { state.site = PENDING.site; SITE_CTRL.setValue(PENDING.site); }
+    if (COACHES_READY) {
+      state.coach1 = coachValid(1, PENDING.coach1) ? PENDING.coach1 : 'all';
+      state.coach2 = coachValid(2, PENDING.coach2) ? PENDING.coach2 : 'all';
+      paintCoachSelects();
+    }
+    PENDING = { site: 'all', coach1: 'all', coach2: 'all' };
+    if (wanted && BOOTING && state.lastN && state.activePreset) RANGE.setPreset(state.activePreset);
+    return wanted;
   }
 
   function resetFilters() {

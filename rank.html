@@ -25,6 +25,7 @@
 <meta name="twitter:image" content="https://frontporchsports.com/og-image.png">
 <meta name="description" content="All-time program rankings by individual category.">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="data/derived/manifest.json" as="fetch" crossorigin="anonymous">
 <style>
   :root {
     --orange: #fe5c00;
@@ -389,6 +390,8 @@
   </div>
 </footer>
 
+<!-- Slim derived data (data/derived/); falls back to front_porch_games.json. -->
+<script src="js/derived-data.js"></script>
 <script>
 /* Legacy fallback only - superseded by program_stats.json, and rendered solely
    if that fetch fails. These are a pre-program_stats snapshot over a different
@@ -495,6 +498,10 @@ const TEAM_STATS = {
   }
   let currentCatSlug = params.get('cat') && CATEGORIES[params.get('cat')] ? params.get('cat') : 'all-time-record';
   let GAMES = [];
+  // league.json (data/derived/): every team's W-L-T and win count, tallied at build time by
+  // the same loops as liveWins()/liveWinPct() below, keys in the same order. Replaces the
+  // 17 MB games download; GAMES is only filled if derived data fails (the fallback).
+  let LEAGUE = null;
   let META = {};            // name -> { id, color, conference }
   let TEAMS_LIVE = [];      // canonical FBS team list from fbs_teams.json
   let sortKey = 'rank';
@@ -520,13 +527,20 @@ const TEAM_STATS = {
   // ===== Data fetch =====
   // v30: complete program records (CFBD + Wikipedia accolades)
   let PROGRAM_STATS = null;
+  const leagueOrGames = FPSData.loadLeague()
+    .then(league => ({ league }))
+    .catch(err => {
+      FPSData.warnFallback('rank', err);
+      return FPSData.loadFull().then(games => ({ games }));
+    });
   Promise.all([
-    fetch('front_porch_games.json').then(r => r.json()),
+    leagueOrGames,
     fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] })),
     fetch('program_stats.json').then(r => r.ok ? r.json() : null).catch(() => null)
-  ]).then(([games, fbs, programStats]) => {
+  ]).then(([data, fbs, programStats]) => {
     PROGRAM_STATS = programStats;
-    GAMES = games;
+    LEAGUE = data.league || null;
+    GAMES = data.games || [];
     (fbs.teams || []).forEach(t => {
       META[t.name] = { id: t.espn_id, color: t.color ? ('#' + t.color) : '#003594', conference: t.conference || '' };
     });
@@ -541,7 +555,8 @@ const TEAM_STATS = {
   function liveWins() {
     if (_winsCache) return _winsCache;
     const c = {};
-    GAMES.forEach(g => { if (!g.is_tie) c[g.winner] = (c[g.winner] || 0) + 1; });
+    if (LEAGUE) LEAGUE.wins.forEach(([team, w]) => { c[team] = w; });
+    else GAMES.forEach(g => { if (!g.is_tie) c[g.winner] = (c[g.winner] || 0) + 1; });
     _winsCache = c;
     return c;
   }
@@ -549,7 +564,8 @@ const TEAM_STATS = {
   function liveWinPct() {
     if (_winPctCache) return _winPctCache;
     const recs = {};
-    GAMES.forEach(g => {
+    if (LEAGUE) LEAGUE.records.forEach(([team, w, l, t]) => { recs[team] = { w, l, t }; });
+    else GAMES.forEach(g => {
       [g.team_a, g.team_b].forEach(t => { if (!recs[t]) recs[t] = { w:0, l:0, t:0 }; });
       if (g.is_tie) { recs[g.team_a].t++; recs[g.team_b].t++; }
       else if (g.winner === g.team_a) { recs[g.team_a].w++; recs[g.team_b].l++; }
@@ -861,7 +877,7 @@ const TEAM_STATS = {
   }
 
   function renderAll() {
-    if (!GAMES.length) return;
+    if (!GAMES.length && !LEAGUE) return;
     _winsCache = null; _winPctCache = null;
     const rows = buildRows();
     renderHeader();

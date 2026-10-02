@@ -25,6 +25,7 @@
 <meta name="twitter:image" content="https://frontporchsports.com/og-image.png">
 <meta name="description" content="All-time program history, head-to-head records, and national rankings.">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="data/derived/manifest.json" as="fetch" crossorigin="anonymous">
 <style>
   :root {
     --orange: #fe5c00;
@@ -575,6 +576,8 @@
   </div>
 </footer>
 
+<!-- Slim derived data (data/derived/); falls back to front_porch_games.json. -->
+<script src="js/derived-data.js"></script>
 <script>
   const TEAM_META = {
   'Air Force': {id:'2005',color:'#003594',alt:'#ffffff',abbr:'AF'},
@@ -924,7 +927,8 @@
   function buildWinsRank() {
     if (_winsRankCache) return _winsRankCache;
     const counts = {};
-    GAMES.forEach(g => {
+    if (LEAGUE) LEAGUE.wins.forEach(([team, w]) => { counts[team] = w; });
+    else GAMES.forEach(g => {
       if (g.is_tie) return;
       counts[g.winner] = (counts[g.winner] || 0) + 1;
     });
@@ -938,7 +942,8 @@
   function buildWinPctRank() {
     if (_winPctRankCache) return _winPctRankCache;
     const recs = {};
-    GAMES.forEach(g => {
+    if (LEAGUE) LEAGUE.records.forEach(([team, w, l, t]) => { recs[team] = { w, l, t }; });
+    else GAMES.forEach(g => {
       [g.team_a, g.team_b].forEach(t => { if (!recs[t]) recs[t] = { w:0, l:0, t:0 }; });
       if (g.is_tie) { recs[g.team_a].t++; recs[g.team_b].t++; }
       else if (g.winner === g.team_a) { recs[g.team_a].w++; recs[g.team_b].l++; }
@@ -1113,7 +1118,11 @@
   }
   const TEAM = params.get('team') || 'Oklahoma';
 
+  // With derived data GAMES holds only this team's games (data/derived/teams/<slug>.json)
+  // and LEAGUE the league-wide tallies (league.json) the two all-time ranks need; both
+  // replace the 17 MB front_porch_games.json, which is only loaded as a fallback.
   let GAMES = [];
+  let LEAGUE = null;
   let FBS_NAMES = new Set();      // accent-folded, lowercased keys
   let fcsState = { sort: 'name', dir: 'asc', records: {}, logos: {} };
   let winChart = null;
@@ -1151,8 +1160,17 @@
     return FBS_NAMES.has(fpsKey(team));
   }
 
+  // This team's file + league.json; a team not in the dataset simply has no file (no
+  // games), which renders the same "No data" message the full file gave.
+  const _gamesPromise = Promise.all([FPSData.loadTeams([TEAM]), FPSData.loadLeague()])
+    .then(([games, league]) => ({ games, league }))
+    .catch(err => {
+      FPSData.warnFallback('team', err);
+      return FPSData.loadFull().then(games => ({ games, league: null }));
+    });
+
   Promise.all([
-    fetch('front_porch_games.json').then(r => r.json()),
+    _gamesPromise,
     fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] })),
     _psPromise,
     _hoPromise,
@@ -1160,7 +1178,8 @@
     _coachPromise
   ])
   .then(([gamesData, fbsData]) => {
-    GAMES = gamesData;
+    GAMES = gamesData.games;
+    LEAGUE = gamesData.league;
     FBS_NAMES = new Set((fbsData.teams || []).map(t => fpsKey(t.name)));
     renderTeam();
   })
