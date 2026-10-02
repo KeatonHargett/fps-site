@@ -588,8 +588,9 @@
       set('meta[property="og:url"]', 'content', B + o.path);
     }
   }
-  const TEAM1 = params.get('team1');
-  const TEAM2 = params.get('team2');
+  // Resolved to the dataset's spelling after load (?team1=Oklahoma State / osu -> "Oklahoma St.").
+  let TEAM1 = params.get('team1');
+  let TEAM2 = params.get('team2');
   // Location / "last N" use the same pipeline and URL contract as compare.html
   // (js/matchup-filter.js), so this list is exactly the games behind its numbers.
   const MF = FPSMatchupFilter;
@@ -782,6 +783,21 @@
           let maxSeason = 0;
           for (const g of data) { if ((g.season|0) > maxSeason) maxSeason = g.season|0; }
           END = maxSeason || new Date().getFullYear();
+        }
+        // Same alias rules as compare.html (js/matchup-filter.js): site abbreviations
+        // first (OSU = Oklahoma St., OHST = Ohio St.), then every TEAM_META abbreviation.
+        const aliases = { 'OSU': 'Oklahoma St.', 'OHST': 'Ohio St.' };
+        for (const [team, m] of Object.entries(TEAM_META)) if (m && m.abbr && !(m.abbr in aliases)) aliases[m.abbr] = team;
+        const resolve = MF.teamResolver([...new Set(data.flatMap(g => [g.team_a, g.team_b]))], aliases);
+        const r1 = resolve(TEAM1) || TEAM1, r2 = resolve(TEAM2) || TEAM2;
+        if (r1 !== TEAM1 || r2 !== TEAM2) {
+          TEAM1 = r1; TEAM2 = r2;
+          const canon = new URLSearchParams(location.search);
+          canon.set('team1', TEAM1); canon.set('team2', TEAM2);
+          history.replaceState(null, '', `${location.pathname}?${canon.toString()}`);
+          const back = new URLSearchParams(document.getElementById('back-link').search);
+          back.set('team1', TEAM1); back.set('team2', TEAM2);
+          document.getElementById('back-link').href = `compare.html?${back.toString()}`;
         }
         renderGames(data);
       })
