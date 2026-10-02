@@ -30,6 +30,9 @@
   var coachIx = new Map();
 
   function getJSON(path) {
+    // Requests a page's <head> already started (window.__fpsPrefetch.json) are reused.
+    var early = global.__fpsPrefetch && global.__fpsPrefetch.json;
+    if (!fileCache[path] && early && early[path]) { fileCache[path] = early[path]; delete early[path]; }
     if (!fileCache[path]) {
       fileCache[path] = fetch(path).then(function (r) {
         if (!r.ok) throw new Error(path + ' HTTP ' + r.status);
