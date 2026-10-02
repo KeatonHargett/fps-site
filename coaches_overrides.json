@@ -1,10 +1,10 @@
 {
+  "_rule": "STANDING RULE: when an official school or conference source (school media guide, official athletics site, conference media guide) conflicts with CFBD, the official source wins. CFBD fills only what the official sources do not cover.",
   "_comment": "Head coaches CFBD has no record of (or gets wrong), applied on top of CFBD by scripts/build_coaches_data.py. Every entry cites its source and the name exactly as that source spells it (source_name). coach is the label shown in the dropdown; it differs from source_name only to match CFBD's spelling of the same coach in neighbouring seasons (so one coach is one option), to join co-coaches into one label, or to store a season with no head coach as \"No coach\". A season-level entry replaces CFBD for that school-season; an entry with game_id applies to that one game only. Seasons no source covers are left missing on purpose.",
   "sources": {
     "sec2023": "https://a.espncdn.com/sec/football/2023/Coaches.pdf",
     "ou": "https://soonersports.com/sports/2019/8/14/208798710",
-    "osu2026": "https://okstate.com/documents/2026/7/6/2026_Oklahoma_State_Football_Media_Guide.pdf",
-    "cfbd1902": "https://api.collegefootballdata.com/coaches?year=1902"
+    "osu2026": "https://okstate.com/documents/2026/7/6/2026_Oklahoma_State_Football_Media_Guide.pdf"
   },
   "overrides": [
     { "school": "Alabama", "season": 1892, "coach": "E.B. Beaumont", "source_name": "E.B. Beaumont", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Alabama all-time coaches)" },
@@ -14,7 +14,8 @@
     { "school": "Alabama", "season": 1896, "coach": "Otto Wagonhurst", "source_name": "Otto Wagonhurst", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Alabama all-time coaches)" },
     { "school": "Alabama", "season": 1897, "coach": "Allen McCants", "source_name": "Allen McCants", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Alabama all-time coaches)" },
     { "school": "Alabama", "season": 1899, "coach": "W.A. Martin", "source_name": "W.A. Martin", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Alabama all-time coaches)" },
-    { "school": "Alabama", "season": 1902, "coach": "Abbott / Heyworth", "source_name": "Eli Abbott; J.O. Heyworth", "source": "cfbd1902", "source_title": "CollegeFootballData /coaches 1902 (each credited with all 8 games)", "note": "Co-coaches per the instruction for this season. The 2023 SEC guide and Sports Reference credit Eli Abbott alone for 1902." },
+    { "school": "Alabama", "season": 1901, "coach": "M.H. Harvey", "source_name": "M.H. Harvey", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Alabama all-time coaches)", "note": "Official source over CFBD, which has \"G.H. Harvey\" (the name of Auburn's 1893 co-coach). Same man as Auburn 1902 and Ole Miss 1903-04 (the SEC guide's \"Mike Harvey\"; Michael Smith Harvey): matching records 2-1-2 / 0-2-0 / 6-4-1. CFBD already calls him \"M.H. Harvey\" at Auburn and Ole Miss, so this one label covers all three schools." },
+    { "school": "Alabama", "season": 1902, "coach": "Eli Abbott", "source_name": "Eli Abbott (1893-95, 1902)", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Alabama all-time coaches)", "note": "Official source over CFBD, which also credits J.O. Heyworth with the full 1902 season." },
 
     { "school": "Auburn", "season": 1892, "coach": "Dr. George Petrie", "source_name": "Dr. George Petrie", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Auburn all-time coaches)" },
     { "school": "Auburn", "season": 1893, "coach": "Harvey / Balliet", "source_name": "G.H. Harvey, D.M. Balliet", "source": "sec2023", "source_title": "2023 SEC Football Media Guide - Coaches (Auburn all-time coaches)", "note": "Listed on one line as joint coaches for 1893 (3-0-2)." },

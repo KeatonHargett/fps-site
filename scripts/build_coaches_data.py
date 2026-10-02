@@ -27,6 +27,11 @@ Overrides (coaches_overrides.json):
   pins that one game. "No coach" is a valid value (a season the source says had
   no head coach). Overrides win over CFBD.
 
+  STANDING RULE: official school or conference sources (school media guides,
+  official athletics sites, conference media guides) outrank CFBD whenever the
+  two conflict. A conflict is fixed with an override citing the official
+  source, never by trusting CFBD's version.
+
 Output (compact - compare.html loads it on every visit):
   {
     "_meta":   {...},
@@ -166,6 +171,8 @@ def main():
         if issues:
             ambiguous_ts[(school, season)] = (issues, [(coach_names[s[0]], s[1]) for s in spans])
 
+    # Standing rule: official school / conference sources outrank CFBD, so an
+    # override always replaces whatever CFBD says for that school-season or game.
     # Season-level overrides replace CFBD outright (one coach - or one co-coach label -
     # for the whole season). The game count comes from the CFBD schedule when it has one.
     for (school, season), o in sorted(season_ov.items()):
