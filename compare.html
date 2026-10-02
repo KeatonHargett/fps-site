@@ -306,6 +306,41 @@
   #top-results > .hero-bar:last-child { margin-bottom: 1rem; }
   .year-range-section { padding-top: 0; margin-bottom: 1.25rem; }
   .results-top-after:not(:empty) { padding-top: 1.25rem; }
+  /* Location filter: segmented buttons from Team 1's point of view. Active = orange
+     fill, inactive = outlined blue. One row at every width; padding shrinks first. */
+  .site-filter-wrap { margin-bottom: 1rem; }
+  .site-filter { display: flex; gap: 0.4rem; }
+  .site-btn {
+    flex: 1 1 auto; min-width: 0; white-space: nowrap; cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; letter-spacing: 0.05em; line-height: 1;
+    padding: 0.55rem 0.75rem; border-radius: 8px;
+    border: 2px solid var(--blue); background: white; color: var(--blue);
+    transition: background 0.12s, color 0.12s, border-color 0.12s;
+  }
+  .site-btn:hover { background: rgba(0,53,148,0.06); }
+  .site-btn[aria-pressed="true"] { background: var(--orange); border-color: var(--orange); color: white; }
+  .site-btn:focus-visible { outline: 3px solid rgba(0,53,148,0.45); outline-offset: 2px; }
+  .site-note { margin-top: 0.4rem; text-align: center; font-size: 0.75rem; color: var(--gray); }
+  .filter-summary {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: 0.08em;
+    color: var(--gray); margin-top: 0.2rem;
+  }
+  .reset-filters {
+    background: none; border: none; padding: 0.25rem 0.1rem; margin-left: 1rem; cursor: pointer;
+    font-family: 'Inter', sans-serif; font-size: 0.8rem; color: var(--blue);
+    text-decoration: underline; text-underline-offset: 2px;
+  }
+  .reset-filters:hover { color: var(--orange); }
+  .empty-state .reset-filters { margin: 0.5rem 0 0; font-size: 0.9rem; }
+  @media (max-width: 700px) {
+    .site-filter { gap: 0.3rem; }
+    .site-btn { font-size: 1rem; padding: 0.5rem 0.35rem; letter-spacing: 0.03em; }
+  }
+  @media (max-width: 400px) {
+    .site-filter { gap: 0.25rem; }
+    .site-btn { font-size: 0.95rem; padding: 0.5rem 0.15rem; letter-spacing: 0.02em; border-width: 1.5px; }
+    .filter-summary { font-size: 0.95rem; margin-top: 0.1rem; }
+  }
   .year-range-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem; }
   .year-range-title { font-size: 0.72rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; }
   .year-range-display { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
@@ -798,7 +833,7 @@
 
   /* v29 Tweak 1E: Full Games button + Time Period dropdown side-by-side */
   .controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: center; padding: 1rem 0 1.25rem; margin-bottom: 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .controls-row .games-btn-cell { display: flex; justify-content: flex-start; }
+  .controls-row .games-btn-cell { display: flex; justify-content: flex-start; align-items: center; flex-wrap: wrap; }
   .controls-row .time-period-cell { display: flex; justify-content: flex-end; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
   .controls-row .time-period-cell label { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; color: var(--gray); letter-spacing: 0.07em; }
   .controls-row .time-period-cell select { min-width: 200px; padding: 0.55rem 2.25rem 0.55rem 0.8rem; }
@@ -963,6 +998,12 @@
          results container would detach its listeners. Everything below it renders into
          #top-results-after (streak, upcoming line), #results (charts, stat tiles) and
          #results-stats (Program Comparison). -->
+    <!-- Location filter (js/matchup-filter.js builds the buttons into #site-filter). Hidden
+         until game_sites.json has loaded and the pair has met. -->
+    <div class="site-filter-wrap" id="site-filter-wrap" hidden>
+      <div id="site-filter"></div>
+      <div class="site-note" id="site-note" hidden></div>
+    </div>
     <div class="year-range-section">
       <div class="year-range-header">
         <span class="year-range-title">Year Range</span>
@@ -980,6 +1021,7 @@
     <div class="controls-row">
       <div class="games-btn-cell">
         <a class="btn btn-secondary" id="games-link" href="#">Full Games List &rarr;</a>
+        <button type="button" class="reset-filters" id="reset-filters" hidden>Reset filters</button>
       </div>
       <div class="time-period-cell">
         <label for="preset-select">Time Period</label>
@@ -1035,6 +1077,8 @@
 </footer>
 <!-- Shared year-range filter. Plain script, no build step; defines window.FPSRangeFilter. -->
 <script src="js/range-filter.js"></script>
+<!-- Shared location filter, filter pipeline and URL contract; defines window.FPSMatchupFilter. -->
+<script src="js/matchup-filter.js"></script>
 <script>
   // v29: school+mascot text mapping for the Winsipedia-style selector bar
   const TEAM_DISPLAY = {
@@ -1769,8 +1813,10 @@
     // "Last N Matchups" moves the sliders to the span those N games happen to cover;
     // the games themselves are still cut by COUNT, in getRivalryGames().
     lastNResolver: n => getLastNAllTime(n).map(g => g.season),
-    onChange: () => { syncRangeState(); render(); }
+    onChange: () => { syncRangeState(); if (!BOOTING) render(); }
   });
+  // True until the first render; lets URL restore move the range without rendering twice.
+  let BOOTING = true;
 
   // Mirror the module's range onto `state` so every existing read site keeps working.
   function syncRangeState() {
@@ -2031,8 +2077,13 @@
     // Range fields are mirrored from RANGE (js/range-filter.js) by syncRangeState().
     startYear: RANGE.state.startYear, endYear: RANGE.state.endYear,
     activePreset: RANGE.state.activePreset,
-    lastN: RANGE.state.lastN  // Tweak 4: when set, getRivalryGames() returns only the most recent N matchups
+    lastN: RANGE.state.lastN,  // Tweak 4: when set, getRivalryGames() returns only the most recent N matchups
+    site: 'all'                 // location filter, from team1's point of view (js/matchup-filter.js)
   };
+  const MF = FPSMatchupFilter;
+  let SITES_READY = false;      // game_sites.json loaded and folded into GAMES as g._site
+  let SITE_CTRL = null;
+  let LAST_MISSING_SITE = 0;    // games the current location view had to drop for lack of site data
 
   const params = new URLSearchParams(location.search);
 
@@ -2101,10 +2152,13 @@
     Promise.all([
     fetch('front_porch_games.json').then(r => r.json()),
     fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] })),
-    _ulPromise
+    _ulPromise,
+    MF.loadSites()
   ])
-    .then(([data, fbsData]) => {
+    .then(([data, fbsData, _ul, sitesDoc]) => {
       GAMES = data;
+      // Precompute every game's site label once; filters only ever read g._site.
+      SITES_READY = MF.annotateSites(GAMES, sitesDoc);
       buildGameIndexes();
       _allTimeGamesCache = null;
       FBS_NAMES = new Set((fbsData.teams || []).map(t => fpsKey(t.name)));
@@ -2124,7 +2178,9 @@
       initDropdown('dd1', 'team1');
       initDropdown('dd2', 'team2');
       updateSliderColors();
+      initFilters();
       updateRangeFill();
+      BOOTING = false;
       render();
     })
     .catch(err => {
@@ -2275,21 +2331,74 @@
   const pairGames = (a, b) => (a && b && PAIR_INDEX && PAIR_INDEX.get(pairKey(a, b))) || EMPTY_GAMES;
   const teamGames = t => (t && TEAM_INDEX && TEAM_INDEX.get(t)) || EMPTY_GAMES;
 
-  function getRivalryGames() {
-    let games = pairGames(state.team1, state.team2).filter(g => RANGE.matchesSeason(g.season));
-    // Tweak 4: when last5/last10 preset is active, return only the most recent N matchups
-    if (state.lastN) {
-      games = [...games].sort((a, b) => b.game_date.localeCompare(a.game_date)).slice(0, state.lastN);
-    }
-    return games;
+  // The filters every number on the page shares: year range AND location, then
+  // "Last N" by count. The pipeline lives in js/matchup-filter.js so games.html
+  // applies exactly the same cut.
+  function filterState() {
+    return {
+      team1: state.team1, team2: state.team2,
+      startYear: state.startYear, endYear: state.endYear,
+      minYear: RANGE.minYear, maxYear: RANGE.maxYear,
+      preset: state.activePreset, lastN: state.lastN,
+      site: SITES_READY ? state.site : 'all'
+    };
   }
-  // Most recent N games between the two selected teams across full history (used to set slider range)
+  function getRivalryGames() {
+    const res = MF.filterGames(pairGames(state.team1, state.team2), filterState());
+    LAST_MISSING_SITE = res.missingSite;
+    return res.games;
+  }
+  // Most recent N games in the current location view, across full history
+  // (sets the slider span for the "Last N Matchups" presets).
   function getLastNAllTime(n) {
     if (!state.team1 || !state.team2) return [];
-    return pairGames(state.team1, state.team2)
-      .slice()
+    return MF.filterLocationOnly(pairGames(state.team1, state.team2), filterState())
       .sort((a, b) => b.game_date.localeCompare(a.game_date))
       .slice(0, n);
+  }
+
+  // A count preset's span depends on the location view, so re-resolve it.
+  function refilter() {
+    if (state.lastN && state.activePreset) RANGE.setPreset(state.activePreset);
+    else render();
+  }
+
+  function initFilters() {
+    if (SITES_READY) {
+      SITE_CTRL = MF.createSiteControl({
+        container: '#site-filter',
+        onChange: v => { state.site = v; refilter(); }
+      });
+    }
+    document.getElementById('reset-filters').addEventListener('click', resetFilters);
+    // Restore a shared view from the URL: ?site=, and ?preset= or ?start=&end=.
+    const f = MF.readParams(params);
+    if (SITE_CTRL && f.site !== 'all') { state.site = f.site; SITE_CTRL.setValue(f.site); }
+    if (f.preset && RANGE.presets[f.preset] || f.preset === 'last5' || f.preset === 'last10') {
+      RANGE.setPreset(f.preset);
+    } else if (f.start || f.end) {
+      const lo = Math.max(RANGE.minYear, Math.min(f.start || RANGE.minYear, RANGE.maxYear));
+      const hi = Math.min(RANGE.maxYear, Math.max(f.end || RANGE.maxYear, lo));
+      RANGE.setRange(lo, hi);
+    }
+    syncRangeState();
+  }
+
+  function resetFilters() {
+    state.site = 'all';
+    if (SITE_CTRL) SITE_CTRL.setValue('all');
+    RANGE.setPreset('all');  // fires onChange -> render
+  }
+
+  // Keep the address bar in step with the filters so a shared link reopens this view.
+  // A random demo matchup (no teams in the URL) only gets written once a filter is on.
+  function syncUrl(f) {
+    const p = new URLSearchParams(location.search);
+    MF.writeParams(p, f);
+    if (MF.isActive(f) || _hadUrlTeams) { p.set('team1', state.team1); p.set('team2', state.team2); }
+    const qs = p.toString();
+    const next = location.pathname + (qs ? '?' + qs : '') + location.hash;
+    if (next !== location.pathname + location.search + location.hash) history.replaceState(null, '', next);
   }
 
   function teamLogo(team, large=false) {
@@ -2420,6 +2529,13 @@
     return { count, team: streakTeam, startYear, endYear, tied: false };
   }
 
+  // School names for the filter summary line ("At Auburn").
+  function siteNames() {
+    const nm = t => (TEAM_DISPLAY[t] && TEAM_DISPLAY[t].school)
+      ? TEAM_DISPLAY[t].school.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) : t;
+    return { team1: nm(state.team1), team2: nm(state.team2) };
+  }
+
   function render() {
     if (!GAMES.length) return;
     const topEl = document.getElementById('top-results');
@@ -2465,7 +2581,30 @@
     });
     const _cr0 = document.querySelector('.controls-row'); if (_cr0 && _cr0.style.display === 'none') _cr0.style.display = '';
     const _yr0 = document.querySelector('.year-range-section'); if (_yr0 && _yr0.style.display === 'none') _yr0.style.display = '';
+    const allPair = pairGames(state.team1, state.team2);
+    const siteWrap = document.getElementById('site-filter-wrap');
+    if (SITE_CTRL) {
+      // Labels follow the teams; Neutral only when the pair has ever met at one.
+      SITE_CTRL.setTeams(getTeamAbbr(state.team1), getTeamAbbr(state.team2), MF.hasNeutral(allPair));
+      state.site = SITE_CTRL.value;
+    }
+    if (siteWrap) siteWrap.hidden = !SITE_CTRL || allPair.length === 0;
     const games = getRivalryGames();
+    const fNow = filterState();
+    const filtersOn = MF.isActive(fNow);
+    syncUrl(fNow);
+    document.getElementById('reset-filters').hidden = !filtersOn;
+    const gl = document.getElementById('games-link');
+    if (gl) {
+      // games.html reads the same params and runs the same pipeline (js/matchup-filter.js),
+      // so its list is exactly the games behind these numbers.
+      gl.href = `games.html?${MF.gamesListQuery(fNow)}`;
+    }
+    const siteNote = document.getElementById('site-note');
+    if (siteNote) {
+      siteNote.textContent = MF.missingNote(LAST_MISSING_SITE);
+      siteNote.hidden = !LAST_MISSING_SITE;
+    }
     if (games.length === 0) {
       // v45 Change 2: check if these teams have NEVER played at all
       const allTimeAny = pairGames(state.team1, state.team2).length > 0;
@@ -2480,12 +2619,15 @@
         // Hide static H2H-only controls (Full Games List + Time Period) when no prior meetings
         const _cr = document.querySelector('.controls-row'); if (_cr) _cr.style.display = 'none';
         const _yr = document.querySelector('.year-range-section'); if (_yr) _yr.style.display = 'none';
+        document.getElementById('reset-filters').hidden = true;
         return;
       }
       if (topEl) topEl.innerHTML = '';
       clearStats();
       resEl.innerHTML =
-        `<div class="empty-state"><h3>No games found</h3><p>${state.team1} and ${state.team2} haven't played between ${state.startYear} and ${state.endYear}.</p></div>`;
+        `<div class="empty-state"><h3>No meetings match these filters</h3><p>${state.team1} and ${state.team2} have no games for ${MF.summary(fNow, siteNames())}.</p>
+          <button type="button" class="reset-filters" data-reset>Reset filters</button></div>`;
+      resEl.querySelector('[data-reset]').addEventListener('click', resetFilters);
       return;
     }
     const t1Wins = games.filter(g => g.winner===state.team1).length;
@@ -2523,6 +2665,7 @@
           : `<div class="total" id="total-num">${total}</div>
              <div class="total-label">${totalLabel}</div>`}
         <div class="record-line">${leader?`<span class="leader" style="color:${leaderColor}">${recordStr}</span>`:recordStr}</div>
+        ${filtersOn ? `<div class="filter-summary">${MF.summary(fNow, siteNames())}</div>` : ''}
         ${(() => {
           if (!streak) return '';
           if (streak.tied) {
@@ -2681,14 +2824,6 @@
     });
 
     // Full Games List opens its own page (mobile-friendly)
-    const gl = document.getElementById('games-link');
-    if (gl) {
-      // ?start=/?end= is the contract games.html reads; RANGE.queryString() is the one
-      // place that emits it, so a second page linking to games.html cannot drift from it.
-      gl.href = `games.html?team1=${encodeURIComponent(state.team1)}&team2=${encodeURIComponent(state.team2)}`
-              + `&${RANGE.queryString()}`;
-    }
-
     drawCharts(games);
   }
 

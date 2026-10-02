@@ -60,6 +60,14 @@
   [headers.values]
     Cache-Control = "public, max-age=86400, must-revalidate"
 
+# Home/away/neutral per game (scripts/build_game_sites.py) and head coach per game
+# (scripts/build_coaches_data.py). Rebuilt by hand when the history changes, so they
+# cache like the other slow-moving datasets.
+[[headers]]
+  for = "/game_sites.json"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
 [[headers]]
   for = "/upcoming_lines.json"
   [headers.values]

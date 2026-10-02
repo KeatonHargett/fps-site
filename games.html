@@ -418,6 +418,8 @@
   </div>
 </footer>
 
+<!-- Shared filter pipeline + URL contract (same file compare.html uses). -->
+<script src="js/matchup-filter.js"></script>
 <script>
   const TEAM_META = {
   'Air Force': {id:'2005',color:'#003594',alt:'#ffffff',abbr:'AF'},
@@ -588,6 +590,12 @@
   }
   const TEAM1 = params.get('team1');
   const TEAM2 = params.get('team2');
+  // Location / "last N" use the same pipeline and URL contract as compare.html
+  // (js/matchup-filter.js), so this list is exactly the games behind its numbers.
+  const MF = FPSMatchupFilter;
+  const FILTERS = MF.readParams(params);
+  const SITE = FILTERS.site;
+  const LAST_N = FILTERS.lastN;
   const START = parseInt(params.get('start')) || 1869;
   const endParam = parseInt(params.get('end'));
   // END is finalized after data load if not in URL params; placeholder for now.
@@ -753,11 +761,14 @@
   if (!TEAM1 || !TEAM2) {
     document.getElementById('content').innerHTML = '<div class="loading">No matchup specified.</div>';
   } else {
-    document.getElementById('back-link').href =
-      `compare.html?team1=${encodeURIComponent(TEAM1)}&team2=${encodeURIComponent(TEAM2)}`;
-    fetch('front_porch_games.json')
-      .then(r => r.json())
-      .then(data => {
+    // Back to Compare reopens the same filtered view.
+    const back = new URLSearchParams(location.search);
+    back.delete('last');
+    if (LAST_N === 5 || LAST_N === 10) { back.delete('start'); back.delete('end'); back.set('preset', 'last' + LAST_N); }
+    document.getElementById('back-link').href = `compare.html?${back.toString()}`;
+    Promise.all([fetch('front_porch_games.json').then(r => r.json()), SITE !== 'all' ? MF.loadSites() : null])
+      .then(([data, sitesDoc]) => {
+        if (sitesDoc) MF.annotateSites(data, sitesDoc);
         if (END === null) {
           let maxSeason = 0;
           for (const g of data) { if ((g.season|0) > maxSeason) maxSeason = g.season|0; }
@@ -779,14 +790,18 @@
         path: `/games?team1=${encodeURIComponent(TEAM1)}&team2=${encodeURIComponent(TEAM2)}`
       });
     }
-    let games = GAMES.filter(g =>
-      ((g.team_a===TEAM1 && g.team_b===TEAM2) || (g.team_a===TEAM2 && g.team_b===TEAM1)) &&
-      g.season >= START && g.season <= END);
+    const pair = GAMES.filter(g =>
+      (g.team_a===TEAM1 && g.team_b===TEAM2) || (g.team_a===TEAM2 && g.team_b===TEAM1));
+    const f = { team1: TEAM1, team2: TEAM2, startYear: START, endYear: END, site: SITE, lastN: LAST_N };
+    const res = MF.filterGames(pair, f);
+    let games = res.games;
     games.sort((a,b) => b.game_date.localeCompare(a.game_date));
+    const viewLabel = MF.summary(f, { team1: TEAM1, team2: TEAM2 });
+    const note = MF.missingNote(res.missingSite);
 
     if (games.length === 0) {
       document.getElementById('content').innerHTML =
-        `<div class="loading">${TEAM1} and ${TEAM2} have no games between ${START} and ${END}.</div>`;
+        `<div class="loading">${TEAM1} and ${TEAM2} have no games for ${viewLabel}.</div>`;
       return;
     }
 
@@ -855,7 +870,8 @@
           <span class="vs">VS</span>
           ${teamLogo(TEAM2)}
         </div>
-        <div class="sub">${games.length} meetings &middot; ${START}\u2013${END}</div>
+        <div class="sub">${games.length} meetings &middot; ${viewLabel}</div>
+        ${note ? `<div class="sub sub-note">${note}</div>` : ''}
       </div>
       <div class="summary-bar"><strong>${recStr}</strong></div>
       <table class="games-table">
