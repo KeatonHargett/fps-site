@@ -3,7 +3,8 @@ name: Deploy + weekly refresh (Netlify API, keyless)
 # - Any push to main deploys current files to Netlify (no Netlify clone needed).
 # - Weekly cron Aug-Jan pulls completed games from ESPN, replaces current
 #   season rows, commits, then deploys.
-# - Manual dispatch lets you force-deploy or dry-run the refresh.
+# - Manual dispatch lets you force-deploy or dry-run the refresh. Production deploys
+#   only ever run from main, and never on a dry run.
 on:
   push:
     branches: [main]
@@ -78,6 +79,39 @@ jobs:
             python scripts/refresh_schedules.py
           fi
 
+      # Home / away / neutral and head coach for the season's games. Both scripts
+      # re-fetch ONLY the current season from CFBD, keep every earlier season from the
+      # committed files, and reapply game_sites_overrides.json / coaches_overrides.json
+      # on every run. A CFBD error (or a missing key) exits non-zero BEFORE anything is
+      # written, so the data files are never replaced with empty or partial output.
+      # continue-on-error lets the ESPN data above still commit and deploy; the
+      # "Fail if CFBD site/coach refresh failed" step at the end then turns the run red.
+      - name: Refresh game sites from CFBD
+        id: sites
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        continue-on-error: true
+        env:
+          CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
+          FPS_CURRENT_SEASON: ${{ github.event.inputs.season }}
+          FPS_DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && '1' || '' }}
+        run: |
+          SEASON="$(python -c 'import sys; sys.path.insert(0, "scripts"); from refresh_games import current_season; print(current_season())')"
+          echo "Season: $SEASON"
+          python scripts/build_game_sites.py --update-season "$SEASON"
+
+      - name: Refresh head coaches from CFBD
+        id: coaches
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        continue-on-error: true
+        env:
+          CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
+          FPS_CURRENT_SEASON: ${{ github.event.inputs.season }}
+          FPS_DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && '1' || '' }}
+        run: |
+          SEASON="$(python -c 'import sys; sys.path.insert(0, "scripts"); from refresh_games import current_season; print(current_season())')"
+          echo "Season: $SEASON"
+          python scripts/build_coaches_data.py --update-season "$SEASON"
+
       # Runs after the refreshers so it scores against the data they just pulled.
       # Keyless (ESPN only), so unlike the CFBD step it has no secret to skip on.
       - name: Compute featured matchups
@@ -96,6 +130,9 @@ jobs:
           if [ -n "$(git status --porcelain fbs_teams.json)"        ]; then CHANGED="$CHANGED fbs_teams.json"; fi
           if [ -n "$(git status --porcelain schedules_data.json)"   ]; then CHANGED="$CHANGED schedules_data.json"; fi
           if [ -n "$(git status --porcelain featured_matchups.json)" ]; then CHANGED="$CHANGED featured_matchups.json"; fi
+          for f in game_sites.json game_venues.json coaches_data.json; do
+            if [ -n "$(git status --porcelain $f)" ]; then CHANGED="$CHANGED $f"; fi
+          done
           if [ -n "$CHANGED" ]; then
             git config user.name  "fps-refresh-bot"
             git config user.email "fps-refresh-bot@users.noreply.github.com"
@@ -112,6 +149,8 @@ jobs:
           node-version: "20"
 
       - name: Deploy to Netlify
+        # Production only from main, and never on a manual dry run.
+        if: github.ref == 'refs/heads/main' && github.event.inputs.dry_run != 'true'
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
@@ -122,3 +161,9 @@ jobs:
             --message "GitHub Actions deploy ${{ github.sha }}" \
             --site "$NETLIFY_SITE_ID" \
             --auth "$NETLIFY_AUTH_TOKEN"
+
+      - name: Fail if CFBD site/coach refresh failed
+        if: always() && (steps.sites.outcome == 'failure' || steps.coaches.outcome == 'failure')
+        run: |
+          echo "::error::CFBD refresh failed (sites: ${{ steps.sites.outcome }}, coaches: ${{ steps.coaches.outcome }}). game_sites.json / game_venues.json / coaches_data.json were left unchanged; see the step logs above."
+          exit 1

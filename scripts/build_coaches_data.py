@@ -25,14 +25,14 @@ Overrides (coaches_overrides.json):
   each with a cited source and the name exactly as the source spells it. A
   season-level entry replaces CFBD for that school-season; an entry with game_id
   pins that one game. "No coach" is a valid value (a season the source says had
-  no head coach). Overrides win over CFBD.
+  no head coach). Overrides win over CFBD, and are applied on every run.
 
   STANDING RULE: official school or conference sources (school media guides,
   official athletics sites, conference media guides) outrank CFBD whenever the
   two conflict. A conflict is fixed with an override citing the official
   source, never by trusting CFBD's version.
 
-Output (compact - compare.html loads it on every visit):
+Output (compact - compare.html loads it after first paint):
   {
     "_meta":   {...},
     "coaches": ["Nick Saban", ...],
@@ -42,27 +42,39 @@ Output (compact - compare.html loads it on every visit):
   The date is only present on all but the last coach of a split season; a game on
   or before it belongs to that coach.
 
+Modes:
+  full (default)        rebuild every season from the CFBD cache.
+  --update-season Y...  CI / weekly refresh: re-fetch only these seasons from CFBD
+                        (coaches + schedule) and recompute them; every other season
+                        keeps what coaches_data.json already holds.
+  A CFBD error is fatal: the script exits non-zero and leaves coaches_data.json
+  untouched. The output is written to a temp file and swapped in only on success,
+  and never if it would cover fewer games than the file it replaces.
+
 Env vars:
-  CFBD_API_KEY   CollegeFootballData key (env or repo .env). Only needed for
-                 seasons not cached or passed to --refresh. Never printed.
+  CFBD_API_KEY   CollegeFootballData key (env or repo .env). Never printed.
+  FPS_DRY_RUN=1  compute and report, write nothing.
 
 Usage:
   python scripts/build_coaches_data.py
   python scripts/build_coaches_data.py --refresh 2026
+  python scripts/build_coaches_data.py --update-season 2026
 """
 from __future__ import annotations
 
 import argparse
 import datetime as dt
 import json
+import os
 import sys
 from collections import defaultdict
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from refresh_games import normalize  # noqa: E402
-from backfill_season_type import api_get  # noqa: E402
-from build_game_sites import REPO, CACHE_DIR, GAMES_FILE, load_key, season_rows  # noqa: E402
+from build_game_sites import (  # noqa: E402
+    REPO, CACHE_DIR, GAMES_FILE, CFBDError, cfbd_fetch, season_rows, write_atomic,
+)
 
 OUT_FILE = REPO / "coaches_data.json"
 OVERRIDES_FILE = REPO / "coaches_overrides.json"
@@ -72,12 +84,8 @@ def coaches_for(year: int, refresh: bool, key_holder: dict):
     cf = CACHE_DIR / f"cfbd_coaches_{year}.json"
     if cf.exists() and not refresh:
         return json.loads(cf.read_text(encoding="utf-8"))
-    if "key" not in key_holder:
-        key_holder["key"] = load_key()
-    if not key_holder["key"]:
-        print(f"  WARN: coaches {year} not cached and CFBD_API_KEY is not set", flush=True)
-        return []
-    rows = api_get("/coaches", {"year": year}, key_holder["key"]) or []
+    rows = cfbd_fetch("/coaches", {"year": year}, key_holder)  # raises CFBDError on failure
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
     cf.write_text(json.dumps(rows), encoding="utf-8")
     print(f"  fetched coaches {year}: {len(rows):,}", flush=True)
     return rows
@@ -99,96 +107,58 @@ def schedules(season: int, refresh: bool, key_holder: dict):
     return out
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--refresh", nargs="*", type=int, default=[])
-    ap.add_argument("--report", nargs="*", default=["Alabama|Auburn", "Oklahoma St.|Oklahoma"])
-    args = ap.parse_args()
-    refresh = set(args.refresh)
-
-    games = json.loads(GAMES_FILE.read_text(encoding="utf-8"))
-    seasons_needed = sorted({g["season"] for g in games})
-    key_holder: dict = {}
-
-    # (school, season) -> {coach name: (games, hireDate)}
+def coaches_by_team_season(years, refresh, key_holder):
+    """(school, season) -> {coach name: (games, hireDate)} for the given seasons."""
     by_ts: dict = defaultdict(dict)
-    for y in seasons_needed:
+    for y in years:
         for c in coaches_for(y, y in refresh, key_holder):
             name = f"{c.get('firstName') or ''} {c.get('lastName') or ''}".strip()
             for s in c.get("seasons") or []:
                 if s.get("year") != y or not s.get("games"):
                     continue
                 by_ts[(normalize(s["school"]), y)][name] = (s["games"], c.get("hireDate") or "")
+    return by_ts
 
-    coach_names: list[str] = []
-    coach_ix: dict[str, int] = {}
 
-    def cix(name):
-        if name not in coach_ix:
-            coach_ix[name] = len(coach_names)
-            coach_names.append(name)
-        return coach_ix[name]
+def season_spans(school, season, cs, prev, nxt, dates):
+    """Named spans for one school-season: [[name, games(, last date)], ...] + issues."""
+    if len(cs) == 1:
+        (name, (n, _)), = cs.items()
+        return [[name, n]], []
+    order = sorted(cs.items(), key=lambda kv: (kv[0] not in prev, kv[0] in nxt, kv[1][1][:10], kv[0]))
+    keys = [(k not in prev, k in nxt, v[1][:10]) for k, v in order]
+    issues = []
+    if len(set(keys)) != len(keys):
+        issues.append("coach order undetermined")
+    total = sum(v[0] for _, v in order)
+    if total != len(dates):
+        issues.append(f"coach games {total} vs CFBD schedule {len(dates)}")
+    spans, cum = [], 0
+    for i, (name, (n, _)) in enumerate(order):
+        cum += n
+        if i < len(order) - 1:
+            spans.append([name, n, dates[min(cum, len(dates)) - 1] if dates else None])
+        else:
+            spans.append([name, n])
+    return spans, issues
 
-    teams: dict = defaultdict(dict)
-    ambiguous_ts = {}
-    sched_cache = {}
-    overrides = json.loads(OVERRIDES_FILE.read_text(encoding="utf-8"))["overrides"] if OVERRIDES_FILE.exists() else []
-    season_ov = {(o["school"], o["season"]): o for o in overrides if "game_id" not in o}
-    game_ov = defaultdict(dict)
-    for o in overrides:
-        if "game_id" in o:
-            game_ov[o["game_id"]][o["school"]] = o
 
-    for (school, season), cs in sorted(by_ts.items()):
-        if (school, season) in season_ov:
-            continue  # replaced by an override below
-        if len(cs) == 1:
-            (name, (n, _)), = cs.items()
-            teams[school][str(season)] = [[cix(name), n]]
-            continue
-        prev = by_ts.get((school, season - 1), {})
-        nxt = by_ts.get((school, season + 1), {})
-        order = sorted(cs.items(), key=lambda kv: (kv[0] not in prev, kv[0] in nxt, kv[1][1][:10], kv[0]))
-        keys = [(k not in prev, k in nxt, v[1][:10]) for k, v in order]
-        issues = []
-        if len(set(keys)) != len(keys):
-            issues.append("coach order undetermined")
-        if season not in sched_cache:
-            sched_cache[season] = schedules(season, season in refresh, key_holder)
-        dates = sched_cache[season].get(school, [])
-        total = sum(v[0] for _, v in order)
-        if total != len(dates):
-            issues.append(f"coach games {total} vs CFBD schedule {len(dates)}")
-        spans, cum = [], 0
-        for i, (name, (n, _)) in enumerate(order):
-            cum += n
-            if i < len(order) - 1:
-                last = dates[min(cum, len(dates)) - 1] if dates else None
-                spans.append([cix(name), n, last])
-            else:
-                spans.append([cix(name), n])
-        teams[school][str(season)] = spans
-        if issues:
-            ambiguous_ts[(school, season)] = (issues, [(coach_names[s[0]], s[1]) for s in spans])
+def decode_named(doc):
+    """coaches_data.json -> (school -> season -> named spans, game pins by name)."""
+    names = doc.get("coaches", [])
+    teams = {school: {season: [[names[s[0]]] + s[1:] for s in spans] for season, spans in seasons.items()}
+             for school, seasons in doc.get("teams", {}).items()}
+    pins = {gid: {school: names[ix] for school, ix in m.items()} for gid, m in doc.get("games", {}).items()}
+    return teams, pins
 
-    # Standing rule: official school / conference sources outrank CFBD, so an
-    # override always replaces whatever CFBD says for that school-season or game.
-    # Season-level overrides replace CFBD outright (one coach - or one co-coach label -
-    # for the whole season). The game count comes from the CFBD schedule when it has one.
-    for (school, season), o in sorted(season_ov.items()):
-        if season not in sched_cache:
-            sched_cache[season] = schedules(season, season in refresh, key_holder)
-        n = len(sched_cache[season].get(school, [])) or None
-        teams[school][str(season)] = [[cix(o["coach"]), n]]
-        ambiguous_ts.pop((school, season), None)
-    games_out = {gid: {school: cix(o["coach"]) for school, o in m.items()} for gid, m in game_ov.items()}
 
+def coach_resolver(teams_ix, games_out):
     def coach_of(team, g):
         """(coach index or None, reason)."""
         pinned = games_out.get(g["game_id"], {}).get(team)
         if pinned is not None:
             return pinned, None
-        spans = teams.get(team, {}).get(str(g["season"]))
+        spans = teams_ix.get(team, {}).get(str(g["season"]))
         if not spans:
             return None, "no CFBD coach for school+season"
         if len(spans) == 1:
@@ -199,43 +169,141 @@ def main():
             if len(s) < 3 or (s[2] and g["game_date"] <= s[2]):
                 return s[0], None
         return spans[-1][0], None
+    return coach_of
 
-    covered = 0
+
+def covered_count(games, coach_of):
+    return sum(1 for g in games if coach_of(g["team_a"], g)[0] is not None and coach_of(g["team_b"], g)[0] is not None)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--refresh", nargs="*", type=int, default=[], help="seasons to re-fetch from CFBD (full build)")
+    ap.add_argument("--update-season", nargs="*", type=int, default=None,
+                    help="only recompute these seasons (fresh from CFBD); keep the rest from coaches_data.json")
+    ap.add_argument("--report", nargs="*", default=["Alabama|Auburn", "Oklahoma St.|Oklahoma"])
+    args = ap.parse_args()
+    dry = os.environ.get("FPS_DRY_RUN") == "1"
+
+    games = json.loads(GAMES_FILE.read_text(encoding="utf-8"))
+    overrides = json.loads(OVERRIDES_FILE.read_text(encoding="utf-8"))["overrides"] if OVERRIDES_FILE.exists() else []
+    season_ov = {(o["school"], o["season"]): o for o in overrides if "game_id" not in o}
+    game_ov = defaultdict(dict)
+    for o in overrides:
+        if "game_id" in o:
+            game_ov[o["game_id"]][o["school"]] = o
+
+    key_holder: dict = {}
+    incremental = args.update_season is not None
+    baseline_doc = json.loads(OUT_FILE.read_text(encoding="utf-8")) if OUT_FILE.exists() else None
+    named: dict = defaultdict(dict)     # school -> season(str) -> named spans
+    ambiguous_ts = {}
+    sched_cache = {}
+    try:
+        if incremental:
+            target = sorted(set(args.update_season))
+            if not target or not baseline_doc:
+                sys.exit(f"FATAL: --update-season needs at least one season and an existing {OUT_FILE.name}")
+            base_named, _ = decode_named(baseline_doc)
+            for school, seasons in base_named.items():
+                for season, spans in seasons.items():
+                    if int(season) not in target:
+                        named[school][season] = spans
+            # Fresh CFBD for the target seasons only - a failed call raises.
+            by_ts = coaches_by_team_season(target, set(target), key_holder)
+            prev_names = lambda school, y: {s[0] for s in base_named.get(school, {}).get(str(y), [])}
+        else:
+            target = sorted({g["season"] for g in games})
+            by_ts = coaches_by_team_season(target, set(args.refresh), key_holder)
+            prev_names = lambda school, y: set(by_ts.get((school, y), {}))
+
+        for (school, season), cs in sorted(by_ts.items()):
+            if (school, season) in season_ov:
+                continue  # replaced by an override below
+            if season not in sched_cache and len(cs) > 1:
+                sched_cache[season] = schedules(season, incremental or season in args.refresh, key_holder)
+            spans, issues = season_spans(
+                school, season, cs,
+                prev=prev_names(school, season - 1),
+                nxt=set(by_ts.get((school, season + 1), {})),
+                dates=sched_cache.get(season, {}).get(school, []))
+            named[school][str(season)] = spans
+            if issues:
+                ambiguous_ts[(school, season)] = (issues, [(s[0], s[1]) for s in spans])
+
+        # Standing rule: official school / conference sources outrank CFBD, so an
+        # override always replaces whatever CFBD says for that school-season or game.
+        # Season-level overrides replace CFBD outright (one coach - or one co-coach
+        # label - for the whole season); the game count comes from the CFBD schedule
+        # when it is at hand.
+        for (school, season), o in sorted(season_ov.items()):
+            n = len(sched_cache.get(season, {}).get(school, [])) or None
+            if n is None and baseline_doc:
+                old = baseline_doc.get("teams", {}).get(school, {}).get(str(season))
+                n = old[0][1] if old else None
+            named[school][str(season)] = [[o["coach"], n]]
+            ambiguous_ts.pop((school, season), None)
+    except CFBDError as e:
+        print(f"::error::{e}. Leaving {OUT_FILE.name} untouched.", flush=True)
+        sys.exit(1)
+
+    # Index names (first use order) and encode.
+    coach_names: list[str] = []
+    coach_ix: dict[str, int] = {}
+
+    def cix(name):
+        if name not in coach_ix:
+            coach_ix[name] = len(coach_names)
+            coach_names.append(name)
+        return coach_ix[name]
+
+    teams_ix = {school: {season: [[cix(s[0])] + s[1:] for s in spans]
+                         for season, spans in sorted(seasons.items(), key=lambda kv: int(kv[0]))}
+                for school, seasons in sorted(named.items())}
+    games_out = {gid: {school: cix(o["coach"]) for school, o in m.items()} for gid, m in game_ov.items()}
+    coach_of = coach_resolver(teams_ix, games_out)
+
+    covered = covered_count(games, coach_of)
+    total = len(games)
+    if baseline_doc:
+        old_teams = baseline_doc.get("teams", {})
+        old_of = coach_resolver(old_teams, baseline_doc.get("games", {}))
+        before = covered_count(games, old_of)
+        if covered < before:
+            print(f"::error::new build covers {covered:,} games, fewer than the {before:,} in the "
+                  f"current {OUT_FILE.name}. Not writing.", flush=True)
+            sys.exit(1)
+
     reasons = defaultdict(int)
     amb_games = []
     for g in games:
-        ca, ra = coach_of(g["team_a"], g)
-        cb, rb = coach_of(g["team_b"], g)
-        if ca is not None and cb is not None:
-            covered += 1
-        for r in (ra, rb):
+        for t in (g["team_a"], g["team_b"]):
+            r = coach_of(t, g)[1]
             if r:
                 reasons[r] += 1
-        for t in (g["team_a"], g["team_b"]):
             if (t, g["season"]) in ambiguous_ts and t not in games_out.get(g["game_id"], {}):
                 amb_games.append((g, t))
 
-    total = len(games)
     doc = {
         "_meta": {
-            "source": "CollegeFootballData /coaches; split seasons cut by CFBD schedule order",
+            "source": "CollegeFootballData /coaches; split seasons cut by CFBD schedule order; "
+                      "coaches_overrides.json (official sources outrank CFBD)",
             "generated": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
             "games_total": total, "games_with_both_coaches": covered,
-            "ambiguous_team_seasons": len(ambiguous_ts),
+            "ambiguous_team_seasons_this_run": len(ambiguous_ts),
             "overrides": {"season": len(season_ov), "game": sum(len(m) for m in game_ov.values())},
         },
         "coaches": coach_names,
-        "teams": teams,
+        "teams": teams_ix,
         "games": games_out,
     }
-    OUT_FILE.write_text(json.dumps(doc, separators=(",", ":"), ensure_ascii=False), encoding="utf-8")
 
-    print(f"\n==> wrote {OUT_FILE.name}: {OUT_FILE.stat().st_size:,} bytes, "
-          f"{len(coach_names):,} coaches, {sum(len(v) for v in teams.values()):,} team-seasons")
+    print(f"\n==> mode: {'incremental ' + str(target) if incremental else 'full'}{' (dry run)' if dry else ''}")
+    print(f"==> {len(coach_names):,} coaches, {sum(len(v) for v in teams_ix.values()):,} team-seasons")
     print(f"==> games with both head coaches: {covered:,} / {total:,} ({covered / total:.1%})")
     print("==> missing coach (per team-side): " + ", ".join(f"{k}: {v:,}" for k, v in reasons.items()))
-    print(f"==> split seasons: {sum(1 for t in teams.values() for s in t.values() if len(s) > 1):,}, "
-          f"ambiguous: {len(ambiguous_ts):,} team-seasons touching {len(amb_games):,} game-sides")
+    print(f"==> split seasons: {sum(1 for t in teams_ix.values() for s in t.values() if len(s) > 1):,}, "
+          f"ambiguous (this run): {len(ambiguous_ts):,} team-seasons touching {len(amb_games):,} game-sides")
 
     for spec in args.report:
         a, b = spec.split("|")
@@ -250,14 +318,21 @@ def main():
             if g in pg:
                 iss, spans = ambiguous_ts[(t, g["season"])]
                 print(f"      ambiguous: {g['season']} {t}: {'; '.join(iss)}  {spans}")
-        splits = {(t, g["season"]) for g in pg for t in (a, b) if len(teams.get(t, {}).get(str(g["season"]), [])) > 1}
+        splits = {(t, g["season"]) for g in pg for t in (a, b) if len(teams_ix.get(t, {}).get(str(g["season"]), [])) > 1}
         for t, s in sorted(splits, key=lambda x: x[1]):
             print(f"      split season: {s} {t}: " + ", ".join(
-                f"{coach_names[x[0]]} ({x[1]} g{', thru ' + x[2] if len(x) > 2 and x[2] else ''})" for x in teams[t][str(s)]))
+                f"{coach_names[x[0]]} ({x[1]} g{', thru ' + x[2] if len(x) > 2 and x[2] else ''})" for x in teams_ix[t][str(s)]))
 
-    print(f"\n==> all ambiguous team-seasons ({len(ambiguous_ts)}):")
-    for (t, s), (iss, spans) in sorted(ambiguous_ts.items(), key=lambda kv: kv[0][1]):
-        print(f"      {s} {t}: {'; '.join(iss)}  {spans}")
+    if ambiguous_ts:
+        print(f"\n==> ambiguous team-seasons this run ({len(ambiguous_ts)}):")
+        for (t, s), (iss, spans) in sorted(ambiguous_ts.items(), key=lambda kv: kv[0][1]):
+            print(f"      {s} {t}: {'; '.join(iss)}  {spans}")
+
+    if dry:
+        print("\n==> dry run: nothing written")
+        return
+    write_atomic(OUT_FILE, doc)
+    print(f"\n==> wrote {OUT_FILE.name}: {OUT_FILE.stat().st_size:,} bytes")
 
 
 if __name__ == "__main__":
