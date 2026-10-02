@@ -299,11 +299,13 @@
   .dd-option img { width: 26px; height: 26px; flex-shrink: 0; }
   .dd-empty { padding: 1rem; text-align: center; color: var(--gray); font-size: 0.9rem; }
 
-  /* v52: the range control now sits directly under the Record (Winning %) chart, so
-     it reads as that chart's control rather than as a separate section - no top rule,
-     tighter lead-in. Only presentation changed; js/range-filter.js is untouched and
-     still binds to the same six ids. */
+  /* The range control sits directly under the Head-to-Head Results chart, so it reads
+     as that chart's control rather than as a separate section - no top rule, tight
+     lead-in from the chart's tap hint. js/range-filter.js still binds to the same six
+     ids. The block closes with a rule (on .controls-row) before the stat tiles. */
+  #results > .chart-box:last-child { margin-bottom: 1.25rem; }
   .year-range-section { padding-top: 0.25rem; margin-bottom: 1.25rem; }
+  #results-charts > .stats-grid:first-child { margin-top: 1.5rem; }
   .year-range-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem; }
   .year-range-title { font-size: 0.72rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; }
   .year-range-display { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
@@ -787,7 +789,7 @@
   .streak-block .streak-value { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; line-height: 1; margin-top: 0.25rem; letter-spacing: 0.03em; }
 
   /* v29 Tweak 1E: Full Games button + Time Period dropdown side-by-side */
-  .controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: center; padding-top: 1rem; margin-bottom: 0; border-top: 1px solid var(--border); }
+  .controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; align-items: center; padding: 1rem 0 1.25rem; margin-bottom: 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
   .controls-row .games-btn-cell { display: flex; justify-content: flex-start; }
   .controls-row .time-period-cell { display: flex; justify-content: flex-end; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
   .controls-row .time-period-cell label { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; color: var(--gray); letter-spacing: 0.07em; }
@@ -928,13 +930,16 @@
     </div>
     <!-- Tweak 3: H2H matchup result renders here, directly under the dropdowns. -->
     <div class="results-top" id="top-results"></div>
+    <!-- #results holds only the Head-to-Head Results chart; the rest of the charts render
+         into #results-charts below the year-range control. -->
     <div class="results" id="results">
       <div class="loading"><div class="spinner"></div><div>Loading game data&hellip;</div></div>
     </div>
-    <!-- v52: the year-range control sits directly beneath the Record (Winning %) chart,
-         matching the reference layout. It stays in STATIC markup on purpose - js/range-filter.js
-         binds to these six ids once at init, so re-rendering it inside #results would detach
-         its listeners. Program Comparison therefore renders into its own #results-stats below. -->
+    <!-- The year-range control sits directly beneath the Head-to-Head Results chart. It stays
+         in STATIC markup on purpose - js/range-filter.js binds to these six ids once at init,
+         so re-rendering it inside #results would detach its listeners. The stat tiles and the
+         Record chart therefore render into #results-charts, and Program Comparison into
+         #results-stats, both below it. -->
     <div class="year-range-section">
       <div class="year-range-header">
         <span class="year-range-title">Year Range</span>
@@ -970,6 +975,7 @@
         </select>
       </div>
     </div>
+    <div class="results-charts" id="results-charts"></div>
     <div class="results-stats" id="results-stats"></div>
   </div>
 </main>
@@ -2391,10 +2397,15 @@
     if (!GAMES.length) return;
     const topEl = document.getElementById('top-results');
     const resEl = document.getElementById('results');
-    // v52: Program Comparison lives in its own static container so the year-range
-    // control can sit between the charts and the cards without being re-rendered.
+    // The H2H chart renders into #results, above the static year-range control; the
+    // stat tiles + Record chart and Program Comparison render into their own static
+    // containers below it, so the control is never re-rendered.
+    const chartsEl = document.getElementById('results-charts');
     const statsEl = document.getElementById('results-stats');
-    const clearStats = () => { if (statsEl) statsEl.innerHTML = ''; };
+    const clearStats = () => {
+      if (chartsEl) chartsEl.innerHTML = '';
+      if (statsEl) statsEl.innerHTML = '';
+    };
 
     if (!state.team1 || !state.team2) {
       // no matchup chosen yet: this variant is not its own page, point at /compare
@@ -2437,6 +2448,7 @@
         const t1ColorFB = TEAM_META[state.team1]?.color || '#fe5c00';
         const t2ColorFB = TEAM_META[state.team2]?.color || '#003594';
         resEl.innerHTML = '';
+        if (chartsEl) chartsEl.innerHTML = '';
         if (statsEl) statsEl.innerHTML = renderStatComparison(t1ColorFB, t2ColorFB);
         // Hide static H2H-only controls (Full Games List + Time Period) when no prior meetings
         const _cr = document.querySelector('.controls-row'); if (_cr) _cr.style.display = 'none';
@@ -2575,14 +2587,17 @@
       })()}
     `;
 
-    // ===== BOTTOM container: charts, stat grid, program comparison, games link, suggested matchups =====
+    // ===== H2H chart: sits directly above the year-range control =====
     resEl.innerHTML = `
       <div class="chart-box">
         <div class="chart-title">Head-to-Head Results</div>
         <canvas id="marginChart" height="110"></canvas>
         <div id="marginReveal" class="chart-reveal"></div>
       </div>
+    `;
 
+    // ===== Below the year-range control: stat grid + Record chart =====
+    if (chartsEl) chartsEl.innerHTML = `
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-team">${teamLogo(state.team1)}</div>
@@ -2625,7 +2640,7 @@
       <!-- v29 Tweak 1G: Suggested Matchups removed -->
     `;
 
-    // ...and into its own container, below the year-range control.
+    // ...and Program Comparison into its own container below those.
     if (statsEl) statsEl.innerHTML = renderStatComparison(t1Color, t2Color);
 
     // --- Animations ---
