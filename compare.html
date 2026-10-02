@@ -299,13 +299,13 @@
   .dd-option img { width: 26px; height: 26px; flex-shrink: 0; }
   .dd-empty { padding: 1rem; text-align: center; color: var(--gray); font-size: 0.9rem; }
 
-  /* The range control sits directly under the Head-to-Head Results chart, so it reads
-     as that chart's control rather than as a separate section - no top rule, tight
-     lead-in from the chart's tap hint. js/range-filter.js still binds to the same six
-     ids. The block closes with a rule (on .controls-row) before the stat tiles. */
-  #results > .chart-box:last-child { margin-bottom: 1.25rem; }
-  .year-range-section { padding-top: 0.25rem; margin-bottom: 1.25rem; }
-  #results-charts > .stats-grid:first-child { margin-top: 1.5rem; }
+  /* The filter block sits directly under the stacked win/loss/tie bar so the numbers it
+     drives stay in view: ~16px above it, and it closes with a rule (on .controls-row)
+     and ~20px before the streak line. js/range-filter.js still binds to the same ids. */
+  #top-results > .hero-bar:last-child { margin-bottom: 1rem; }
+  .year-range-section { padding-top: 0; margin-bottom: 1.25rem; }
+  .results-top-after:not(:empty) { padding-top: 1.25rem; }
+  .results-top-after > .streak-block:first-child { margin-top: 0; }
   .year-range-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem; }
   .year-range-title { font-size: 0.72rem; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; }
   .year-range-display { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; }
@@ -390,6 +390,10 @@
     border-radius: 999px; background: var(--orange); flex-shrink: 0;
   }
   .chart-canvas-wrap { position: relative; height: 300px; width: 100%; }
+  /* H2H margin chart: desktop keeps the canvas's own aspect ratio. On a phone that ratio
+     left ~90px for legend + axes + bars, so the plot collapsed; give it a real height. */
+  .margin-canvas-wrap { position: relative; width: 100%; }
+  @media (max-width: 700px) { .margin-canvas-wrap { height: 220px; } }
   /* v52 mobile legibility: 140 seasons squeezed into ~330px is an unreadable tangle.
      Rather than shrink the desktop chart, give each season a floor of horizontal
      space and let the plot scroll. Every data point survives and tap-to-reveal keeps
@@ -928,18 +932,15 @@
         <img id="dd2-logo" alt="" style="display:none"><span id="dd2-label" style="display:none"></span>
       </div>
     </div>
-    <!-- Tweak 3: H2H matchup result renders here, directly under the dropdowns. -->
+    <!-- Tweak 3: H2H matchup result renders here, directly under the dropdowns:
+         meetings count, series leader, rivalry badge and the stacked win/loss/tie bar. -->
     <div class="results-top" id="top-results"></div>
-    <!-- #results holds only the Head-to-Head Results chart; the rest of the charts render
-         into #results-charts below the year-range control. -->
-    <div class="results" id="results">
-      <div class="loading"><div class="spinner"></div><div>Loading game data&hellip;</div></div>
-    </div>
-    <!-- The year-range control sits directly beneath the Head-to-Head Results chart. It stays
-         in STATIC markup on purpose - js/range-filter.js binds to these six ids once at init,
-         so re-rendering it inside #results would detach its listeners. The stat tiles and the
-         Record chart therefore render into #results-charts, and Program Comparison into
-         #results-stats, both below it. -->
+    <!-- The filter block sits directly beneath the stacked bar, so changing it updates the
+         numbers right above it without scrolling. It stays in STATIC markup on purpose -
+         js/range-filter.js binds to these ids once at init, so re-rendering it inside a
+         results container would detach its listeners. Everything below it renders into
+         #top-results-after (streak, upcoming line), #results (charts, stat tiles) and
+         #results-stats (Program Comparison). -->
     <div class="year-range-section">
       <div class="year-range-header">
         <span class="year-range-title">Year Range</span>
@@ -975,7 +976,10 @@
         </select>
       </div>
     </div>
-    <div class="results-charts" id="results-charts"></div>
+    <div class="results-top-after" id="top-results-after"></div>
+    <div class="results" id="results">
+      <div class="loading"><div class="spinner"></div><div>Loading game data&hellip;</div></div>
+    </div>
     <div class="results-stats" id="results-stats"></div>
   </div>
 </main>
@@ -2397,13 +2401,13 @@
     if (!GAMES.length) return;
     const topEl = document.getElementById('top-results');
     const resEl = document.getElementById('results');
-    // The H2H chart renders into #results, above the static year-range control; the
-    // stat tiles + Record chart and Program Comparison render into their own static
-    // containers below it, so the control is never re-rendered.
-    const chartsEl = document.getElementById('results-charts');
+    // The static filter block sits between #top-results (summary + stacked bar) and
+    // #top-results-after (streak + upcoming line); charts and Program Comparison render
+    // below those, so the filter itself is never re-rendered.
+    const afterEl = document.getElementById('top-results-after');
     const statsEl = document.getElementById('results-stats');
     const clearStats = () => {
-      if (chartsEl) chartsEl.innerHTML = '';
+      if (afterEl) afterEl.innerHTML = '';
       if (statsEl) statsEl.innerHTML = '';
     };
 
@@ -2448,7 +2452,7 @@
         const t1ColorFB = TEAM_META[state.team1]?.color || '#fe5c00';
         const t2ColorFB = TEAM_META[state.team2]?.color || '#003594';
         resEl.innerHTML = '';
-        if (chartsEl) chartsEl.innerHTML = '';
+        if (afterEl) afterEl.innerHTML = '';
         if (statsEl) statsEl.innerHTML = renderStatComparison(t1ColorFB, t2ColorFB);
         // Hide static H2H-only controls (Full Games List + Time Period) when no prior meetings
         const _cr = document.querySelector('.controls-row'); if (_cr) _cr.style.display = 'none';
@@ -2537,6 +2541,10 @@
           </div>
         </div>
       </div>
+    `;
+
+    // ===== Below the filter block: current win streak + upcoming matchup =====
+    if (afterEl) afterEl.innerHTML = `
       ${(() => {
         if (!streak) return '';
         if (streak.tied) {
@@ -2585,19 +2593,16 @@
           ${asOf ? `<div class="um-asof">Current line as of ${asOf}</div>` : ''}
         </div>`;
       })()}
-    `;
+    `.trim();
 
-    // ===== H2H chart: sits directly above the year-range control =====
+    // ===== Charts + stat grid =====
     resEl.innerHTML = `
       <div class="chart-box">
         <div class="chart-title">Head-to-Head Results</div>
-        <canvas id="marginChart" height="110"></canvas>
+        <div class="margin-canvas-wrap"><canvas id="marginChart" height="110"></canvas></div>
         <div id="marginReveal" class="chart-reveal"></div>
       </div>
-    `;
 
-    // ===== Below the year-range control: stat grid + Record chart =====
-    if (chartsEl) chartsEl.innerHTML = `
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-team">${teamLogo(state.team1)}</div>
@@ -2640,7 +2645,7 @@
       <!-- v29 Tweak 1G: Suggested Matchups removed -->
     `;
 
-    // ...and Program Comparison into its own container below those.
+    // Program Comparison renders into its own container below the charts.
     if (statsEl) statsEl.innerHTML = renderStatComparison(t1Color, t2Color);
 
     // --- Animations ---
@@ -2890,6 +2895,17 @@
     </div>`;
   }
 
+  // Clean symmetric axis for a +/- max value: pick a round step that gives about
+  // `perSide` ticks on each side of zero, then round the bound up to a multiple of it.
+  function niceAxis(max, perSide) {
+    if (!(max > 0)) return { bound: 5, step: 5 };
+    const raw = max / perSide;
+    const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+    const f = [1, 2, 2.5, 3, 4, 5, 10].find(f => raw <= f * mag);
+    const step = f * mag;
+    return { bound: Math.ceil(max / step) * step, step };
+  }
+
   function drawCharts(games) {
     if (charts.margin) charts.margin.destroy();
     if (charts.lead) charts.lead.destroy();
@@ -2906,6 +2922,9 @@
     });
     // v36: mobile-friendly chart + tap to reveal game detail
     const isMobile = window.innerWidth <= 700;
+    // Symmetric y axis sized to the biggest margin in the filtered games, rounded up to a
+    // clean value, so the bars fill the plot and it rescales whenever the filters change.
+    const yAxis = niceAxis(Math.max(0, ...marginData.map(Math.abs)), isMobile ? 2 : 3);
     const marginReveal = document.getElementById('marginReveal');
     if (marginReveal) marginReveal.innerHTML = '<div class="chart-reveal-hint">Tap a year to see the game detail</div>';
     charts.margin = new Chart(document.getElementById('marginChart'), {
@@ -2918,7 +2937,7 @@
         barPercentage: isMobile ? 0.9 : 0.85
       }] },
       options: {
-        responsive: true, maintainAspectRatio: true,
+        responsive: true, maintainAspectRatio: !isMobile,
         layout: { padding: { top: 4, bottom: 0 } },
         plugins: {
           legend: {
@@ -2942,12 +2961,13 @@
         },
         scales: {
           x: {
-            ticks: { maxTicksLimit: isMobile ? 8 : 12, font: { size: isMobile ? 11 : 12 }, color: '#6b7280' },
+            ticks: { maxTicksLimit: isMobile ? 6 : 12, maxRotation: isMobile ? 0 : 50, font: { size: isMobile ? 11 : 12 }, color: '#6b7280' },
             grid: { display: false }
           },
           y: {
+            min: -yAxis.bound, max: yAxis.bound,
             title: { display: !isMobile, text: `\u2190 ${t2Abbr}    |    ${t1Abbr} \u2192`, font: { size: 12 } },
-            ticks: { font: { size: isMobile ? 10 : 12 }, color: '#6b7280' },
+            ticks: { stepSize: yAxis.step, font: { size: isMobile ? 10 : 12 }, color: '#6b7280' },
             grid: { color: 'rgba(0,0,0,0.06)' }
           }
         },
