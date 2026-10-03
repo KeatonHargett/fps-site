@@ -538,7 +538,11 @@
 
   /* Rivalry badge */
   .rivalry-badge { text-align: center; margin: 0 0 1.5rem; }
-  .rivalry-badge .rb-logo { height: 96px; width: auto; margin: 0 auto 0.5rem; display: block; }
+  /* Fixed box + contain, so a wide wordmark and a tall shield read as the same size. */
+  .rivalry-badge .rb-logo { width: 168px; height: 72px; object-fit: contain; margin: 0 auto 0.5rem; display: block; }
+  /* Logos whose outer edge is white (rivalries.json logo_light) vanish on the white card,
+     so they sit on a subtle gray disc instead. */
+  .rivalry-badge .rb-logo.rb-light { width: 80px; height: 80px; padding: 9px; box-sizing: border-box; border-radius: 50%; background: #e9ebef; }
   .rivalry-badge .rb-pill {
     display: inline-flex; align-items: center; gap: 0.5rem;
     background: var(--dark); color: white;
@@ -964,7 +968,8 @@
     .record-line { font-size: 1.45rem; margin-top: 0.2rem; }
     .streak-line { font-size: 1.05rem; margin-top: 0.15rem; }
     .rivalry-badge { margin-bottom: 0.4rem; }
-    .rivalry-badge .rb-logo { height: 60px; margin-bottom: 0.25rem; }
+    .rivalry-badge .rb-logo { width: 132px; height: 56px; margin-bottom: 0.25rem; }
+    .rivalry-badge .rb-logo.rb-light { width: 62px; height: 62px; padding: 7px; }
     .rivalry-badge .rb-pill { font-size: 1.15rem; padding: 0.25rem 1rem; }
     .rivalry-badge .rb-trophy { margin-top: 0.2rem; font-size: 0.7rem; }
     .hero-bar { margin: 0.6rem 0 1rem; }
@@ -3049,12 +3054,14 @@
       ${(() => {
         const riv = getRivalry();
         if (!riv) return '';
+        // Names and trophies now come from Wikipedia ("Texas A&M", "Commander-in-Chief's"), so escape them.
+        const h = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         const hasLogo = !!riv.logo;
         return `<div class="rivalry-badge">
-          ${hasLogo ? `<img class="rb-logo" src="${riv.logo}" alt="${riv.name}"
+          ${hasLogo ? `<img class="rb-logo${riv.logo_light ? ' rb-light' : ''}" src="${h(riv.logo)}" alt="${h(riv.name)} logo" decoding="async"
             onerror="this.style.display='none';var p=this.parentElement.querySelector('.rb-pill');if(p)p.classList.remove('rb-hidden');">` : ''}
-          <span class="rb-pill${hasLogo ? ' rb-hidden' : ''}"><span class="rb-star">&#9733;</span>${riv.name}<span class="rb-star">&#9733;</span></span>
-          ${riv.trophy ? `<span class="rb-trophy">Trophy: ${riv.trophy}</span>` : ''}
+          <span class="rb-pill${hasLogo ? ' rb-hidden' : ''}"><span class="rb-star">&#9733;</span>${h(riv.name)}<span class="rb-star">&#9733;</span></span>
+          ${riv.trophy ? `<span class="rb-trophy">Trophy: ${h(riv.trophy)}</span>` : ''}
         </div>`;
       })()}
       <!-- v29 Tweak 1B: hero bar with logos on opposite ends, big WINS numbers next to logos -->
