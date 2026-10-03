@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- PREVIEW-BRANCH ONLY (feat/rivalry-logos). Delete before merge; never ship to production. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Rivalry Logo Review</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --orange: #fe5c00; --dark: #0d1117; --gray: #6b7280; --light: #f3f4f6; --border: #e5e7eb; --green: #16a34a; --amber: #a16207; --red: #b91c1c; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #fafafa; color: var(--dark); line-height: 1.45; font-size: 14px; }
+  main { max-width: 1240px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; letter-spacing: 0.03em; line-height: 1; }
+  h1 span { color: var(--orange); }
+  h2 { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.03em; margin: 36px 0 12px; }
+  .banner { margin: 10px 0 14px; padding: 8px 12px; border-left: 3px solid var(--orange); background: #fff7f1; color: #7c2d12; font-size: 13px; }
+  .stats { display: flex; flex-wrap: wrap; gap: 8px; }
+  .stat { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; color: var(--gray); }
+  .stat b { color: var(--dark); font-size: 1.1rem; margin-right: 4px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+  .card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 14px; display: flex; flex-direction: column; gap: 6px; }
+  .logo { height: 104px; display: grid; place-items: center; border-bottom: 1px solid var(--border); margin-bottom: 4px; padding-bottom: 8px; }
+  /* same box and light-disc rules as compare.html's badge */
+  .logo img { width: 168px; height: 72px; object-fit: contain; }
+  .logo img.rb-light { width: 80px; height: 80px; padding: 9px; border-radius: 50%; background: #e9ebef; }
+  .name { font-weight: 700; font-size: 15px; }
+  .aka { color: var(--gray); font-size: 12px; }
+  .teams a { font-weight: 600; text-decoration: none; border-bottom: 1px dotted var(--gray); }
+  dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; font-size: 12.5px; }
+  dt { color: var(--gray); } dd { overflow-wrap: anywhere; }
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tag { font-size: 11px; border: 1px solid currentColor; border-radius: 999px; padding: 0 7px; }
+  .active { color: var(--green); } .dormant { color: var(--amber); } .sponsor { color: var(--red); } .light { color: var(--gray); }
+  .src { margin-top: auto; font-size: 12.5px; }
+  .tablewrap { overflow-x: auto; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 13px; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { background: var(--light); font-weight: 600; }
+  .err { color: var(--red); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Rivalry <span>Logo Review</span></h1>
+  <div class="banner">Preview branch only: not linked, not indexed, deleted before merge. Logos are for display on frontporchsports.com only, never on FrontPorchSports.shop merch.</div>
+  <div class="stats" id="stats"></div>
+  <h2 id="h-logo">With logo</h2>
+  <div class="grid" id="grid"></div>
+  <h2 id="h-nologo">Text badge (no logo)</h2>
+  <div class="tablewrap"><table><thead><tr><th>Rivalry</th><th>Teams</th><th>Trophy</th><th>Status</th><th>Source</th></tr></thead><tbody id="rows"></tbody></table></div>
+</main>
+<script>
+(function () {
+  const h = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const cmp = r => `compare.html?team1=${encodeURIComponent(r.team1)}&team2=${encodeURIComponent(r.team2)}`;
+  const link = (url, label) => url ? `<a href="${h(url)}" target="_blank" rel="noopener">${label}</a>` : '';
+  fetch('rivalries.json').then(r => r.json()).then(doc => {
+    const all = Object.values(doc.rivalries).sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }));
+    const withLogo = all.filter(r => r.logo), noLogo = all.filter(r => !r.logo);
+    document.getElementById('stats').innerHTML =
+      `<span class="stat"><b>${all.length}</b>rivalries</span><span class="stat"><b>${withLogo.length}</b>with logo</span>` +
+      `<span class="stat"><b>${noLogo.length}</b>text badge</span><span class="stat"><b>${withLogo.filter(r => r.sponsor_branded).length}</b>sponsor-branded</span>`;
+    document.getElementById('h-logo').textContent = `With logo (${withLogo.length})`;
+    document.getElementById('h-nologo').textContent = `Text badge, no logo (${noLogo.length})`;
+    document.getElementById('grid').innerHTML = withLogo.map(r => `
+      <article class="card">
+        <div class="logo"><img class="${r.logo_light ? 'rb-light' : ''}" src="${h(r.logo)}" alt="${h(r.name)} logo" loading="lazy"
+          onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'err',textContent:'BROKEN: ${h(r.logo)}'}))"></div>
+        <div class="name">${h(r.name)}</div>${r.also_known_as ? `<div class="aka">aka ${h(r.also_known_as)}</div>` : ''}
+        <div class="teams"><a href="${cmp(r)}">${h(r.team1)} vs ${h(r.team2)}</a></div>
+        <dl><dt>Trophy</dt><dd>${h(r.trophy || '—')}</dd><dt>License</dt><dd>${h(r.license || '—')}</dd>
+        <dt>Sponsor</dt><dd>${r.sponsor_branded ? h(r.sponsor || 'yes') : 'none'}</dd><dt>File</dt><dd><code>${h(r.logo)}</code></dd></dl>
+        <div class="tags"><span class="tag ${h(r.status || 'dormant')}">${h(r.status || 'status unknown')}</span>
+          ${r.sponsor_branded ? '<span class="tag sponsor">sponsor-branded</span>' : ''}${r.logo_light ? '<span class="tag light">gray disc</span>' : ''}</div>
+        <div class="src">${link(r.wikipedia_url, 'Wikipedia')}${r.wikipedia_url && r.wikimedia_file_url ? ' · ' : ''}${link(r.wikimedia_file_url, 'File page')}</div>
+      </article>`).join('');
+    document.getElementById('rows').innerHTML = noLogo.map(r => `<tr>
+      <td>${h(r.name)}${r.also_known_as ? ` <span class="aka">(${h(r.also_known_as)})</span>` : ''}</td>
+      <td><a href="${cmp(r)}">${h(r.team1)} vs ${h(r.team2)}</a></td><td>${h(r.trophy || '—')}</td>
+      <td>${r.status ? `<span class="tag ${h(r.status)}">${h(r.status)}</span>` : '—'}</td><td>${link(r.wikipedia_url, 'Wikipedia') || '—'}</td></tr>`).join('');
+  }).catch(e => { document.getElementById('grid').innerHTML = `<p class="err">Could not load rivalries.json: ${h(e)}</p>`; });
+})();
+</script>
+</body>
+</html>
