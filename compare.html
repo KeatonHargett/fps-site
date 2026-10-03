@@ -3014,9 +3014,14 @@
 
     const isLastN = !!state.lastN;
     const isPastPreset = ['past5','past10','past20'].includes(state.activePreset);
+    // The series' own first and last meeting in the games shown (so the filtered range when
+    // filters are on), not the dataset bounds the year-range slider uses.
+    let firstMet = Infinity, lastMet = -Infinity;
+    for (const g of games) { if (g.season < firstMet) firstMet = g.season; if (g.season > lastMet) lastMet = g.season; }
+    const metRange = firstMet === lastMet ? `${firstMet}` : `${firstMet}-${lastMet}`;
     const totalLabel = isLastN
-      ? `Last ${state.lastN} Matchups &middot; ${state.startYear}-${state.endYear}`
-      : `Total Meetings &middot; ${state.startYear}-${state.endYear}`;
+      ? `Last ${state.lastN} Matchups &middot; ${metRange}`
+      : `Total Meetings &middot; ${metRange}`;
 
     const t1Margin = largestMargin(games, state.team1);
     const t2Margin = largestMargin(games, state.team2);

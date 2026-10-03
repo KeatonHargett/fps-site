@@ -2,14 +2,15 @@
  "_meta": {
   "usage": "Rivalry logos are for display on frontporchsports.com only. They must never be used on FrontPorchSports.shop merchandise or any other product. Most are non-free (fair use) marks; see each entry's license.",
   "source": "Extracted from the RIVALRIES literal previously inlined in index.html and compare.html; extended 2026-10 from Wikipedia 'List of NCAA college football rivalry games' and each rivalry article (MediaWiki API).",
-  "keyFormat": "The two canonical team names, alphabetically sorted, joined by '|'. Lookups must accent-fold: the Fresno St. key uses the un-accented 'San Jose St.' spelling.",
-  "fields": "name (display), also_known_as, team1/team2 (dataset names), trophy, logo (path or null), wikipedia_url, wikimedia_file_url, license (as listed on the file page), sponsor_branded, sponsor, status (active = met 2024 or later), last_meeting, logo_light (true = mostly white/light, rendered on a gray backing circle).",
+  "keyFormat": "The two dataset team names (data/derived/manifest.json 'names'), alphabetically sorted, joined by '|'. Lookups still accent-fold both sides.",
+  "fields": "name (display), also_known_as, team1/team2 (dataset names), trophy, logo (path or null), wikipedia_url, wikimedia_file_url, license (as listed on the file page), sponsor_branded, sponsor, status (active = met 2024 or later), last_meeting, logo_light (true = mostly white/light, rendered on a gray backing circle). tier: 1 = the 64 rivalries the site featured before the 2026-10 expansion (full +35 featured-matchup bonus), 2 = every other named rivalry (+10). source: only where the logo has no Wikipedia/Wikimedia file page (\"owner supplied\" = provided by the site owner, origin not documented).",
   "count": 242,
   "with_logo": 22
  },
  "rivalries": {
   "Middle Tennessee|Western Kentucky": {
    "name": "100 Miles of Hate",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Middle Tennessee",
    "team2": "Western Kentucky",
@@ -25,6 +26,7 @@
   },
   "Air Force|Colorado St.": {
    "name": "Air Force–Colorado State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Air Force",
    "team2": "Colorado St.",
@@ -40,6 +42,7 @@
   },
   "Air Force|Hawaii": {
    "name": "Air Force–Hawaii",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Air Force",
    "team2": "Hawaii",
@@ -55,6 +58,7 @@
   },
   "Akron|Kent St.": {
    "name": "Akron–Kent State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Akron",
    "team2": "Kent St.",
@@ -70,6 +74,7 @@
   },
   "Alabama|Clemson": {
    "name": "Alabama–Clemson",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Alabama",
    "team2": "Clemson",
@@ -85,6 +90,7 @@
   },
   "Alabama|Florida": {
    "name": "Alabama–Florida",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Alabama",
    "team2": "Florida",
@@ -100,6 +106,7 @@
   },
   "Alabama|Georgia": {
    "name": "Alabama–Georgia",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Alabama",
    "team2": "Georgia",
@@ -115,6 +122,7 @@
   },
   "Alabama|Georgia Tech": {
    "name": "Alabama–Georgia Tech",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Alabama",
    "team2": "Georgia Tech",
@@ -130,6 +138,7 @@
   },
   "Alabama|LSU": {
    "name": "Alabama–LSU",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Alabama",
    "team2": "LSU",
@@ -145,6 +154,7 @@
   },
   "Alabama|Ole Miss": {
    "name": "Alabama–Ole Miss",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Alabama",
    "team2": "Ole Miss",
@@ -160,6 +170,7 @@
   },
   "Alabama|Penn St.": {
    "name": "Alabama–Penn State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Alabama",
    "team2": "Penn St.",
@@ -175,6 +186,7 @@
   },
   "Washington|Washington St.": {
    "name": "Apple Cup",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Washington",
    "team2": "Washington St.",
@@ -190,6 +202,7 @@
   },
   "Illinois|Missouri": {
    "name": "Arch Rivalry",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Illinois",
    "team2": "Missouri",
@@ -205,6 +218,7 @@
   },
   "Arizona|New Mexico": {
    "name": "Arizona–New Mexico",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Arizona",
    "team2": "New Mexico",
@@ -220,6 +234,7 @@
   },
   "Arkansas|Ole Miss": {
    "name": "Arkansas–Ole Miss",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Arkansas",
    "team2": "Ole Miss",
@@ -235,6 +250,7 @@
   },
   "Arkansas|Texas A&M": {
    "name": "Arkansas–Texas A&M",
+   "tier": 2,
    "also_known_as": "Southwest Classic",
    "team1": "Arkansas",
    "team2": "Texas A&M",
@@ -250,6 +266,7 @@
   },
   "Arkansas|Texas Tech": {
    "name": "Arkansas–Texas Tech",
+   "tier": 2,
    "also_known_as": "The Southwest Series",
    "team1": "Arkansas",
    "team2": "Texas Tech",
@@ -265,6 +282,7 @@
   },
   "Army|Navy": {
    "name": "Army–Navy Game",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Army",
    "team2": "Navy",
@@ -280,6 +298,7 @@
   },
   "Army|Notre Dame": {
    "name": "Army–Notre Dame",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Army",
    "team2": "Notre Dame",
@@ -295,6 +314,7 @@
   },
   "Auburn|Clemson": {
    "name": "Auburn–Clemson",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Auburn",
    "team2": "Clemson",
@@ -310,6 +330,7 @@
   },
   "Auburn|Florida": {
    "name": "Auburn–Florida",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Auburn",
    "team2": "Florida",
@@ -325,6 +346,7 @@
   },
   "Auburn|Georgia Tech": {
    "name": "Auburn–Georgia Tech",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Auburn",
    "team2": "Georgia Tech",
@@ -340,6 +362,7 @@
   },
   "Auburn|Mississippi St.": {
    "name": "Auburn–Mississippi State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Auburn",
    "team2": "Mississippi St.",
@@ -355,6 +378,7 @@
   },
   "Auburn|Ole Miss": {
    "name": "Auburn–Ole Miss",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Auburn",
    "team2": "Ole Miss",
@@ -370,6 +394,7 @@
   },
   "Auburn|Tennessee": {
    "name": "Auburn–Tennessee",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Auburn",
    "team2": "Tennessee",
@@ -385,6 +410,7 @@
   },
   "Auburn|Tulane": {
    "name": "Auburn–Tulane",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Auburn",
    "team2": "Tulane",
@@ -400,6 +426,7 @@
   },
   "Pittsburgh|West Virginia": {
    "name": "Backyard Brawl",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Pittsburgh",
    "team2": "West Virginia",
@@ -415,6 +442,7 @@
   },
   "Ball St.|Northern Illinois": {
    "name": "Ball State–Northern Illinois",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Ball St.",
    "team2": "Northern Illinois",
@@ -430,6 +458,7 @@
   },
   "Alabama|Mississippi St.": {
    "name": "Battle for Highway 82",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Alabama",
    "team2": "Mississippi St.",
@@ -445,6 +474,7 @@
   },
   "Nevada|UNLV": {
    "name": "Battle for Nevada",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Nevada",
    "team2": "UNLV",
@@ -460,6 +490,7 @@
   },
   "Southern Miss|Tulane": {
    "name": "Battle for the Bell",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Southern Miss",
    "team2": "Tulane",
@@ -475,6 +506,7 @@
   },
   "South Alabama|Troy": {
    "name": "Battle for the Belt",
+   "tier": 2,
    "also_known_as": null,
    "team1": "South Alabama",
    "team2": "Troy",
@@ -490,6 +522,7 @@
   },
   "Memphis|UAB": {
    "name": "Battle for the Bones",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Memphis",
    "team2": "UAB",
@@ -505,6 +538,7 @@
   },
   "SMU|TCU": {
    "name": "Battle for the Iron Skillet",
+   "tier": 1,
    "also_known_as": null,
    "team1": "SMU",
    "team2": "TCU",
@@ -520,6 +554,7 @@
   },
   "Michigan St.|Penn St.": {
    "name": "Battle for the Land Grant",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Michigan St.",
    "team2": "Penn St.",
@@ -535,6 +570,7 @@
   },
   "Jacksonville St.|Troy": {
    "name": "Battle for the Ol' School Bell",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Jacksonville St.",
    "team2": "Troy",
@@ -550,6 +586,7 @@
   },
   "Middle Tennessee|Troy": {
    "name": "Battle for the Palladium",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Middle Tennessee",
    "team2": "Troy",
@@ -565,6 +602,7 @@
   },
   "LSU|Tulane": {
    "name": "Battle for the Rag",
+   "tier": 1,
    "also_known_as": null,
    "team1": "LSU",
    "team2": "Tulane",
@@ -580,6 +618,7 @@
   },
   "Arkansas|Missouri": {
    "name": "Battle Line Rivalry",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Arkansas",
    "team2": "Missouri",
@@ -595,6 +634,7 @@
   },
   "New Mexico St.|UTEP": {
    "name": "Battle of I-10",
+   "tier": 2,
    "also_known_as": null,
    "team1": "New Mexico St.",
    "team2": "UTEP",
@@ -610,6 +650,7 @@
   },
   "Bowling Green|Toledo": {
    "name": "Battle of I-75",
+   "tier": 1,
    "also_known_as": "Bowling Green–Toledo",
    "team1": "Bowling Green",
    "team2": "Toledo",
@@ -626,6 +667,7 @@
   },
   "North Dakota St.|Wyoming": {
    "name": "Battle of the Basins",
+   "tier": 2,
    "also_known_as": null,
    "team1": "North Dakota St.",
    "team2": "Wyoming",
@@ -641,6 +683,7 @@
   },
   "James Madison|Liberty": {
    "name": "Battle of the Blue Ridge",
+   "tier": 2,
    "also_known_as": null,
    "team1": "James Madison",
    "team2": "Liberty",
@@ -656,6 +699,7 @@
   },
   "Baylor|Texas A&M": {
    "name": "Battle of the Brazos",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Baylor",
    "team2": "Texas A&M",
@@ -671,6 +715,7 @@
   },
   "Miami (OH)|Ohio": {
    "name": "Battle of the Bricks",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Miami (OH)",
    "team2": "Ohio",
@@ -687,6 +732,7 @@
   },
   "Utah|Utah St.": {
    "name": "Battle of the Brothers",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Utah",
    "team2": "Utah St.",
@@ -702,6 +748,7 @@
   },
   "North Carolina|South Carolina": {
    "name": "Battle of the Carolinas",
+   "tier": 2,
    "also_known_as": null,
    "team1": "North Carolina",
    "team2": "South Carolina",
@@ -717,6 +764,7 @@
   },
   "Louisiana Lafayette|Louisiana Monroe": {
    "name": "Battle on the Bayou",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Louisiana Lafayette",
    "team2": "Louisiana Monroe",
@@ -732,6 +780,7 @@
   },
   "Baylor|Houston": {
    "name": "Baylor–Houston",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Baylor",
    "team2": "Houston",
@@ -747,6 +796,7 @@
   },
   "Baylor|Rice": {
    "name": "Baylor–Rice",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Baylor",
    "team2": "Rice",
@@ -762,6 +812,7 @@
   },
   "Baylor|Texas": {
    "name": "Baylor–Texas",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Baylor",
    "team2": "Texas",
@@ -777,6 +828,7 @@
   },
   "Baylor|Texas Tech": {
    "name": "Baylor–Texas Tech",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Baylor",
    "team2": "Texas Tech",
@@ -792,6 +844,7 @@
   },
   "Houston|Rice": {
    "name": "Bayou Bucket Classic",
+   "tier": 1,
    "also_known_as": "Houston–Rice",
    "team1": "Houston",
    "team2": "Rice",
@@ -807,6 +860,7 @@
   },
   "Oklahoma|Oklahoma St.": {
    "name": "Bedlam",
+   "tier": 1,
    "also_known_as": "Bedlam Series",
    "team1": "Oklahoma",
    "team2": "Oklahoma St.",
@@ -822,6 +876,7 @@
   },
   "San José St.|Stanford": {
    "name": "Bill Walsh Legacy Game",
+   "tier": 2,
    "also_known_as": null,
    "team1": "San José St.",
    "team2": "Stanford",
@@ -837,6 +892,7 @@
   },
   "Memphis|Southern Miss": {
    "name": "Black and Blue Bowl",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Memphis",
    "team2": "Southern Miss",
@@ -852,6 +908,7 @@
   },
   "Baylor|TCU": {
    "name": "Bluebonnet Battle",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Baylor",
    "team2": "TCU",
@@ -859,7 +916,8 @@
    "logo": "rivalry-logos/bluebonnet-battle.png",
    "wikipedia_url": "https://en.wikipedia.org/wiki/Baylor%E2%80%93TCU_football_rivalry",
    "wikimedia_file_url": null,
-   "license": null,
+   "license": "Unknown (owner supplied)",
+   "source": "owner supplied",
    "sponsor_branded": false,
    "sponsor": null,
    "status": "active",
@@ -867,6 +925,7 @@
   },
   "Boise St.|Fresno St.": {
    "name": "Boise State–Fresno State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Boise St.",
    "team2": "Fresno St.",
@@ -882,6 +941,7 @@
   },
   "Boise St.|Nevada": {
    "name": "Boise State–Nevada",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Boise St.",
    "team2": "Nevada",
@@ -897,6 +957,7 @@
   },
   "Kansas|Missouri": {
    "name": "Border War",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Kansas",
    "team2": "Missouri",
@@ -912,6 +973,7 @@
   },
   "Colorado St.|Wyoming": {
    "name": "Border War",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Colorado St.",
    "team2": "Wyoming",
@@ -927,6 +989,7 @@
   },
   "Boston College|Clemson": {
    "name": "Boston College–Clemson",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Boston College",
    "team2": "Clemson",
@@ -942,6 +1005,7 @@
   },
   "Boston College|UMass": {
    "name": "Boston College–UMass",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Boston College",
    "team2": "UMass",
@@ -957,6 +1021,7 @@
   },
   "Boston College|Virginia Tech": {
    "name": "Boston College–Virginia Tech",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Boston College",
    "team2": "Virginia Tech",
@@ -972,6 +1037,7 @@
   },
   "Bowling Green|Kent St.": {
    "name": "Bowling Green–Kent State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Bowling Green",
    "team2": "Kent St.",
@@ -987,6 +1053,7 @@
   },
   "Utah St.|Wyoming": {
    "name": "Bridger's Battle",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Utah St.",
    "team2": "Wyoming",
@@ -1002,6 +1069,7 @@
   },
   "Buffalo|UMass": {
    "name": "Buffalo–UMass",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Buffalo",
    "team2": "UMass",
@@ -1017,6 +1085,7 @@
   },
   "BYU|Utah St.": {
    "name": "BYU–Utah State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "BYU",
    "team2": "Utah St.",
@@ -1032,6 +1101,7 @@
   },
   "California|UCLA": {
    "name": "California–UCLA",
+   "tier": 2,
    "also_known_as": null,
    "team1": "California",
    "team2": "UCLA",
@@ -1047,6 +1117,7 @@
   },
   "California|USC": {
    "name": "California–USC",
+   "tier": 2,
    "also_known_as": null,
    "team1": "California",
    "team2": "USC",
@@ -1062,6 +1133,7 @@
   },
   "Duke|North Carolina": {
    "name": "Carolina–Duke Rivalry",
+   "tier": 1,
    "also_known_as": "Duke–North Carolina",
    "team1": "Duke",
    "team2": "North Carolina",
@@ -1077,6 +1149,7 @@
   },
   "North Carolina|North Carolina St.": {
    "name": "Carolina–NC State Rivalry",
+   "tier": 1,
    "also_known_as": "North Carolina–NC State",
    "team1": "North Carolina",
    "team2": "North Carolina St.",
@@ -1092,6 +1165,7 @@
   },
   "Central Michigan|Eastern Michigan": {
    "name": "Central Michigan–Eastern Michigan",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Central Michigan",
    "team2": "Eastern Michigan",
@@ -1107,6 +1181,7 @@
   },
   "Central Michigan|Western Michigan": {
    "name": "Central Michigan–Western Michigan",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Central Michigan",
    "team2": "Western Michigan",
@@ -1122,6 +1197,7 @@
   },
   "Cincinnati|Louisville": {
    "name": "Cincinnati–Louisville",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Cincinnati",
    "team2": "Louisville",
@@ -1137,6 +1213,7 @@
   },
   "Cincinnati|Memphis": {
    "name": "Cincinnati–Memphis",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Cincinnati",
    "team2": "Memphis",
@@ -1152,6 +1229,7 @@
   },
   "Cincinnati|UCF": {
    "name": "Cincinnati–UCF",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Cincinnati",
    "team2": "UCF",
@@ -1167,6 +1245,7 @@
   },
   "Cincinnati|West Virginia": {
    "name": "Cincinnati–West Virginia",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Cincinnati",
    "team2": "West Virginia",
@@ -1182,6 +1261,7 @@
   },
   "Georgia|Georgia Tech": {
    "name": "Clean Old-Fashioned Hate",
+   "tier": 1,
    "also_known_as": "Clean, Old-Fashioned Hate",
    "team1": "Georgia",
    "team2": "Georgia Tech",
@@ -1197,6 +1277,7 @@
   },
   "Clemson|Florida St.": {
    "name": "Clemson–Florida State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Clemson",
    "team2": "Florida St.",
@@ -1212,6 +1293,7 @@
   },
   "Clemson|Georgia": {
    "name": "Clemson–Georgia",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Clemson",
    "team2": "Georgia",
@@ -1227,6 +1309,7 @@
   },
   "Clemson|Georgia Tech": {
    "name": "Clemson–Georgia Tech",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Clemson",
    "team2": "Georgia Tech",
@@ -1242,6 +1325,7 @@
   },
   "Coastal Carolina|Liberty": {
    "name": "Coastal Carolina–Liberty",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Coastal Carolina",
    "team2": "Liberty",
@@ -1257,6 +1341,7 @@
   },
   "Colorado|Kansas St.": {
    "name": "Colorado–Kansas State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Colorado",
    "team2": "Kansas St.",
@@ -1272,6 +1357,7 @@
   },
   "Colorado|Nebraska": {
    "name": "Colorado–Nebraska Rivalry",
+   "tier": 1,
    "also_known_as": "Colorado–Nebraska",
    "team1": "Colorado",
    "team2": "Nebraska",
@@ -1287,6 +1373,7 @@
   },
   "Air Force|Army": {
    "name": "Commander-in-Chief’s Trophy",
+   "tier": 1,
    "also_known_as": "Air Force–Army",
    "team1": "Air Force",
    "team2": "Army",
@@ -1302,6 +1389,7 @@
   },
   "Air Force|Navy": {
    "name": "Commander-in-Chief’s Trophy",
+   "tier": 1,
    "also_known_as": "Air Force–Navy",
    "team1": "Air Force",
    "team2": "Navy",
@@ -1317,6 +1405,7 @@
   },
   "Virginia|Virginia Tech": {
    "name": "Commonwealth Cup",
+   "tier": 1,
    "also_known_as": "Virginia–Virginia Tech",
    "team1": "Virginia",
    "team2": "Virginia Tech",
@@ -1332,6 +1421,7 @@
   },
   "Maryland|Navy": {
    "name": "Crab Bowl Classic",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Maryland",
    "team2": "Navy",
@@ -1347,6 +1437,7 @@
   },
   "Iowa|Iowa St.": {
    "name": "Cy-Hawk Series",
+   "tier": 1,
    "also_known_as": "Iowa–Iowa State",
    "team1": "Iowa",
    "team2": "Iowa St.",
@@ -1362,6 +1453,7 @@
   },
   "Auburn|Georgia": {
    "name": "Deep South’s Oldest Rivalry",
+   "tier": 1,
    "also_known_as": "Deep South's Oldest Rivalry",
    "team1": "Auburn",
    "team2": "Georgia",
@@ -1377,6 +1469,7 @@
   },
   "Appalachian St.|Georgia Southern": {
    "name": "Deeper than Hate",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Appalachian St.",
    "team2": "Georgia Southern",
@@ -1392,6 +1485,7 @@
   },
   "Hawaii|San José St.": {
    "name": "Dick Tomey Legacy Game",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Hawaii",
    "team2": "San José St.",
@@ -1407,6 +1501,7 @@
   },
   "Duke|Georgia Tech": {
    "name": "Duke–Georgia Tech",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Duke",
    "team2": "Georgia Tech",
@@ -1422,6 +1517,7 @@
   },
   "Duke|North Carolina St.": {
    "name": "Duke–NC State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Duke",
    "team2": "North Carolina St.",
@@ -1437,6 +1533,7 @@
   },
   "Duke|Virginia": {
    "name": "Duke–Virginia",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Duke",
    "team2": "Virginia",
@@ -1452,6 +1549,7 @@
   },
   "Duke|Wake Forest": {
    "name": "Duke–Wake Forest",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Duke",
    "team2": "Wake Forest",
@@ -1467,6 +1565,7 @@
   },
   "East Carolina|Marshall": {
    "name": "East Carolina–Marshall",
+   "tier": 2,
    "also_known_as": null,
    "team1": "East Carolina",
    "team2": "Marshall",
@@ -1482,6 +1581,7 @@
   },
   "East Carolina|North Carolina St.": {
    "name": "East Carolina–NC State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "East Carolina",
    "team2": "North Carolina St.",
@@ -1497,6 +1597,7 @@
   },
   "Eastern Michigan|Western Michigan": {
    "name": "Eastern Michigan–Western Michigan",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Eastern Michigan",
    "team2": "Western Michigan",
@@ -1512,6 +1613,7 @@
   },
   "Mississippi St.|Ole Miss": {
    "name": "Egg Bowl",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Mississippi St.",
    "team2": "Ole Miss",
@@ -1527,6 +1629,7 @@
   },
   "Iowa St.|Kansas St.": {
    "name": "Farmageddon",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Iowa St.",
    "team2": "Kansas St.",
@@ -1542,6 +1645,7 @@
   },
   "FAU|South Florida": {
    "name": "Florida Atlantic–South Florida",
+   "tier": 2,
    "also_known_as": null,
    "team1": "FAU",
    "team2": "South Florida",
@@ -1557,6 +1661,7 @@
   },
   "Florida St.|Miami": {
    "name": "Florida State–Miami",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Florida St.",
    "team2": "Miami",
@@ -1572,6 +1677,7 @@
   },
   "Florida St.|Virginia": {
    "name": "Florida State–Virginia",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Florida St.",
    "team2": "Virginia",
@@ -1587,6 +1693,7 @@
   },
   "Florida|Florida St.": {
    "name": "Florida–Florida State Rivalry",
+   "tier": 1,
    "also_known_as": "Florida–Florida State / Sunshine Showdown",
    "team1": "Florida",
    "team2": "Florida St.",
@@ -1602,6 +1709,7 @@
   },
   "Florida|Kentucky": {
    "name": "Florida–Kentucky",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Florida",
    "team2": "Kentucky",
@@ -1617,6 +1725,7 @@
   },
   "Florida|LSU": {
    "name": "Florida–LSU",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Florida",
    "team2": "LSU",
@@ -1632,6 +1741,7 @@
   },
   "Florida|Miami": {
    "name": "Florida–Miami Rivalry",
+   "tier": 1,
    "also_known_as": "Florida–Miami",
    "team1": "Florida",
    "team2": "Miami",
@@ -1647,6 +1757,7 @@
   },
   "Florida|Tennessee": {
    "name": "Florida–Tennessee",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Florida",
    "team2": "Tennessee",
@@ -1662,6 +1773,7 @@
   },
   "Iowa|Minnesota": {
    "name": "Floyd of Rosedale",
+   "tier": 1,
    "also_known_as": "Iowa–Minnesota",
    "team1": "Iowa",
    "team2": "Minnesota",
@@ -1677,6 +1789,7 @@
   },
   "Nebraska|Wisconsin": {
    "name": "Freedom Trophy",
+   "tier": 1,
    "also_known_as": "Nebraska–Wisconsin",
    "team1": "Nebraska",
    "team2": "Wisconsin",
@@ -1692,6 +1805,7 @@
   },
   "Fresno St.|Hawaii": {
    "name": "Fresno State–Hawaii",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Fresno St.",
    "team2": "Hawaii",
@@ -1707,6 +1821,7 @@
   },
   "Fresno St.|San Diego St.": {
    "name": "Fresno State–San Diego State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Fresno St.",
    "team2": "San Diego St.",
@@ -1722,6 +1837,7 @@
   },
   "Marshall|West Virginia": {
    "name": "Friends of Coal Bowl",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Marshall",
    "team2": "West Virginia",
@@ -1737,6 +1853,7 @@
   },
   "Georgia Tech|Tennessee": {
    "name": "Georgia Tech–Tennessee",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Georgia Tech",
    "team2": "Tennessee",
@@ -1752,6 +1869,7 @@
   },
   "Georgia Tech|Vanderbilt": {
    "name": "Georgia Tech–Vanderbilt",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Georgia Tech",
    "team2": "Vanderbilt",
@@ -1767,6 +1885,7 @@
   },
   "Georgia|South Carolina": {
    "name": "Georgia–South Carolina",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Georgia",
    "team2": "South Carolina",
@@ -1782,6 +1901,7 @@
   },
   "Georgia|Tennessee": {
    "name": "Georgia–Tennessee",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Georgia",
    "team2": "Tennessee",
@@ -1797,6 +1917,7 @@
   },
   "Georgia|Vanderbilt": {
    "name": "Georgia–Vanderbilt",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Georgia",
    "team2": "Vanderbilt",
@@ -1812,6 +1933,7 @@
   },
   "Kentucky|Louisville": {
    "name": "Governor’s Cup",
+   "tier": 1,
    "also_known_as": "Kentucky–Louisville",
    "team1": "Kentucky",
    "team2": "Louisville",
@@ -1827,6 +1949,7 @@
   },
   "Hawaii|Wyoming": {
    "name": "Hawaii–Wyoming",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Hawaii",
    "team2": "Wyoming",
@@ -1842,6 +1965,7 @@
   },
   "Iowa|Wisconsin": {
    "name": "Heartland Trophy",
+   "tier": 1,
    "also_known_as": "Iowa–Wisconsin / Battle for the Heartland",
    "team1": "Iowa",
    "team2": "Wisconsin",
@@ -1857,6 +1981,7 @@
   },
   "Iowa|Nebraska": {
    "name": "Heroes Trophy",
+   "tier": 1,
    "also_known_as": "Iowa–Nebraska / Heroes Game",
    "team1": "Iowa",
    "team2": "Nebraska",
@@ -1872,6 +1997,7 @@
   },
   "BYU|Utah": {
    "name": "Holy War",
+   "tier": 1,
    "also_known_as": null,
    "team1": "BYU",
    "team2": "Utah",
@@ -1887,6 +2013,7 @@
   },
   "Boston College|Notre Dame": {
    "name": "Holy War",
+   "tier": 1,
    "also_known_as": "Frank Leahy Memorial Bowl",
    "team1": "Boston College",
    "team2": "Notre Dame",
@@ -1902,6 +2029,7 @@
   },
   "Houston|SMU": {
    "name": "Houston–SMU",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Houston",
    "team2": "SMU",
@@ -1917,6 +2045,7 @@
   },
   "Houston|Texas Tech": {
    "name": "Houston–Texas Tech",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Houston",
    "team2": "Texas Tech",
@@ -1932,6 +2061,7 @@
   },
   "Texas St.|UTSA": {
    "name": "I-35 Rivalry",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Texas St.",
    "team2": "UTSA",
@@ -1947,6 +2077,7 @@
   },
   "Illinois|Indiana": {
    "name": "Illinois–Indiana",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Illinois",
    "team2": "Indiana",
@@ -1962,6 +2093,7 @@
   },
   "Illinois|Iowa": {
    "name": "Illinois–Iowa",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Illinois",
    "team2": "Iowa",
@@ -1977,6 +2109,7 @@
   },
   "Illinois|Michigan": {
    "name": "Illinois–Michigan",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Illinois",
    "team2": "Michigan",
@@ -1992,6 +2125,7 @@
   },
   "Illinois|Ohio St.": {
    "name": "Illinois–Ohio State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Illinois",
    "team2": "Ohio St.",
@@ -2007,6 +2141,7 @@
   },
   "Indiana|Kentucky": {
    "name": "Indiana–Kentucky",
+   "tier": 2,
    "also_known_as": "Battle of the Barrel",
    "team1": "Indiana",
    "team2": "Kentucky",
@@ -2022,6 +2157,7 @@
   },
   "Indiana|Michigan St.": {
    "name": "Indiana–Michigan State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Indiana",
    "team2": "Michigan St.",
@@ -2037,6 +2173,7 @@
   },
   "Iowa St.|Missouri": {
    "name": "Iowa State–Missouri",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Iowa St.",
    "team2": "Missouri",
@@ -2052,6 +2189,7 @@
   },
   "Iowa St.|Nebraska": {
    "name": "Iowa State–Nebraska",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Iowa St.",
    "team2": "Nebraska",
@@ -2067,6 +2205,7 @@
   },
   "Alabama|Auburn": {
    "name": "Iron Bowl",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Alabama",
    "team2": "Auburn",
@@ -2082,6 +2221,7 @@
   },
   "Notre Dame|USC": {
    "name": "Jeweled Shillelagh",
+   "tier": 1,
    "also_known_as": "Notre Dame–USC",
    "team1": "Notre Dame",
    "team2": "USC",
@@ -2097,6 +2237,7 @@
   },
   "Kansas St.|Missouri": {
    "name": "Kansas State–Missouri",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Kansas St.",
    "team2": "Missouri",
@@ -2112,6 +2253,7 @@
   },
   "Kansas St.|Nebraska": {
    "name": "Kansas State–Nebraska",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Kansas St.",
    "team2": "Nebraska",
@@ -2127,6 +2269,7 @@
   },
   "Kansas St.|Oklahoma": {
    "name": "Kansas State–Oklahoma",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Kansas St.",
    "team2": "Oklahoma",
@@ -2142,6 +2285,7 @@
   },
   "Kansas|Nebraska": {
    "name": "Kansas–Nebraska",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Kansas",
    "team2": "Nebraska",
@@ -2157,6 +2301,7 @@
   },
   "Kentucky|Vanderbilt": {
    "name": "Kentucky–Vanderbilt",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Kentucky",
    "team2": "Vanderbilt",
@@ -2172,6 +2317,7 @@
   },
   "Penn St.|Pittsburgh": {
    "name": "Keystone Classic",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Penn St.",
    "team2": "Pittsburgh",
@@ -2187,6 +2333,7 @@
   },
   "Illinois|Northwestern": {
    "name": "Land of Lincoln Trophy",
+   "tier": 1,
    "also_known_as": "Illinois–Northwestern",
    "team1": "Illinois",
    "team2": "Northwestern",
@@ -2202,6 +2349,7 @@
   },
   "Michigan|Minnesota": {
    "name": "Little Brown Jug",
+   "tier": 1,
    "also_known_as": "Michigan–Minnesota",
    "team1": "Michigan",
    "team2": "Minnesota",
@@ -2217,6 +2365,7 @@
   },
   "Texas|Texas A&M": {
    "name": "Lone Star Showdown",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Texas",
    "team2": "Texas A&M",
@@ -2232,6 +2381,7 @@
   },
   "Louisiana Monroe|Louisiana Tech": {
    "name": "Louisiana Tech–Louisiana–Monroe",
+   "tier": 2,
    "also_known_as": "I-20 Showdown",
    "team1": "Louisiana Tech",
    "team2": "Louisiana Monroe",
@@ -2247,6 +2397,7 @@
   },
   "Louisiana Lafayette|Louisiana Tech": {
    "name": "Louisiana–Louisiana Tech",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Louisiana Lafayette",
    "team2": "Louisiana Tech",
@@ -2262,6 +2413,7 @@
   },
   "Louisville|Memphis": {
    "name": "Louisville–Memphis",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Louisville",
    "team2": "Memphis",
@@ -2277,6 +2429,7 @@
   },
   "Louisville|Miami": {
    "name": "Louisville–Miami",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Louisville",
    "team2": "Miami",
@@ -2292,6 +2445,7 @@
   },
   "LSU|Mississippi St.": {
    "name": "LSU–Mississippi State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "LSU",
    "team2": "Mississippi St.",
@@ -2307,6 +2461,7 @@
   },
   "LSU|Ole Miss": {
    "name": "Magnolia Bowl",
+   "tier": 2,
    "also_known_as": null,
    "team1": "LSU",
    "team2": "Ole Miss",
@@ -2322,6 +2477,7 @@
   },
   "Marshall|Ohio": {
    "name": "Marshall–Ohio Rivalry",
+   "tier": 1,
    "also_known_as": "Battle for the Bell",
    "team1": "Marshall",
    "team2": "Ohio",
@@ -2337,6 +2493,7 @@
   },
   "Maryland|Penn St.": {
    "name": "Maryland–Penn State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Maryland",
    "team2": "Penn St.",
@@ -2352,6 +2509,7 @@
   },
   "Maryland|Rutgers": {
    "name": "Maryland–Rutgers",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Maryland",
    "team2": "Rutgers",
@@ -2367,6 +2525,7 @@
   },
   "Maryland|Virginia": {
    "name": "Maryland–Virginia",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Maryland",
    "team2": "Virginia",
@@ -2382,6 +2541,7 @@
   },
   "Maryland|West Virginia": {
    "name": "Maryland–West Virginia",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Maryland",
    "team2": "West Virginia",
@@ -2397,6 +2557,7 @@
   },
   "Memphis|Mississippi St.": {
    "name": "Memphis–Mississippi State Rivalry",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Memphis",
    "team2": "Mississippi St.",
@@ -2412,6 +2573,7 @@
   },
   "Miami|Nebraska": {
    "name": "Miami–Nebraska",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Miami",
    "team2": "Nebraska",
@@ -2427,6 +2589,7 @@
   },
   "Miami|Virginia Tech": {
    "name": "Miami–Virginia Tech",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Miami",
    "team2": "Virginia Tech",
@@ -2442,6 +2605,7 @@
   },
   "Michigan St.|Notre Dame": {
    "name": "Michigan State–Notre Dame",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Michigan St.",
    "team2": "Notre Dame",
@@ -2457,6 +2621,7 @@
   },
   "Michigan|Northwestern": {
    "name": "Michigan–Northwestern",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Michigan",
    "team2": "Northwestern",
@@ -2472,6 +2637,7 @@
   },
   "Michigan|Notre Dame": {
    "name": "Michigan–Notre Dame",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Michigan",
    "team2": "Notre Dame",
@@ -2487,6 +2653,7 @@
   },
   "Michigan|Penn St.": {
    "name": "Michigan–Penn State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Michigan",
    "team2": "Penn St.",
@@ -2502,6 +2669,7 @@
   },
   "Memphis|Ole Miss": {
    "name": "Mid–South Rivalry",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Memphis",
    "team2": "Ole Miss",
@@ -2517,6 +2685,7 @@
   },
   "Minnesota|Nebraska": {
    "name": "Minnesota–Nebraska",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Minnesota",
    "team2": "Nebraska",
@@ -2532,6 +2701,7 @@
   },
   "Minnesota|Penn St.": {
    "name": "Minnesota–Penn State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Minnesota",
    "team2": "Penn St.",
@@ -2547,6 +2717,7 @@
   },
   "Missouri|Nebraska": {
    "name": "Missouri–Nebraska",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Missouri",
    "team2": "Nebraska",
@@ -2562,6 +2733,7 @@
   },
   "Missouri|Oklahoma": {
    "name": "Missouri–Oklahoma",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Missouri",
    "team2": "Oklahoma",
@@ -2577,6 +2749,7 @@
   },
   "Missouri|South Carolina": {
    "name": "Missouri–South Carolina",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Missouri",
    "team2": "South Carolina",
@@ -2592,6 +2765,7 @@
   },
   "Georgia Southern|Georgia St.": {
    "name": "Modern Day Hate",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Georgia Southern",
    "team2": "Georgia St.",
@@ -2607,6 +2781,7 @@
   },
   "Navy|Notre Dame": {
    "name": "Navy–Notre Dame",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Navy",
    "team2": "Notre Dame",
@@ -2622,6 +2797,7 @@
   },
   "Navy|SMU": {
    "name": "Navy–SMU",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Navy",
    "team2": "SMU",
@@ -2637,6 +2813,7 @@
   },
   "North Carolina St.|Wake Forest": {
    "name": "NC State–Wake Forest",
+   "tier": 2,
    "also_known_as": null,
    "team1": "North Carolina St.",
    "team2": "Wake Forest",
@@ -2652,6 +2829,7 @@
   },
   "Nebraska|Oklahoma": {
    "name": "Nebraska–Oklahoma Rivalry",
+   "tier": 1,
    "also_known_as": "Nebraska–Oklahoma",
    "team1": "Nebraska",
    "team2": "Oklahoma",
@@ -2667,6 +2845,7 @@
   },
   "North Carolina|Wake Forest": {
    "name": "North Carolina–Wake Forest",
+   "tier": 2,
    "also_known_as": null,
    "team1": "North Carolina",
    "team2": "Wake Forest",
@@ -2682,6 +2861,7 @@
   },
   "Northwestern|Notre Dame": {
    "name": "Northwestern–Notre Dame",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Northwestern",
    "team2": "Notre Dame",
@@ -2697,6 +2877,7 @@
   },
   "Notre Dame|Pittsburgh": {
    "name": "Notre Dame–Pittsburgh",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Notre Dame",
    "team2": "Pittsburgh",
@@ -2712,6 +2893,7 @@
   },
   "Notre Dame|Purdue": {
    "name": "Notre Dame–Purdue",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Notre Dame",
    "team2": "Purdue",
@@ -2727,6 +2909,7 @@
   },
   "Notre Dame|Stanford": {
    "name": "Notre Dame–Stanford",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Notre Dame",
    "team2": "Stanford",
@@ -2742,6 +2925,7 @@
   },
   "Ohio St.|Penn St.": {
    "name": "Ohio State–Penn State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Ohio St.",
    "team2": "Penn St.",
@@ -2757,6 +2941,7 @@
   },
   "Oklahoma St.|Tulsa": {
    "name": "Oklahoma State–Tulsa",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Oklahoma St.",
    "team2": "Tulsa",
@@ -2772,6 +2957,7 @@
   },
   "Indiana|Purdue": {
    "name": "Old Oaken Bucket",
+   "tier": 1,
    "also_known_as": "Indiana–Purdue",
    "team1": "Indiana",
    "team2": "Purdue",
@@ -2787,6 +2973,7 @@
   },
   "Ole Miss|Tennessee": {
    "name": "Ole Miss–Tennessee",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Ole Miss",
    "team2": "Tennessee",
@@ -2802,6 +2989,7 @@
   },
   "Ole Miss|Tulane": {
    "name": "Ole Miss–Tulane",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Ole Miss",
    "team2": "Tulane",
@@ -2817,6 +3005,7 @@
   },
   "Ole Miss|Vanderbilt": {
    "name": "Ole Miss–Vanderbilt",
+   "tier": 2,
    "also_known_as": "Khaki Bowl",
    "team1": "Ole Miss",
    "team2": "Vanderbilt",
@@ -2832,6 +3021,7 @@
   },
   "Oregon|Stanford": {
    "name": "Oregon–Stanford",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Oregon",
    "team2": "Stanford",
@@ -2847,6 +3037,7 @@
   },
   "Oregon|USC": {
    "name": "Oregon–USC",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Oregon",
    "team2": "USC",
@@ -2862,6 +3053,7 @@
   },
   "Arkansas St.|Memphis": {
    "name": "Paint Bucket Bowl",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Arkansas St.",
    "team2": "Memphis",
@@ -2877,6 +3069,7 @@
   },
   "Clemson|South Carolina": {
    "name": "Palmetto Bowl",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Clemson",
    "team2": "South Carolina",
@@ -2892,6 +3085,7 @@
   },
   "Michigan|Michigan St.": {
    "name": "Paul Bunyan Trophy",
+   "tier": 1,
    "also_known_as": "Michigan–Michigan State",
    "team1": "Michigan",
    "team2": "Michigan St.",
@@ -2907,6 +3101,7 @@
   },
   "Minnesota|Wisconsin": {
    "name": "Paul Bunyan’s Axe",
+   "tier": 1,
    "also_known_as": "Minnesota–Wisconsin",
    "team1": "Minnesota",
    "team2": "Wisconsin",
@@ -2922,6 +3117,7 @@
   },
   "Penn St.|Syracuse": {
    "name": "Penn State–Syracuse",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Penn St.",
    "team2": "Syracuse",
@@ -2937,6 +3133,7 @@
   },
   "Penn St.|West Virginia": {
    "name": "Penn State–West Virginia",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Penn St.",
    "team2": "West Virginia",
@@ -2952,6 +3149,7 @@
   },
   "Pittsburgh|Syracuse": {
    "name": "Pittsburgh–Syracuse",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Pittsburgh",
    "team2": "Syracuse",
@@ -2967,6 +3165,7 @@
   },
   "Oregon|Oregon St.": {
    "name": "Platypus Trophy",
+   "tier": 1,
    "also_known_as": "Oregon–Oregon State",
    "team1": "Oregon",
    "team2": "Oregon St.",
@@ -2982,6 +3181,7 @@
   },
   "Illinois|Purdue": {
    "name": "Purdue Cannon",
+   "tier": 1,
    "also_known_as": "Illinois–Purdue",
    "team1": "Illinois",
    "team2": "Purdue",
@@ -2997,6 +3197,7 @@
   },
   "Oklahoma|Texas": {
    "name": "Red River Rivalry",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Oklahoma",
    "team2": "Texas",
@@ -3012,6 +3213,7 @@
   },
   "Rice|SMU": {
    "name": "Rice–SMU",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Rice",
    "team2": "SMU",
@@ -3027,6 +3229,7 @@
   },
   "Rice|Texas": {
    "name": "Rice–Texas",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Rice",
    "team2": "Texas",
@@ -3042,6 +3245,7 @@
   },
   "New Mexico|New Mexico St.": {
    "name": "Rio Grande Rivalry",
+   "tier": 2,
    "also_known_as": null,
    "team1": "New Mexico",
    "team2": "New Mexico St.",
@@ -3057,6 +3261,7 @@
   },
   "Louisiana Tech|Southern Miss": {
    "name": "Rivalry in Dixie",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Louisiana Tech",
    "team2": "Southern Miss",
@@ -3072,6 +3277,7 @@
   },
   "Colorado|Colorado St.": {
    "name": "Rocky Mountain Showdown",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Colorado",
    "team2": "Colorado St.",
@@ -3087,6 +3293,7 @@
   },
   "James Madison|Old Dominion": {
    "name": "Royal Rivalry",
+   "tier": 2,
    "also_known_as": null,
    "team1": "James Madison",
    "team2": "Old Dominion",
@@ -3102,6 +3309,7 @@
   },
   "Colorado|Utah": {
    "name": "Rumble in the Rockies",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Colorado",
    "team2": "Utah",
@@ -3117,6 +3325,7 @@
   },
   "North Texas|SMU": {
    "name": "Safeway Bowl",
+   "tier": 2,
    "also_known_as": null,
    "team1": "North Texas",
    "team2": "SMU",
@@ -3132,6 +3341,7 @@
   },
   "Sam Houston St.|Texas St.": {
    "name": "Sam Houston–Texas State",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Sam Houston St.",
    "team2": "Texas St.",
@@ -3147,6 +3357,7 @@
   },
   "FAU|FIU": {
    "name": "Shula Bowl",
+   "tier": 2,
    "also_known_as": null,
    "team1": "FAU",
    "team2": "FIU",
@@ -3162,6 +3373,7 @@
   },
   "North Carolina|Virginia": {
    "name": "South's Oldest Rivalry",
+   "tier": 2,
    "also_known_as": null,
    "team1": "North Carolina",
    "team2": "Virginia",
@@ -3177,6 +3389,7 @@
   },
   "Stanford|UCLA": {
    "name": "Stanford–UCLA",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Stanford",
    "team2": "UCLA",
@@ -3192,6 +3405,7 @@
   },
   "Stanford|USC": {
    "name": "Stanford–USC",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Stanford",
    "team2": "USC",
@@ -3207,6 +3421,7 @@
   },
   "Kansas|Kansas St.": {
    "name": "Sunflower Showdown",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Kansas",
    "team2": "Kansas St.",
@@ -3222,6 +3437,7 @@
   },
   "Connecticut|Syracuse": {
    "name": "Syracuse–UConn",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Syracuse",
    "team2": "Connecticut",
@@ -3237,6 +3453,7 @@
   },
   "Syracuse|West Virginia": {
    "name": "Syracuse–West Virginia",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Syracuse",
    "team2": "West Virginia",
@@ -3252,6 +3469,7 @@
   },
   "TCU|Texas": {
    "name": "TCU–Texas",
+   "tier": 2,
    "also_known_as": null,
    "team1": "TCU",
    "team2": "Texas",
@@ -3267,6 +3485,7 @@
   },
   "TCU|Texas A&M": {
    "name": "TCU–Texas A&M",
+   "tier": 2,
    "also_known_as": null,
    "team1": "TCU",
    "team2": "Texas A&M",
@@ -3282,6 +3501,7 @@
   },
   "TCU|Texas Tech": {
    "name": "TCU–Texas Tech",
+   "tier": 2,
    "also_known_as": "West Texas Championship",
    "team1": "TCU",
    "team2": "Texas Tech",
@@ -3297,6 +3517,7 @@
   },
   "Georgia Tech|Virginia Tech": {
    "name": "Techmo Bowl",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Georgia Tech",
    "team2": "Virginia Tech",
@@ -3312,6 +3533,7 @@
   },
   "Kentucky|Tennessee": {
    "name": "Tennessee–Kentucky Rivalry",
+   "tier": 1,
    "also_known_as": "Kentucky–Tennessee",
    "team1": "Kentucky",
    "team2": "Tennessee",
@@ -3327,6 +3549,7 @@
   },
   "Tennessee|Vanderbilt": {
    "name": "Tennessee–Vanderbilt",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Tennessee",
    "team2": "Vanderbilt",
@@ -3342,6 +3565,7 @@
   },
   "Arizona|Arizona St.": {
    "name": "Territorial Cup",
+   "tier": 1,
    "also_known_as": "Duel in the Desert",
    "team1": "Arizona",
    "team2": "Arizona St.",
@@ -3357,6 +3581,7 @@
   },
   "LSU|Texas A&M": {
    "name": "Texas A&M–LSU Rivalry",
+   "tier": 1,
    "also_known_as": "LSU–Texas A&M",
    "team1": "LSU",
    "team2": "Texas A&M",
@@ -3372,6 +3597,7 @@
   },
   "Texas A&M|Texas Tech": {
    "name": "Texas A&M–Texas Tech",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Texas A&M",
    "team2": "Texas Tech",
@@ -3387,6 +3613,7 @@
   },
   "Arkansas|Texas": {
    "name": "Texas–Arkansas Rivalry",
+   "tier": 1,
    "also_known_as": "Arkansas–Texas / Hogs vs. Horns",
    "team1": "Arkansas",
    "team2": "Texas",
@@ -3402,6 +3629,7 @@
   },
   "Texas|Texas Tech": {
    "name": "Texas–Texas Tech",
+   "tier": 2,
    "also_known_as": "Battle For The Chancellor's Spurs",
    "team1": "Texas",
    "team2": "Texas Tech",
@@ -3417,6 +3645,7 @@
   },
   "Clemson|North Carolina St.": {
    "name": "Textile Bowl",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Clemson",
    "team2": "North Carolina St.",
@@ -3432,6 +3661,7 @@
   },
   "California|Stanford": {
    "name": "The Big Game",
+   "tier": 1,
    "also_known_as": "Big Game",
    "team1": "California",
    "team2": "Stanford",
@@ -3447,6 +3677,7 @@
   },
   "Arkansas|LSU": {
    "name": "The Boot",
+   "tier": 1,
    "also_known_as": "Arkansas–LSU / Battle for the Golden Boot",
    "team1": "Arkansas",
    "team2": "LSU",
@@ -3462,6 +3693,7 @@
   },
   "Michigan|Ohio St.": {
    "name": "The Game",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Michigan",
    "team2": "Ohio St.",
@@ -3477,6 +3709,7 @@
   },
   "Appalachian St.|Marshall": {
    "name": "The Old Mountain Feud",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Appalachian St.",
    "team2": "Marshall",
@@ -3493,6 +3726,7 @@
   },
   "Alabama|Tennessee": {
    "name": "Third Saturday in October",
+   "tier": 1,
    "also_known_as": null,
    "team1": "Alabama",
    "team2": "Tennessee",
@@ -3508,6 +3742,7 @@
   },
   "Auburn|LSU": {
    "name": "Tiger Bowl",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Auburn",
    "team2": "LSU",
@@ -3523,6 +3758,7 @@
   },
   "Connecticut|UMass": {
    "name": "UConn–UMass",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Connecticut",
    "team2": "UMass",
@@ -3538,6 +3774,7 @@
   },
   "Fresno St.|San José St.": {
    "name": "Valley Trophy",
+   "tier": 1,
    "also_known_as": "Battle for the Valley",
    "team1": "Fresno St.",
    "team2": "San José St.",
@@ -3553,6 +3790,7 @@
   },
   "Cincinnati|Miami (OH)": {
    "name": "Victory Bell",
+   "tier": 1,
    "also_known_as": "Battle for the Bell",
    "team1": "Cincinnati",
    "team2": "Miami (OH)",
@@ -3568,6 +3806,7 @@
   },
   "UCLA|USC": {
    "name": "Victory Bell Rivalry",
+   "tier": 1,
    "also_known_as": "UCLA–USC",
    "team1": "UCLA",
    "team2": "USC",
@@ -3583,6 +3822,7 @@
   },
   "Virginia Tech|West Virginia": {
    "name": "Virginia Tech–West Virginia",
+   "tier": 2,
    "also_known_as": null,
    "team1": "Virginia Tech",
    "team2": "West Virginia",
@@ -3598,6 +3838,7 @@
   },
   "South Florida|UCF": {
    "name": "War on I-4",
+   "tier": 1,
    "also_known_as": "War on I–4",
    "team1": "South Florida",
    "team2": "UCF",
@@ -3613,6 +3854,7 @@
   },
   "Oregon|Washington": {
    "name": "Washington–Oregon Rivalry",
+   "tier": 1,
    "also_known_as": "Oregon–Washington",
    "team1": "Oregon",
    "team2": "Washington",
@@ -3627,8 +3869,9 @@
    "last_meeting": 2025
   },
   "Florida|Georgia": {
-   "name": "World’s Largest Outdoor Cocktail Party",
-   "also_known_as": "Florida–Georgia",
+   "name": "Florida–Georgia",
+   "tier": 1,
+   "also_known_as": "World’s Largest Outdoor Cocktail Party",
    "team1": "Florida",
    "team2": "Georgia",
    "trophy": "Okefenokee Oar",
