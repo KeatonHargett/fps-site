@@ -617,8 +617,13 @@ const TEAM_STATS = {
     if (usePS) {
       const psKey = PS_KEY_MAP[cat.source];
       Object.entries(PROGRAM_STATS).forEach(([team, ps]) => {
+        // program_stats.json carries a non-team "_meta" key (as team.html and compare.html
+        // already account for). Every other category read ps[psKey], which is simply
+        // undefined there and skipped below; All-Time Wins reads the nested record.wins,
+        // so _meta made it throw ("Cannot read properties of undefined (reading 'wins')").
+        if (team === '_meta' || !ps) return;
         let v;
-        if (psKey === 'wins') v = ps.record.wins;
+        if (psKey === 'wins') v = ps.record ? ps.record.wins : null;
         else v = ps[psKey];
         if (v == null) return;
         pairs.push({ team, value: v });

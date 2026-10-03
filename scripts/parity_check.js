@@ -178,6 +178,69 @@ function liveWinPct(recs) {   // rank.html
   return out;
 }
 
+// ---- rank.html's own category code, lifted from the page source ------------------------------
+// Pulls `const NAME = {...};` / `function NAME(...) {...}` out of rank.html by brace matching
+// (string-aware), so this runs exactly what the page runs - not a copy that could drift.
+function liftDecl(src, head) {
+  const start = src.indexOf(head);
+  if (start < 0) throw new Error('rank.html: cannot find ' + head);
+  let i = src.indexOf('{', start), depth = 0, quote = null;
+  for (; i < src.length; i++) {
+    const c = src[i];
+    if (quote) { if (c === '\\') { i++; continue; } if (c === quote) quote = null; continue; }
+    if (c === '"' || c === "'" || c === '`') { quote = c; continue; }
+    if (c === '{') depth++;
+    else if (c === '}' && --depth === 0) break;
+  }
+  let end = i + 1;
+  if (src[end] === ';') end++;
+  return src.slice(start, end);
+}
+function checkRankCategories(OLD, league) {
+  const src = read('rank.html');
+  const code = [
+    liftDecl(src, 'const TEAM_STATS = {'), liftDecl(src, 'const CATEGORIES = {'), liftDecl(src, 'const PS_KEY_MAP = {'),
+    'let _winsCache = null;', liftDecl(src, 'function liveWins()'),
+    'let _winPctCache = null;', liftDecl(src, 'function liveWinPct()'),
+    liftDecl(src, 'function buildRows()'),
+    'this.__run = (slug, ps, lg, games, fbs) => { currentCatSlug = slug; PROGRAM_STATS = ps; LEAGUE = lg; GAMES = games; TEAMS_LIVE = fbs;' +
+    ' _winsCache = null; _winPctCache = null; return buildRows(); }; this.__cats = Object.keys(CATEGORIES);',
+  ].join('\n');
+  const ctx = { currentCatSlug: null, PROGRAM_STATS: null, LEAGUE: null, GAMES: [], TEAMS_LIVE: [] };
+  vm.createContext(ctx);
+  vm.runInContext('var currentCatSlug, PROGRAM_STATS, LEAGUE, GAMES, TEAMS_LIVE;\n' + code, ctx);
+  const ps = readJSON('program_stats.json');
+  const fbs = (readJSON('fbs_teams.json').teams || []).map(t => t.name);
+  let rows = 0;
+  eq('rank.html has 12 categories', 12, ctx.__cats.length);
+  for (const slug of ctx.__cats) {
+    // three data paths: program_stats (normal), league.json fallback, full-games fallback
+    const run = (label, args) => {
+      try { return ctx.__run(slug, ...args); }
+      catch (e) { eq(`rank.html ${slug} (${label}) runs without throwing`, 'ok', String(e && e.message || e)); return null; }
+    };
+    const main = run('program_stats', [ps, league, [], fbs]);
+    const viaLeague = run('league.json fallback', [null, league, [], fbs]);
+    const viaGames = run('full-games fallback', [null, null, OLD, fbs]);
+    if (!main || !viaLeague || !viaGames) continue;
+    const plain = r => r.map(x => [x.team, x.value, x.rank]);
+    checks++;
+    if (!main.length) { mismatches.push(`rank.html ${slug}: no rows`); console.log(`MISMATCH rank.html ${slug}: no rows`); }
+    eq(`rank.html ${slug}: values numeric, no _meta row, ranks consistent`,
+      true, main.every((x, i) => typeof x.value === 'number' && isFinite(x.value) && x.team !== '_meta' &&
+        (i === 0 ? x.rank === 1 : (x.value === main[i - 1].value ? x.rank === main[i - 1].rank : x.rank === i + 1))));
+    eq(`rank.html ${slug}: league.json fallback == full-games fallback`, plain(viaGames), plain(viaLeague));
+    rows += main.length + viaLeague.length + viaGames.length;
+  }
+  // All-Time Wins is the category that broke: hold it to program_stats itself.
+  const winsRows = ctx.__run('all-time-wins', ps, league, [], fbs);
+  const fbsSet = new Set(fbs);
+  const expected = Object.entries(ps).filter(([t, v]) => t !== '_meta' && v && v.record && v.record.wins != null && fbsSet.has(t))
+    .map(([t, v]) => [t, v.record.wins]).sort((a, b) => b[1] - a[1]);
+  eq('rank.html all-time-wins rows == program_stats record.wins (FBS)', expected, winsRows.map(x => [x.team, x.value]));
+  return { cats: ctx.__cats.length, rows };
+}
+
 // ---- seeded random ------------------------------------------------------------------------
 function rng(seed) { return () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }; }
 
@@ -317,7 +380,11 @@ function main() {
     eq(`team.html ${team}`, o.map(g => g.game_id), n.map(g => g.game_id));
   }
 
+  // ---- 5. rank.html: every category, through the page's own code ----------------------
+  const rankRows = checkRankCategories(OLD, league);
+
   const secs = ((Date.now() - t0) / 1000).toFixed(1);
+  console.log(`rank.html: ${rankRows.cats} categories x 3 data paths, ${rankRows.rows.toLocaleString()} rows checked`);
   console.log(`\nparity: ${checks.toLocaleString()} checks (${recordChecks.toLocaleString()} records, ${pairs.length} pairs incl. ${neverMet} never-met, ` +
               `${filterChecks.toLocaleString()} filter combinations), ${mismatches.length} mismatches, ${secs}s`);
   if (mismatches.length) { console.log('PARITY FAILED'); process.exit(1); }
