@@ -225,6 +225,9 @@
   .team-hero .th-record .rec-big { font-family: 'Bebas Neue', sans-serif; font-size: 3.25rem; line-height: 1; letter-spacing: 0.02em; }
   .team-hero .th-record .rec-pct { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; line-height: 1; color: var(--orange); }
   .team-hero .th-record .rec-label { font-size: 0.72rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+  .team-hero .th-record .rec-onfield { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; line-height: 1; color: var(--dark); opacity: 0.75; }
+  .team-hero .th-record .rec-foot { font-size: 0.72rem; color: var(--gray); max-width: 22rem; text-align: right; }
+  .nsc-foot { font-size: 0.78rem; color: var(--gray); margin: 0.6rem 0 0; }
   @media (max-width: 880px) {
     .team-hero { grid-template-columns: auto 1fr; }
     .team-hero .th-record { grid-column: 1 / -1; flex-direction: row; align-items: baseline; justify-content: space-between; padding-top: 0.75rem; border-top: 1px solid var(--border); }
@@ -1013,9 +1016,23 @@
     </div>`;
   }
 
+  // Official NCAA record is the main figure. When vacated wins or NCAA forfeits make the
+  // on-field record differ, it is shown as a second, asterisked line with this footnote.
+  function onFieldInfo(ps) {
+    if (!ps || !ps.recordOnField || !ps.record) return null;
+    const o = ps.record, f = ps.recordOnField;
+    if (o.wins === f.wins && o.losses === f.losses && o.ties === f.ties) return null;
+    const d = f.wins - o.wins, n = Math.abs(d), s = n === 1 ? '' : 's';
+    const note = d > 0 ? `*Includes ${n.toLocaleString()} win${s} later vacated or forfeited`
+      : d < 0 ? `*Counts ${n} game${s} awarded by NCAA forfeit as played`
+      : '*Includes games later vacated by NCAA ruling';
+    return { rec: f, pct: ps.winPctOnField, note };
+  }
+
   function renderNationalStatCards(tColor) {
     // v30: pull from PROGRAM_STATS when available (complete CFBD + Wikipedia data)
     const ps = (PROGRAM_STATS && PROGRAM_STATS[TEAM]) || null;
+    const ofi = onFieldInfo(ps);
     const sLegacy = TEAM_STATS[TEAM] || {};
     const wr = buildWinsRank();
     const pr = buildWinPctRank();
@@ -1053,26 +1070,23 @@
     else { const e = pr.rank[TEAM]; wpVal = e?fmtPct(e.value):null; wpRank = e?e.rank:null; wpTotal = pr.total; }
     const nc1 = get('claimedNatChamps', 'ncClaimed', 'ncClaimedRank');
     const nc2 = get('recognizedNatChamps', 'ncRecognized', 'ncRecognizedRank');
-    const cc  = get('confChamps', 'confChamps', 'confChampsRank');
-    const bg  = get('bowlAppearances', 'bowlGames', 'bowlGamesRank');
-    const aa  = get('allAmericans', 'allAmericans', 'allAmericansRank');
     const hw  = get('heismanWinners', 'heismans', 'heismansRank');
-    const np_ = get('nflDraftPicks', 'nflPicks', 'nflPicksRank');
     const wip = get('weeksInPoll', 'weeksInAP', 'weeksInAPRank');
+    // Conference titles, bowl games, consensus All-Americans and NFL draft picks are hidden
+    // until they are rebuilt from verified sources (records audit, Oct 2026).
+    const wpSub = ofi ? `${fmtPct(ofi.pct)}* on field` : '';
+    const winsSub = ofi ? `${ofi.rec.wins.toLocaleString()}* on field` : '';
     const rows = [
-      card('All-Time Win %',                      wpVal,     '', wpRank,    wpTotal),
+      card('All-Time Win %',                      wpVal,     wpSub, wpRank,    wpTotal),
       card('National Championships (Claimed)',    nc1.value, '', nc1.rank,  nc1.total),
       card('National Championships (Recognized)', nc2.value, '', nc2.rank,  nc2.total),
-      card('Conference Championships',            cc.value,  '', cc.rank,   cc.total),
-      card('Total Wins',                          winsVal,   '', winsRank,  winsTotal),
-      card('Bowl Games',                          bg.value,  '', bg.rank,   bg.total),
-      card('Consensus All-Americans',             aa.value,  '', aa.rank,   aa.total),
+      card('Total Wins',                          winsVal != null ? winsVal.toLocaleString() : winsVal, winsSub, winsRank, winsTotal),
       card('Heisman Winners',                     hw.value,  '', hw.rank,   hw.total),
-      card('NFL Draft Picks',                     np_.value, '', np_.rank,  np_.total),
-      card('Weeks in AP Poll',                    wip.value, '', wip.rank,  wip.total)
+      card('Weeks in AP Poll',                    wip.value, ps ? 'as of 2025' : '', wip.rank,  wip.total)
     ];
     return `<div class="nat-stats-section">
       <div class="nat-stats-grid">${rows.join('')}</div>
+      ${ofi ? `<p class="nsc-foot">${ofi.note}. Official NCAA totals exclude them.</p>` : ''}
     </div>`;
   }
 
@@ -1213,6 +1227,8 @@
     }
     const total = w+l+t;
     const wpct = total ? ((w + t*0.5) / total).toFixed(3).replace(/^0/,'') : '.000';
+    const ofi = onFieldInfo(PROGRAM_STATS && PROGRAM_STATS[TEAM]);
+    const fmtRec = r => `${r.wins.toLocaleString()}-${r.losses.toLocaleString()}${r.ties ? '-' + r.ties : ''}`;
     const seasons = [...new Set(teamGames.map(g=>g.season))];
     let biggestWin = {margin:0};
     teamGames.forEach(g => {
@@ -1278,9 +1294,10 @@
           <div class="th-conf">${confLogoHtml}${conf}</div>
         </div>
         <div class="th-record">
-          <div class="rec-big">${w}-${l}${t?'-'+t:''}</div>
+          <div class="rec-big">${w.toLocaleString()}-${l.toLocaleString()}${t?'-'+t:''}</div>
           <div class="rec-pct">${wpct} <span style="font-family:'Inter',sans-serif;font-size:0.72rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.1em;font-weight:600;vertical-align:middle">win pct</span></div>
-          <div class="rec-label">All-Time Record</div>
+          <div class="rec-label">All-Time Record${ofi ? ' (Official NCAA)' : ''}</div>
+          ${ofi ? `<div class="rec-onfield">${fmtRec(ofi.rec)}* on field</div><div class="rec-foot">${ofi.note}</div>` : ''}
         </div>
       </div>
       <!-- Improvement 1C (v27): Compare Team CTA -->
@@ -1290,7 +1307,6 @@
       </div>
       <!-- Improvement 1B (v27): national rank stat cards -->
       ${renderNationalStatCards(tColor)}
-      ${renderRankedRecords(tColor)}
       <!-- Program Snapshot (kept, lower priority below the national stats) -->
       <div class="card">
         <h2>Program Snapshot</h2>

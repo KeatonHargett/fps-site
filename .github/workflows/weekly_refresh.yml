@@ -112,6 +112,19 @@ jobs:
           echo "Season: $SEASON"
           python scripts/build_coaches_data.py --update-season "$SEASON"
 
+      # All-time records (official NCAA + on field) for program_stats.json and /rankings,
+      # rebuilt from the pinned sources in data/sources/records/ plus CFBD's current-season
+      # records. Hard failure on purpose: a CFBD error, a Records Book mismatch, a total that
+      # drops without an adjustments change, or any change outside the record fields stops
+      # the job here - nothing is committed or deployed and the run is red.
+      - name: Build program records (CFBD current season)
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        env:
+          CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
+          FPS_CURRENT_SEASON: ${{ github.event.inputs.season }}
+        run: |
+          python scripts/build_program_records.py --fetch-current
+
       # Runs after the refreshers so it scores against the data they just pulled.
       # Keyless (ESPN only), so unlike the CFBD step it has no secret to skip on.
       - name: Compute featured matchups
@@ -137,6 +150,12 @@ jobs:
         with:
           node-version: "20"
 
+      # Every run (push deploys included): the committed records must equal a fresh offline
+      # build byte for byte, and pass the Records Book cross-check.
+      - name: Records build reproducible
+        run: |
+          python3 scripts/build_program_records.py --check
+
       - name: Parity check (derived data vs front_porch_games.json)
         run: |
           node scripts/parity_check.js
@@ -149,7 +168,7 @@ jobs:
           if [ -n "$(git status --porcelain fbs_teams.json)"        ]; then CHANGED="$CHANGED fbs_teams.json"; fi
           if [ -n "$(git status --porcelain schedules_data.json)"   ]; then CHANGED="$CHANGED schedules_data.json"; fi
           if [ -n "$(git status --porcelain featured_matchups.json)" ]; then CHANGED="$CHANGED featured_matchups.json"; fi
-          for f in game_sites.json game_venues.json coaches_data.json data/derived; do
+          for f in game_sites.json game_venues.json coaches_data.json data/derived program_stats.json rankings.html data/sources/records; do
             if [ -n "$(git status --porcelain $f)" ]; then CHANGED="$CHANGED $f"; fi
           done
           if [ -n "$CHANGED" ]; then

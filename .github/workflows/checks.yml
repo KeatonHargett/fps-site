@@ -1,0 +1,41 @@
+name: Checks (records build + parity)
+
+# Runs on every pull request and on pushes to branches other than main (main runs the
+# same two checks inside weekly_refresh.yml before it deploys). Offline: no secrets,
+# no network, no deploy.
+on:
+  pull_request:
+  push:
+    branches-ignore: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # Rebuilds program_stats.json record fields, rankings.html and the build manifest from
+      # data/sources/records/ and fails on any byte difference, any Records Book mismatch
+      # outside the documented exceptions, or any change outside the record fields.
+      - name: Records build reproducible
+        run: |
+          python scripts/build_program_records.py --check
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Parity check (derived data, rank categories, record fields)
+        run: |
+          node scripts/parity_check.js

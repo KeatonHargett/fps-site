@@ -259,6 +259,7 @@
 
   .cf-na { color: var(--gray); opacity: 0.55; font-style: italic; font-size: 0.82rem; }
   .cf-note { margin-top: 0.85rem; font-size: 0.85rem; color: var(--gray); }
+  .cf-alt { display: block; font-size: 0.72rem; color: var(--gray); white-space: nowrap; }
   .cf-note strong { color: var(--dark); }
   .cf-empty { padding: 2rem 0; text-align: center; color: var(--gray); }
 
@@ -445,8 +446,12 @@
   }
 
   const NA = '<span class="cf-na">Not yet available</span>';
-  const recStr = r => r ? `${r.wins}-${r.losses}${r.ties ? '-' + r.ties : ''}` : null;
+  const recStr = r => r ? `${r.wins.toLocaleString()}-${r.losses.toLocaleString()}${r.ties ? '-' + r.ties : ''}` : null;
   const pct3 = v => (v == null) ? null : v.toFixed(3).replace(/^0/, '');
+  // Official NCAA record is the main figure; the on-field record (vacated wins and NCAA
+  // forfeits reversed) is a second, asterisked line only where the two differ.
+  const differs = s => s.record && s.recordOnField &&
+    (s.record.wins !== s.recordOnField.wins || s.record.losses !== s.recordOnField.losses || s.record.ties !== s.recordOnField.ties);
   const abbrOf = t => ABBR_OVERRIDES[t.name] || t.abbreviation || t.name;
 
   /* Column definitions. `get` pulls straight from the pre-aggregated program_stats
@@ -454,8 +459,10 @@
      which is a different state from a real zero and must not sort as one. */
   const COLS = [
     { key:'team',       label:'Team',            get:null,                                                    val:t => t.name, str:true },
-    { key:'record',     label:'All-Time Record', get:s => recStr(s.record),                                   val:s => (s.record ? s.record.wins : null) },
-    { key:'winPct',     label:'Win %',           get:s => pct3(s.winPct),                                     val:s => s.winPct },
+    { key:'record',     label:'All-Time Record', get:s => recStr(s.record),                                   val:s => (s.record ? s.record.wins : null),
+      alt:s => differs(s) ? recStr(s.recordOnField) : null },
+    { key:'winPct',     label:'Win %',           get:s => pct3(s.winPct),                                     val:s => s.winPct,
+      alt:s => differs(s) ? pct3(s.winPctOnField) : null },
     { key:'bowlRecord', label:'Bowl Record',     get:s => recStr(s.bowlRecord),                               val:s => (s.bowlRecord ? s.bowlRecord.wins : null) },
     { key:'claimedNatChamps',    label:'Claimed NC',     get:s => s.claimedNatChamps,    val:s => s.claimedNatChamps },
     { key:'recognizedNatChamps', label:'Recognized NC',  get:s => s.recognizedNatChamps, val:s => s.recognizedNatChamps },
@@ -501,6 +508,7 @@
     }).join('');
 
     const missing = [];
+    const starred = new Set();
     const rows = list.map(t => {
       const s = STATS[t.name];
       const isSelf = t.name === selfTeam;
@@ -508,7 +516,9 @@
       const cells = COLS.slice(1).map(c => {
         if (!s) return `<td>${NA}</td>`;
         const v = c.get(s);
-        return `<td>${(v === null || v === undefined || v === '') ? NA : esc(v)}</td>`;
+        const alt = c.alt ? c.alt(s) : null;
+        if (alt) starred.add(t.name);
+        return `<td>${(v === null || v === undefined || v === '') ? NA : esc(v)}${alt ? `<span class="cf-alt">${esc(alt)}* on field</span>` : ''}</td>`;
       }).join('');
       return `<tr data-team="${esc(t.name)}" class="${isSelf ? 'cf-self' : ''}">
         <td><div class="cf-team">
@@ -534,6 +544,13 @@
         <thead><tr>${head}</tr></thead>
         <tbody>${rows}</tbody>
       </table></div>
+      <p class="cf-note">All-time records are official NCAA totals (vacated wins and NCAA forfeits applied).${starred.size
+        ? ' *On field: ' + [...starred].map(n => {
+            const s = STATS[n], d = s.recordOnField.wins - s.record.wins;
+            return `${esc(n)} ${d > 0 ? 'includes ' + d + ' win' + (d === 1 ? '' : 's') + ' later vacated or forfeited'
+                                 : d < 0 ? 'counts ' + (-d) + ' game' + (d === -1 ? '' : 's') + ' awarded by NCAA forfeit as played'
+                                         : 'includes games later vacated'}`;
+          }).join('; ') + '.' : ''}</p>
       ${missing.length ? `<p class="cf-note"><strong>Not yet available:</strong> ${missing.map(esc).join(', ')} ${missing.length === 1 ? 'has' : 'have'} no row in the program stats dataset yet, so ${missing.length === 1 ? 'its' : 'their'} cells are blank rather than zero.</p>` : ''}
     `;
 

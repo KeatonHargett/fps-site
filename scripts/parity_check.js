@@ -203,16 +203,25 @@ function checkRankCategories(OLD, league) {
     'let _winsCache = null;', liftDecl(src, 'function liveWins()'),
     'let _winPctCache = null;', liftDecl(src, 'function liveWinPct()'),
     liftDecl(src, 'function buildRows()'),
-    'this.__run = (slug, ps, lg, games, fbs) => { currentCatSlug = slug; PROGRAM_STATS = ps; LEAGUE = lg; GAMES = games; TEAMS_LIVE = fbs;' +
-    ' _winsCache = null; _winPctCache = null; return buildRows(); }; this.__cats = Object.keys(CATEGORIES);',
+    // one-line array literal (liftDecl matches braces only)
+    src.slice(src.indexOf('const HIDDEN_CATEGORIES = ['), src.indexOf('\n', src.indexOf('const HIDDEN_CATEGORIES = ['))),
+    'this.__run = (slug, ps, lg, games, fbs, b) => { currentCatSlug = slug; PROGRAM_STATS = ps; LEAGUE = lg; GAMES = games; TEAMS_LIVE = fbs;' +
+    ' basis = b || "official"; _winsCache = null; _winPctCache = null; return buildRows(); };' +
+    ' this.__cats = Object.keys(CATEGORIES); this.__hidden = HIDDEN_CATEGORIES.slice();' +
+    ' this.__basisCats = Object.keys(CATEGORIES).filter(k => CATEGORIES[k].basis);',
   ].join('\n');
-  const ctx = { currentCatSlug: null, PROGRAM_STATS: null, LEAGUE: null, GAMES: [], TEAMS_LIVE: [] };
+  const ctx = { currentCatSlug: null, PROGRAM_STATS: null, LEAGUE: null, GAMES: [], TEAMS_LIVE: [], basis: 'official' };
   vm.createContext(ctx);
-  vm.runInContext('var currentCatSlug, PROGRAM_STATS, LEAGUE, GAMES, TEAMS_LIVE;\n' + code, ctx);
+  vm.runInContext('var currentCatSlug, PROGRAM_STATS, LEAGUE, GAMES, TEAMS_LIVE, basis;\n' + code, ctx);
   const ps = readJSON('program_stats.json');
   const fbs = (readJSON('fbs_teams.json').teams || []).map(t => t.name);
   let rows = 0;
-  eq('rank.html has 12 categories', 12, ctx.__cats.length);
+  // 7 visible categories; the 5 unverified ones stay hidden until rebuilt from sources.
+  const HIDDEN = ['conference-championships', 'bowl-games', 'all-americans', 'nfl-draft-picks', 'first-round-nfl-draft-picks'];
+  eq('rank.html visible categories', ['all-time-record', 'claimed-national-championships', 'recognized-national-championships',
+    'all-time-wins', 'heisman-winners', 'weeks-in-poll', 'weeks-at-ap-number-one'], ctx.__cats);
+  eq('rank.html hidden categories (not in navigation)', HIDDEN, ctx.__hidden.filter(s => !ctx.__cats.includes(s)));
+  eq('rank.html official/on-field toggle categories', ['all-time-record', 'all-time-wins'], ctx.__basisCats);
   for (const slug of ctx.__cats) {
     // three data paths: program_stats (normal), league.json fallback, full-games fallback
     const run = (label, args) => {
@@ -220,25 +229,61 @@ function checkRankCategories(OLD, league) {
       catch (e) { eq(`rank.html ${slug} (${label}) runs without throwing`, 'ok', String(e && e.message || e)); return null; }
     };
     const main = run('program_stats', [ps, league, [], fbs]);
+    const onField = ctx.__basisCats.includes(slug) ? run('program_stats on field', [ps, league, [], fbs, 'onfield']) : main;
     const viaLeague = run('league.json fallback', [null, league, [], fbs]);
     const viaGames = run('full-games fallback', [null, null, OLD, fbs]);
-    if (!main || !viaLeague || !viaGames) continue;
+    if (!main || !onField || !viaLeague || !viaGames) continue;
     const plain = r => r.map(x => [x.team, x.value, x.rank]);
-    checks++;
-    if (!main.length) { mismatches.push(`rank.html ${slug}: no rows`); console.log(`MISMATCH rank.html ${slug}: no rows`); }
-    eq(`rank.html ${slug}: values numeric, no _meta row, ranks consistent`,
-      true, main.every((x, i) => typeof x.value === 'number' && isFinite(x.value) && x.team !== '_meta' &&
-        (i === 0 ? x.rank === 1 : (x.value === main[i - 1].value ? x.rank === main[i - 1].rank : x.rank === i + 1))));
+    for (const [label, rs] of [['official', main], ['on field', onField]]) {
+      checks++;
+      if (!rs.length) { mismatches.push(`rank.html ${slug} ${label}: no rows`); console.log(`MISMATCH rank.html ${slug} ${label}: no rows`); }
+      eq(`rank.html ${slug} (${label}): values numeric, no _meta row, ranks consistent`,
+        true, rs.every((x, i) => typeof x.value === 'number' && isFinite(x.value) && x.team !== '_meta' &&
+          (i === 0 ? x.rank === 1 : (x.value === rs[i - 1].value ? x.rank === rs[i - 1].rank : x.rank === i + 1))));
+    }
     eq(`rank.html ${slug}: league.json fallback == full-games fallback`, plain(viaGames), plain(viaLeague));
-    rows += main.length + viaLeague.length + viaGames.length;
+    rows += main.length + viaLeague.length + viaGames.length + (onField === main ? 0 : onField.length);
   }
-  // All-Time Wins is the category that broke: hold it to program_stats itself.
-  const winsRows = ctx.__run('all-time-wins', ps, league, [], fbs);
+  // The two record categories must show exactly what the records build wrote.
   const fbsSet = new Set(fbs);
-  const expected = Object.entries(ps).filter(([t, v]) => t !== '_meta' && v && v.record && v.record.wins != null && fbsSet.has(t))
-    .map(([t, v]) => [t, v.record.wins]).sort((a, b) => b[1] - a[1]);
-  eq('rank.html all-time-wins rows == program_stats record.wins (FBS)', expected, winsRows.map(x => [x.team, x.value]));
+  const teamsPS = Object.entries(ps).filter(([t, v]) => t !== '_meta' && v && v.record && fbsSet.has(t));
+  const byValue = (get) => teamsPS.map(([t, v]) => [t, get(v)]).sort((a, b) => b[1] - a[1]);
+  const rowsOf = (slug, b) => ctx.__run(slug, ps, league, [], fbs, b).map(x => [x.team, x.value]);
+  eq('rank.html all-time-wins (official) == program_stats record.wins', byValue(v => v.record.wins), rowsOf('all-time-wins'));
+  eq('rank.html all-time-wins (on field) == program_stats recordOnField.wins', byValue(v => v.recordOnField.wins), rowsOf('all-time-wins', 'onfield'));
+  eq('rank.html all-time-record (official) == program_stats winPct', byValue(v => v.winPct), rowsOf('all-time-record'));
+  eq('rank.html all-time-record (on field) == program_stats winPctOnField', byValue(v => v.winPctOnField), rowsOf('all-time-record', 'onfield'));
   return { cats: ctx.__cats.length, rows };
+}
+
+// Record fields written by scripts/build_program_records.py: internally consistent, and the
+// ranks team.html / compare.html print are the competition ranks of the official values.
+function checkProgramRecords() {
+  const ps = readJSON('program_stats.json');
+  const teams = Object.keys(ps).filter(k => k !== '_meta');
+  // same exact half-up rounding as build_program_records.py: floor((2N + D) / 2D)
+  const pct = r => {
+    const g = r.wins + r.losses + r.ties; if (!g) return 0;
+    const num = (2 * r.wins + r.ties) * 10000, den = 2 * g;
+    return Math.floor((2 * num + den) / (2 * den)) / 1e4;
+  };
+  const comp = vals => { const s = [...vals].sort((a, b) => b - a); return v => s.indexOf(v) + 1; };
+  const rankWins = comp(teams.map(t => ps[t].record.wins)), rankPct = comp(teams.map(t => ps[t].winPct));
+  let n = 0;
+  for (const t of teams) {
+    const p = ps[t];
+    eq(`${t}: record fields present`, true, !!(p.record && p.recordOnField && p.recordAsOf && p.winPct != null && p.winPctOnField != null));
+    if (!(p.record && p.recordOnField)) continue;
+    eq(`${t}: winPct == official W-L-T`, pct(p.record), p.winPct);
+    eq(`${t}: winPctOnField == on-field W-L-T`, pct(p.recordOnField), p.winPctOnField);
+    eq(`${t}: ranks.wins == competition rank of record.wins`, rankWins(p.record.wins), p.ranks.wins);
+    eq(`${t}: ranks.winPct == competition rank of winPct`, rankPct(p.winPct), p.ranks.winPct);
+    n++;
+  }
+  eq('Oklahoma St. claimed national titles', 1, ps['Oklahoma St.'].claimedNatChamps);
+  eq('Oklahoma St. recognized national titles (1945 AFCA)', 1, ps['Oklahoma St.'].recognizedNatChamps);
+  eq('Ohio St. claimed national titles (adds 2024)', 9, ps['Ohio St.'].claimedNatChamps);
+  return n;
 }
 
 // ---- seeded random ------------------------------------------------------------------------
@@ -382,9 +427,11 @@ function main() {
 
   // ---- 5. rank.html: every category, through the page's own code ----------------------
   const rankRows = checkRankCategories(OLD, league);
+  const recTeams = checkProgramRecords();
 
   const secs = ((Date.now() - t0) / 1000).toFixed(1);
-  console.log(`rank.html: ${rankRows.cats} categories x 3 data paths, ${rankRows.rows.toLocaleString()} rows checked`);
+  console.log(`rank.html: ${rankRows.cats} visible categories x 3 data paths (+ on-field basis), ${rankRows.rows.toLocaleString()} rows checked`);
+  console.log(`program_stats.json records: ${recTeams} programs consistent (official + on field, win %, ranks)`);
   console.log(`\nparity: ${checks.toLocaleString()} checks (${recordChecks.toLocaleString()} records, ${pairs.length} pairs incl. ${neverMet} never-met, ` +
               `${filterChecks.toLocaleString()} filter combinations), ${mismatches.length} mismatches, ${secs}s`);
   if (mismatches.length) { console.log('PARITY FAILED'); process.exit(1); }

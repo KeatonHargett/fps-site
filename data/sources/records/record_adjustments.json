@@ -1,0 +1,901 @@
+{
+ "_doc": [
+  "Sourced adjustments for scripts/build_program_records.py. Every entry carries a source.",
+  "official = baseline (Wikipedia rev 1271870786 = NCAA official through 2024, or a baselineOverride) + CFBD season records after the baseline,",
+  "           minus vacated/forfeit entries with inBaseline=false (rulings the baseline does not contain yet; seasons after the baseline are always applied).",
+  "onField  = official with every vacated W/L/T added back and every NCAA forfeit reversed on both sides (penalized team and opponent).",
+  "NCAA rule (Statistics Policies p.21): vacated regular-season wins/ties are dropped (losses kept); vacated postseason games drop W and L;",
+  "a forfeit turns the penalized team's W/T into L and the opponent's L/T into W. Conference-only forfeits never change NCAA records."
+ ],
+ "baseline": {
+  "file": "wiki_fbs_wl_rev1271870786.json",
+  "throughSeason": 2024
+ },
+ "nameMap": {
+  "Appalachian St.": "Appalachian State",
+  "Connecticut": "UConn",
+  "FAU": "Florida Atlantic",
+  "Louisiana Lafayette": "Louisiana",
+  "Louisiana Monroe": "UL Monroe",
+  "Miami": "Miami (FL)",
+  "North Carolina St.": "NC State",
+  "Sam Houston St.": "Sam Houston",
+  "San José St.": "San Jose State"
+ },
+ "baselineOverrides": [
+  {
+   "team": "Delaware",
+   "throughSeason": 2025,
+   "record": [
+    746,
+    491,
+    43
+   ],
+   "basis": "official",
+   "source": "NCAA 2026 FBS Records Book p.110 (http://fs.ncaa.org.s3.amazonaws.com/Docs/stats/football_records/FBS.pdf)",
+   "reason": "FCS through 2024, so no row in the pinned FBS table. The 2026 Delaware record book prints 796-491-43 (.600), but .600 only fits 746 wins (746 + 21.5) / 1,280 = .600 - the guide is internally inconsistent, so the Records Book is used.",
+   "guide": "https://bluehens.com/documents/2026/7/28/Delaware_Football_Record_Book.pdf"
+  },
+  {
+   "team": "Georgia Southern",
+   "throughSeason": 2025,
+   "record": [
+    432,
+    264,
+    10
+   ],
+   "basis": "official",
+   "source": "NCAA 2026 FBS Records Book p.110 (http://fs.ncaa.org.s3.amazonaws.com/Docs/stats/football_records/FBS.pdf)",
+   "reason": "Pinned Wikipedia (2024) + CFBD 2025 gives 433-264-10; the Records Book prints 432-264-10. The 2026 Georgia Southern guide prints only a \"Modern Era Record\" (1982-) of 370-187-1, so it cannot break the tie - the NCAA Records Book is used.",
+   "guide": "https://gseagles.com/documents/2026/8/10/FB_1_General_Info_2026.pdf"
+  },
+  {
+   "team": "Ball St.",
+   "throughSeason": 2025,
+   "record": [
+    483,
+    473,
+    32
+   ],
+   "basis": "official",
+   "source": "https://ballstatesports.com/documents/download/2026/4/18/FootballRecordBook_ADA_Accessible.pdf",
+   "reason": "2026 Ball State Historical Guide & Record Book, p.6: \"All-Time Record (988 games): 483 473 32\". Internally consistent: the season-by-season table (101 seasons, 1924-2025, no team in 1943), the home/away/neutral split and the coaching records all sum to 483-473-32. Replaces the pinned Wikipedia row + CFBD 2025 (484-475-32), whose later Wikipedia revision carries an unexplained +1W/-1L edit."
+  },
+  {
+   "team": "Western Kentucky",
+   "throughSeason": 2025,
+   "record": [
+    630,
+    437,
+    31
+   ],
+   "basis": "official",
+   "source": "https://wkusports.com/documents/2026/9/3/WKU_FB_26___Record_Book.pdf",
+   "reason": "2026 WKU Record Book, p.3: 630-437-31 (.573). Internally consistent: the season table (107 seasons, 1913-2025; no team 1917-19 and 1943-45) and the coaching table both sum to 630-437-31. Replaces the pinned Wikipedia row + CFBD 2025 (632-436-30)."
+  },
+  {
+   "team": "Missouri St.",
+   "throughSeason": 2025,
+   "record": [
+    507,
+    551,
+    39
+   ],
+   "basis": "official",
+   "source": "https://missouristatebears.com/documents/2026/8/21/2026_MOST_MEDIAGUIDE_V1.pdf",
+   "reason": "FCS through 2024, so no row in the pinned FBS table, and no row in the NCAA Records Book. The 2026 guide is not fully consistent: Quick Facts prints 507-542-39, but the year-by-year Totals row (p.103), the sum of every season (114 seasons, 1909-2025; no team 1913, 1943, 1944), the game-by-game season totals and the coaching records all give 507-551-39. The Quick Facts figure is 9 losses short (typo). Documented exception: neither a consistent guide nor a Records Book row exists, so the figure every internal table agrees on is used."
+  }
+ ],
+ "vacated": [
+  {
+   "team": "Alabama",
+   "season": 2005,
+   "wins": 10,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Alabama",
+   "season": 2006,
+   "wins": 6,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Alabama",
+   "season": 2007,
+   "wins": 5,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Arizona St.",
+   "season": 2021,
+   "wins": 8,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": false,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197",
+   "note": "Applied by the 2026 NCAA Records Book (p.110: 647-432-24) but not by the pinned Wikipedia revision"
+  },
+  {
+   "team": "Arizona St.",
+   "season": 2022,
+   "wins": 2,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": false,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197",
+   "note": "Applied by the 2026 NCAA Records Book (p.110: 647-432-24) but not by the pinned Wikipedia revision"
+  },
+  {
+   "team": "Arkansas St.",
+   "season": 2005,
+   "wins": 4,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Arkansas St.",
+   "season": 2006,
+   "wins": 6,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "California",
+   "season": 1999,
+   "wins": 4,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "FIU",
+   "season": 2005,
+   "wins": 5,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Florida St.",
+   "season": 2006,
+   "wins": 5,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Florida St.",
+   "season": 2007,
+   "wins": 7,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Georgia Tech",
+   "season": 2009,
+   "wins": 1,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Iowa",
+   "season": 2023,
+   "wins": 4,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": false,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197",
+   "note": "Applied by the 2026 NCAA Records Book (p.111 2019-25 table: 57 wins vs 61 on field) but not by the pinned Wikipedia revision"
+  },
+  {
+   "team": "Kentucky",
+   "season": 2021,
+   "wins": 10,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "LSU",
+   "season": 2012,
+   "wins": 10,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "LSU",
+   "season": 2013,
+   "wins": 10,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "LSU",
+   "season": 2014,
+   "wins": 8,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "LSU",
+   "season": 2015,
+   "wins": 9,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Louisiana Lafayette",
+   "season": 2011,
+   "wins": 8,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Louisiana Lafayette",
+   "season": 2012,
+   "wins": 4,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Louisiana Lafayette",
+   "season": 2013,
+   "wins": 8,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Louisiana Lafayette",
+   "season": 2014,
+   "wins": 2,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Michigan St.",
+   "season": 2022,
+   "wins": 14,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": false,
+   "seasons": "2022-2024",
+   "note": "NCAA ruling Nov 12, 2025: all 14 wins of 2022-24 vacated (Detroit Free Press, cited in the season list)",
+   "source": "https://en.wikipedia.org/wiki/List_of_Michigan_State_Spartans_football_seasons"
+  },
+  {
+   "team": "Mississippi St.",
+   "season": 2018,
+   "wins": 8,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/wiki/List_of_Mississippi_State_Bulldogs_football_seasons",
+   "note": "NCAA COI 8/2019; 2026 Mississippi State media guide: \"All wins in the 2018 season were vacated by the NCAA Committee on Infractions.\""
+  },
+  {
+   "team": "Missouri",
+   "season": 2015,
+   "wins": 5,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Missouri",
+   "season": 2016,
+   "wins": 4,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "North Carolina",
+   "season": 2008,
+   "wins": 8,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "North Carolina",
+   "season": 2009,
+   "wins": 8,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Notre Dame",
+   "season": 2012,
+   "wins": 12,
+   "losses": 1,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Notre Dame",
+   "season": 2013,
+   "wins": 9,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Ohio St.",
+   "season": 2010,
+   "wins": 12,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Ole Miss",
+   "season": 2010,
+   "wins": 4,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Ole Miss",
+   "season": 2011,
+   "wins": 2,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Ole Miss",
+   "season": 2012,
+   "wins": 7,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Ole Miss",
+   "season": 2013,
+   "wins": 7,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Ole Miss",
+   "season": 2014,
+   "wins": 8,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Ole Miss",
+   "season": 2016,
+   "wins": 5,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "SMU",
+   "season": 1998,
+   "wins": 4,
+   "losses": 6,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Syracuse",
+   "season": 2004,
+   "wins": 6,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Syracuse",
+   "season": 2005,
+   "wins": 1,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Syracuse",
+   "season": 2006,
+   "wins": 4,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Tennessee",
+   "season": 2019,
+   "wins": 8,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "Tennessee",
+   "season": 2020,
+   "wins": 3,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "USC",
+   "season": 2004,
+   "wins": 2,
+   "losses": 0,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "team": "USC",
+   "season": 2005,
+   "wins": 12,
+   "losses": 1,
+   "ties": 0,
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  }
+ ],
+ "forfeits": [
+  {
+   "team": "Alabama",
+   "season": 1993,
+   "games": [
+    {
+     "opponent": "Tulane",
+     "onField": "W"
+    },
+    {
+     "opponent": "Vanderbilt",
+     "onField": "W"
+    },
+    {
+     "opponent": "Arkansas",
+     "onField": "W"
+    },
+    {
+     "opponent": "Louisiana Tech",
+     "onField": "W"
+    },
+    {
+     "opponent": "South Carolina",
+     "onField": "W"
+    },
+    {
+     "opponent": "Ole Miss",
+     "onField": "W"
+    },
+    {
+     "opponent": "Southern Miss",
+     "onField": "W"
+    },
+    {
+     "opponent": "Mississippi St.",
+     "onField": "W"
+    },
+    {
+     "opponent": "Tennessee",
+     "onField": "T"
+    }
+   ],
+   "inBaseline": true,
+   "source": "https://rolltide.com/documents/2026/8/5/2026_Alabama_Football_Media_Guide.pdf",
+   "note": "1993: \"Originally 9-3-1 with 8 wins and 1 tie later vacated by NCAA ruling\", marked \"Later forfeited by NCAA action\"; Gator Bowl win kept (official 1-12-0)"
+  },
+  {
+   "team": "Michigan St.",
+   "season": 1994,
+   "games": [
+    {
+     "opponent": "Miami (OH)",
+     "onField": "W"
+    },
+    {
+     "opponent": "Wisconsin",
+     "onField": "W"
+    },
+    {
+     "opponent": "Indiana",
+     "onField": "W"
+    },
+    {
+     "opponent": "Northwestern",
+     "onField": "W"
+    },
+    {
+     "opponent": "Purdue",
+     "onField": "W"
+    }
+   ],
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/wiki/List_of_Miami_RedHawks_football_seasons",
+   "note": "NCAA later awarded forfeit wins to Michigan State 1994 opponents (ineligible player)"
+  },
+  {
+   "team": "Mississippi St.",
+   "season": 1975,
+   "games": [
+    {
+     "opponent": "Southern Miss",
+     "onField": "W"
+    },
+    {
+     "opponent": "Rice",
+     "onField": "W"
+    },
+    {
+     "opponent": "Louisville",
+     "onField": "W"
+    },
+    {
+     "opponent": "LSU",
+     "onField": "W"
+    },
+    {
+     "opponent": "Auburn",
+     "onField": "T"
+    }
+   ],
+   "inBaseline": true,
+   "source": "https://static.hailstate.com/custompages/pdf/fb/2026/fb_26mg.pdf",
+   "note": "\"All wins in the 1975-77 seasons were forfeited by the NCAA, except for the 1975 Memphis State & North Texas Games\""
+  },
+  {
+   "team": "Mississippi St.",
+   "season": 1976,
+   "games": [
+    {
+     "opponent": "North Texas",
+     "onField": "W"
+    },
+    {
+     "opponent": "Louisville",
+     "onField": "W"
+    },
+    {
+     "opponent": "Cal Poly-Pomona",
+     "onField": "W"
+    },
+    {
+     "opponent": "Kentucky",
+     "onField": "W"
+    },
+    {
+     "opponent": "Memphis",
+     "onField": "W"
+    },
+    {
+     "opponent": "Southern Miss",
+     "onField": "W"
+    },
+    {
+     "opponent": "Auburn",
+     "onField": "W"
+    },
+    {
+     "opponent": "LSU",
+     "onField": "W"
+    },
+    {
+     "opponent": "Ole Miss",
+     "onField": "W"
+    }
+   ],
+   "inBaseline": true,
+   "source": "https://static.hailstate.com/custompages/pdf/fb/2026/fb_26mg.pdf",
+   "note": "same note"
+  },
+  {
+   "team": "Mississippi St.",
+   "season": 1977,
+   "games": [
+    {
+     "opponent": "North Texas",
+     "onField": "W"
+    },
+    {
+     "opponent": "Washington",
+     "onField": "W"
+    },
+    {
+     "opponent": "Kansas St.",
+     "onField": "W"
+    },
+    {
+     "opponent": "Auburn",
+     "onField": "W"
+    },
+    {
+     "opponent": "Ole Miss",
+     "onField": "W"
+    }
+   ],
+   "inBaseline": true,
+   "source": "https://static.hailstate.com/custompages/pdf/fb/2026/fb_26mg.pdf",
+   "note": "same note"
+  },
+  {
+   "team": "Tulane",
+   "season": 1983,
+   "games": [
+    {
+     "opponent": "Ole Miss",
+     "onField": "W"
+    },
+    {
+     "opponent": "Florida St.",
+     "onField": "W"
+    }
+   ],
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/wiki/List_of_Tulane_Green_Wave_football_seasons",
+   "note": "NCAA-ordered forfeit of the wins over Ole Miss and Florida State"
+  },
+  {
+   "team": "UNLV",
+   "season": 1983,
+   "games": [
+    {
+     "opponent": "Nevada",
+     "onField": "W"
+    },
+    {
+     "opponent": "Pacific",
+     "onField": "W"
+    },
+    {
+     "opponent": "Oregon St.",
+     "onField": "W"
+    },
+    {
+     "opponent": "Utah St.",
+     "onField": "W"
+    },
+    {
+     "opponent": "San Diego St.",
+     "onField": "W"
+    },
+    {
+     "opponent": "Fresno St.",
+     "onField": "W"
+    },
+    {
+     "opponent": "Cal State Fullerton",
+     "onField": "W"
+    }
+   ],
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/wiki/List_of_UNLV_Rebels_football_seasons",
+   "note": "March 1985: the NCAA ruled UNLV forfeit all of its 1983 and 1984 victories"
+  },
+  {
+   "team": "UNLV",
+   "season": 1984,
+   "games": [
+    {
+     "opponent": "San José St.",
+     "onField": "W"
+    },
+    {
+     "opponent": "New Mexico St.",
+     "onField": "W"
+    },
+    {
+     "opponent": "Wichita St.",
+     "onField": "W"
+    },
+    {
+     "opponent": "Long Beach St.",
+     "onField": "W"
+    },
+    {
+     "opponent": "Idaho St.",
+     "onField": "W"
+    },
+    {
+     "opponent": "Pacific",
+     "onField": "W"
+    },
+    {
+     "opponent": "San Diego St.",
+     "onField": "W"
+    },
+    {
+     "opponent": "Cal State Fullerton",
+     "onField": "W"
+    },
+    {
+     "opponent": "Utah St.",
+     "onField": "W"
+    },
+    {
+     "opponent": "Fresno St.",
+     "onField": "W"
+    },
+    {
+     "opponent": "Toledo",
+     "onField": "W"
+    }
+   ],
+   "inBaseline": true,
+   "source": "https://en.wikipedia.org/wiki/List_of_UNLV_Rebels_football_seasons",
+   "note": "same ruling"
+  }
+ ],
+ "excluded": [
+  {
+   "claim": "Penn St. 2012 vacation of 112 wins (1998-2011)",
+   "reason": "Restored by the NCAA in the January 2015 settlement - no adjustment",
+   "source": "https://en.wikipedia.org/w/index.php?oldid=1357084197"
+  },
+  {
+   "claim": "UCLA 1977 (7), Arizona St. 1979 (4), San Jose St. 1979 (3W+1T), Tulane 1896/1901, Boise St. 1997, Ole Miss 1914, Oregon 1979 forfeits",
+   "reason": "Conference-, school- or pre-NCAA forfeits, or not reflected in NCAA records - NCAA records keep the on-field results",
+   "source": "https://en.wikipedia.org/wiki/List_of_vacated_games_in_NCAA_Division_I_FBS_football"
+  },
+  {
+   "claim": "Louisiana Tech 1979/1993/1998, UCF 1980, Missouri/Kansas 1960, South Carolina 1965, Arkansas 1914, California 1979",
+   "reason": "Conference-only or school claims; NCAA records keep the on-field results",
+   "source": "Wikipedia team season lists"
+  }
+ ],
+ "bookExceptions": {
+  "Michigan": {
+   "allTime": {
+    "book": [
+     1022,
+     362,
+     36
+    ],
+    "built": [
+     1021,
+     362,
+     36
+    ]
+   },
+   "seasons2019to2025": {
+    "book": [
+     69,
+     20
+    ],
+    "built": [
+     68,
+     20
+    ]
+   },
+   "reason": "Tiebreaker: Michigan's 2026 media guide (\"Victors Valiant\" section, p.210, year-by-year TOTALS) prints 1,021-362-36, matching the pinned Wikipedia baseline + CFBD 2025. The Records Book's one extra win sits in its 2019-25 table (69 vs 68), where CFBD has every Michigan game. 1,021 is used.",
+   "source": "https://mgoblue.com/documents/2026/9/18/2026-fbl-media-guide-victors-valiant.pdf"
+  }
+ },
+ "fieldCorrections": [
+  {
+   "team": "Ohio St.",
+   "field": "claimedNatChamps",
+   "value": 9,
+   "was": 8,
+   "note": "Adds 2024 (CFP national champion). Claimed: 1942, 1954, 1957, 1961, 1968, 1970, 2002, 2014, 2024",
+   "sources": [
+    "https://en.wikipedia.org/w/index.php?oldid=1377269636#Claims_by_school",
+    "NCAA 2026 FBS Records Book p.125 (2024 national champion: Ohio St.)"
+   ]
+  },
+  {
+   "team": "Oklahoma St.",
+   "field": "recognizedNatChamps",
+   "value": 1,
+   "was": 0,
+   "note": "1945 AFCA (awarded retroactively in 2016) is listed among the NCAA major selections. claimedNatChamps stays 1.",
+   "sources": [
+    "NCAA 2026 FBS Records Book p.122: \"Oklahoma St.: AFCA# ... AFCA awarded Oklahoma St. the 1945 AFCA Trophy retroactively in 2016\"",
+    "http://fs.ncaa.org.s3.amazonaws.com/Docs/stats/football_records/FBS.pdf"
+   ]
+  }
+ ],
+ "decisions": [
+  {
+   "team": "Michigan",
+   "decision": "official 1,021-362-36 through 2025 (Records Book prints 1,022)",
+   "see": "bookExceptions.Michigan"
+  },
+  {
+   "team": "Delaware",
+   "decision": "Records Book 746-491-43 (guide internally inconsistent)",
+   "see": "baselineOverrides"
+  },
+  {
+   "team": "Georgia Southern",
+   "decision": "Records Book 432-264-10 (guide prints modern era only)",
+   "see": "baselineOverrides"
+  },
+  {
+   "team": "Ball St.",
+   "decision": "media guide 483-473-32 (internally consistent)",
+   "see": "baselineOverrides"
+  },
+  {
+   "team": "Western Kentucky",
+   "decision": "media guide 630-437-31 (internally consistent)",
+   "see": "baselineOverrides"
+  },
+  {
+   "team": "Missouri St.",
+   "decision": "507-551-39 from the guide's year-by-year totals (Quick Facts 507-542-39 is a typo; no Records Book row) - documented exception",
+   "see": "baselineOverrides"
+  },
+  {
+   "team": "Air Force",
+   "decision": "keep the reconstruction 442-357-13 through 2025 (pinned Wikipedia + CFBD 2025)",
+   "reason": "The 2026 guide is internally inconsistent: Quick Facts prints 436-349-13 (70 years), but its season table sums to 442-356-13, its game results to 442-357-13 and its coaching records to 442-357-13 (1955 freshman season correctly excluded); the record book disagrees on 1979, 1995 and 2015. The Records Book has no Air Force all-time row, so the fallback is unavailable; the reconstruction equals the guide's game-by-game sum.",
+   "source": "https://goairforcefalcons.com/documents/2026/7/9/2026_Air_Force_Football_Media_Guide.pdf"
+  },
+  {
+   "team": "Mississippi St.",
+   "decision": "keep the reconstruction: official 593-627-39, on field 618-609-40 through 2025",
+   "reason": "The 2026 guide prints on-field 617-610-40 and adjusted 593-627-40, but its own season table, game-by-game records and coaching records sum to 618-609-40 on field and 593-627-39 adjusted (the forfeited 1975 Auburn tie must leave the tie column, as its own adjusted conference line already does). The Records Book has no Mississippi State all-time row; the reconstruction equals the guide's own season sums on both bases.",
+   "source": "https://static.hailstate.com/custompages/pdf/fb/2026/fb_26mg.pdf"
+  }
+ ]
+}
