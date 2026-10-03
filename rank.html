@@ -102,6 +102,16 @@
   .cat-row label { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.07em; color: var(--gray); }
   .cat-select { flex: 1; min-width: 260px; padding: 0.7rem 2.5rem 0.7rem 0.85rem; border: 2px solid var(--border); border-radius: 8px; background: white; font-size: 1rem; font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.04em; color: var(--dark); cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'><path stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/></svg>"); background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 18px; }
   .cat-select:focus, .cat-select:hover { outline: none; border-color: var(--orange); }
+  .rk-note { margin: 0 0 1rem; padding: 0.7rem 0.9rem; border-left: 4px solid var(--orange); background: #fff7ed; border-radius: 6px; font-size: 0.95rem; color: var(--dark); }
+  .basis-row { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin: -0.25rem 0 1rem; }
+  .basis-label { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #6b7280; }
+  .basis-toggle { display: inline-flex; border: 2px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .basis-toggle button { border: 0; background: white; padding: 0.45rem 0.85rem; min-height: 40px; font: inherit; font-size: 0.9rem; font-weight: 600; color: var(--dark); cursor: pointer; }
+  .basis-toggle button + button { border-left: 2px solid var(--border); }
+  .basis-toggle button[aria-pressed="true"] { background: var(--dark); color: white; }
+  .basis-toggle button:focus-visible { outline: 3px solid var(--orange); outline-offset: -3px; }
+  .rk-alt { display: block; font-size: 0.72rem; font-weight: 600; color: #6b7280; white-space: nowrap; }
+  .rk-foot { margin: 0.85rem 0 0; font-size: 0.82rem; color: #6b7280; line-height: 1.45; }
   .back-rk { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--orange); text-decoration: none; letter-spacing: 0.06em; }
   .back-rk:hover { text-decoration: underline; }
 
@@ -336,10 +346,18 @@
 </section>
 
 <main>
+  <p class="rk-note" id="rk-note" role="status" hidden></p>
   <div class="cat-row">
     <label for="cat-select">Category</label>
     <select id="cat-select" class="cat-select"></select>
     <a class='back-rk' href='/rankings'>&larr; All Rankings</a>
+  </div>
+  <div class="basis-row" id="basis-row" hidden>
+    <span class="basis-label" id="basis-label">Rank by</span>
+    <div class="basis-toggle" id="basis-toggle" role="group" aria-labelledby="basis-label">
+      <button type="button" data-basis="official" aria-pressed="true">Official (NCAA)</button>
+      <button type="button" data-basis="onfield" aria-pressed="false">On field</button>
+    </div>
   </div>
 
   <p class="cat-blurb" id="cat-blurb"></p>
@@ -364,6 +382,7 @@
       </tr></thead>
       <tbody id="rk-tbody"></tbody>
     </table>
+    <p class="rk-foot" id="rk-foot" hidden></p>
   </div>
 </main>
 
@@ -392,6 +411,7 @@
 
 <!-- Slim derived data (data/derived/); falls back to front_porch_games.json. -->
 <script src="js/derived-data.js"></script>
+<script src="js/record-notes.js"></script>
 <script>
 /* Legacy fallback only - superseded by program_stats.json, and rendered solely
    if that fetch fails. These are a pre-program_stats snapshot over a different
@@ -455,19 +475,17 @@ const TEAM_STATS = {
 
   // Category catalog. Each maps a URL slug to a stat extractor and presentation hints.
   const CATEGORIES = {
-    'all-time-record':                   { label: 'All-Time Record',                     short: 'Win %',                source: 'winPct',     fmt: 'pct3', live: true,  desc: 'Career winning percentage including ties (.500 weight). Minimum 50 games.' },
+    'all-time-record':                   { label: 'All-Time Record',                     short: 'Win %',                source: 'winPct',     fmt: 'pct3', live: true,  basis: true, desc: 'Official NCAA winning percentage including ties (.500 weight), with vacated wins and NCAA forfeits applied. Minimum 50 games.',
+                                           descOnField: 'On-field winning percentage including ties (.500 weight): wins later vacated or forfeited by NCAA ruling still count, and games the NCAA awarded by forfeit count as played. Minimum 50 games.' },
     'claimed-national-championships':    { label: 'Claimed National Championships',      short: 'Claimed NC',           source: 'ncClaimed',                              desc: 'National championships claimed by each program.' },
-    'recognized-national-championships': { label: 'Recognized National Championships',   short: 'Recognized NC',        source: 'ncRecognized',                           desc: 'National championships recognized by the NCAA or major selectors.' },
-    'conference-championships':          { label: 'Conference Championships',            short: 'Conf Championships',   source: 'confChamps',                             desc: 'All-time conference titles won.' },
-    'bowl-games':                        { label: 'Bowl Games',                          short: 'Bowl Games',           source: 'bowlGames',                              desc: 'All-time bowl game appearances.' },
-    'all-time-wins':                     { label: 'All-Time Wins',                       short: 'Wins',                 source: 'wins',       live: true,                desc: 'Total career wins from the historical game record.' },
-    'all-americans':                     { label: 'Consensus All-Americans',             short: 'All-Americans',        source: 'allAmericans',                           desc: 'Players selected as consensus All-Americans.' },
+    'all-time-wins':                     { label: 'All-Time Wins',                       short: 'Wins',                 source: 'wins',       live: true,  basis: true, desc: 'Official NCAA all-time wins, every division included, with vacated wins and NCAA forfeits applied.',
+                                           descOnField: 'On-field all-time wins, every division included: wins later vacated or forfeited by NCAA ruling still count, and wins the NCAA awarded by forfeit do not.' },
     'heisman-winners':                   { label: 'Heisman Winners',                     short: 'Heismans',             source: 'heismans',                               desc: 'Heisman Trophy winners by program.' },
-    'nfl-draft-picks':                   { label: 'NFL Draft Picks',                     short: 'Draft Picks',          source: 'nflPicks',                               desc: 'All-time NFL Draft selections.' },
-    'first-round-nfl-draft-picks':       { label: 'First Round NFL Draft Picks',         short: 'First Rounders',       source: 'firstRound',                             desc: 'All-time first-round NFL Draft selections.' },
-    'weeks-in-poll':                     { label: 'Weeks in AP Poll',                    short: 'AP Weeks',             source: 'weeksInAP',                              desc: 'Total weeks ranked in the Associated Press top 25.' },
-    'weeks-at-ap-number-one':            { label: 'Weeks at AP #1',                      short: 'Weeks at #1',          source: 'weeksAtNo1',                             desc: 'Total weeks ranked #1 in the AP poll.' }
+    'weeks-at-ap-number-one':            { label: 'Weeks at AP #1 (as of 2025)',         short: 'Weeks at #1',          source: 'weeksAtNo1',                             desc: 'Weeks ranked No. 1 in the weekly AP poll, preseason polls not counted, through the 2025 season (NCAA Records Book).' }
   };
+  // Temporarily hidden until each is rebuilt from verified sources (records audit, Oct 2026).
+  // Old links land on the default category with a short note instead of unverified numbers.
+  const HIDDEN_CATEGORIES = ['recognized-national-championships', 'weeks-in-poll', 'conference-championships', 'bowl-games', 'all-americans', 'nfl-draft-picks', 'first-round-nfl-draft-picks'];
 
 
   const LOGO_URL = id => id ? `https://a.espncdn.com/i/teamlogos/ncaa/500/${id}.png` : '';
@@ -497,6 +515,17 @@ const TEAM_STATS = {
     }
   }
   let currentCatSlug = params.get('cat') && CATEGORIES[params.get('cat')] ? params.get('cat') : 'all-time-record';
+  if (HIDDEN_CATEGORIES.includes(params.get('cat'))) {
+    const url = new URL(location.href);
+    url.searchParams.delete('cat');
+    history.replaceState(null, '', url);
+    const note = document.getElementById('rk-note');
+    note.textContent = 'This category is being rebuilt with verified data.';
+    note.hidden = false;
+  }
+  // All-Time Wins / All-Time Record rank by the official NCAA figure; ?basis=onfield switches
+  // to on-field results (vacated wins and NCAA forfeits reversed).
+  let basis = params.get('basis') === 'onfield' ? 'onfield' : 'official';
   let GAMES = [];
   // league.json (data/derived/): every team's W-L-T and win count, tallied at build time by
   // the same loops as liveWins()/liveWinPct() below, keys in the same order. Replaces the
@@ -522,6 +551,16 @@ const TEAM_STATS = {
     url.searchParams.set('cat', currentCatSlug);
     history.replaceState(null, '', url);
     renderAll();
+  });
+  document.querySelectorAll('#basis-toggle button').forEach(b => {
+    b.addEventListener('click', () => {
+      basis = b.dataset.basis;
+      const url = new URL(location.href);
+      if (basis === 'onfield') url.searchParams.set('basis', 'onfield');
+      else url.searchParams.delete('basis');
+      history.replaceState(null, '', url);
+      renderAll();
+    });
   });
 
   // ===== Data fetch =====
@@ -617,11 +656,23 @@ const TEAM_STATS = {
     if (usePS) {
       const psKey = PS_KEY_MAP[cat.source];
       Object.entries(PROGRAM_STATS).forEach(([team, ps]) => {
-        let v;
-        if (psKey === 'wins') v = ps.record.wins;
+        // program_stats.json carries a non-team "_meta" key (as team.html and compare.html
+        // already account for). Every other category read ps[psKey], which is simply
+        // undefined there and skipped below; All-Time Wins reads the nested record.wins,
+        // so _meta made it throw ("Cannot read properties of undefined (reading 'wins')").
+        if (team === '_meta' || !ps) return;
+        let v, alt = null;
+        if (psKey === 'wins' || psKey === 'winPct') {
+          // official (record / winPct) vs on-field (recordOnField / winPctOnField)
+          const off = psKey === 'wins' ? (ps.record ? ps.record.wins : null) : ps.winPct;
+          const onf = psKey === 'wins' ? (ps.recordOnField ? ps.recordOnField.wins : null) : ps.winPctOnField;
+          v = basis === 'onfield' && onf != null ? onf : off;
+          const other = basis === 'onfield' ? off : onf;
+          if (other != null && other !== v) alt = other;
+        }
         else v = ps[psKey];
         if (v == null) return;
-        pairs.push({ team, value: v });
+        pairs.push({ team, value: v, alt });
       });
     } else if (cat.live && cat.source === 'wins') {
       const w = liveWins();
@@ -657,9 +708,13 @@ const TEAM_STATS = {
       description: `Every major college football program ranked by ${cat.label.toLowerCase()}. ${cat.desc}`,
       path: '/rank?cat=' + encodeURIComponent(currentCatSlug)
     });
-    document.getElementById('hero-title').innerHTML = `${cat.label.split(' ').slice(0,-1).join(' ')} <span class="accent">${cat.label.split(' ').slice(-1)[0]}</span>`;
-    document.getElementById('hero-sub').textContent = cat.desc;
-    document.getElementById('cat-blurb').textContent = cat.desc;
+    // "(as of 2025)" stays in the dropdown label; the hero accent goes on the last real word
+    const heroLabel = cat.label.replace(/\s*\([^)]*\)$/, '');
+    document.getElementById('hero-title').innerHTML = `${heroLabel.split(' ').slice(0,-1).join(' ')} <span class="accent">${heroLabel.split(' ').slice(-1)[0]}</span>`;
+    // On-field mode (?basis=onfield) describes the on-field figure, not the official one
+    const desc = (cat.basis && basis === 'onfield' && cat.descOnField) || cat.desc;
+    document.getElementById('hero-sub').textContent = desc;
+    document.getElementById('cat-blurb').textContent = desc;
   }
 
   // v35: Team abbreviations + override map (Oklahoma St -> OSU, Ohio St -> OHST)
@@ -830,7 +885,7 @@ const TEAM_STATS = {
       const logo = LOGO_URL(m.id);
       return `<div class="bar-col">
         ${logo ? `<img class="bar-logo" src="${logo}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">` : '<div class="bar-logo"></div>'}
-        <div class="bar-value">${formatValue(p.value, cat.fmt)}</div>
+        <div class="bar-value">${formatValue(p.value, cat.fmt)}${p.alt != null ? '*' : ''}</div>
         <div class="bar" style="height:${heightPct}px;background:${color}"></div>
         <div class="bar-team">${getTeamAbbr(p.team)}</div>
         <div class="bar-rank">${ordinal(p.rank)}</div>
@@ -871,9 +926,31 @@ const TEAM_STATS = {
           <div class="rk-name" style="color:${color}">${p.team}</div>
           ${conf ? `<div class="rk-conf">${conf}</div>` : ''}
         </div>
-        <div class="rk-value" style="color:${color}">${formatValue(p.value, cat.fmt)}</div>
+        <div class="rk-value" style="color:${color}">${formatValue(p.value, cat.fmt)}${p.alt != null
+          ? `<span class="rk-alt">${formatValue(p.alt, cat.fmt)}* ${basis === 'onfield' ? 'official' : 'on field'}</span>` : ''}</div>
       </a></td></tr>`;
     }).join('');
+  }
+
+  // Basis toggle + asterisk footnote for the two record categories
+  function renderBasis(rows) {
+    const cat = CATEGORIES[currentCatSlug];
+    const on = !!(cat.basis && PROGRAM_STATS);
+    document.getElementById('basis-row').hidden = !on;
+    document.querySelectorAll('#basis-toggle button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.basis === basis)));
+    const foot = document.getElementById('rk-foot');
+    if (!on) { foot.hidden = true; return; }
+    const asOf = (Object.values(PROGRAM_STATS).find(p => p && p.recordAsOf) || {}).recordAsOf;
+    // asOf.date = date of the last completed game, America/Chicago (build_program_records.py)
+    const day = d => (window.FPSRecordNote ? FPSRecordNote.formatDate(d) : d);
+    const when = asOf ? (asOf.inProgress ? ` Records through completed games as of ${day(asOf.date)}.` : ` Records through the ${asOf.season} season.`) : '';
+    const starred = rows.some(r => r.alt != null);
+    foot.textContent = (starred
+      ? (basis === 'onfield'
+          ? '* Official NCAA figure, with vacated wins removed and NCAA forfeits applied. Rankings above use on-field results.'
+          : '* On field: counts wins later vacated or forfeited by NCAA ruling, and the games of teams awarded a forfeit as they were played.')
+      : '') + when;
+    foot.hidden = false;
   }
 
   function renderAll() {
@@ -883,6 +960,7 @@ const TEAM_STATS = {
     renderHeader();
     renderChart(rows);
     renderTable(rows);
+    renderBasis(rows);
   }
 
   // Search + sort wiring

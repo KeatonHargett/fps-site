@@ -18,10 +18,8 @@ This script derives every copy from the canonical list:
   compare/team/rank     the legacy TEAM_STATS fallback tables, which only
                         render if program_stats.json fails to load. Only the
                         heismans / heismansRank fields are touched.
-  rankings.html         cats[8] of each RANKINGS row. avg and rank are NOT
-                        recomputed - that composite predates program_stats
-                        and is not reproducible from cats, so it is left
-                        alone deliberately. See the note above that array.
+  (rankings.html renders its Heisman column straight from program_stats.json,
+   so it no longer carries a copy to update.)
 
 Two invariants this script exists to enforce:
   - every fbs:true winner's team must be a key in program_stats.json, so a
@@ -48,8 +46,6 @@ CLOSE_MARK = "  /* <<< END GENERATED heisman */"
 
 LEGACY_FILES = ["compare.html", "team.html", "rank.html"]
 LEGACY_ROW = re.compile(r"^(\s*)'([^']+)':(\s*)\{(.*heismans:)(\d+)(,\s*heismansRank:)(\d+)(.*)$")
-RANKINGS_RE = re.compile(r"(const RANKINGS = )(\[.*?\])(;)", re.S)
-HEISMAN_CAT = 8
 
 
 # ------------------------------------------------------------------ file I/O
@@ -210,32 +206,6 @@ def build_legacy(name, counts, rank_of):
     return "\n".join(out), hits
 
 
-# -------------------------------------------------------------- rankings.html
-def build_rankings(counts, rank_of):
-    """Update cats[8] only. avg and rank are intentionally left as they are.
-
-    The emitter below reproduces the existing literal byte for byte, so the
-    only bytes that move are the ones assigned here.
-    """
-    src = read("rankings.html")
-    m = RANKINGS_RE.search(src)
-    if not m:
-        sys.exit("rankings.html: could not locate const RANKINGS")
-    rows = json.loads(m.group(2))
-    changed = 0
-    for r in rows:
-        new = rank_of[counts.get(r["name"], 0)]
-        if r["cats"][HEISMAN_CAT] != new:
-            r["cats"][HEISMAN_CAT] = new
-            changed += 1
-    body = ",".join(
-        '{"rank":%d,"name":%s,"display":%s,"avg":%s,"cats":[%s]}' % (
-            r["rank"], json.dumps(r["name"]), json.dumps(r["display"]),
-            json.dumps(r["avg"]), ", ".join(str(c) for c in r["cats"]))
-        for r in rows)
-    return src[:m.start(2)] + "[" + body + "]" + src[m.end(2):], len(rows), changed
-
-
 # ----------------------------------------------------------------------- main
 def main():
     args = sys.argv[1:]
@@ -259,8 +229,6 @@ def main():
         text, hits = build_legacy(name, counts, rank_of)
         legacy[name] = hits
         emit(name, text, plan)
-    rankings, n_rows, n_changed = build_rankings(counts, rank_of)
-    emit("rankings.html", rankings, plan)
 
     moved = [(t, before[t]["heismanWinners"], counts.get(t, 0),
               before[t]["ranks"]["heismanWinners"], rank_of[counts.get(t, 0)])
@@ -287,9 +255,6 @@ def main():
           % (len(ordered), len(counts), len(ordered) - len(counts), sum(n for _, n in ordered)))
     print("==> legacy TEAM_STATS (fallback only)")
     print("    " + ", ".join("%s %d rows" % kv for kv in legacy.items()))
-    print("==> rankings.html")
-    print("    cats[%d] updated on %d of %d rows; avg and rank left as-is"
-          % (HEISMAN_CAT, n_changed, n_rows))
 
     if check:
         if plan:

@@ -14,16 +14,16 @@
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#003594">
 <meta property="og:title" content="Conference Comparison — Front Porch Sports">
-<meta property="og:description" content="Compare every program in a conference side by side on all-time record, championships, All-Americans, draft picks and Heisman winners.">
+<meta property="og:description" content="Compare every program in a conference side by side on official all-time record, national championships and Heisman winners.">
 <meta property="og:image" content="https://frontporchsports.com/og-image.png">
 <meta property="og:url" content="https://frontporchsports.com/conference">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Front Porch Sports">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Conference Comparison — Front Porch Sports">
-<meta name="twitter:description" content="Compare every program in a conference side by side on all-time record, championships, All-Americans, draft picks and Heisman winners.">
+<meta name="twitter:description" content="Compare every program in a conference side by side on official all-time record, national championships and Heisman winners.">
 <meta name="twitter:image" content="https://frontporchsports.com/og-image.png">
-<meta name="description" content="Compare every program in a conference side by side on all-time record, championships, All-Americans, draft picks and Heisman winners.">
+<meta name="description" content="Compare every program in a conference side by side on official all-time record, national championships and Heisman winners.">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -259,6 +259,7 @@
 
   .cf-na { color: var(--gray); opacity: 0.55; font-style: italic; font-size: 0.82rem; }
   .cf-note { margin-top: 0.85rem; font-size: 0.85rem; color: var(--gray); }
+  .cf-alt { display: block; font-size: 0.72rem; color: var(--gray); white-space: nowrap; }
   .cf-note strong { color: var(--dark); }
   .cf-empty { padding: 2rem 0; text-align: center; color: var(--gray); }
 
@@ -347,6 +348,7 @@
     <p class="footer-copy">&copy; 2025 Front Porch Sports</p>
   </div>
 </footer>
+<script src="js/record-notes.js"></script>
 <script>
   /* Conference-wide comparison.
      Data: fbs_teams.json (grouping + logos) and program_stats.json (pre-aggregated
@@ -445,8 +447,12 @@
   }
 
   const NA = '<span class="cf-na">Not yet available</span>';
-  const recStr = r => r ? `${r.wins}-${r.losses}${r.ties ? '-' + r.ties : ''}` : null;
+  const recStr = r => r ? `${r.wins.toLocaleString()}-${r.losses.toLocaleString()}${r.ties ? '-' + r.ties : ''}` : null;
   const pct3 = v => (v == null) ? null : v.toFixed(3).replace(/^0/, '');
+  // Official NCAA record is the main figure; the on-field record (vacated wins and NCAA
+  // forfeits reversed) is a second, asterisked line only where the two differ.
+  const differs = s => s.record && s.recordOnField &&
+    (s.record.wins !== s.recordOnField.wins || s.record.losses !== s.recordOnField.losses || s.record.ties !== s.recordOnField.ties);
   const abbrOf = t => ABBR_OVERRIDES[t.name] || t.abbreviation || t.name;
 
   /* Column definitions. `get` pulls straight from the pre-aggregated program_stats
@@ -454,14 +460,14 @@
      which is a different state from a real zero and must not sort as one. */
   const COLS = [
     { key:'team',       label:'Team',            get:null,                                                    val:t => t.name, str:true },
-    { key:'record',     label:'All-Time Record', get:s => recStr(s.record),                                   val:s => (s.record ? s.record.wins : null) },
-    { key:'winPct',     label:'Win %',           get:s => pct3(s.winPct),                                     val:s => s.winPct },
-    { key:'bowlRecord', label:'Bowl Record',     get:s => recStr(s.bowlRecord),                               val:s => (s.bowlRecord ? s.bowlRecord.wins : null) },
+    { key:'record',     label:'All-Time Record', get:s => recStr(s.record),                                   val:s => (s.record ? s.record.wins : null),
+      alt:s => differs(s) ? recStr(s.recordOnField) : null },
+    { key:'winPct',     label:'Win %',           get:s => pct3(s.winPct),                                     val:s => s.winPct,
+      alt:s => differs(s) ? pct3(s.winPctOnField) : null },
+    // Recognized national titles, bowl record, conference titles, consensus All-Americans and
+    // NFL draft picks are hidden
+    // until rebuilt from verified sources (records audit, Oct 2026) - same as /rank, /team, /compare.
     { key:'claimedNatChamps',    label:'Claimed NC',     get:s => s.claimedNatChamps,    val:s => s.claimedNatChamps },
-    { key:'recognizedNatChamps', label:'Recognized NC',  get:s => s.recognizedNatChamps, val:s => s.recognizedNatChamps },
-    { key:'confChamps',          label:'Conf Titles',    get:s => s.confChamps,          val:s => s.confChamps },
-    { key:'allAmericans',        label:'All-Americans',  get:s => s.allAmericans,        val:s => s.allAmericans },
-    { key:'nflDraftPicks',       label:'Draft Picks',    get:s => s.nflDraftPicks,       val:s => s.nflDraftPicks },
     { key:'heismanWinners',      label:'Heismans',       get:s => s.heismanWinners,      val:s => s.heismanWinners }
   ];
 
@@ -501,6 +507,7 @@
     }).join('');
 
     const missing = [];
+    const starred = new Set();
     const rows = list.map(t => {
       const s = STATS[t.name];
       const isSelf = t.name === selfTeam;
@@ -508,7 +515,9 @@
       const cells = COLS.slice(1).map(c => {
         if (!s) return `<td>${NA}</td>`;
         const v = c.get(s);
-        return `<td>${(v === null || v === undefined || v === '') ? NA : esc(v)}</td>`;
+        const alt = c.alt ? c.alt(s) : null;
+        if (alt) starred.add(t.name);
+        return `<td>${(v === null || v === undefined || v === '') ? NA : esc(v)}${alt ? `<span class="cf-alt">${esc(alt)}* on field</span>` : ''}</td>`;
       }).join('');
       return `<tr data-team="${esc(t.name)}" class="${isSelf ? 'cf-self' : ''}">
         <td><div class="cf-team">
@@ -534,6 +543,13 @@
         <thead><tr>${head}</tr></thead>
         <tbody>${rows}</tbody>
       </table></div>
+      <p class="cf-note">All-time records are official NCAA totals (vacated wins and NCAA forfeits applied).${starred.size
+        ? ' *On field — ' + [...starred].map(n => {
+            // shared wording: js/record-notes.js ("*Includes ... ; excludes ..."), one sentence per team
+            const f = window.FPSRecordNote ? FPSRecordNote.onField(STATS[n]) : null;
+            const txt = f ? f.note.slice(1) : 'Includes games later vacated';
+            return `${esc(n)}: ${esc(txt.charAt(0).toLowerCase() + txt.slice(1))}.`;
+          }).join(' ') : ''}</p>
       ${missing.length ? `<p class="cf-note"><strong>Not yet available:</strong> ${missing.map(esc).join(', ')} ${missing.length === 1 ? 'has' : 'have'} no row in the program stats dataset yet, so ${missing.length === 1 ? 'its' : 'their'} cells are blank rather than zero.</p>` : ''}
     `;
 
@@ -562,13 +578,13 @@
       h1.textContent = `${selfTeam} vs the ${label}${suffix}`;
       sub.textContent = `How ${selfTeam} stacks up against every other ${label} program, all-time.`;
       fpsMeta({ title: `${selfTeam} vs the ${label} — Conference Comparison | Front Porch Sports`,
-                description: `Compare ${selfTeam} against every ${label} program on all-time record, championships, All-Americans, draft picks and Heisman winners.`,
+                description: `Compare ${selfTeam} against every ${label} program on official all-time record, national championships and Heisman winners.`,
                 path: `/conference?team=${encodeURIComponent(selfTeam)}` });
     } else {
       h1.textContent = `${label} Comparison${suffix}`;
       sub.textContent = `Every ${label} program side by side across all-time record, championships and accolades.`;
       fpsMeta({ title: `${label} All-Time Comparison — Front Porch Sports`,
-                description: `Compare every ${label} program on all-time record, championships, All-Americans, draft picks and Heisman winners.`,
+                description: `Compare every ${label} program on official all-time record, national championships and Heisman winners.`,
                 path: `/conference?conf=${encodeURIComponent(conf)}` });
     }
     if (pushUrl) {

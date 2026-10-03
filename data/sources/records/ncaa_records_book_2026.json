@@ -1,0 +1,894 @@
+{
+ "title": "2026 NCAA Football Bowl Subdivision Records",
+ "url": "http://fs.ncaa.org.s3.amazonaws.com/Docs/stats/football_records/FBS.pdf",
+ "pdfSha256": "e77c56c30e853cfff90702d26072fd1875614cb4adb70563103962ee50484a84",
+ "pdfCreationDate": "2026-09-21",
+ "throughSeason": 2025,
+ "basis": "NCAA official: \"Some teams have had records adjusted by the NCAA Committee on Infractions\" (p.110)",
+ "allTime": {
+  "page": 110,
+  "note": "Top-25 lists by percentage and by victories (33 programs)",
+  "rows": {
+   "Alabama": {
+    "years": 131,
+    "record": [
+     985,
+     345,
+     43
+    ],
+    "games": 1373
+   },
+   "Appalachian St.": {
+    "years": 96,
+    "record": [
+     674,
+     368,
+     29
+    ],
+    "games": 1071
+   },
+   "Arizona St.": {
+    "years": 113,
+    "record": [
+     647,
+     432,
+     24
+    ],
+    "games": 1103
+   },
+   "Arkansas": {
+    "years": 132,
+    "record": [
+     749,
+     555,
+     40
+    ],
+    "games": 1344
+   },
+   "Army": {
+    "years": 136,
+    "record": [
+     746,
+     553,
+     51
+    ],
+    "games": 1350
+   },
+   "Auburn": {
+    "years": 133,
+    "record": [
+     809,
+     485,
+     47
+    ],
+    "games": 1341
+   },
+   "Boise St.": {
+    "years": 58,
+    "record": [
+     511,
+     194,
+     2
+    ],
+    "games": 707
+   },
+   "Clemson": {
+    "years": 130,
+    "record": [
+     815,
+     482,
+     45
+    ],
+    "games": 1342
+   },
+   "Delaware": {
+    "years": 134,
+    "record": [
+     746,
+     491,
+     43
+    ],
+    "games": 1280
+   },
+   "Florida": {
+    "years": 119,
+    "record": [
+     770,
+     458,
+     40
+    ],
+    "games": 1268
+   },
+   "Florida St.": {
+    "years": 79,
+    "record": [
+     588,
+     298,
+     17
+    ],
+    "games": 903
+   },
+   "Georgia": {
+    "years": 132,
+    "record": [
+     904,
+     434,
+     54
+    ],
+    "games": 1392
+   },
+   "Georgia Southern": {
+    "years": 62,
+    "record": [
+     432,
+     264,
+     10
+    ],
+    "games": 706
+   },
+   "Georgia Tech": {
+    "years": 133,
+    "record": [
+     772,
+     550,
+     43
+    ],
+    "games": 1365
+   },
+   "James Madison": {
+    "years": 53,
+    "record": [
+     390,
+     227,
+     4
+    ],
+    "games": 621
+   },
+   "LSU": {
+    "years": 132,
+    "record": [
+     822,
+     444,
+     47
+    ],
+    "games": 1313
+   },
+   "Miami": {
+    "years": 100,
+    "record": [
+     686,
+     394,
+     19
+    ],
+    "games": 1099
+   },
+   "Michigan": {
+    "years": 146,
+    "record": [
+     1022,
+     362,
+     36
+    ],
+    "games": 1420
+   },
+   "Minnesota": {
+    "years": 142,
+    "record": [
+     749,
+     553,
+     44
+    ],
+    "games": 1346
+   },
+   "Nebraska": {
+    "years": 136,
+    "record": [
+     931,
+     436,
+     40
+    ],
+    "games": 1407
+   },
+   "Notre Dame": {
+    "years": 136,
+    "record": [
+     972,
+     341,
+     42
+    ],
+    "games": 1355
+   },
+   "Ohio St.": {
+    "years": 136,
+    "record": [
+     990,
+     337,
+     53
+    ],
+    "games": 1380
+   },
+   "Oklahoma": {
+    "years": 131,
+    "record": [
+     960,
+     351,
+     53
+    ],
+    "games": 1364
+   },
+   "Penn St.": {
+    "years": 139,
+    "record": [
+     950,
+     418,
+     41
+    ],
+    "games": 1409
+   },
+   "Pittsburgh": {
+    "years": 136,
+    "record": [
+     776,
+     571,
+     42
+    ],
+    "games": 1389
+   },
+   "Tennessee": {
+    "years": 129,
+    "record": [
+     883,
+     422,
+     53
+    ],
+    "games": 1358
+   },
+   "Texas": {
+    "years": 133,
+    "record": [
+     971,
+     398,
+     33
+    ],
+    "games": 1402
+   },
+   "Texas A&M": {
+    "years": 131,
+    "record": [
+     797,
+     511,
+     48
+    ],
+    "games": 1356
+   },
+   "USC": {
+    "years": 132,
+    "record": [
+     891,
+     378,
+     54
+    ],
+    "games": 1323
+   },
+   "Virginia Tech": {
+    "years": 132,
+    "record": [
+     781,
+     521,
+     46
+    ],
+    "games": 1348
+   },
+   "Washington": {
+    "years": 136,
+    "record": [
+     790,
+     477,
+     50
+    ],
+    "games": 1317
+   },
+   "West Virginia": {
+    "years": 133,
+    "record": [
+     791,
+     541,
+     45
+    ],
+    "games": 1377
+   },
+   "Wisconsin": {
+    "years": 137,
+    "record": [
+     751,
+     533,
+     53
+    ],
+    "games": 1337
+   }
+  }
+ },
+ "seasons2019to2025": {
+  "page": 111,
+  "note": "Printed as \"2020s (2020-25)\"; its totals equal the 2019-2025 seasons (academic years 2019-20 .. 2025-26)",
+  "rows": {
+   "Air Force": [
+    52,
+    30
+   ],
+   "Akron": [
+    16,
+    62
+   ],
+   "Alabama": [
+    80,
+    16
+   ],
+   "Appalachian St.": [
+    57,
+    33
+   ],
+   "Arizona": [
+    33,
+    46
+   ],
+   "Arizona St.": [
+    33,
+    38
+   ],
+   "Arkansas": [
+    34,
+    51
+   ],
+   "Arkansas St.": [
+    38,
+    49
+   ],
+   "Army": [
+    54,
+    35
+   ],
+   "Auburn": [
+    42,
+    44
+   ],
+   "BYU": [
+    64,
+    26
+   ],
+   "Ball St.": [
+    34,
+    47
+   ],
+   "Baylor": [
+    47,
+    40
+   ],
+   "Boise St.": [
+    63,
+    26
+   ],
+   "Boston College": [
+    37,
+    49
+   ],
+   "Bowling Green": [
+    31,
+    49
+   ],
+   "Buffalo": [
+    42,
+    40
+   ],
+   "California": [
+    37,
+    43
+   ],
+   "Central Michigan": [
+    40,
+    42
+   ],
+   "Charlotte": [
+    26,
+    53
+   ],
+   "Cincinnati": [
+    57,
+    31
+   ],
+   "Clemson": [
+    71,
+    23
+   ],
+   "Coastal Carolina": [
+    56,
+    33
+   ],
+   "Colorado": [
+    30,
+    49
+   ],
+   "Colorado St.": [
+    26,
+    51
+   ],
+   "Connecticut": [
+    30,
+    45
+   ],
+   "Duke": [
+    45,
+    43
+   ],
+   "East Carolina": [
+    41,
+    43
+   ],
+   "Eastern Michigan": [
+    39,
+    43
+   ],
+   "FAU": [
+    37,
+    46
+   ],
+   "FIU": [
+    26,
+    53
+   ],
+   "Florida": [
+    48,
+    40
+   ],
+   "Florida St.": [
+    44,
+    41
+   ],
+   "Fresno St.": [
+    51,
+    33
+   ],
+   "Georgia": [
+    85,
+    11
+   ],
+   "Georgia Southern": [
+    45,
+    45
+   ],
+   "Georgia St.": [
+    36,
+    49
+   ],
+   "Georgia Tech": [
+    37,
+    48
+   ],
+   "Hawaii": [
+    43,
+    45
+   ],
+   "Houston": [
+    45,
+    39
+   ],
+   "Illinois": [
+    45,
+    39
+   ],
+   "Indiana": [
+    50,
+    36
+   ],
+   "Iowa": [
+    57,
+    27
+   ],
+   "Iowa St.": [
+    53,
+    36
+   ],
+   "Kansas": [
+    30,
+    53
+   ],
+   "Kansas St.": [
+    54,
+    34
+   ],
+   "Kent St.": [
+    28,
+    51
+   ],
+   "Kentucky": [
+    36,
+    41
+   ],
+   "LSU": [
+    62,
+    29
+   ],
+   "Liberty": [
+    59,
+    29
+   ],
+   "Louisiana Lafayette": [
+    62,
+    30
+   ],
+   "Louisiana Monroe": [
+    23,
+    59
+   ],
+   "Louisiana Tech": [
+    37,
+    48
+   ],
+   "Louisville": [
+    54,
+    36
+   ],
+   "Marshall": [
+    52,
+    35
+   ],
+   "Maryland": [
+    36,
+    44
+   ],
+   "Memphis": [
+    62,
+    27
+   ],
+   "Miami": [
+    56,
+    34
+   ],
+   "Miami (OH)": [
+    50,
+    35
+   ],
+   "Michigan": [
+    69,
+    20
+   ],
+   "Michigan St.": [
+    24,
+    43
+   ],
+   "Middle Tennessee": [
+    32,
+    51
+   ],
+   "Minnesota": [
+    54,
+    31
+   ],
+   "Mississippi St.": [
+    38,
+    49
+   ],
+   "Missouri": [
+    52,
+    35
+   ],
+   "Navy": [
+    48,
+    37
+   ],
+   "Nebraska": [
+    34,
+    48
+   ],
+   "Nevada": [
+    32,
+    52
+   ],
+   "New Mexico": [
+    27,
+    53
+   ],
+   "New Mexico St.": [
+    29,
+    49
+   ],
+   "North Carolina": [
+    48,
+    42
+   ],
+   "North Carolina St.": [
+    52,
+    36
+   ],
+   "North Texas": [
+    44,
+    44
+   ],
+   "Northern Illinois": [
+    35,
+    47
+   ],
+   "Northwestern": [
+    33,
+    50
+   ],
+   "Notre Dame": [
+    75,
+    17
+   ],
+   "Ohio": [
+    52,
+    30
+   ],
+   "Ohio St.": [
+    79,
+    12
+   ],
+   "Oklahoma": [
+    64,
+    26
+   ],
+   "Oklahoma St.": [
+    49,
+    40
+   ],
+   "Old Dominion": [
+    31,
+    44
+   ],
+   "Ole Miss": [
+    61,
+    28
+   ],
+   "Oregon": [
+    74,
+    17
+   ],
+   "Oregon St.": [
+    39,
+    43
+   ],
+   "Penn St.": [
+    63,
+    27
+   ],
+   "Pittsburgh": [
+    52,
+    37
+   ],
+   "Purdue": [
+    30,
+    51
+   ],
+   "Rice": [
+    29,
+    51
+   ],
+   "Rutgers": [
+    33,
+    51
+   ],
+   "SMU": [
+    63,
+    26
+   ],
+   "San Diego St.": [
+    49,
+    36
+   ],
+   "San José St.": [
+    41,
+    41
+   ],
+   "South Alabama": [
+    39,
+    47
+   ],
+   "South Carolina": [
+    39,
+    46
+   ],
+   "South Florida": [
+    31,
+    53
+   ],
+   "Southern Miss": [
+    31,
+    54
+   ],
+   "Stanford": [
+    24,
+    54
+   ],
+   "Syracuse": [
+    37,
+    49
+   ],
+   "TCU": [
+    52,
+    35
+   ],
+   "Temple": [
+    26,
+    54
+   ],
+   "Tennessee": [
+    45,
+    32
+   ],
+   "Texas": [
+    63,
+    28
+   ],
+   "Texas A&M": [
+    56,
+    30
+   ],
+   "Texas St.": [
+    36,
+    51
+   ],
+   "Texas Tech": [
+    50,
+    38
+   ],
+   "Toledo": [
+    53,
+    32
+   ],
+   "Troy": [
+    50,
+    39
+   ],
+   "Tulane": [
+    58,
+    35
+   ],
+   "Tulsa": [
+    33,
+    49
+   ],
+   "UAB": [
+    42,
+    43
+   ],
+   "UCF": [
+    49,
+    38
+   ],
+   "UCLA": [
+    40,
+    41
+   ],
+   "UMass": [
+    8,
+    68
+   ],
+   "UNLV": [
+    41,
+    43
+   ],
+   "USC": [
+    52,
+    32
+   ],
+   "UTEP": [
+    24,
+    57
+   ],
+   "UTSA": [
+    57,
+    34
+   ],
+   "Utah": [
+    58,
+    27
+   ],
+   "Utah St.": [
+    41,
+    43
+   ],
+   "Vanderbilt": [
+    29,
+    54
+   ],
+   "Virginia": [
+    42,
+    42
+   ],
+   "Virginia Tech": [
+    38,
+    48
+   ],
+   "Wake Forest": [
+    48,
+    38
+   ],
+   "Washington": [
+    55,
+    28
+   ],
+   "Washington St.": [
+    41,
+    40
+   ],
+   "West Virginia": [
+    41,
+    44
+   ],
+   "Western Kentucky": [
+    57,
+    36
+   ],
+   "Western Michigan": [
+    44,
+    39
+   ],
+   "Wisconsin": [
+    46,
+    38
+   ],
+   "Wyoming": [
+    40,
+    42
+   ]
+  }
+ },
+ "weeksAtNo1": {
+  "page": 142,
+  "title": "Most Weeks At No. 1 - All-Time",
+  "note": "Complete list; does not count preseason polls. Through the 2025 season (AP poll). Programs not listed have 0.",
+  "rows": {
+   "Alabama": 141,
+   "Ohio St.": 120,
+   "Oklahoma": 101,
+   "Notre Dame": 98,
+   "USC": 91,
+   "Florida St.": 72,
+   "Nebraska": 70,
+   "Miami": 68,
+   "Georgia": 55,
+   "Texas": 49,
+   "Florida": 41,
+   "LSU": 38,
+   "Michigan": 36,
+   "Michigan St.": 29,
+   "Army": 27,
+   "Clemson": 25,
+   "Penn St.": 21,
+   "Pittsburgh": 21,
+   "Minnesota": 18,
+   "Tennessee": 18,
+   "Oregon": 16,
+   "Washington": 15,
+   "Iowa": 11,
+   "Auburn": 9,
+   "Colorado": 7,
+   "Syracuse": 7,
+   "Texas A&M": 7,
+   "UCLA": 7,
+   "Maryland": 6,
+   "Mississippi St.": 5,
+   "Northwestern": 5,
+   "Ole Miss": 5,
+   "Purdue": 5,
+   "BYU": 4,
+   "California": 4,
+   "Virginia": 3,
+   "Indiana": 2,
+   "Missouri": 2,
+   "SMU": 2,
+   "TCU": 2,
+   "Arkansas": 1,
+   "Boston College": 1,
+   "North Carolina": 1,
+   "Wisconsin": 1
+  },
+  "excluded": {
+   "Cornell": {
+    "weeks": 4,
+    "note": "No longer FBS (# in the Book)"
+   }
+  }
+ }
+}

@@ -1,0 +1,2 @@
+# Records build inputs/outputs are compared byte for byte; keep them LF on every OS.
+data/sources/records/** text eol=lf

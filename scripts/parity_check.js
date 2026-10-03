@@ -178,6 +178,146 @@ function liveWinPct(recs) {   // rank.html
   return out;
 }
 
+// ---- rank.html's own category code, lifted from the page source ------------------------------
+// Pulls `const NAME = {...};` / `function NAME(...) {...}` out of rank.html by brace matching
+// (string-aware), so this runs exactly what the page runs - not a copy that could drift.
+function liftDecl(src, head) {
+  const start = src.indexOf(head);
+  if (start < 0) throw new Error('rank.html: cannot find ' + head);
+  let i = src.indexOf('{', start), depth = 0, quote = null;
+  for (; i < src.length; i++) {
+    const c = src[i];
+    if (quote) { if (c === '\\') { i++; continue; } if (c === quote) quote = null; continue; }
+    if (c === '"' || c === "'" || c === '`') { quote = c; continue; }
+    if (c === '{') depth++;
+    else if (c === '}' && --depth === 0) break;
+  }
+  let end = i + 1;
+  if (src[end] === ';') end++;
+  return src.slice(start, end);
+}
+function checkRankCategories(OLD, league) {
+  const src = read('rank.html');
+  const code = [
+    liftDecl(src, 'const TEAM_STATS = {'), liftDecl(src, 'const CATEGORIES = {'), liftDecl(src, 'const PS_KEY_MAP = {'),
+    'let _winsCache = null;', liftDecl(src, 'function liveWins()'),
+    'let _winPctCache = null;', liftDecl(src, 'function liveWinPct()'),
+    liftDecl(src, 'function buildRows()'),
+    // one-line array literal (liftDecl matches braces only)
+    src.slice(src.indexOf('const HIDDEN_CATEGORIES = ['), src.indexOf('\n', src.indexOf('const HIDDEN_CATEGORIES = ['))),
+    'this.__run = (slug, ps, lg, games, fbs, b) => { currentCatSlug = slug; PROGRAM_STATS = ps; LEAGUE = lg; GAMES = games; TEAMS_LIVE = fbs;' +
+    ' basis = b || "official"; _winsCache = null; _winPctCache = null; return buildRows(); };' +
+    ' this.__cats = Object.keys(CATEGORIES); this.__hidden = HIDDEN_CATEGORIES.slice();' +
+    ' this.__basisCats = Object.keys(CATEGORIES).filter(k => CATEGORIES[k].basis);',
+  ].join('\n');
+  const ctx = { currentCatSlug: null, PROGRAM_STATS: null, LEAGUE: null, GAMES: [], TEAMS_LIVE: [], basis: 'official' };
+  vm.createContext(ctx);
+  vm.runInContext('var currentCatSlug, PROGRAM_STATS, LEAGUE, GAMES, TEAMS_LIVE, basis;\n' + code, ctx);
+  const ps = readJSON('program_stats.json');
+  const fbs = (readJSON('fbs_teams.json').teams || []).map(t => t.name);
+  let rows = 0;
+  // 5 visible categories; the 7 unverified ones stay hidden until rebuilt from sources.
+  const HIDDEN = ['recognized-national-championships', 'weeks-in-poll', 'conference-championships', 'bowl-games', 'all-americans', 'nfl-draft-picks', 'first-round-nfl-draft-picks'];
+  eq('rank.html visible categories', ['all-time-record', 'claimed-national-championships',
+    'all-time-wins', 'heisman-winners', 'weeks-at-ap-number-one'], ctx.__cats);
+  eq('rank.html hidden categories (not in navigation)', HIDDEN, ctx.__hidden.filter(s => !ctx.__cats.includes(s)));
+  eq('rank.html official/on-field toggle categories', ['all-time-record', 'all-time-wins'], ctx.__basisCats);
+  for (const slug of ctx.__cats) {
+    // three data paths: program_stats (normal), league.json fallback, full-games fallback
+    const run = (label, args) => {
+      try { return ctx.__run(slug, ...args); }
+      catch (e) { eq(`rank.html ${slug} (${label}) runs without throwing`, 'ok', String(e && e.message || e)); return null; }
+    };
+    const main = run('program_stats', [ps, league, [], fbs]);
+    const onField = ctx.__basisCats.includes(slug) ? run('program_stats on field', [ps, league, [], fbs, 'onfield']) : main;
+    const viaLeague = run('league.json fallback', [null, league, [], fbs]);
+    const viaGames = run('full-games fallback', [null, null, OLD, fbs]);
+    if (!main || !onField || !viaLeague || !viaGames) continue;
+    const plain = r => r.map(x => [x.team, x.value, x.rank]);
+    for (const [label, rs] of [['official', main], ['on field', onField]]) {
+      checks++;
+      if (!rs.length) { mismatches.push(`rank.html ${slug} ${label}: no rows`); console.log(`MISMATCH rank.html ${slug} ${label}: no rows`); }
+      eq(`rank.html ${slug} (${label}): values numeric, no _meta row, ranks consistent`,
+        true, rs.every((x, i) => typeof x.value === 'number' && isFinite(x.value) && x.team !== '_meta' &&
+          (i === 0 ? x.rank === 1 : (x.value === rs[i - 1].value ? x.rank === rs[i - 1].rank : x.rank === i + 1))));
+    }
+    eq(`rank.html ${slug}: league.json fallback == full-games fallback`, plain(viaGames), plain(viaLeague));
+    rows += main.length + viaLeague.length + viaGames.length + (onField === main ? 0 : onField.length);
+  }
+  // The two record categories must show exactly what the records build wrote.
+  const fbsSet = new Set(fbs);
+  const teamsPS = Object.entries(ps).filter(([t, v]) => t !== '_meta' && v && v.record && fbsSet.has(t));
+  const byValue = (get) => teamsPS.map(([t, v]) => [t, get(v)]).sort((a, b) => b[1] - a[1]);
+  const rowsOf = (slug, b) => ctx.__run(slug, ps, league, [], fbs, b).map(x => [x.team, x.value]);
+  eq('rank.html all-time-wins (official) == program_stats record.wins', byValue(v => v.record.wins), rowsOf('all-time-wins'));
+  eq('rank.html all-time-wins (on field) == program_stats recordOnField.wins', byValue(v => v.recordOnField.wins), rowsOf('all-time-wins', 'onfield'));
+  eq('rank.html all-time-record (official) == program_stats winPct', byValue(v => v.winPct), rowsOf('all-time-record'));
+  eq('rank.html all-time-record (on field) == program_stats winPctOnField', byValue(v => v.winPctOnField), rowsOf('all-time-record', 'onfield'));
+  return { cats: ctx.__cats.length, rows };
+}
+
+// Record fields written by scripts/build_program_records.py: internally consistent, and the
+// ranks team.html / compare.html print are the competition ranks of the official values.
+function checkProgramRecords() {
+  const ps = readJSON('program_stats.json');
+  const teams = Object.keys(ps).filter(k => k !== '_meta');
+  // same exact half-up rounding as build_program_records.py: floor((2N + D) / 2D)
+  const pct = r => {
+    const g = r.wins + r.losses + r.ties; if (!g) return 0;
+    const num = (2 * r.wins + r.ties) * 10000, den = 2 * g;
+    return Math.floor((2 * num + den) / (2 * den)) / 1e4;
+  };
+  const comp = vals => { const s = [...vals].sort((a, b) => b - a); return v => s.indexOf(v) + 1; };
+  const rankWins = comp(teams.map(t => ps[t].record.wins)), rankPct = comp(teams.map(t => ps[t].winPct));
+  let n = 0;
+  for (const t of teams) {
+    const p = ps[t];
+    eq(`${t}: record fields present`, true, !!(p.record && p.recordOnField && p.recordAsOf && p.winPct != null && p.winPctOnField != null));
+    if (!(p.record && p.recordOnField)) continue;
+    eq(`${t}: winPct == official W-L-T`, pct(p.record), p.winPct);
+    eq(`${t}: winPctOnField == on-field W-L-T`, pct(p.recordOnField), p.winPctOnField);
+    eq(`${t}: ranks.wins == competition rank of record.wins`, rankWins(p.record.wins), p.ranks.wins);
+    eq(`${t}: ranks.winPct == competition rank of winPct`, rankPct(p.winPct), p.ranks.winPct);
+    const a = p.recordAdjust || {};
+    eq(`${t}: on-field minus official wins == vacated + forfeited - awarded (footnote counts)`,
+      p.recordOnField.wins - p.record.wins, (a.vacated | 0) + (a.forfeited | 0) - (a.awarded | 0));
+    n++;
+  }
+  // Footnotes: the shared js/record-notes.js wording must describe the asterisked on-field
+  // number for every program - "includes" what on-field adds back, "excludes" what the NCAA
+  // awarded by forfeit - with the counts from recordAdjust.
+  const nctx = {}; vm.createContext(nctx);
+  vm.runInContext(read('js/record-notes.js'), nctx);
+  const RN = nctx.FPSRecordNote;
+  for (const t of teams) {
+    const p = ps[t], a = p.recordAdjust, f = RN.onField(p);
+    const differs = JSON.stringify(p.record) !== JSON.stringify(p.recordOnField);
+    eq(`${t}: on-field line shown exactly when official and on-field differ`, differs, !!f);
+    if (!f) continue;
+    const lost = a.vacated + a.forfeited;
+    const want = [];
+    if (lost) want.push(`includes ${lost.toLocaleString('en-US')} win${lost === 1 ? '' : 's'} later ` +
+      (a.vacated && a.forfeited ? 'vacated or forfeited' : a.vacated ? 'vacated' : 'forfeited'));
+    if (a.awarded) want.push(`excludes ${a.awarded} win${a.awarded === 1 ? '' : 's'} awarded by forfeit`);
+    eq(`${t}: footnote wording`, ('*' + want.join('; ')).toLowerCase(), f.note.toLowerCase());
+    if (p.recordOnField.wins < p.record.wins) eq(`${t}: lower on-field total says "excludes ... awarded by forfeit"`, true, /excludes \d+ wins? awarded by forfeit/i.test(f.note));
+  }
+  eq('as-of date formatting (no UTC day shift)', 'Oct. 3, 2026', RN.formatDate('2026-10-03'));
+
+  eq('Oklahoma St. claimed national titles', 1, ps['Oklahoma St.'].claimedNatChamps);
+  eq('Oklahoma St. recognized national titles (1945 AFCA)', 1, ps['Oklahoma St.'].recognizedNatChamps);
+  // Weeks at AP No. 1 = NCAA Records Book p.142 (complete list, 0 when absent); seasons = NCAA count
+  const book = readJSON('data/sources/records/ncaa_records_book_2026.json');
+  const wk1 = book.weeksAtNo1.rows, rankWk1 = comp(teams.map(t => wk1[t] || 0));
+  for (const t of teams) {
+    eq(`${t}: weeksAtOne == Records Book p.142`, wk1[t] || 0, ps[t].weeksAtOne);
+    eq(`${t}: ranks.weeksAtOne == competition rank`, rankWk1(wk1[t] || 0), ps[t].ranks.weeksAtOne);
+    eq(`${t}: recordSeasons is a season count`, true, Number.isInteger(ps[t].recordSeasons) && ps[t].recordSeasons > 0);
+  }
+  eq('Ohio St. claimed national titles (adds 2024)', 9, ps['Ohio St.'].claimedNatChamps);
+  return n;
+}
+
 // ---- seeded random ------------------------------------------------------------------------
 function rng(seed) { return () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }; }
 
@@ -317,7 +457,13 @@ function main() {
     eq(`team.html ${team}`, o.map(g => g.game_id), n.map(g => g.game_id));
   }
 
+  // ---- 5. rank.html: every category, through the page's own code ----------------------
+  const rankRows = checkRankCategories(OLD, league);
+  const recTeams = checkProgramRecords();
+
   const secs = ((Date.now() - t0) / 1000).toFixed(1);
+  console.log(`rank.html: ${rankRows.cats} visible categories x 3 data paths (+ on-field basis), ${rankRows.rows.toLocaleString()} rows checked`);
+  console.log(`program_stats.json records: ${recTeams} programs consistent (official + on field, win %, ranks)`);
   console.log(`\nparity: ${checks.toLocaleString()} checks (${recordChecks.toLocaleString()} records, ${pairs.length} pairs incl. ${neverMet} never-met, ` +
               `${filterChecks.toLocaleString()} filter combinations), ${mismatches.length} mismatches, ${secs}s`);
   if (mismatches.length) { console.log('PARITY FAILED'); process.exit(1); }

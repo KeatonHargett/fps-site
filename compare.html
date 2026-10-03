@@ -643,6 +643,7 @@
     font-family: 'Inter', sans-serif; font-size: 0.6rem; font-weight: 500;
     letter-spacing: 0.02em; opacity: 0.9; margin-top: 0.1rem;
   }
+  .scc-card-alt { font-weight: 700; }
   .scc-card-label {
     font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 600;
     text-transform: uppercase; letter-spacing: 0.05em; line-height: 1.2;
@@ -796,6 +797,11 @@
   .hb-end .hb-wins { font-family: 'Bebas Neue', sans-serif; font-size: 3.25rem; line-height: 1; letter-spacing: 0.02em; }
   .hb-end .hb-wins-label { font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem; letter-spacing: 0.12em; color: var(--gray); }
   .hb-end .hb-games { font-family: 'Inter', sans-serif; font-size: 0.78rem; color: var(--gray); margin-top: -0.1rem; }
+  .hb-end .hb-games .hb-onfield { display: block; font-weight: 600; white-space: nowrap; }
+  .hb-end .hb-games .hb-nowrap { white-space: nowrap; }
+  /* very narrow phones: let the two short lines wrap between words instead of widening the bar */
+  @media (max-width: 360px) { .hb-end .hb-games .hb-nowrap, .hb-end .hb-games .hb-onfield { white-space: normal; } }
+  .hero-bar .hb-foot { font-family: 'Inter', sans-serif; font-size: 0.72rem; color: var(--gray); text-align: center; margin: 0.5rem 0 0; }
   .hb-bar-wrap { display: flex; flex-direction: column; align-items: stretch; gap: 0.45rem; }
   .hb-bar { position: relative; height: 56px; background: var(--light); border-radius: 8px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
   .hb-seg { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; color: white; font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; text-shadow: 0 1px 2px rgba(0,0,0,0.3); transition: width 1s cubic-bezier(0.42,0,0.58,1), left 1s cubic-bezier(0.42,0,0.58,1); white-space: nowrap; overflow: hidden; }
@@ -1191,6 +1197,7 @@
 <script src="js/range-filter.js"></script>
 <!-- Slim per-team data (data/derived/); falls back to front_porch_games.json. -->
 <script src="js/derived-data.js"></script>
+<script src="js/record-notes.js"></script>
 <!-- Shared location filter, filter pipeline and URL contract; defines window.FPSMatchupFilter. -->
 <script src="js/matchup-filter.js"></script>
 <script>
@@ -2299,7 +2306,6 @@
   function useGames(data) {
     GAMES = data;
     buildGameIndexes();
-    _allTimeGamesCache = null;
     _winsRankCache = null;
     _winPctRankCache = null;
   }
@@ -2824,18 +2830,6 @@
     requestAnimationFrame(step);
   }
 
-  // v29: compute total all-time games played by a team
-  let _allTimeGamesCache = null;
-  function totalGamesAllTime(team) {
-    if (!_allTimeGamesCache) {
-      _allTimeGamesCache = {};
-      for (const g of GAMES) {
-        _allTimeGamesCache[g.team_a] = (_allTimeGamesCache[g.team_a] || 0) + 1;
-        _allTimeGamesCache[g.team_b] = (_allTimeGamesCache[g.team_b] || 0) + 1;
-      }
-    }
-    return _allTimeGamesCache[team] || 0;
-  }
 
   // Current H2H win streak within the games the filters leave in view, so it moves
   // with every filter (range, location, coach) like the rest of the header.
@@ -3022,8 +3016,23 @@
     const t2Streak = longestStreak(games, state.team2);
 
     // ===== v29 TOP container: summary, streak, trophy, hero H2H bar =====
-    const t1Games = totalGamesAllTime(state.team1);
-    const t2Games = totalGamesAllTime(state.team2);
+    // Official all-time wins from the records build (program_stats.json), with the
+    // asterisked on-field figure where vacated wins / NCAA forfeits apply - the same
+    // js/record-notes.js wording as the Program Comparison tiles. (This label used to show
+    // games played in the head-to-head game file, e.g. "(1,222 all-time)" for Alabama.)
+    const allTimeOf = team => {
+      const ps = PROGRAM_STATS && PROGRAM_STATS[team];
+      if (!ps || !ps.record) return null;
+      return { wins: ps.record.wins, f: window.FPSRecordNote ? FPSRecordNote.onField(ps) : null };
+    };
+    const at1 = allTimeOf(state.team1), at2 = allTimeOf(state.team2);
+    const atAnyOnField = !!((at1 && at1.f) || (at2 && at2.f));
+    // non-breaking hyphen: the narrow column wraps to "989 all-time / wins", never "all- / time"
+    const allTimeHtml = a => !a ? '' : `<div class="hb-games"><span class="hb-nowrap">${a.wins.toLocaleString()} all&#8209;time</span> wins${
+      a.f ? `<span class="hb-onfield">${a.f.rec.wins.toLocaleString()}* on field</span>`
+          : atAnyOnField ? '<span class="hb-onfield" aria-hidden="true">&nbsp;</span>' : ''}</div>`;
+    const atFoot = [[state.team1, at1], [state.team2, at2]].filter(x => x[1] && x[1].f)
+      .map(([t, a]) => `*${t} on field: ${a.f.note.slice(1)}.`).join(' ');
     const streak = currentH2HStreak(games);
     topEl.innerHTML = `
       <div class="h2h-summary">
@@ -3066,7 +3075,7 @@
             </a>
             <div class="hb-wins" style="color:${t1Color}">${t1Wins}</div>
             <div class="hb-wins-label">WINS</div>
-            <div class="hb-games">(${t1Games.toLocaleString()} all-time)</div>
+            ${allTimeHtml(at1)}
           </div>
           <div class="hb-bar-wrap">
             <div class="hb-bar">
@@ -3082,9 +3091,10 @@
             </a>
             <div class="hb-wins" style="color:${t2Color}">${t2Wins}</div>
             <div class="hb-wins-label">WINS</div>
-            <div class="hb-games">(${t2Games.toLocaleString()} all-time)</div>
+            ${allTimeHtml(at2)}
           </div>
         </div>
+        ${atFoot ? `<p class="hb-foot">${atFoot}</p>` : ''}
       </div>
     `;
 
@@ -3220,22 +3230,33 @@
       return { v: sLegacy[legacyKey], r: sLegacy[legacyRankKey], total: TOTAL_FBS };
     };
 
+    // Official NCAA record is the main figure; when vacated wins or NCAA forfeits make the
+    // on-field record differ it rides along as a second, asterisked line + footnote.
+    // shared wording: js/record-notes.js (note starts with "*")
+    const onField = ps => (window.FPSRecordNote ? FPSRecordNote.onField(ps) : null);
+    const of1 = onField(ps1), of2 = onField(ps2);
     const winsOf = (team, ps) => {
-      if (ps) return { v: ps.record.wins.toLocaleString(), r: ps.ranks.wins, total: TOTAL };
+      if (ps) {
+        const f = onField(ps);
+        return { v: ps.record.wins.toLocaleString(), r: ps.ranks.wins, total: TOTAL,
+                 alt: f ? `${f.rec.wins.toLocaleString()}* on field` : '' };
+      }
       const e = wr.rank[team];
       return { v: e ? e.value : null, r: e ? e.rank : null, total: wr.total };
     };
     const pctOf = (team, ps) => {
       if (ps) {
-        const rc = ps.record;
+        const rc = ps.record, f = onField(ps);
         return {
           v: fmtPct(ps.winPct), r: ps.ranks.winPct, total: TOTAL,
-          sub: `${rc.wins.toLocaleString()}-${rc.losses.toLocaleString()}${rc.ties ? '-' + rc.ties : ''}`
+          sub: `${rc.wins.toLocaleString()}-${rc.losses.toLocaleString()}${rc.ties ? '-' + rc.ties : ''}`,
+          alt: f ? `${fmtPct(f.pct)}* on field` : ''
         };
       }
       const e = pr.rank[team];
       return { v: e ? fmtPct(e.value) : null, r: e ? e.rank : null, total: pr.total };
     };
+    const asOf2025 = d => (d && d.v != null && PROGRAM_STATS ? Object.assign({ sub: 'as of 2025' }, d) : d);
 
     const rows = [
       { title: 'All-Time Win %',
@@ -3245,36 +3266,29 @@
       { title: 'National Championships (Claimed)',
         a: pick(ps1, s1, 'claimedNatChamps', 'ncClaimed', 'ncClaimedRank'),
         b: pick(ps2, s2, 'claimedNatChamps', 'ncClaimed', 'ncClaimedRank') },
-      { title: 'National Championships (Recognized)',
-        a: pick(ps1, s1, 'recognizedNatChamps', 'ncRecognized', 'ncRecognizedRank'),
-        b: pick(ps2, s2, 'recognizedNatChamps', 'ncRecognized', 'ncRecognizedRank') },
-      { title: 'Conference Championships',
-        a: pick(ps1, s1, 'confChamps', 'confChamps', 'confChampsRank'),
-        b: pick(ps2, s2, 'confChamps', 'confChamps', 'confChampsRank') },
-      { title: 'Bowl Games',
-        a: pick(ps1, s1, 'bowlAppearances', 'bowlGames', 'bowlGamesRank'),
-        b: pick(ps2, s2, 'bowlAppearances', 'bowlGames', 'bowlGamesRank') },
-      { title: 'Consensus All-Americans',
-        a: pick(ps1, s1, 'allAmericans', 'allAmericans', 'allAmericansRank'),
-        b: pick(ps2, s2, 'allAmericans', 'allAmericans', 'allAmericansRank') },
+      // Recognized national championships, weeks in the AP poll, conference titles, bowl games, consensus
+      // All-Americans, NFL draft picks, first-round picks and records vs ranked teams are
+      // hidden until rebuilt from verified sources (records audit, Oct 2026).
       { title: 'Heisman Winners',
         a: pick(ps1, s1, 'heismanWinners', 'heismans', 'heismansRank'),
         b: pick(ps2, s2, 'heismanWinners', 'heismans', 'heismansRank') },
-      { title: 'NFL Draft Picks',
-        a: pick(ps1, s1, 'nflDraftPicks', 'nflPicks', 'nflPicksRank'),
-        b: pick(ps2, s2, 'nflDraftPicks', 'nflPicks', 'nflPicksRank') },
-      { title: 'First Round Draft Picks',
-        a: pick(ps1, s1, 'firstRoundPicks', 'firstRound', 'firstRoundRank'),
-        b: pick(ps2, s2, 'firstRoundPicks', 'firstRound', 'firstRoundRank') },
-      { title: 'Weeks in AP Poll',
-        a: pick(ps1, s1, 'weeksInPoll', 'weeksInAP', 'weeksInAPRank'),
-        b: pick(ps2, s2, 'weeksInPoll', 'weeksInAP', 'weeksInAPRank') },
+      // NCAA Records Book p.142 (preseason polls not counted), through 2025
       { title: 'Weeks at #1',
-        a: pick(ps1, s1, 'weeksAtOne', 'weeksAtNo1', 'weeksAtNo1Rank'),
-        b: pick(ps2, s2, 'weeksAtOne', 'weeksAtNo1', 'weeksAtNo1Rank') }
+        a: asOf2025(pick(ps1, s1, 'weeksAtOne', 'weeksAtNo1', 'weeksAtNo1Rank')),
+        b: asOf2025(pick(ps2, s2, 'weeksAtOne', 'weeksAtNo1', 'weeksAtNo1Rank')) }
     ];
 
-    // v37: Vs Ranked Opponents rows (AP poll era, since 1936)
+    // The two columns are laid out independently, so when only one team has an on-field
+    // line, reserve the same line (blank, hidden from screen readers) on the other card to
+    // keep every row aligned.
+    rows.forEach(r => {
+      if (r.a && r.b && (r.a.alt || r.b.alt)) {
+        if (!r.a.alt) r.a.altBlank = true;
+        if (!r.b.alt) r.b.altBlank = true;
+      }
+    });
+
+    // v37: Vs Ranked Opponents rows (AP poll era, since 1936) - hidden for now, see above.
     const recRow = (label, key) => {
       const recOf = ps => {
         if (!ps || !ps.rankedRecords || !ps.rankedRecords[key]) return null;
@@ -3302,9 +3316,6 @@
         b: { recObj: b }
       };
     };
-    rows.push(recRow('Vs Top 25 Ranked', 'top25'));
-    rows.push(recRow('Vs Top 10 Ranked', 'top10'));
-    rows.push(recRow('Vs Top 5 Ranked', 'top5'));
 
     /* v53: the leader is decided by the RANK ORDINAL already printed on the card -
        lower wins - not by the raw value the v33 comparator parsed. The two agree
@@ -3383,6 +3394,8 @@
       } else {
         body = `<div class="scc-card-value">${d.v}</div>` +
                (d.sub ? `<div class="scc-card-sub">${d.sub}</div>` : '') +
+               (d.alt ? `<div class="scc-card-sub scc-card-alt">${d.alt}</div>`
+                      : d.altBlank ? '<div class="scc-card-sub scc-card-alt" aria-hidden="true">&nbsp;</div>' : '') +
                label +
                (d.r == null || d.r === 0
                  ? ''
@@ -3395,6 +3408,8 @@
       const aria = d.v == null
         ? `${team} ${row.title}: not available. See the full ranking.`
         : `${team} ${row.title}: ${d.v}` +
+          (d.sub ? ` (${d.sub})` : '') +
+          (d.alt ? `, ${d.alt.replace('*', '')}` : '') +
           (d.r == null || d.r === 0 ? '' : `, ranked ${ordinal(d.r)} of ${d.total}`) +
           '. See the full ranking.';
       return `<a class="${cls}" style="${style}" href="rank.html?cat=${slug}" aria-label="${aria}">${body}</a>`;
@@ -3412,7 +3427,8 @@
         <div class="scc-side">${head('a')}${rows.map(r => card(r, 'a')).join('')}</div>
         <div class="scc-side">${head('b')}${rows.map(r => card(r, 'b')).join('')}</div>
       </div>
-      <p class="stat-comparison-footnote">Vs Ranked Opponents: AP poll era records, since 1936. Computed from CFBD games + rankings.</p>
+      <p class="stat-comparison-footnote">All-time records are official NCAA totals (vacated wins and NCAA forfeits applied).${
+        [[t1, of1], [t2, of2]].filter(x => x[1]).map(([t, f]) => ` *${t} on field: ${f.note.slice(1)}.`).join('')}</p>
     </div>`;
   }
 

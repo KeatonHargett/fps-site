@@ -1,0 +1,688 @@
+{
+ "season": 2019,
+ "source": "CollegeFootballData /records (total: all games incl. non-FBS opponents)",
+ "fetched": "2026-10-02",
+ "final": true,
+ "records": {
+  "Air Force": [
+   11,
+   2,
+   0
+  ],
+  "Akron": [
+   0,
+   12,
+   0
+  ],
+  "Alabama": [
+   11,
+   2,
+   0
+  ],
+  "Appalachian St.": [
+   13,
+   1,
+   0
+  ],
+  "Arizona": [
+   4,
+   8,
+   0
+  ],
+  "Arizona St.": [
+   8,
+   5,
+   0
+  ],
+  "Arkansas": [
+   2,
+   10,
+   0
+  ],
+  "Arkansas St.": [
+   8,
+   5,
+   0
+  ],
+  "Army": [
+   5,
+   8,
+   0
+  ],
+  "Auburn": [
+   9,
+   4,
+   0
+  ],
+  "BYU": [
+   7,
+   6,
+   0
+  ],
+  "Ball St.": [
+   5,
+   7,
+   0
+  ],
+  "Baylor": [
+   11,
+   3,
+   0
+  ],
+  "Boise St.": [
+   12,
+   2,
+   0
+  ],
+  "Boston College": [
+   6,
+   7,
+   0
+  ],
+  "Bowling Green": [
+   3,
+   9,
+   0
+  ],
+  "Buffalo": [
+   8,
+   5,
+   0
+  ],
+  "California": [
+   8,
+   5,
+   0
+  ],
+  "Central Michigan": [
+   8,
+   6,
+   0
+  ],
+  "Charlotte": [
+   7,
+   6,
+   0
+  ],
+  "Cincinnati": [
+   11,
+   3,
+   0
+  ],
+  "Clemson": [
+   14,
+   1,
+   0
+  ],
+  "Coastal Carolina": [
+   5,
+   7,
+   0
+  ],
+  "Colorado": [
+   5,
+   7,
+   0
+  ],
+  "Colorado St.": [
+   4,
+   8,
+   0
+  ],
+  "Connecticut": [
+   2,
+   10,
+   0
+  ],
+  "Delaware": [
+   5,
+   7,
+   0
+  ],
+  "Duke": [
+   5,
+   7,
+   0
+  ],
+  "East Carolina": [
+   4,
+   8,
+   0
+  ],
+  "Eastern Michigan": [
+   6,
+   7,
+   0
+  ],
+  "FAU": [
+   11,
+   3,
+   0
+  ],
+  "FIU": [
+   6,
+   7,
+   0
+  ],
+  "Florida": [
+   11,
+   2,
+   0
+  ],
+  "Florida St.": [
+   6,
+   7,
+   0
+  ],
+  "Fresno St.": [
+   4,
+   8,
+   0
+  ],
+  "Georgia": [
+   12,
+   2,
+   0
+  ],
+  "Georgia Southern": [
+   7,
+   6,
+   0
+  ],
+  "Georgia St.": [
+   7,
+   6,
+   0
+  ],
+  "Georgia Tech": [
+   3,
+   9,
+   0
+  ],
+  "Hawaii": [
+   10,
+   5,
+   0
+  ],
+  "Houston": [
+   4,
+   8,
+   0
+  ],
+  "Illinois": [
+   6,
+   7,
+   0
+  ],
+  "Indiana": [
+   8,
+   5,
+   0
+  ],
+  "Iowa": [
+   10,
+   3,
+   0
+  ],
+  "Iowa St.": [
+   7,
+   6,
+   0
+  ],
+  "Jacksonville St.": [
+   6,
+   6,
+   0
+  ],
+  "James Madison": [
+   14,
+   2,
+   0
+  ],
+  "Kansas": [
+   3,
+   9,
+   0
+  ],
+  "Kansas St.": [
+   8,
+   5,
+   0
+  ],
+  "Kennesaw St.": [
+   11,
+   3,
+   0
+  ],
+  "Kent St.": [
+   7,
+   6,
+   0
+  ],
+  "Kentucky": [
+   8,
+   5,
+   0
+  ],
+  "LSU": [
+   15,
+   0,
+   0
+  ],
+  "Liberty": [
+   8,
+   5,
+   0
+  ],
+  "Louisiana Lafayette": [
+   11,
+   3,
+   0
+  ],
+  "Louisiana Monroe": [
+   5,
+   7,
+   0
+  ],
+  "Louisiana Tech": [
+   10,
+   3,
+   0
+  ],
+  "Louisville": [
+   8,
+   5,
+   0
+  ],
+  "Marshall": [
+   8,
+   5,
+   0
+  ],
+  "Maryland": [
+   3,
+   9,
+   0
+  ],
+  "Memphis": [
+   12,
+   2,
+   0
+  ],
+  "Miami": [
+   6,
+   7,
+   0
+  ],
+  "Miami (OH)": [
+   8,
+   6,
+   0
+  ],
+  "Michigan": [
+   9,
+   4,
+   0
+  ],
+  "Michigan St.": [
+   7,
+   6,
+   0
+  ],
+  "Middle Tennessee": [
+   4,
+   8,
+   0
+  ],
+  "Minnesota": [
+   11,
+   2,
+   0
+  ],
+  "Mississippi St.": [
+   6,
+   7,
+   0
+  ],
+  "Missouri": [
+   6,
+   6,
+   0
+  ],
+  "Missouri St.": [
+   1,
+   10,
+   0
+  ],
+  "Navy": [
+   11,
+   2,
+   0
+  ],
+  "Nebraska": [
+   5,
+   7,
+   0
+  ],
+  "Nevada": [
+   7,
+   6,
+   0
+  ],
+  "New Mexico": [
+   2,
+   10,
+   0
+  ],
+  "New Mexico St.": [
+   2,
+   10,
+   0
+  ],
+  "North Carolina": [
+   7,
+   6,
+   0
+  ],
+  "North Carolina St.": [
+   4,
+   8,
+   0
+  ],
+  "North Texas": [
+   4,
+   8,
+   0
+  ],
+  "Northern Illinois": [
+   5,
+   7,
+   0
+  ],
+  "Northwestern": [
+   3,
+   9,
+   0
+  ],
+  "Notre Dame": [
+   11,
+   2,
+   0
+  ],
+  "Ohio": [
+   7,
+   6,
+   0
+  ],
+  "Ohio St.": [
+   13,
+   1,
+   0
+  ],
+  "Oklahoma": [
+   12,
+   2,
+   0
+  ],
+  "Oklahoma St.": [
+   8,
+   5,
+   0
+  ],
+  "Old Dominion": [
+   1,
+   11,
+   0
+  ],
+  "Ole Miss": [
+   4,
+   8,
+   0
+  ],
+  "Oregon": [
+   12,
+   2,
+   0
+  ],
+  "Oregon St.": [
+   5,
+   7,
+   0
+  ],
+  "Penn St.": [
+   11,
+   2,
+   0
+  ],
+  "Pittsburgh": [
+   8,
+   5,
+   0
+  ],
+  "Purdue": [
+   4,
+   8,
+   0
+  ],
+  "Rice": [
+   3,
+   9,
+   0
+  ],
+  "Rutgers": [
+   2,
+   10,
+   0
+  ],
+  "SMU": [
+   10,
+   3,
+   0
+  ],
+  "Sam Houston St.": [
+   7,
+   5,
+   0
+  ],
+  "San Diego St.": [
+   10,
+   3,
+   0
+  ],
+  "San José St.": [
+   5,
+   7,
+   0
+  ],
+  "South Alabama": [
+   2,
+   10,
+   0
+  ],
+  "South Carolina": [
+   4,
+   8,
+   0
+  ],
+  "South Florida": [
+   4,
+   8,
+   0
+  ],
+  "Southern Miss": [
+   7,
+   6,
+   0
+  ],
+  "Stanford": [
+   4,
+   8,
+   0
+  ],
+  "Syracuse": [
+   5,
+   7,
+   0
+  ],
+  "TCU": [
+   5,
+   7,
+   0
+  ],
+  "Temple": [
+   8,
+   5,
+   0
+  ],
+  "Tennessee": [
+   8,
+   5,
+   0
+  ],
+  "Texas": [
+   8,
+   5,
+   0
+  ],
+  "Texas A&M": [
+   8,
+   5,
+   0
+  ],
+  "Texas St.": [
+   3,
+   9,
+   0
+  ],
+  "Texas Tech": [
+   4,
+   8,
+   0
+  ],
+  "Toledo": [
+   6,
+   6,
+   0
+  ],
+  "Troy": [
+   5,
+   7,
+   0
+  ],
+  "Tulane": [
+   7,
+   6,
+   0
+  ],
+  "Tulsa": [
+   4,
+   8,
+   0
+  ],
+  "UAB": [
+   9,
+   5,
+   0
+  ],
+  "UCF": [
+   10,
+   3,
+   0
+  ],
+  "UCLA": [
+   4,
+   8,
+   0
+  ],
+  "UMass": [
+   1,
+   11,
+   0
+  ],
+  "UNLV": [
+   4,
+   8,
+   0
+  ],
+  "USC": [
+   8,
+   5,
+   0
+  ],
+  "UTEP": [
+   1,
+   11,
+   0
+  ],
+  "UTSA": [
+   4,
+   8,
+   0
+  ],
+  "Utah": [
+   11,
+   3,
+   0
+  ],
+  "Utah St.": [
+   7,
+   6,
+   0
+  ],
+  "Vanderbilt": [
+   3,
+   9,
+   0
+  ],
+  "Virginia": [
+   9,
+   5,
+   0
+  ],
+  "Virginia Tech": [
+   8,
+   5,
+   0
+  ],
+  "Wake Forest": [
+   8,
+   5,
+   0
+  ],
+  "Washington": [
+   8,
+   5,
+   0
+  ],
+  "Washington St.": [
+   6,
+   7,
+   0
+  ],
+  "West Virginia": [
+   5,
+   7,
+   0
+  ],
+  "Western Kentucky": [
+   9,
+   4,
+   0
+  ],
+  "Western Michigan": [
+   7,
+   6,
+   0
+  ],
+  "Wisconsin": [
+   10,
+   4,
+   0
+  ],
+  "Wyoming": [
+   8,
+   5,
+   0
+  ]
+ }
+}
