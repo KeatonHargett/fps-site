@@ -1,0 +1,137 @@
+team,ours_W,ours_L,ours_T,ours_pct,official_thru2025_W,L,T,pct,onfield_thru2025_W,L,T,pct,cfbd2026_W,L,T,official_now_W,onfield_now_W,diff_official_W,diff_onfield_W,likely_cause,official_source
+Delaware,156,108,0,0.5909,746,491,43,0.6,746,491,43,0.6,2,2,0,748,748,590,590,FCS/lower-division era games excluded (+536); other: frozen program_stats differs from current CFBD (-54),ncaa-book (wiki-end2024+cfbd2025 = None)
+Western Kentucky,160,130,0,0.5517,632,436,30,0.589,632,436,30,0.589,1,4,0,633,633,472,472,FCS/lower-division era games excluded (+462); other: frozen program_stats differs from current CFBD (-10),wiki-end2024+cfbd2025
+Middle Tennessee,153,174,0,0.4679,613,481,28,0.559,613,481,28,0.559,2,2,0,615,615,460,460,FCS/lower-division era games excluded (+453); other: frozen program_stats differs from current CFBD (-7),wiki-end2024+cfbd2025
+UMass,129,204,4,0.3887,582,661,50,0.469,582,661,50,0.469,4,0,0,586,586,453,453,FCS/lower-division era games excluded (+412); other: frozen program_stats differs from current CFBD (-41),wiki-end2024+cfbd2025
+Jacksonville St.,182,80,0,0.6947,630,432,39,0.59,630,432,39,0.59,3,2,0,633,633,448,448,FCS/lower-division era games excluded (+442); other: frozen program_stats differs from current CFBD (-6),wiki-end2024+cfbd2025
+Texas St.,111,156,0,0.4157,548,511,25,0.517,548,511,25,0.517,2,2,0,550,550,437,437,FCS/lower-division era games excluded (+430); other: frozen program_stats differs from current CFBD (-7),wiki-end2024+cfbd2025
+Appalachian St.,252,143,5,0.6362,674,368,29,0.643,674,368,29,0.643,3,1,0,677,677,422,422,FCS/lower-division era games excluded (+415); other: frozen program_stats differs from current CFBD (-7),ncaa-book
+Troy,171,139,0,0.5516,587,445,28,0.567,587,445,28,0.567,2,2,0,589,589,416,416,FCS/lower-division era games excluded (+411); other: frozen program_stats differs from current CFBD (-5),wiki-end2024+cfbd2025
+Sam Houston St.,168,94,0,0.6412,583,501,34,0.537,583,501,34,0.537,1,3,0,584,584,415,415,FCS/lower-division era games excluded (+412); other: frozen program_stats differs from current CFBD (-3),wiki-end2024+cfbd2025
+Connecticut,131,183,2,0.4177,539,617,38,0.467,539,617,38,0.467,2,2,0,541,541,408,408,FCS/lower-division era games excluded (+385); other: frozen program_stats differs from current CFBD (-23),wiki-end2024+cfbd2025
+Louisiana Tech,266,259,7,0.5066,653,509,37,0.56,652,510,37,0.559,1,2,0,654,653,387,386,FCS/lower-division era games excluded (+352); other: frozen program_stats differs from current CFBD (-34),wiki-end2024+cfbd2025
+Akron,166,292,3,0.3633,534,608,36,0.469,534,608,36,0.469,1,3,0,535,535,368,368,FCS/lower-division era games excluded (+348); other: frozen program_stats differs from current CFBD (-20),wiki-end2024+cfbd2025
+Marshall,276,294,3,0.4843,643,581,47,0.524,643,581,47,0.524,3,1,0,646,646,367,367,FCS/lower-division era games excluded (+357); other: frozen program_stats differs from current CFBD (-10),wiki-end2024+cfbd2025
+Central Michigan,313,269,11,0.5371,658,464,36,0.584,658,464,36,0.584,2,2,0,660,660,345,345,FCS/lower-division era games excluded (+339); other: frozen program_stats differs from current CFBD (-6),wiki-end2024+cfbd2025
+Nevada,238,226,0,0.5129,583,540,33,0.519,582,541,33,0.518,1,3,0,584,583,345,344,FCS/lower-division era games excluded (+320); other: frozen program_stats differs from current CFBD (-24),wiki-end2024+cfbd2025
+Miami (OH),400,313,15,0.5598,740,496,44,0.595,739,497,44,0.595,2,2,0,742,741,340,339,missing early seasons (+312); other: frozen program_stats differs from current CFBD (-27),wiki-end2024+cfbd2025
+Eastern Michigan,192,381,7,0.3371,499,638,47,0.441,499,638,47,0.441,2,3,0,501,501,307,307,FCS/lower-division era games excluded (+305),wiki-end2024+cfbd2025
+Northern Illinois,324,347,4,0.483,622,541,51,0.533,622,541,51,0.533,0,4,0,622,622,298,298,FCS/lower-division era games excluded (+298),wiki-end2024+cfbd2025
+Louisiana Lafayette,288,326,5,0.4693,581,591,34,0.496,603,591,34,0.505,3,1,0,584,606,293,315,FCS/lower-division era games excluded (+312); vacated/forfeited wins (ours counts on-field) (-22); other: frozen program_stats differs from current CFBD (-3),wiki-end2024+cfbd2025
+Ohio,333,387,9,0.463,623,591,48,0.513,623,591,48,0.513,2,2,0,625,625,290,290,missing early seasons (+275); other: frozen program_stats differs from current CFBD (-15),wiki-end2024+cfbd2025
+Arkansas St.,231,285,2,0.4479,511,536,37,0.488,521,536,37,0.493,2,2,0,513,523,280,290,FCS/lower-division era games excluded (+266); other: frozen program_stats differs from current CFBD (-24); vacated/forfeited wins (ours counts on-field) (-10),wiki-end2024+cfbd2025
+Hawaii,325,320,6,0.5038,597,503,25,0.542,597,503,25,0.542,1,3,0,598,598,272,272,FCS/lower-division era games excluded (+241); other: frozen program_stats differs from current CFBD (-31),wiki-end2024+cfbd2025
+Georgia Southern,161,119,0,0.575,432,264,10,0.619,432,264,10,0.619,1,3,0,433,433,271,271,FCS/lower-division era games excluded (+271),"ncaa-book (wiki-end2024+cfbd2025 = [433, 264, 10])"
+Cincinnati,409,395,12,0.5086,671,620,51,0.519,671,620,51,0.519,4,0,0,675,675,262,262,FCS/lower-division era games excluded (+235); other: frozen program_stats differs from current CFBD (-27),wiki-end2024+cfbd2025
+Buffalo,163,241,4,0.4044,422,568,28,0.428,422,568,28,0.428,2,2,0,424,424,259,259,FCS/lower-division era games excluded (+250); other: frozen program_stats differs from current CFBD (-9),wiki-end2024+cfbd2025
+Fresno St.,401,284,4,0.5849,660,457,27,0.589,658,459,27,0.587,3,1,0,663,661,259,257,FCS/lower-division era games excluded (+227); other: frozen program_stats differs from current CFBD (-30),wiki-end2024+cfbd2025
+North Texas,302,374,11,0.4476,560,550,33,0.504,558,552,33,0.503,3,2,0,563,561,258,256,FCS/lower-division era games excluded (+235); other: frozen program_stats differs from current CFBD (-21),wiki-end2024+cfbd2025
+Western Michigan,374,339,7,0.5243,613,492,24,0.554,613,492,24,0.554,2,2,0,615,615,239,239,missing early seasons (+239),wiki-end2024+cfbd2025
+Southern Miss,388,335,6,0.5364,621,477,26,0.564,618,480,26,0.561,1,3,0,622,619,233,230,FCS/lower-division era games excluded (+205); other: frozen program_stats differs from current CFBD (-25),wiki-end2024+cfbd2025
+San Diego St.,372,297,8,0.5554,604,460,32,0.566,602,462,32,0.564,1,3,0,605,603,232,230,FCS/lower-division era games excluded (+214); other: frozen program_stats differs from current CFBD (-16),wiki-end2024+cfbd2025
+Boise St.,292,92,0,0.7604,511,194,2,0.724,511,194,2,0.724,3,1,0,514,514,219,219,FCS/lower-division era games excluded (+201); other: frozen program_stats differs from current CFBD (-18),ncaa-book
+Rutgers,466,459,12,0.5037,683,708,42,0.491,683,708,42,0.491,1,3,0,684,684,217,217,missing early seasons (+185); other: frozen program_stats differs from current CFBD (-32),wiki-end2024+cfbd2025
+Ball St.,280,304,4,0.4796,484,475,32,0.505,484,475,32,0.505,1,3,0,485,485,204,204,FCS/lower-division era games excluded (+199); other: frozen program_stats differs from current CFBD (-5),wiki-end2024+cfbd2025 + correction since Jan 2025 (unverified)
+Bowling Green,383,328,11,0.5381,573,440,52,0.562,573,440,52,0.562,0,4,0,573,573,190,190,FCS/lower-division era games excluded (+181); other: frozen program_stats differs from current CFBD (-9),wiki-end2024+cfbd2025
+James Madison,212,74,0,0.7413,390,227,4,0.631,390,227,4,0.631,4,0,0,394,394,178,178,FCS/lower-division era games excluded (+173); other: frozen program_stats differs from current CFBD (-5),ncaa-book
+Louisiana Monroe,157,293,2,0.3496,333,480,8,0.41,333,480,8,0.41,0,4,0,333,333,176,176,FCS/lower-division era games excluded (+166); other: frozen program_stats differs from current CFBD (-10),wiki-end2024+cfbd2025
+Memphis,376,365,8,0.5073,552,544,33,0.504,551,545,33,0.503,3,1,0,555,554,176,175,FCS/lower-division era games excluded (+172); other: frozen program_stats differs from current CFBD (-3),wiki-end2024+cfbd2025
+Boston College,537,439,14,0.5495,703,541,37,0.563,703,541,37,0.563,2,2,0,705,705,166,166,missing early seasons (+149); other: frozen program_stats differs from current CFBD (-17),wiki-end2024+cfbd2025
+Louisville,403,334,7,0.5464,568,504,17,0.529,566,506,17,0.528,2,2,0,570,568,165,163,missing early seasons (+153); other: frozen program_stats differs from current CFBD (-10),wiki-end2024+cfbd2025
+Toledo,436,295,8,0.5954,596,462,24,0.562,595,463,24,0.561,3,1,0,599,598,160,159,missing early seasons (+156); other: frozen program_stats differs from current CFBD (-3),wiki-end2024+cfbd2025
+Liberty,155,103,0,0.6008,311,266,4,0.539,311,266,4,0.539,3,1,0,314,314,156,156,FCS/lower-division era games excluded (+155),wiki-end2024+cfbd2025
+Temple,348,460,26,0.4329,502,633,52,0.445,502,633,52,0.445,1,3,0,503,503,154,154,FCS/lower-division era games excluded (+147); other: frozen program_stats differs from current CFBD (-7),wiki-end2024+cfbd2025
+San José St.,374,459,14,0.4498,527,554,38,0.488,526,555,38,0.487,2,2,0,529,528,153,152,FCS/lower-division era games excluded (+130); other: frozen program_stats differs from current CFBD (-22),wiki-end2024+cfbd2025
+Kent St.,231,476,5,0.3279,371,614,28,0.38,371,614,28,0.38,2,2,0,373,373,140,140,missing early seasons (+138),wiki-end2024+cfbd2025
+Tulsa,518,498,18,0.5097,654,551,27,0.542,654,551,27,0.542,3,2,0,657,657,136,136,FCS/lower-division era games excluded (+116); other: frozen program_stats differs from current CFBD (-20),wiki-end2024+cfbd2025
+Arizona,519,468,23,0.5252,646,511,33,0.557,646,511,33,0.557,3,1,0,649,649,127,127,missing early seasons (+125),wiki-end2024+cfbd2025
+New Mexico St.,343,628,14,0.3553,462,688,30,0.404,461,689,30,0.403,2,3,0,464,463,119,118,FCS/lower-division era games excluded (+118),wiki-end2024+cfbd2025
+East Carolina,361,339,3,0.5156,477,463,12,0.507,477,463,12,0.507,2,2,0,479,479,116,116,FCS/lower-division era games excluded (+110); other: frozen program_stats differs from current CFBD (-6),wiki-end2024+cfbd2025
+Kentucky,537,593,36,0.476,652,662,44,0.496,661,663,44,0.499,3,1,0,655,664,115,124,missing early seasons (+112); other: frozen program_stats differs from current CFBD (-12); vacated/forfeited wins (ours counts on-field) (-9),wiki-end2024+cfbd2025
+Michigan St.,616,420,30,0.5919,725,502,44,0.588,744,497,44,0.596,2,2,0,727,746,109,128,missing early seasons (+124); vacated/forfeited wins (ours counts on-field) (-19); other: frozen program_stats differs from current CFBD (-4),wiki-end2024+cfbd2025 + correction since Jan 2025 (unverified)
+Ohio St.,882,270,36,0.7576,990,337,53,0.737,1002,337,53,0.739,3,1,0,993,1005,108,120,FCS/lower-division era games excluded (+118); vacated/forfeited wins (ours counts on-field) (-12),ncaa-book
+Washington,684,449,32,0.6009,790,477,50,0.619,789,478,50,0.618,3,1,0,793,792,106,105,missing early seasons (+103),ncaa-book
+California,608,556,31,0.5218,705,582,51,0.546,709,582,51,0.547,2,2,0,707,711,97,101,missing early seasons (+101); vacated/forfeited wins (ours counts on-field) (-4),wiki-end2024+cfbd2025
+UCF,207,162,0,0.561,302,249,1,0.548,302,249,1,0.548,3,1,0,305,305,95,95,missing early seasons (+90); other: frozen program_stats differs from current CFBD (-5),wiki-end2024+cfbd2025
+Maryland,593,550,30,0.5183,685,640,43,0.516,685,640,43,0.516,2,2,0,687,687,92,92,missing early seasons (+91),wiki-end2024+cfbd2025
+New Mexico,425,587,17,0.4213,513,651,31,0.442,513,651,31,0.442,3,1,0,516,516,88,88,missing early seasons (+83); other: frozen program_stats differs from current CFBD (-5),wiki-end2024+cfbd2025
+West Virginia,703,482,41,0.5901,791,541,45,0.591,791,541,45,0.591,3,1,0,794,794,88,88,FCS/lower-division era games excluded (+86),ncaa-book
+Virginia,613,619,37,0.4976,699,652,48,0.517,699,652,48,0.517,3,1,0,702,702,86,86,missing early seasons (+79); other: frozen program_stats differs from current CFBD (-7),wiki-end2024+cfbd2025
+USC,807,337,40,0.6985,891,378,54,0.694,905,379,54,0.697,4,1,0,895,909,84,98,missing early seasons (+90); vacated/forfeited wins (ours counts on-field) (-14); other: frozen program_stats differs from current CFBD (-8),ncaa-book
+Oregon,653,472,34,0.5781,731,514,46,0.584,731,514,46,0.584,3,1,0,734,734,78,78,missing early seasons (+78),wiki-end2024+cfbd2025
+Stanford,603,496,34,0.5472,677,513,49,0.566,677,513,49,0.566,2,2,0,679,679,74,74,missing early seasons (+72),wiki-end2024+cfbd2025
+Washington St.,514,560,38,0.4793,587,597,45,0.496,587,597,45,0.496,1,3,0,588,588,73,73,missing early seasons (+71),wiki-end2024+cfbd2025
+Oregon St.,499,607,36,0.4527,571,646,50,0.47,570,647,50,0.47,2,2,0,573,572,72,71,missing early seasons (+71),wiki-end2024+cfbd2025
+Michigan,954,336,34,0.7334,1021,362,36,0.732,1021,362,36,0.732,3,1,0,1024,1024,67,67,other: frozen program_stats differs from current CFBD (-40); missing early seasons (+27),"Wikipedia end-2024 + CFBD 2025 = 2026 Michigan media guide (Records Book prints 1,022)"
+UTEP,349,600,18,0.3702,415,653,30,0.392,415,653,30,0.392,1,3,0,416,416,66,66,missing early seasons (+62); other: frozen program_stats differs from current CFBD (-4),wiki-end2024+cfbd2025
+Vanderbilt,573,651,43,0.4692,635,674,50,0.486,634,675,50,0.485,3,1,0,638,637,62,61,missing early seasons (+61),wiki-end2024+cfbd2025
+Kansas St.,526,634,35,0.4548,585,680,42,0.464,584,681,42,0.463,3,1,0,588,587,59,58,missing early seasons (+53); other: frozen program_stats differs from current CFBD (-5),wiki-end2024+cfbd2025
+Kansas,557,670,54,0.4559,615,693,58,0.471,615,693,58,0.471,1,2,0,616,616,58,58,missing early seasons (+57),wiki-end2024+cfbd2025
+Notre Dame,916,327,33,0.7308,972,341,42,0.733,993,342,42,0.736,4,0,0,976,997,56,77,missing early seasons (+70); vacated/forfeited wins (ours counts on-field) (-21); other: frozen program_stats differs from current CFBD (-7),ncaa-book
+Colorado,682,530,35,0.5609,735,557,36,0.567,735,557,36,0.567,2,2,0,737,737,53,53,missing early seasons (+53),wiki-end2024+cfbd2025
+Oklahoma,907,331,47,0.7241,960,351,53,0.723,960,351,53,0.723,2,2,0,962,962,53,53,missing early seasons (+47); other: frozen program_stats differs from current CFBD (-6),ncaa-book
+UNLV,220,339,3,0.3941,273,393,4,0.41,291,375,4,0.437,2,2,0,275,293,53,71,missing early seasons (+68); vacated/forfeited wins (ours counts on-field) (-18); other: frozen program_stats differs from current CFBD (-3),wiki-end2024+cfbd2025
+Texas,920,388,32,0.6985,971,398,33,0.704,971,398,33,0.704,4,0,0,975,975,51,51,missing early seasons (+50),ncaa-book
+Miami,637,359,12,0.6379,686,394,19,0.633,686,394,19,0.633,4,0,0,690,690,49,49,FCS/lower-division era games excluded (+48),ncaa-book
+Pittsburgh,727,519,37,0.5811,776,571,42,0.574,776,571,42,0.574,4,0,0,780,780,49,49,missing early seasons (+47),ncaa-book
+Missouri,681,566,50,0.5443,729,598,52,0.547,738,598,52,0.55,3,1,0,732,741,48,57,missing early seasons (+55); vacated/forfeited wins (ours counts on-field) (-9),wiki-end2024+cfbd2025
+Navy,711,579,52,0.5492,759,605,57,0.554,759,605,57,0.554,1,2,0,760,760,48,48,missing early seasons (+30); other: frozen program_stats differs from current CFBD (-18),wiki-end2024+cfbd2025
+Minnesota,704,538,42,0.5646,749,553,44,0.573,749,553,44,0.573,3,1,0,752,752,45,45,other: frozen program_stats differs from current CFBD (-29); missing early seasons (+16),ncaa-book
+Syracuse,711,539,41,0.5666,756,589,49,0.56,767,589,49,0.563,1,2,0,757,768,45,56,missing early seasons (+55); vacated/forfeited wins (ours counts on-field) (-11),wiki-end2024+cfbd2025
+North Carolina,695,556,48,0.5535,739,584,54,0.556,755,584,54,0.561,2,1,0,741,757,44,60,missing early seasons (+60); vacated/forfeited wins (ours counts on-field) (-16),wiki-end2024+cfbd2025
+Purdue,604,606,46,0.4992,644,618,48,0.51,643,619,48,0.509,1,3,0,645,644,40,39,other: frozen program_stats differs from current CFBD (-29); missing early seasons (+10),wiki-end2024+cfbd2025
+Arizona St.,611,389,18,0.609,647,432,24,0.597,657,432,24,0.601,2,1,0,649,659,36,46,FCS/lower-division era games excluded (+46); vacated/forfeited wins (ours counts on-field) (-10),"ncaa-book (wiki-end2024+cfbd2025 = [657, 432, 24])"
+Army,710,533,48,0.5686,746,553,51,0.571,746,553,51,0.571,2,1,0,748,748,36,36,other: frozen program_stats differs from current CFBD (-22); missing early seasons (+14),ncaa-book
+Nebraska,896,411,38,0.6803,931,436,40,0.676,931,436,40,0.676,4,0,0,935,935,35,35,missing early seasons (+34),ncaa-book
+Utah St.,548,557,28,0.496,583,582,31,0.5,581,584,31,0.499,1,3,0,584,582,35,33,missing early seasons (+30); other: frozen program_stats differs from current CFBD (-3),wiki-end2024+cfbd2025
+Virginia Tech,746,504,44,0.5935,781,521,46,0.596,781,521,46,0.596,4,0,0,785,785,35,35,missing early seasons (+35),ncaa-book
+Arkansas,715,532,37,0.5713,749,555,40,0.572,748,556,40,0.571,2,2,0,751,750,34,33,missing early seasons (+32),ncaa-book
+South Carolina,614,592,41,0.5088,648,624,44,0.509,647,625,44,0.508,2,2,0,650,649,34,33,missing early seasons (+31),wiki-end2024+cfbd2025
+Northwestern,544,689,33,0.4427,577,716,44,0.448,576,717,44,0.447,2,1,0,579,578,33,32,other: frozen program_stats differs from current CFBD (-24); missing early seasons (+8),wiki-end2024+cfbd2025
+Oklahoma St.,608,555,41,0.522,641,592,48,0.519,641,592,48,0.519,3,1,0,644,644,33,33,missing early seasons (+31),wiki-end2024+cfbd2025
+Illinois,619,618,43,0.5004,651,632,50,0.507,651,632,50,0.507,2,2,0,653,653,32,32,other: frozen program_stats differs from current CFBD (-22); missing early seasons (+10),wiki-end2024+cfbd2025
+Penn St.,918,402,37,0.6901,950,418,41,0.689,950,418,41,0.689,3,1,0,953,953,32,32,missing early seasons (+20); other: frozen program_stats differs from current CFBD (-12),ncaa-book
+UAB,147,186,0,0.4414,179,204,2,0.468,179,204,2,0.468,2,2,0,181,181,32,32,missing early seasons (+31),wiki-end2024+cfbd2025
+Texas Tech,586,462,24,0.5578,617,488,32,0.557,617,488,32,0.557,4,0,0,621,621,31,31,missing early seasons (+28); other: frozen program_stats differs from current CFBD (-3),wiki-end2024+cfbd2025
+Utah,704,468,30,0.5982,735,491,31,0.597,735,491,31,0.597,4,0,0,739,739,31,31,missing early seasons (+29),wiki-end2024+cfbd2025
+Wisconsin,721,518,50,0.5787,751,533,53,0.582,750,534,53,0.581,3,1,0,754,753,30,29,other: frozen program_stats differs from current CFBD (-25); missing early seasons (+4),ncaa-book
+Auburn,783,475,43,0.6184,809,485,47,0.621,806,487,48,0.619,3,1,0,812,809,26,23,missing early seasons (+23),ncaa-book
+Georgia,878,411,50,0.6744,904,434,54,0.669,904,434,54,0.669,4,0,0,908,908,26,26,missing early seasons (+26),ncaa-book
+Iowa,680,557,34,0.5484,706,585,39,0.545,710,585,39,0.547,4,0,0,710,714,26,30,missing early seasons (+29); vacated/forfeited wins (ours counts on-field) (-4),wiki-end2024+cfbd2025 + correction since Jan 2025 (unverified)
+Florida,745,454,37,0.6177,770,458,40,0.623,770,458,40,0.623,4,0,0,774,774,25,25,missing early seasons (+24),ncaa-book
+Florida St.,563,277,16,0.6671,588,298,17,0.661,599,299,17,0.664,2,2,0,590,601,25,36,missing early seasons (+33); vacated/forfeited wins (ours counts on-field) (-11); other: frozen program_stats differs from current CFBD (-3),ncaa-book
+Indiana,509,692,38,0.4262,534,715,44,0.43,533,716,44,0.429,4,0,0,538,537,25,24,missing early seasons (+24),wiki-end2024+cfbd2025
+Tulane,560,659,35,0.4605,585,680,38,0.464,586,679,38,0.464,2,2,0,587,588,25,26,missing early seasons (+26); vacated/forfeited wins (ours counts on-field) (-1),wiki-end2024+cfbd2025
+Wyoming,547,602,26,0.4766,572,616,28,0.482,572,616,28,0.482,2,2,0,574,574,25,25,missing early seasons (+25),wiki-end2024+cfbd2025
+Iowa St.,561,674,45,0.4559,585,685,46,0.462,585,685,46,0.462,2,2,0,587,587,24,24,missing early seasons (+19); other: frozen program_stats differs from current CFBD (-5),wiki-end2024+cfbd2025
+North Carolina St.,628,591,46,0.5146,652,611,55,0.516,652,611,55,0.516,2,2,0,654,654,24,24,missing early seasons (+21); other: frozen program_stats differs from current CFBD (-3),wiki-end2024+cfbd2025
+South Alabama,71,102,0,0.4104,94,106,0,0.47,94,106,0,0.47,2,2,0,96,96,23,23,missing early seasons (+19); other: frozen program_stats differs from current CFBD (-4),wiki-end2024+cfbd2025
+Texas A&M,775,498,44,0.6052,797,511,48,0.605,797,511,48,0.605,2,2,0,799,799,22,22,missing early seasons (+20),ncaa-book
+UCLA,623,425,31,0.5918,645,462,37,0.58,645,462,37,0.58,4,0,0,649,649,22,22,missing early seasons (+22),wiki-end2024+cfbd2025
+Duke,535,557,28,0.4902,556,565,31,0.496,556,565,31,0.496,4,0,0,560,560,21,21,missing early seasons (+19),wiki-end2024+cfbd2025
+TCU,682,562,50,0.5464,703,582,57,0.545,703,582,57,0.545,2,2,0,705,705,21,21,missing early seasons (+19),wiki-end2024+cfbd2025
+Clemson,795,475,44,0.6218,815,482,45,0.624,815,482,45,0.624,3,1,0,818,818,20,20,missing early seasons (+20),ncaa-book
+South Florida,164,151,0,0.5206,184,164,0,0.529,184,164,0,0.529,4,0,0,188,188,20,20,missing early seasons (+20),wiki-end2024+cfbd2025
+Mississippi St.,610,597,37,0.5052,593,627,39,0.486,618,609,40,0.504,4,0,0,597,622,-17,8,vacated/forfeited wins (ours counts on-field) (-25); missing early seasons (+7),wiki-end2024+cfbd2025
+Alabama,999,319,42,0.75,985,345,43,0.733,1014,336,44,0.743,4,0,0,989,1018,-14,15,vacated/forfeited wins (ours counts on-field) (-29); missing early seasons (+15),ncaa-book
+Tennessee,869,404,51,0.6756,883,422,53,0.67,893,422,54,0.672,3,1,0,886,896,14,24,missing early seasons (+24); vacated/forfeited wins (ours counts on-field) (-10),ncaa-book
+Houston,474,385,15,0.5509,486,405,15,0.545,486,405,15,0.545,3,1,0,489,489,12,12,missing early seasons (+11),wiki-end2024+cfbd2025
+Wake Forest,495,693,31,0.4188,505,697,33,0.422,505,697,33,0.422,3,1,0,508,508,10,10,missing early seasons (+10),wiki-end2024+cfbd2025
+Old Dominion,98,84,0,0.5385,107,89,0,0.546,107,89,0,0.546,1,3,0,108,108,9,9,other: frozen program_stats differs from current CFBD (-8),wiki-end2024+cfbd2025
+Colorado St.,541,607,31,0.472,549,631,33,0.466,549,631,33,0.466,2,2,0,551,551,8,8,missing early seasons (+6),wiki-end2024+cfbd2025
+LSU,830,431,47,0.6525,822,444,47,0.644,857,446,47,0.652,3,1,0,825,860,-8,27,vacated/forfeited wins (ours counts on-field) (-35); missing early seasons (+27),ncaa-book
+Rice,493,667,32,0.427,501,668,32,0.43,500,669,32,0.43,1,3,0,502,501,8,7,missing early seasons (+6),wiki-end2024+cfbd2025
+Baylor,631,605,41,0.5102,638,614,44,0.509,638,614,44,0.509,3,1,0,641,641,7,7,missing early seasons (+7),wiki-end2024+cfbd2025
+Coastal Carolina,171,100,0,0.631,178,103,0,0.633,178,103,0,0.633,1,3,0,179,179,7,7,FCS/lower-division era games excluded (+7),wiki-end2024+cfbd2025
+Air Force,436,355,12,0.5504,442,357,13,0.552,442,357,13,0.552,2,1,0,444,444,6,6,missing early seasons (+6),wiki-end2024+cfbd2025
+Georgia Tech,766,529,40,0.5888,772,550,43,0.581,773,550,43,0.582,1,3,0,773,774,6,7,missing early seasons (+7); vacated/forfeited wins (ours counts on-field) (-1),ncaa-book
+Ole Miss,702,533,34,0.5666,698,552,35,0.557,727,556,35,0.565,3,1,0,701,730,-4,25,vacated/forfeited wins (ours counts on-field) (-29); missing early seasons (+25),wiki-end2024+cfbd2025
+Charlotte,48,101,0,0.3221,51,105,0,0.327,51,105,0,0.327,0,4,0,51,51,3,3,FCS/lower-division era games excluded (+3),wiki-end2024+cfbd2025
+FAU,126,155,0,0.4484,129,172,0,0.429,129,172,0,0.429,3,1,0,132,132,3,3,missing early seasons (+3),wiki-end2024+cfbd2025
+FIU,97,181,0,0.3489,99,184,0,0.35,104,184,0,0.361,2,2,0,101,106,2,7,FCS/lower-division era games excluded (+7); vacated/forfeited wins (ours counts on-field) (-5),wiki-end2024+cfbd2025
+SMU,554,568,54,0.494,553,567,54,0.494,557,573,54,0.493,3,1,0,556,560,-1,3,vacated/forfeited wins (ours counts on-field) (-4); missing early seasons (+3),wiki-end2024+cfbd2025
+BYU,639,447,26,0.5863,639,447,26,0.586,639,447,26,0.586,3,0,0,642,642,0,0,minor (within ±2) (+0),wiki-end2024+cfbd2025
+Georgia St.,65,125,0,0.3421,65,126,0,0.34,65,126,0,0.34,3,1,0,68,68,0,0,minor (within ±2) (+0),wiki-end2024+cfbd2025
+Kennesaw St.,83,44,0,0.6535,83,44,0,0.654,83,44,0,0.654,1,3,0,84,84,0,0,minor (within ±2) (+0),wiki-end2024+cfbd2025
+Missouri St.,101,156,0,,,,,,,,,,1,3,0,,,,,other: no baseline (FBS since 2025; Missouri St. media guide prints 507-542-39 and 507-551-39),none
+UTSA,98,87,0,0.5297,98,87,0,0.53,98,87,0,0.53,3,1,0,101,101,0,0,minor (within ±2) (+0),wiki-end2024+cfbd2025
