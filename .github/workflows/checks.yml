@@ -1,4 +1,4 @@
-name: Checks (records build + parity + rivalries)
+name: Checks (records build + parity + rivalries + public staging)
 
 # Runs on every pull request and on pushes to branches other than main (main runs the
 # same two checks inside weekly_refresh.yml before it deploys). Offline: no secrets,
@@ -45,3 +45,9 @@ jobs:
       - name: Rivalry derived fields reproducible
         run: |
           python scripts/build_rivalries.py --check
+
+      # Every tracked file must be classified public or internal before it can deploy;
+      # an unclassified folder fails here, on the PR, not at deploy time.
+      - name: Public staging classifies every file
+        run: |
+          python scripts/stage_public.py --check
