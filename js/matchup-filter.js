@@ -158,6 +158,13 @@
     return true;
   }
 
+  /* For records that already carry _ca / _cb (js/derived-data.js): point the lookup at the
+     shared coach-name registry those indices refer to. Filter logic is unchanged. */
+  function setCoachNames(names) {
+    COACH_NAMES = names || [];
+    return true;
+  }
+
   /* Coach name for `team` in game g, or null when unknown. */
   function coachOf(g, team) {
     var ix = team === g.team_a ? g._ca : team === g.team_b ? g._cb : null;
@@ -447,6 +454,7 @@
     hasNeutral: hasNeutral,
     loadCoaches: loadCoaches,
     annotateCoaches: annotateCoaches,
+    setCoachNames: setCoachNames,
     coachOf: coachOf,
     coachOptions: coachOptions,
     coachLabel: coachLabel,

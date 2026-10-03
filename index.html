@@ -25,6 +25,7 @@
 <meta name="twitter:image" content="https://frontporchsports.com/og-image.png">
 <meta name="description" content="Head-to-head college football records across 54,000+ games from 1887 to 2025.">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="data/derived/manifest.json" as="fetch" crossorigin="anonymous">
 <style>
   :root {
     --orange: #fe5c00;
@@ -473,6 +474,8 @@
     <p class="footer-copy">&copy; 2025 Front Porch Sports</p>
   </div>
 </footer>
+<!-- Slim derived data (data/derived/); falls back to front_porch_games.json. -->
+<script src="js/derived-data.js"></script>
 <script>
   const TEAM_META = {
   'Air Force': {id:'2005',color:'#003594',alt:'#ffffff',abbr:'AF'},
@@ -644,24 +647,37 @@
   function applyMaxSeasonFromData(data) {
     let maxSeason = 0;
     for (const g of data) { if ((g.season|0) > maxSeason) maxSeason = g.season|0; }
+    applyHeroCounts(data.length, maxSeason);
+  }
+  function applyHeroCounts(gameCount, maxSeason) {
     const hy = document.getElementById('header-end-year');
     if (hy && maxSeason) hy.textContent = maxSeason;
     const hc = document.getElementById('header-game-count');
-    if (hc) hc.textContent = data.length.toLocaleString();
+    if (hc) hc.textContent = gameCount.toLocaleString();
   }
   let GAMES = [];
+  // home.json (data/derived/): the hero counts and the Blue Bloods series records,
+  // precomputed from the full dataset - a few hundred bytes instead of 17 MB.
+  let HOME = null;
   function fpsKey(s) {
     return (s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
   }
   // v50: the compare module moved to /compare, so the home page no longer needs
-  // fbs_teams.json (it only fed the dropdown filter). Blue Bloods still derives its
-  // records from the full games dataset, so that fetch stays.
-  fetch('front_porch_games.json')
-    .then(r => r.json())
-    .then(data => {
-      GAMES = data;
-      applyMaxSeasonFromData(data);
+  // fbs_teams.json (it only fed the dropdown filter). Blue Bloods records and the hero
+  // counts come from home.json; the full games dataset is only the fallback.
+  FPSData.loadHome()
+    .then(home => {
+      HOME = home;
+      applyHeroCounts(home.gameCount, home.maxSeason);
       renderBlueBloods();
+    })
+    .catch(err => {
+      FPSData.warnFallback('index', err);
+      return FPSData.loadFull().then(data => {
+        GAMES = data;
+        applyMaxSeasonFromData(data);
+        renderBlueBloods();
+      });
     })
     .catch(() => {});
 
@@ -755,11 +771,16 @@
 
   const BLUE_BLOODS = [['Texas','Oklahoma'],['Notre Dame','USC'],['Ohio St.','Michigan'],['Alabama','Auburn'],['Nebraska','Oklahoma']];
   function renderBlueBloods() {
-    if (!GAMES.length) { setTimeout(renderBlueBloods, 100); return; }
+    if (!GAMES.length && !HOME) { setTimeout(renderBlueBloods, 100); return; }
     const cards = BLUE_BLOODS.map(([a,b]) => {
-      const rg = GAMES.filter(g => (g.team_a===a&&g.team_b===b)||(g.team_a===b&&g.team_b===a));
-      const aw = rg.filter(g=>g.winner===a).length, bw = rg.filter(g=>g.winner===b).length;
-      const ties = rg.filter(g=>g.is_tie).length;
+      let aw, bw, ties;
+      const pre = HOME && HOME.blueBloods.find(x => x[0] === a && x[1] === b);
+      if (pre) { aw = pre[2]; bw = pre[3]; ties = pre[4]; }
+      else {
+        const rg = GAMES.filter(g => (g.team_a===a&&g.team_b===b)||(g.team_a===b&&g.team_b===a));
+        aw = rg.filter(g=>g.winner===a).length; bw = rg.filter(g=>g.winner===b).length;
+        ties = rg.filter(g=>g.is_tie).length;
+      }
       const aColor = TEAM_META[a]?.color||'#fe5c00', bColor = TEAM_META[b]?.color||'#003594';
       // v49: ties were excluded here (denominator was aw+bw and there was no third
       // segment), so a tied meeting silently vanished from the bar. Divide by every

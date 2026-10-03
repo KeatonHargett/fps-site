@@ -25,6 +25,25 @@
 <meta name="twitter:image" content="https://frontporchsports.com/og-image.png">
 <meta name="description" content="Every game ever played between the two selected teams.">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+/* Start this page's data requests the moment the HTML arrives, instead of after the
+   page's scripts have downloaded. js/derived-data.js and the page code pick these
+   in-flight requests up from window.__fpsPrefetch (json: parsed derived files, raw:
+   plain fetch Responses). Failures are left for those consumers to handle. */
+(function () {
+  var P = window.__fpsPrefetch = { json: {}, raw: {} }, B = 'data/derived/';
+  var q = new URLSearchParams(location.search);
+  var j = function (u) {
+    var p = fetch(u).then(function (r) { if (!r.ok) throw new Error(u + ' HTTP ' + r.status); return r.json(); });
+    p.catch(function () {});
+    return (P.json[u] = p);
+  };
+  
+  j(B + 'manifest.json').then(function (m) {
+    var i = m.names.indexOf(q.get('team1')); if (i >= 0) j(B + m.teams[m.slugs[i]]);
+  }).catch(function () {});
+})();
+</script>
 <style>
   :root {
     --orange: #fe5c00;
@@ -419,6 +438,8 @@
 </footer>
 
 <!-- Shared filter pipeline + URL contract (same file compare.html uses). -->
+<!-- Slim derived data (data/derived/); falls back to front_porch_games.json. -->
+<script src="js/derived-data.js"></script>
 <script src="js/matchup-filter.js"></script>
 <script>
   const TEAM_META = {
@@ -770,44 +791,68 @@
     back.delete('last');
     if (LAST_N === 5 || LAST_N === 10) { back.delete('start'); back.delete('end'); back.set('preset', 'last' + LAST_N); }
     document.getElementById('back-link').href = `compare.html?${back.toString()}`;
+    // Same alias rules as compare.html (js/matchup-filter.js): site abbreviations first
+    // (OSU = Oklahoma St., OHST = Ohio St.), then every TEAM_META abbreviation.
+    const resolveNames = (allNames) => {
+      const aliases = { 'OSU': 'Oklahoma St.', 'OHST': 'Ohio St.' };
+      for (const [team, m] of Object.entries(TEAM_META)) if (m && m.abbr && !(m.abbr in aliases)) aliases[m.abbr] = team;
+      const resolve = MF.teamResolver(allNames, aliases);
+      const r1 = resolve(TEAM1) || TEAM1, r2 = resolve(TEAM2) || TEAM2;
+      if (r1 !== TEAM1 || r2 !== TEAM2) {
+        TEAM1 = r1; TEAM2 = r2;
+        const canon = new URLSearchParams(location.search);
+        canon.set('team1', TEAM1); canon.set('team2', TEAM2);
+        history.replaceState(null, '', `${location.pathname}?${canon.toString()}`);
+        const back = new URLSearchParams(document.getElementById('back-link').search);
+        back.set('team1', TEAM1); back.set('team2', TEAM2);
+        document.getElementById('back-link').href = `compare.html?${back.toString()}`;
+      }
+    };
+    const showError = err => {
+      document.getElementById('content').innerHTML = `<div class="loading">Failed to load: ${err.message}</div>`;
+    };
+
+    // Derived data (data/derived/): resolve the names against the manifest, then load only
+    // team 1's file - it already holds every game against team 2, with location, coaches
+    // and venue attached - instead of the full 17 MB dataset.
+    const loadDerived = () => FPSData.manifest().then(man => {
+      if (END === null) END = man.maxSeason || new Date().getFullYear();
+      resolveNames(man.names);
+      return FPSData.loadTeams([TEAM1]).then(games => {
+        MF.setCoachNames(FPSData.coachNames);
+        VENUE_OF = g => g._venue || null;
+        renderGames(games);
+      });
+    });
+
+    // Fallback: the full dataset and side files, exactly as before.
     // Location / coach data only when this link actually filters on them. Venue names
     // (game_venues.json) are this page's alone - compare.html never loads them.
-    const needCoaches = COACH1 !== 'all' || COACH2 !== 'all';
-    Promise.all([
-      fetch('front_porch_games.json').then(r => r.json()),
-      SITE !== 'all' ? MF.loadSites() : null,
-      needCoaches ? MF.loadCoaches() : null,
-      MF.loadVenues()
-    ])
-      .then(([data, sitesDoc, coachesDoc, venuesDoc]) => {
-        if (sitesDoc) MF.annotateSites(data, sitesDoc);
-        if (coachesDoc) MF.annotateCoaches(data, coachesDoc);
-        VENUE_OF = MF.venueLookup(venuesDoc);
-        if (END === null) {
-          let maxSeason = 0;
-          for (const g of data) { if ((g.season|0) > maxSeason) maxSeason = g.season|0; }
-          END = maxSeason || new Date().getFullYear();
-        }
-        // Same alias rules as compare.html (js/matchup-filter.js): site abbreviations
-        // first (OSU = Oklahoma St., OHST = Ohio St.), then every TEAM_META abbreviation.
-        const aliases = { 'OSU': 'Oklahoma St.', 'OHST': 'Ohio St.' };
-        for (const [team, m] of Object.entries(TEAM_META)) if (m && m.abbr && !(m.abbr in aliases)) aliases[m.abbr] = team;
-        const resolve = MF.teamResolver([...new Set(data.flatMap(g => [g.team_a, g.team_b]))], aliases);
-        const r1 = resolve(TEAM1) || TEAM1, r2 = resolve(TEAM2) || TEAM2;
-        if (r1 !== TEAM1 || r2 !== TEAM2) {
-          TEAM1 = r1; TEAM2 = r2;
-          const canon = new URLSearchParams(location.search);
-          canon.set('team1', TEAM1); canon.set('team2', TEAM2);
-          history.replaceState(null, '', `${location.pathname}?${canon.toString()}`);
-          const back = new URLSearchParams(document.getElementById('back-link').search);
-          back.set('team1', TEAM1); back.set('team2', TEAM2);
-          document.getElementById('back-link').href = `compare.html?${back.toString()}`;
-        }
-        renderGames(data);
-      })
-      .catch(err => {
-        document.getElementById('content').innerHTML = `<div class="loading">Failed to load: ${err.message}</div>`;
-      });
+    const loadFull = () => {
+      const needCoaches = COACH1 !== 'all' || COACH2 !== 'all';
+      return Promise.all([
+        FPSData.loadFull(),
+        SITE !== 'all' ? MF.loadSites() : null,
+        needCoaches ? MF.loadCoaches() : null,
+        MF.loadVenues()
+      ])
+        .then(([data, sitesDoc, coachesDoc, venuesDoc]) => {
+          if (sitesDoc) MF.annotateSites(data, sitesDoc);
+          if (coachesDoc) MF.annotateCoaches(data, coachesDoc);
+          VENUE_OF = MF.venueLookup(venuesDoc);
+          if (END === null) {
+            let maxSeason = 0;
+            for (const g of data) { if ((g.season|0) > maxSeason) maxSeason = g.season|0; }
+            END = maxSeason || new Date().getFullYear();
+          }
+          resolveNames([...new Set(data.flatMap(g => [g.team_a, g.team_b]))]);
+          renderGames(data);
+        });
+    };
+
+    loadDerived()
+      .catch(err => { FPSData.warnFallback('games', err); return loadFull(); })
+      .catch(showError);
   }
 
   function renderGames(GAMES) {

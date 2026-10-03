@@ -25,6 +25,7 @@
 <meta name="twitter:image" content="https://frontporchsports.com/og-image.png">
 <meta name="description" content="Browse every FBS program — head-to-head records and team history.">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="data/derived/manifest.json" as="fetch" crossorigin="anonymous">
 <style>
   :root {
     --orange: #fe5c00;
@@ -359,6 +360,8 @@
   </div>
 </footer>
 
+<!-- Slim derived data (data/derived/); falls back to front_porch_games.json. -->
+<script src="js/derived-data.js"></script>
 <script>
   const TEAM_META = {
   'Air Force': {id:'2005',color:'#003594',alt:'#ffffff',abbr:'AF'},
@@ -678,12 +681,17 @@
   const fpsCanon = n => CANON_BY_KEY[fpsKey(n)] || n;
 
   Promise.all([
-    fetch('front_porch_games.json').then(r => r.json()),
+    // Every team name in the dataset: from the derived manifest (a few KB), or from the
+    // full games file if derived data fails.
+    FPSData.manifest().then(m => m.names).catch(err => {
+      FPSData.warnFallback('teams', err);
+      return FPSData.loadFull().then(data => [...new Set(data.flatMap(g => [g.team_a, g.team_b]))]);
+    }),
     fetch('fbs_teams.json').then(r => r.ok ? r.json() : { teams: [] }).catch(() => ({ teams: [] }))
   ])
-  .then(([data, fbsData]) => {
+  .then(([names, fbsData]) => {
     FBS_NAMES = new Set((fbsData.teams || []).map(t => fpsKey(t.name)));
-    const allTeams = [...new Set(data.flatMap(g => [g.team_a, g.team_b]))];
+    const allTeams = [...new Set(names)];
     // Filter to FBS-only when the FBS list loaded successfully; otherwise
     // fall back to the unfiltered list so the page never goes empty.
     const inFbs = FBS_NAMES.size > 0 ? allTeams.filter(t => FBS_NAMES.has(fpsKey(t))) : allTeams;
