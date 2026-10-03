@@ -481,12 +481,11 @@ const TEAM_STATS = {
     'all-time-wins':                     { label: 'All-Time Wins',                       short: 'Wins',                 source: 'wins',       live: true,  basis: true, desc: 'Official NCAA all-time wins, every division included, with vacated wins and NCAA forfeits applied.',
                                            descOnField: 'On-field all-time wins, every division included: wins later vacated or forfeited by NCAA ruling still count, and wins the NCAA awarded by forfeit do not.' },
     'heisman-winners':                   { label: 'Heisman Winners',                     short: 'Heismans',             source: 'heismans',                               desc: 'Heisman Trophy winners by program.' },
-    'weeks-in-poll':                     { label: 'Weeks in AP Poll (as of 2025)',       short: 'AP Weeks',             source: 'weeksInAP',                              desc: 'Total weeks ranked in the Associated Press top 25, through the 2025 season.' },
     'weeks-at-ap-number-one':            { label: 'Weeks at AP #1 (as of 2025)',         short: 'Weeks at #1',          source: 'weeksAtNo1',                             desc: 'Weeks ranked No. 1 in the weekly AP poll, preseason polls not counted, through the 2025 season (NCAA Records Book).' }
   };
   // Temporarily hidden until each is rebuilt from verified sources (records audit, Oct 2026).
   // Old links land on the default category with a short note instead of unverified numbers.
-  const HIDDEN_CATEGORIES = ['recognized-national-championships', 'conference-championships', 'bowl-games', 'all-americans', 'nfl-draft-picks', 'first-round-nfl-draft-picks'];
+  const HIDDEN_CATEGORIES = ['recognized-national-championships', 'weeks-in-poll', 'conference-championships', 'bowl-games', 'all-americans', 'nfl-draft-picks', 'first-round-nfl-draft-picks'];
 
 
   const LOGO_URL = id => id ? `https://a.espncdn.com/i/teamlogos/ncaa/500/${id}.png` : '';

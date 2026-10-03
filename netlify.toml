@@ -12,90 +12,103 @@
     Referrer-Policy        = "strict-origin-when-cross-origin"
     Permissions-Policy     = "geolocation=(), microphone=(), camera=()"
 
-# HTML must never be cached: the weekly refresh can change what a page renders.
+# Pages, scripts and styles are not content-hashed, so a returning visitor must
+# revalidate every one of them on each visit (a cheap 304 when unchanged). Otherwise a
+# deploy can pair new HTML with an old script or dataset. Extensionless page URLs
+# (/team, /rank) get the same header from Netlify's default.
 [[headers]]
   for = "/*.html"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
-# Datasets. Short TTL + revalidate, so a repeat visitor gets a cheap 304 instead
-# of re-downloading the payload, but still picks up the weekly refresh promptly.
-# Netlify applies no caching by default, so without these every visit refetches
-# these files in full.
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Datasets without a content hash in the name: revalidate on every visit (ETag, so an
+# unchanged file is a cheap 304). A TTL here let a returning visitor combine fresh HTML
+# with an hour-old program_stats.json after a deploy (e.g. "122 seasons" until a hard
+# refresh), so none of them get one.
 [[headers]]
   for = "/front_porch_games.json"
   [headers.values]
-    Cache-Control = "public, max-age=300, must-revalidate"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/fbs_teams.json"
   [headers.values]
-    Cache-Control = "public, max-age=3600, must-revalidate"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/program_stats.json"
   [headers.values]
-    Cache-Control = "public, max-age=3600, must-revalidate"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # Season schedules: refreshed weekly in season, so it tracks the games dataset.
 [[headers]]
   for = "/schedules_data.json"
   [headers.values]
-    Cache-Control = "public, max-age=300, must-revalidate"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/historical_opponents.json"
   [headers.values]
-    Cache-Control = "public, max-age=86400, must-revalidate"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # Conference affiliation and coaching tenures change once a season at most, so they
 # cache alongside historical_opponents.json rather than the live game data.
 [[headers]]
   for = "/conference_history.json"
   [headers.values]
-    Cache-Control = "public, max-age=86400, must-revalidate"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/coaching_history.json"
   [headers.values]
-    Cache-Control = "public, max-age=86400, must-revalidate"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # Home/away/neutral per game (scripts/build_game_sites.py). Rebuilt by hand when the
 # history changes, so it caches like the other slow-moving datasets.
 [[headers]]
   for = "/game_sites.json"
   [headers.values]
-    Cache-Control = "public, max-age=3600, must-revalidate"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # Venue name + data source per game, split out of game_sites.json so compare.html
 # never downloads it; only games.html reads it.
 [[headers]]
   for = "/game_venues.json"
   [headers.values]
-    Cache-Control = "public, max-age=3600, must-revalidate"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # Head coach(es) per school-season (scripts/build_coaches_data.py), same cadence.
 [[headers]]
   for = "/coaches_data.json"
   [headers.values]
-    Cache-Control = "public, max-age=3600, must-revalidate"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/upcoming_lines.json"
   [headers.values]
-    Cache-Control = "public, max-age=300, must-revalidate"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # Recomputed by the weekly job, so it tracks the other weekly datasets.
 [[headers]]
   for = "/featured_matchups.json"
   [headers.values]
-    Cache-Control = "public, max-age=300, must-revalidate"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # Hand-maintained rivalry names; changes rarely, like the FBS team list.
 [[headers]]
   for = "/rivalries.json"
   [headers.values]
-    Cache-Control = "public, max-age=3600, must-revalidate"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # Derived data (scripts/build_derived_data.py). Every file except the manifest has a
 # content hash in its name, so it can be cached for a year: new data means a new name.
@@ -104,7 +117,7 @@
 [[headers]]
   for = "/data/derived/manifest.json"
   [headers.values]
-    Cache-Control = "public, max-age=300"
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/data/derived/teams/*"

@@ -26,7 +26,6 @@ Outputs (only these keys change; anything else changing aborts the build):
                       recordAsOf, weeksAtOne (NCAA Records Book p.142),
                       ranks.wins, ranks.winPct, plus the fields named in fieldCorrections
                       and their ranks
-  rankings.html       cats[0] (Win %), cats[5] (Wins) and cats[12] (Weeks at #1) of the RANKINGS literal
   data/sources/records/build_manifest.json  input hashes + per-team totals (drop guard)
 
 Checks (any failure exits non-zero and writes nothing):
@@ -56,8 +55,6 @@ ADJ_FILE = os.path.join(SRC, "record_adjustments.json")
 BOOK_FILE = os.path.join(SRC, "ncaa_records_book_2026.json")
 MANIFEST = os.path.join(SRC, "build_manifest.json")
 CFBD_DIR = os.path.join(SRC, "cfbd")
-RANKINGS_RE = re.compile(r"(const RANKINGS = )(\[.*?\])(;)", re.S)
-WINPCT_CAT, WINS_CAT, WEEKS1_CAT = 0, 5, 12
 BOOK_SEASON = 2025
 WIKI_ROW = re.compile(r'!\s*scope="row"\s*\|\s*(.+?)\n\|\s*([\d,]+)\s*\|\|\s*([\d,]+)\s*\|\|\s*([\d,]+)\s*\|\|')
 
@@ -391,26 +388,6 @@ def build(check_only=False):
     if json.loads(stats_text) != out:
         errors.append("program_stats.json: re-serialised output does not reparse")
 
-    # --- rankings.html (cats[0] Win %, cats[5] Wins)
-    src = read("rankings.html")
-    m = RANKINGS_RE.search(src)
-    if not m:
-        die("rankings.html: could not locate const RANKINGS")
-    rows = json.loads(m.group(2))
-    for r in rows:
-        if r["name"] not in out:
-            errors.append("rankings.html: unknown team %s" % r["name"])
-            continue
-        r["cats"][WINPCT_CAT] = out[r["name"]]["ranks"]["winPct"]
-        r["cats"][WINS_CAT] = out[r["name"]]["ranks"]["wins"]
-        r["cats"][WEEKS1_CAT] = out[r["name"]]["ranks"]["weeksAtOne"]
-    body = ",".join(
-        '{"rank":%d,"name":%s,"display":%s,"avg":%s,"cats":[%s]}' % (
-            r["rank"], json.dumps(r["name"]), json.dumps(r["display"]),
-            json.dumps(r["avg"]), ", ".join(str(c) for c in r["cats"]))
-        for r in rows)
-    rankings_text = src[:m.start(2)] + "[" + body + "]" + src[m.end(2):]
-
     # --- manifest + drop guard
     inputs = {}
     for name in [ADJ_FILE, BOOK_FILE, os.path.join(SRC, adj["baseline"]["file"])] + \
@@ -438,7 +415,8 @@ def build(check_only=False):
         print("\n".join("  FAIL " + e for e in errors), file=sys.stderr)
         die("%d check(s) failed - nothing written" % len(errors))
 
-    targets = {"program_stats.json": stats_text, "rankings.html": rankings_text, MANIFEST: manifest_text}
+    # (/rankings renders straight from program_stats.json, so there is no copy to keep in sync)
+    targets = {"program_stats.json": stats_text, MANIFEST: manifest_text}
     diff = [n for n, txt in targets.items() if not os.path.exists(path(n)) or read(n) != txt]
     if check_only:
         if diff:

@@ -216,10 +216,10 @@ function checkRankCategories(OLD, league) {
   const ps = readJSON('program_stats.json');
   const fbs = (readJSON('fbs_teams.json').teams || []).map(t => t.name);
   let rows = 0;
-  // 6 visible categories; the 6 unverified ones stay hidden until rebuilt from sources.
-  const HIDDEN = ['recognized-national-championships', 'conference-championships', 'bowl-games', 'all-americans', 'nfl-draft-picks', 'first-round-nfl-draft-picks'];
+  // 5 visible categories; the 7 unverified ones stay hidden until rebuilt from sources.
+  const HIDDEN = ['recognized-national-championships', 'weeks-in-poll', 'conference-championships', 'bowl-games', 'all-americans', 'nfl-draft-picks', 'first-round-nfl-draft-picks'];
   eq('rank.html visible categories', ['all-time-record', 'claimed-national-championships',
-    'all-time-wins', 'heisman-winners', 'weeks-in-poll', 'weeks-at-ap-number-one'], ctx.__cats);
+    'all-time-wins', 'heisman-winners', 'weeks-at-ap-number-one'], ctx.__cats);
   eq('rank.html hidden categories (not in navigation)', HIDDEN, ctx.__hidden.filter(s => !ctx.__cats.includes(s)));
   eq('rank.html official/on-field toggle categories', ['all-time-record', 'all-time-wins'], ctx.__basisCats);
   for (const slug of ctx.__cats) {

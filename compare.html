@@ -3266,15 +3266,12 @@
       { title: 'National Championships (Claimed)',
         a: pick(ps1, s1, 'claimedNatChamps', 'ncClaimed', 'ncClaimedRank'),
         b: pick(ps2, s2, 'claimedNatChamps', 'ncClaimed', 'ncClaimedRank') },
-      // Recognized national championships, conference titles, bowl games, consensus
+      // Recognized national championships, weeks in the AP poll, conference titles, bowl games, consensus
       // All-Americans, NFL draft picks, first-round picks and records vs ranked teams are
       // hidden until rebuilt from verified sources (records audit, Oct 2026).
       { title: 'Heisman Winners',
         a: pick(ps1, s1, 'heismanWinners', 'heismans', 'heismansRank'),
         b: pick(ps2, s2, 'heismanWinners', 'heismans', 'heismansRank') },
-      { title: 'Weeks in AP Poll',
-        a: asOf2025(pick(ps1, s1, 'weeksInPoll', 'weeksInAP', 'weeksInAPRank')),
-        b: asOf2025(pick(ps2, s2, 'weeksInPoll', 'weeksInAP', 'weeksInAPRank')) },
       // NCAA Records Book p.142 (preseason polls not counted), through 2025
       { title: 'Weeks at #1',
         a: asOf2025(pick(ps1, s1, 'weeksAtOne', 'weeksAtNo1', 'weeksAtNo1Rank')),

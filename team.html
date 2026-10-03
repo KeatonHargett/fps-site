@@ -1071,9 +1071,8 @@
     else { const e = pr.rank[TEAM]; wpVal = e?fmtPct(e.value):null; wpRank = e?e.rank:null; wpTotal = pr.total; }
     const nc1 = get('claimedNatChamps', 'ncClaimed', 'ncClaimedRank');
     const hw  = get('heismanWinners', 'heismans', 'heismansRank');
-    const wip = get('weeksInPoll', 'weeksInAP', 'weeksInAPRank');
-    // Recognized national championships, conference titles, bowl games, consensus
-    // All-Americans and NFL draft picks are hidden
+    // Recognized national championships, weeks in the AP poll, conference titles, bowl games,
+    // consensus All-Americans and NFL draft picks are hidden
     // until they are rebuilt from verified sources (records audit, Oct 2026).
     const wpSub = ofi ? `${fmtPct(ofi.pct)}* on field` : '';
     const winsSub = ofi ? `${ofi.rec.wins.toLocaleString()}* on field` : '';
@@ -1082,7 +1081,6 @@
       card('National Championships (Claimed)',    nc1.value, '', nc1.rank,  nc1.total),
       card('Total Wins',                          winsVal != null ? winsVal.toLocaleString() : winsVal, winsSub, winsRank, winsTotal),
       card('Heisman Winners',                     hw.value,  '', hw.rank,   hw.total),
-      card('Weeks in AP Poll',                    wip.value, ps ? 'as of 2025' : '', wip.rank,  wip.total)
     ];
     return `<div class="nat-stats-section">
       <div class="nat-stats-grid">${rows.join('')}</div>

@@ -14,16 +14,16 @@
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#003594">
 <meta property="og:title" content="All-Time Rankings — Front Porch Sports">
-<meta property="og:description" content="Every major program ranked by overall historical performance across 13 categories.">
+<meta property="og:description" content="Every FBS program ranked by verified all-time numbers: official NCAA record and wins, claimed national titles, Heisman winners and weeks at AP No. 1.">
 <meta property="og:image" content="https://frontporchsports.com/og-image.png">
 <meta property="og:url" content="https://frontporchsports.com/rankings">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Front Porch Sports">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="All-Time Rankings — Front Porch Sports">
-<meta name="twitter:description" content="Every major program ranked by overall historical performance across 13 categories.">
+<meta name="twitter:description" content="Every FBS program ranked by verified all-time numbers: official NCAA record and wins, claimed national titles, Heisman winners and weeks at AP No. 1.">
 <meta name="twitter:image" content="https://frontporchsports.com/og-image.png">
-<meta name="description" content="Every major program ranked by overall historical performance across 13 categories.">
+<meta name="description" content="Every FBS program ranked by verified all-time numbers: official NCAA record and wins, claimed national titles, Heisman winners and weeks at AP No. 1.">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -228,7 +228,7 @@
   }
   .rk-hero-inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; }
   .rk-hero-logo {
-    display: block; margin: 0 auto 1.1rem; height: 88px; width: auto;
+    display: block; margin: 0 auto 1.1rem; height: auto; max-height: 88px; width: auto; max-width: 100%;
     filter: drop-shadow(0 4px 14px rgba(0,0,0,0.35));
   }
   .rk-hero h1 {
@@ -237,41 +237,6 @@
   }
   .rk-hero h1 .accent { color: var(--orange); }
   .rk-hero p { color: #b9c5dd; max-width: 620px; margin: 1rem auto 0; font-size: 1.02rem; }
-
-  /* Podium */
-  .rk-podium {
-    max-width: 1000px; margin: -4.5rem auto 0; position: relative; z-index: 5;
-    display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 1rem; align-items: end;
-    padding: 0 1.5rem;
-  }
-  .podium-card {
-    background: white; border-radius: 14px; padding: 1.4rem 1rem 1.5rem; text-align: center;
-    box-shadow: 0 12px 34px rgba(0,0,0,0.16); position: relative;
-    border-top: 5px solid var(--medal); text-decoration: none; color: inherit;
-    transition: transform 0.16s ease, box-shadow 0.16s ease;
-  }
-  .podium-card:hover { transform: translateY(-5px); box-shadow: 0 18px 44px rgba(0,0,0,0.22); }
-  .podium-card.gold { padding-top: 2rem; padding-bottom: 2rem; }
-  .podium-medal {
-    position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
-    width: 40px; height: 40px; border-radius: 50%; background: var(--medal);
-    color: white; font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.25); border: 3px solid white;
-  }
-  .podium-card img { width: 74px; height: 74px; margin: 0.5rem auto 0.6rem; display: block; }
-  .podium-card.gold img { width: 92px; height: 92px; }
-  .podium-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; line-height: 1; color: var(--dark); }
-  .podium-card.gold .podium-name { font-size: 2.1rem; }
-  .podium-avg { margin-top: 0.5rem; }
-  .podium-avg .pa-num {
-    font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; line-height: 1; color: var(--orange);
-  }
-  .podium-card.gold .podium-avg .pa-num { font-size: 3rem; }
-  .podium-avg .pa-label {
-    display: block; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.14em;
-    color: var(--gray); font-weight: 600; margin-top: 0.1rem;
-  }
 
   /* Controls */
   .rk-wrap { max-width: 1200px; margin: 2.5rem auto 0; padding: 0 1.5rem 4rem; }
@@ -320,31 +285,15 @@
   .rk-team-cell a { font-weight: 700; color: var(--blue); text-decoration: none; font-size: 0.98rem; white-space: nowrap; }
   .rk-team-cell a:hover { color: var(--orange); text-decoration: underline; }
 
-  .rk-avg {
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.55rem; color: var(--orange);
-    line-height: 1;
-  }
-  .rk-avg-bar {
-    height: 4px; border-radius: 2px; background: var(--orange); margin: 0.2rem auto 0;
-    opacity: 0.85;
-  }
-
-  /* category cells colored by tier */
-  .cat { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; }
-  .cat.t1 { color: #15803d; }   /* elite 1-10 */
-  .cat.t2 { color: #4d7c0f; }   /* 11-25 */
-  .cat.t3 { color: var(--gray); } /* 26-50 */
-  .cat.t4 { color: #b45309; }   /* 51-90 */
-  .cat.t5 { color: #b91c1c; }   /* 91+ */
+  /* table values */
+  .cat { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--dark); }
+  .cat-sub { display: block; font-size: 0.68rem; color: var(--gray); }
 
   .rk-method {
     margin-top: 1.5rem; background: #fff; border-left: 4px solid var(--orange);
     border-radius: 8px; padding: 1rem 1.25rem; font-size: 0.86rem; color: var(--gray);
   }
   .rk-method strong { color: var(--dark); }
-  .rk-legend { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 0.7rem; }
-  .rk-legend span { display: flex; align-items: center; gap: 0.3rem; font-size: 0.78rem; }
-  .rk-legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
   .rk-noresult { text-align: center; padding: 2.5rem; color: var(--gray); font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; }
 
   /* Category leaderboards */
@@ -398,8 +347,6 @@
   .cl-row.cl-osu .cl-name { color: var(--orange); }
 
   @media (max-width: 720px) {
-    .rk-podium { grid-template-columns: 1fr; gap: 1.5rem; margin-top: -3rem; }
-    .podium-card.gold { order: -1; }
     .rk-hero { padding-bottom: 5rem; }
     .cat-grid { grid-template-columns: 1fr; }
   }
@@ -481,25 +428,23 @@
     <div class="rk-hero-inner">
       <img class="rk-hero-logo" src="logo.png" width="480" height="135" alt="Front Porch Sports">
       <h1>ALL-TIME <span class="accent">RANKINGS</span></h1>
-      <p>Every major program ranked by overall historical performance &mdash; 13 categories of championships, wins, talent, and poll dominance, distilled into one number.</p>
+      <p>Every FBS program&rsquo;s verified all-time numbers &mdash; official NCAA record and wins, claimed national titles, Heisman winners and weeks at AP No.&nbsp;1.</p>
     </div>
   </section>
-
-  <div class="rk-podium" id="rk-podium"></div>
 
   <div class="rk-wrap">
     <div class="cat-section">
       <h2 class="cat-section-title">CATEGORY <span class="accent">LEADERS</span></h2>
-      <p class="cat-section-sub">The top 5 programs in each of the 13 ranking categories.</p>
+      <p class="cat-section-sub">The top 5 programs in each verified category.</p>
       <div class="cat-grid" id="rk-cat-grid"></div>
     </div>
 
     <div class="rk-table-block">
       <h2 class="cat-section-title">ALL-TIME <span class="accent">RANKINGS</span></h2>
-      <p class="cat-section-sub">All 50 ranked programs &mdash; tap any column to sort.</p>
+      <p class="cat-section-sub">All FBS programs, ranked by official all-time wins &mdash; tap any column to sort.</p>
       <div class="rk-controls">
         <input type="text" id="rk-search" class="rk-search" placeholder="Search teams...">
-        <span class="rk-hint">Tap any column to sort &middot; lower is better</span>
+        <span class="rk-hint">Tap any column to sort</span>
       </div>
 
       <div class="rk-table-scroll">
@@ -510,16 +455,10 @@
       </div>
 
       <div class="rk-method">
-        <strong>How the ranking works.</strong> Unweighted Average Ranking — average position across best 12 of 13 ranking categories (worst dropped). Lower = better. Each team's score is the average of its
-        best 12 of 13 category rankings &mdash; the single worst category is dropped. Teams that don't meet
-        Winsipedia's ranking requirements are excluded. Data sourced from Winsipedia.
-        <div class="rk-legend">
-          <span><i style="background:#15803d"></i> Top 10</span>
-          <span><i style="background:#4d7c0f"></i> 11&ndash;25</span>
-          <span><i style="background:#6b7280"></i> 26&ndash;50</span>
-          <span><i style="background:#b45309"></i> 51&ndash;90</span>
-          <span><i style="background:#b91c1c"></i> 91+</span>
-        </div>
+        <strong>Composite rankings return once every category is verified.</strong>
+        <span id="rk-asof">All-time records are official NCAA totals (vacated wins and NCAA forfeits applied).</span>
+        Weeks at AP No.&nbsp;1 are through the 2025 season (NCAA Records Book; preseason polls not counted).
+        Conference titles, bowls, All-Americans, NFL draft picks, recognized national titles and weeks in the AP poll are being rebuilt with verified data.
       </div>
     </div>
   </div>
@@ -554,6 +493,7 @@
   </div>
 </footer>
 
+<script src="js/record-notes.js"></script>
 <script>
   const TEAM_META = {
   'Air Force': {id:'2005',color:'#003594',alt:'#ffffff',abbr:'AF'},
@@ -695,45 +635,41 @@
   'Wisconsin': {id:'275',color:'#a00000',alt:'#ffffff',abbr:'WIS'},
   'Wyoming': {id:'2751',color:'#492f24',alt:'#ffc425',abbr:'WYO'}
 };
-  /* cats[8] (Heisman) is regenerated from program_stats.ranks.heismanWinners by
-     scripts/rebuild_heisman.py, so it always agrees with /rank, /compare and
-     /heisman. avg and rank are a legacy composite that predates program_stats.json
-     and is NOT reproducible from cats - no mean over any 12-of-13 subset matches
-     it (the best fit fails 20 of 50 rows). So the composite is deliberately left
-     as-is and may disagree with the corrected Heisman column. The per-category
-     columns are the ones that cross-check against /rank; the composite does not.
-     Recomputing it is a separate job - do not hand-patch cats[8] to make it fit. */
-  const RANKINGS = [{"rank":1,"name":"Alabama","display":"Alabama","avg":2.9,"cats":[2, 1, 1, 6, 1, 3, 24, 3, 5, 6, 3, 4, 1]},{"rank":2,"name":"Ohio St.","display":"Ohio State","avg":3.3,"cats":[1, 6, 6, 4, 4, 2, 55, 2, 2, 3, 1, 1, 2]},{"rank":3,"name":"USC","display":"USC","avg":4.4,"cats":[8, 3, 2, 5, 7, 10, 15, 1, 1, 1, 2, 6, 5]},{"rank":4,"name":"Michigan","display":"Michigan","avg":5.4,"cats":[4, 2, 2, 3, 12, 1, 89, 6, 6, 7, 5, 2, 13]},{"rank":5,"name":"Oklahoma","display":"Oklahoma","avg":5.5,"cats":[6, 7, 7, 1, 5, 6, 36, 7, 2, 9, 10, 3, 3]},{"rank":6,"name":"Texas","display":"Texas","avg":7.2,"cats":[7, 12, 12, 6, 2, 5, 31, 5, 13, 5, 5, 7, 10]},{"rank":7,"name":"Notre Dame","display":"Notre Dame","avg":8.7,"cats":[2, 3, 2, 49, 19, 4, 49, 4, 2, 2, 4, 5, 4]},{"rank":8,"name":"Nebraska","display":"Nebraska","avg":9.2,"cats":[10, 11, 10, 2, 8, 8, 56, 8, 6, 10, 21, 8, 7]},{"rank":9,"name":"Georgia","display":"Georgia","avg":10.8,"cats":[12, 12, 12, 19, 3, 9, 16, 13, 13, 11, 9, 10, 9]},{"rank":10,"name":"LSU","display":"LSU","avg":12.6,"cats":[14, 12, 12, 19, 9, 12, 32, 17, 6, 12, 7, 11, 12]},{"rank":11,"name":"Penn St.","display":"Penn State","avg":12.9,"cats":[9, 22, 19, 38, 9, 7, 18, 12, 20, 4, 13, 9, 17]},{"rank":12,"name":"Tennessee","display":"Tennessee","avg":13.2,"cats":[11, 9, 8, 19, 5, 11, 33, 11, 39, 8, 12, 12, 19]},{"rank":13,"name":"Florida St.","display":"Florida State","avg":13.9,"cats":[13, 16, 16, 14, 14, 78, 19, 16, 6, 16, 14, 15, 6]},{"rank":14,"name":"Clemson","display":"Clemson","avg":15.4,"cats":[20, 16, 16, 8, 13, 13, 51, 22, 39, 15, 8, 19, 16]},{"rank":15,"name":"Florida","display":"Florida","avg":15.8,"cats":[21, 16, 16, 35, 11, 20, 42, 15, 6, 13, 11, 13, 11]},{"rank":16,"name":"Pittsburgh","display":"Pittsburgh","avg":17.2,"cats":[42, 5, 5, 12, 27, 19, 111, 10, 20, 19, 14, 27, 17]},{"rank":17,"name":"Auburn","display":"Auburn","avg":17.8,"cats":[22, 22, 19, 24, 15, 14, 54, 19, 6, 16, 17, 14, 24]},{"rank":18,"name":"Texas A&M","display":"Texas A&M","avg":20.0,"cats":[25, 16, 24, 14, 17, 15, 88, 24, 13, 22, 22, 18, 25]},{"rank":19,"name":"Washington","display":"Washington","avg":21.3,"cats":[23, 22, 19, 13, 23, 17, 56, 14, 39, 18, 14, 20, 22]},{"rank":20,"name":"UCLA","display":"UCLA","avg":23.1,"cats":[40, 26, 24, 17, 29, 56, 85, 17, 20, 14, 19, 16, 25]},{"rank":21,"name":"Georgia Tech","display":"Georgia Tech","avg":23.9,"cats":[41, 12, 12, 19, 15, 21, 36, 21, 39, 29, 29, 28, 45]},{"rank":22,"name":"Michigan St.","display":"Michigan State","avg":24.1,"cats":[34, 9, 8, 28, 41, 35, 78, 20, 39, 19, 20, 22, 14]},{"rank":23,"name":"Minnesota","display":"Minnesota","avg":25.7,"cats":[43, 7, 10, 14, 53, 25, 39, 27, 20, 28, 22, 56, 19]},{"rank":24,"name":"Colorado","display":"Colorado","avg":26.9,"cats":[46, 26, 24, 9, 38, 32, 110, 23, 13, 26, 26, 29, 25]},{"rank":25,"name":"Stanford","display":"Stanford","avg":27.0,"cats":[48, 16, 19, 24, 43, 45, 45, 8, 20, 21, 17, 30, 45]},{"rank":26,"name":"Ole Miss","display":"Ole Miss","avg":27.2,"cats":[58, 16, 24, 38, 21, 41, 13, 30, 39, 35, 33, 25, 30]},{"rank":27,"name":"Wisconsin","display":"Wisconsin","avg":27.7,"cats":[39, 26, 24, 24, 35, 24, 35, 24, 13, 35, 29, 23, 41]},{"rank":28,"name":"Iowa","display":"Iowa","avg":27.8,"cats":[66, 26, 24, 30, 29, 36, 53, 24, 20, 24, 24, 26, 23]},{"rank":29,"name":"Arkansas","display":"Arkansas","avg":28.0,"cats":[44, 26, 24, 30, 19, 26, 95, 27, 39, 25, 25, 21, 41]},{"rank":30,"name":"Oregon","display":"Oregon","avg":29.0,"cats":[37, 34, 33, 28, 25, 33, 82, 32, 20, 29, 29, 24, 21]},{"rank":31,"name":"TCU","display":"TCU","avg":29.4,"cats":[69, 22, 19, 19, 29, 38, 38, 31, 20, 40, 37, 38, 37]},{"rank":32,"name":"Syracuse","display":"Syracuse","avg":30.4,"cats":[55, 26, 24, 40, 43, 23, 20, 35, 20, 37, 34, 42, 25]},{"rank":33,"name":"West Virginia","display":"West Virginia","avg":30.7,"cats":[31, 34, 33, 17, 25, 16, 99, 34, 39, 33, 36, 32, 45]},{"rank":34,"name":"BYU","display":"BYU","avg":30.9,"cats":[35, 26, 24, 10, 22, 62, 81, 36, 20, 46, 49, 34, 34]},{"rank":35,"name":"Virginia Tech","display":"Virginia Tech","avg":32.3,"cats":[29, 34, 33, 35, 34, 18, 107, 40, 39, 23, 32, 30, 45]},{"rank":36,"name":"Utah","display":"Utah","avg":32.4,"cats":[27, 34, 33, 10, 50, 31, 7, 37, 39, 41, 45, 49, 45]},{"rank":37,"name":"Oklahoma St.","display":"Oklahoma State","avg":33.1,"cats":[81, 26, 33, 33, 37, 61, 12, 40, 20, 34, 38, 35, 45]},{"rank":38,"name":"Miami","display":"Miami","avg":33.2,"cats":[17, 34, 33, 49, 17, 42, 76, 50, 13, 50, 50, 17, 8]},{"rank":39,"name":"North Carolina","display":"North Carolina","avg":34.4,"cats":[60, 34, 33, 40, 27, 30, 111, 27, 39, 32, 26, 37, 41]},{"rank":40,"name":"Missouri","display":"Missouri","avg":36.4,"cats":[65, 34, 33, 24, 29, 34, 87, 37, 39, 38, 39, 35, 37]},{"rank":41,"name":"Army","display":"Army","avg":37.2,"cats":[45, 34, 33, 49, 102, 27, 4, 50, 6, 50, 50, 60, 15]},{"rank":42,"name":"Purdue","display":"Purdue","avg":37.8,"cats":[89, 34, 33, 35, 65, 60, 48, 33, 39, 26, 26, 40, 30]},{"rank":43,"name":"Baylor","display":"Baylor","avg":39.5,"cats":[88, 34, 33, 34, 46, 63, 56, 44, 20, 43, 43, 41, 45]},{"rank":44,"name":"Mississippi St.","display":"Mississippi State","avg":39.9,"cats":[104, 34, 33, 46, 46, 77, 42, 44, 39, 42, 39, 43, 30]},{"rank":45,"name":"Arizona St.","display":"Arizona State","avg":40.2,"cats":[28, 34, 33, 49, 35, 56, 92, 50, 39, 50, 50, 33, 45]},{"rank":46,"name":"Boise St.","display":"Boise State","avg":40.7,"cats":[5, 34, 33, 49, 58, 105, 27, 50, 39, 50, 50, 57, 45]},{"rank":47,"name":"Texas Tech","display":"Texas Tech","avg":41.5,"cats":[56, 34, 33, 44, 24, 70, 97, 48, 39, 43, 46, 61, 45]},{"rank":48,"name":"Houston","display":"Houston","avg":42.2,"cats":[68, 34, 33, 30, 38, 112, 77, 44, 20, 48, 43, 44, 45]},{"rank":49,"name":"Navy","display":"Navy","avg":42.3,"cats":[62, 34, 33, 49, 53, 22, 29, 50, 13, 50, 50, 62, 45]},{"rank":50,"name":"South Carolina","display":"South Carolina","avg":42.4,"cats":[89, 34, 33, 46, 53, 55, 111, 42, 20, 29, 39, 47, 45]}];
-  const CAT_SHORT = ["Win%", "Claim NC", "Recog NC", "Conf", "Bowls", "Wins", "Bowl%", "AAs", "Heis", "Draft", "1st Rd", "AP Wks", "Wks #1"];
-  const CAT_FULL = ["All-Time Win Percentage", "Claimed National Championships", "Recognized National Championships", "Conference Championships", "Bowl Appearances", "All-Time Wins", "Bowl Win Percentage", "Consensus All-Americans", "Heisman Winners", "NFL Draft Picks", "NFL First-Round Picks", "Weeks Ranked in AP Poll", "Weeks Ranked #1 in AP Poll"];
   const LOGO_URL = id => id ? `https://a.espncdn.com/i/teamlogos/ncaa/500/${id}.png` : '';
 
-  let sortKey = 'rank';   // 'rank' | 'avg' | 'name' | catIndex (0-12)
-  let sortAsc = true;
+  /* Verified columns only, straight from program_stats.json (scripts/build_program_records.py):
+     official NCAA record / win % / wins, claimed national titles, Heisman winners and
+     weeks at AP No. 1 (NCAA Records Book, through 2025). The old composite ("Unweighted
+     Average Ranking") averaged 13 categories, most of them unverified, so it is hidden -
+     composite rankings return once every category is verified. */
+  const COLS = [
+    { key: 'record',  short: 'Record',      full: 'Official NCAA all-time record', val: p => p.record.wins, fmt: p => `${p.record.wins.toLocaleString()}-${p.record.losses.toLocaleString()}${p.record.ties ? '-' + p.record.ties : ''}` },
+    { key: 'winPct',  short: 'Win %',       full: 'Official all-time winning percentage', val: p => p.winPct, fmt: p => '.' + Math.round(p.winPct * 1000).toString().padStart(3, '0'), slug: 'all-time-record' },
+    { key: 'wins',    short: 'Wins',        full: 'Official all-time wins', val: p => p.record.wins, fmt: p => p.record.wins.toLocaleString(), slug: 'all-time-wins' },
+    { key: 'claimed', short: 'Claimed NC',  full: 'Claimed national championships', val: p => p.claimedNatChamps, fmt: p => p.claimedNatChamps, slug: 'claimed-national-championships' },
+    { key: 'heisman', short: 'Heisman',     full: 'Heisman Trophy winners', val: p => p.heismanWinners, fmt: p => p.heismanWinners, slug: 'heisman-winners' },
+    { key: 'weeks1',  short: 'Wks at #1',   full: 'Weeks at AP No. 1 (as of 2025)', val: p => p.weeksAtOne, fmt: p => p.weeksAtOne, slug: 'weeks-at-ap-number-one' }
+  ];
+  const DISPLAY = { 'Ohio St.': 'Ohio State', 'Oklahoma St.': 'Oklahoma State', 'Penn St.': 'Penn State', 'Florida St.': 'Florida State',
+                    'Michigan St.': 'Michigan State', 'Mississippi St.': 'Mississippi State', 'Arizona St.': 'Arizona State', 'Boise St.': 'Boise State' };
+  const display = t => DISPLAY[t] || t;
+
+  let ROWS = [];           // [{ name, p, rank }] - rank = competition rank by official wins
+  let sortKey = 'wins';    // default: official all-time wins
+  let sortAsc = false;
   let search = '';
 
-  // tier class for a category rank (1 best)
-  function tier(v) {
-    if (v <= 10) return 't1';
-    if (v <= 25) return 't2';
-    if (v <= 50) return 't3';
-    if (v <= 90) return 't4';
-    return 't5';
-  }
-
   function sortedTeams() {
-    let list = RANKINGS.slice();
+    let list = ROWS.slice();
     if (search) {
       const q = search.toLowerCase();
-      list = list.filter(t => t.name.toLowerCase().includes(q) || t.display.toLowerCase().includes(q));
+      list = list.filter(t => t.name.toLowerCase().includes(q) || display(t.name).toLowerCase().includes(q));
     }
+    const col = COLS.find(c => c.key === sortKey);
     list.sort((a, b) => {
-      let av, bv;
-      if (sortKey === 'name') { av = a.name; bv = b.name; return sortAsc ? av.localeCompare(bv) : bv.localeCompare(av); }
-      if (sortKey === 'rank') { av = a.rank; bv = b.rank; }
-      else if (sortKey === 'avg') { av = a.avg; bv = b.avg; }
-      else { av = a.cats[sortKey]; bv = b.cats[sortKey]; } // catIndex
-      return sortAsc ? av - bv : bv - av;
+      if (sortKey === 'name') return sortAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+      const av = sortKey === 'rank' ? a.rank : col.val(a.p), bv = sortKey === 'rank' ? b.rank : col.val(b.p);
+      return (sortAsc ? av - bv : bv - av) || a.rank - b.rank || a.name.localeCompare(b.name);
     });
     return list;
   }
@@ -742,52 +678,40 @@
     const list = sortedTeams();
     const tbody = document.getElementById('rk-body');
     if (!list.length) {
-      tbody.innerHTML = `<tr><td colspan="${3 + CAT_SHORT.length}" class="rk-noresult">No teams match &ldquo;${search}&rdquo;</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="${2 + COLS.length}" class="rk-noresult">No teams match &ldquo;${search}&rdquo;</td></tr>`;
       return;
     }
-    const maxAvg = Math.max(...RANKINGS.map(t => t.avg));
     tbody.innerHTML = list.map(t => {
       const m = TEAM_META[t.name] || {};
       const rankCls = t.rank === 1 ? 'r1' : t.rank === 2 ? 'r2' : t.rank === 3 ? 'r3' : '';
       const osu = t.name === 'Oklahoma St.' ? ' is-osu' : '';
-      const barW = Math.max(8, 100 - (t.avg / maxAvg) * 92); // better avg -> longer bar
-      const cats = t.cats.map(v => `<td><span class="cat ${tier(v)}">${v}</span></td>`).join('');
+      const cells = COLS.map(c => `<td><span class="cat">${c.fmt(t.p)}</span></td>`).join('');
       return `<tr class="${osu}">
         <td><span class="rk-rank ${rankCls}">${t.rank}</span></td>
         <td>
           <div class="rk-team-cell">
             <img src="${LOGO_URL(m.id)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
-            <a href="team.html?team=${encodeURIComponent(t.name)}">${t.display}</a>
+            <a href="team.html?team=${encodeURIComponent(t.name)}">${display(t.name)}</a>
           </div>
         </td>
-        <td>
-          <div class="rk-avg">${t.avg.toFixed(1)}</div>
-          <div class="rk-avg-bar" style="width:${barW}%"></div>
-        </td>
-        ${cats}
+        ${cells}
       </tr>`;
     }).join('');
   }
 
   function renderHead() {
     const head = document.getElementById('rk-head');
-    const arrow = k => sortKey === k ? `<span class="sort-ar">${sortAsc ? '\u25B2' : '\u25BC'}</span>` : '';
-    const cls = k => sortKey === k ? ' class="sorted"' : '';
+    const arrow = k => sortKey === k ? `<span class="sort-ar">${sortAsc ? '▲' : '▼'}</span>` : '';
     let html = `<tr>
-      <th${sortKey==='rank'?' class="sorted"':''} data-key="rank">Rank${arrow('rank')}</th>
-      <th class="col-team${sortKey==='name'?' sorted':''}" data-key="name">Team${arrow('name')}</th>
-      <th${sortKey==='avg'?' class="sorted"':''} data-key="avg" title="Unweighted Average Ranking">Avg${arrow('avg')}</th>`;
-    CAT_SHORT.forEach((c, i) => {
-      html += `<th${sortKey===i?' class="sorted"':''} data-key="${i}" title="${CAT_FULL[i]}">${c}${arrow(i)}</th>`;
-    });
-    html += `</tr>`;
-    head.innerHTML = html;
+      <th${sortKey==='rank'?' class="sorted"':''} data-key="rank" title="Rank by official all-time wins">Rank${arrow('rank')}</th>
+      <th class="col-team${sortKey==='name'?' sorted':''}" data-key="name">Team${arrow('name')}</th>`;
+    COLS.forEach(c => { html += `<th${sortKey===c.key?' class="sorted"':''} data-key="${c.key}" title="${c.full}">${c.short}${arrow(c.key)}</th>`; });
+    head.innerHTML = html + `</tr>`;
     head.querySelectorAll('th').forEach(th => {
       th.onclick = () => {
-        const k = th.dataset.key;
-        const key = (k === 'rank' || k === 'avg' || k === 'name') ? k : parseInt(k);
-        if (sortKey === key) { sortAsc = !sortAsc; }
-        else { sortKey = key; sortAsc = (key !== 'name') ? true : true; }
+        const key = th.dataset.key;
+        if (sortKey === key) sortAsc = !sortAsc;
+        else { sortKey = key; sortAsc = (key === 'name' || key === 'rank'); }
         renderHead(); renderTable();
       };
     });
@@ -798,64 +722,44 @@
     renderTable();
   });
 
-  // ===== Category leaderboards (top 5 per category) =====
+  // ===== Category leaderboards (top 5 per verified category) =====
   function renderCategoryBoards() {
     const grid = document.getElementById('rk-cat-grid');
-    const cards = CAT_FULL.map((label, ci) => {
-      // sort all teams by their rank in this category; tie-break by overall rank
-      const ranked = RANKINGS.slice().sort((a,b) => a.cats[ci] - b.cats[ci] || a.rank - b.rank);
-      const top5 = ranked.slice(0, 5);
-      const leader = top5[0];
-      const lm = TEAM_META[leader.name] || {};
+    grid.innerHTML = COLS.filter(c => c.slug).map(c => {
+      const top5 = ROWS.slice().sort((a, b) => c.val(b.p) - c.val(a.p) || a.rank - b.rank).slice(0, 5);
+      const lm = TEAM_META[top5[0].name] || {};
       const rows = top5.map((t, i) => {
         const osu = t.name === 'Oklahoma St.' ? ' cl-osu' : '';
         return `<span class="cl-row${osu}" data-href="team.html?team=${encodeURIComponent(t.name)}">
-          <span class="cl-pos">${i+1}</span>
-          <span class="cl-name">${t.display}</span>
+          <span class="cl-pos">${i + 1}</span>
+          <span class="cl-name">${display(t.name)}</span>
         </span>`;
       }).join('');
-      // v28 Fix 1: category card links to dedicated rank.html page
-      const catSlug = CAT_FULL[ci].toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g,'');
-      return `<a class="cat-card cat-card-link" href="rank.html?cat=${catSlug}">
-        <div class="cat-card-head">${label} <span class="cat-card-chevron">&rsaquo;</span></div>
+      return `<a class="cat-card cat-card-link" href="rank.html?cat=${c.slug}">
+        <div class="cat-card-head">${c.full} <span class="cat-card-chevron">&rsaquo;</span></div>
         <div class="cat-card-body">
           <img class="cat-leader-logo" src="${LOGO_URL(lm.id)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
           <div class="cl-list">${rows}</div>
         </div>
-      </div></a>`;
-    }).join('');
-    grid.innerHTML = cards;
-  }
-
-  renderHead();
-  renderTable();
-  renderCategoryBoards();
-</script>
-
-
-<script>
-  (function(){
-    const medals = [
-      {cls:'gold', medal:'1', color:'#e0a000'},
-      {cls:'silver', medal:'2', color:'#aab2bd'},
-      {cls:'bronze', medal:'3', color:'#c87f4a'}
-    ];
-    // visual order: 2nd, 1st, 3rd
-    const order = [1, 0, 2];
-    const top3 = RANKINGS.slice(0, 3);
-    const wrap = document.getElementById('rk-podium');
-    wrap.innerHTML = order.map(idx => {
-      const t = top3[idx];
-      const m = TEAM_META[t.name] || {};
-      const md = medals[idx];
-      return `<a class="podium-card ${md.cls}" style="--medal:${md.color}" href="team.html?team=${encodeURIComponent(t.name)}">
-        <div class="podium-medal">${md.medal}</div>
-        <img src="${LOGO_URL(m.id)}" alt="${t.display}" loading="lazy" onerror="this.style.visibility='hidden'">
-        <div class="podium-avg"><span class="pa-num">${t.avg.toFixed(1)}</span><span class="pa-label">Avg Ranking</span></div>
       </a>`;
     }).join('');
-  })();
+  }
+
+  fetch('program_stats.json').then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(ps => {
+    const teams = Object.keys(ps).filter(k => k !== '_meta' && ps[k] && ps[k].record);
+    const wins = teams.map(t => ps[t].record.wins).sort((a, b) => b - a);
+    ROWS = teams.map(t => ({ name: t, p: ps[t], rank: wins.indexOf(ps[t].record.wins) + 1 }));
+    const asOf = (ps[teams[0]] || {}).recordAsOf;
+    if (asOf && window.FPSRecordNote) document.getElementById('rk-asof').textContent =
+      'All-time records are official NCAA totals (vacated wins and NCAA forfeits applied), ' +
+      (asOf.inProgress ? `through completed games as of ${FPSRecordNote.formatDate(asOf.date)}.` : `through the ${asOf.season} season.`);
+    renderHead(); renderTable(); renderCategoryBoards();
+  }).catch(err => {
+    document.getElementById('rk-body').innerHTML = `<tr><td colspan="${2 + COLS.length}" class="rk-noresult">Failed to load rankings (${err.message})</td></tr>`;
+  });
 </script>
+
+
 
 </body>
 </html>
