@@ -147,6 +147,12 @@
   [headers.values]
     Cache-Control = "public, max-age=604800, stale-while-revalidate=86400"
 
+# Rivalry badges (PNG + SVG). Also not content-hashed, so a week, same as brand images.
+[[headers]]
+  for = "/rivalry-logos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
 [[headers]]
   for = "/favicon.ico"
   [headers.values]

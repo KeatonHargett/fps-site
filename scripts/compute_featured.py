@@ -360,7 +360,10 @@ def main() -> int:
             "tieWidth": round(ties / denom * 100, 2),
             "bWidth": round(bw / denom * 100, 2),
             "streak": streak,
-            "rivalry": m["_rivalry"] or None,
+            # Only the display fields: rivalries.json also carries source/license metadata
+            # that index.html never reads.
+            "rivalry": ({k: m["_rivalry"].get(k) for k in ("name", "trophy", "logo")}
+                        if m["_rivalry"] else None),
             "url": "compare.html?team1=%s&team2=%s" % (
                 requests.utils.quote(a, safe=""), requests.utils.quote(b, safe="")),
             "score": m["_score"],
