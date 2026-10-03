@@ -3,9 +3,11 @@
  "source": "CollegeFootballData /records (total: all games incl. non-FBS opponents)",
  "fetched": "2026-10-03",
  "final": false,
+ "lastGame": "2026-10-03",
+ "lastGameKickoffUtc": "2026-10-03T16:00:00.000Z",
  "records": {
   "Air Force": [
-   2,
+   3,
    1,
    0
   ],
@@ -76,7 +78,7 @@
   ],
   "Boston College": [
    2,
-   2,
+   3,
    0
   ],
   "Bowling Green": [
@@ -101,7 +103,7 @@
   ],
   "Charlotte": [
    0,
-   4,
+   5,
    0
   ],
   "Cincinnati": [
@@ -136,7 +138,7 @@
   ],
   "Delaware": [
    2,
-   2,
+   3,
    0
   ],
   "Duke": [
@@ -240,7 +242,7 @@
    0
   ],
   "Kansas": [
-   1,
+   2,
    2,
    0
   ],
@@ -270,7 +272,7 @@
    0
   ],
   "Liberty": [
-   3,
+   4,
    1,
    0
   ],
@@ -305,7 +307,7 @@
    0
   ],
   "Memphis": [
-   3,
+   4,
    1,
    0
   ],
@@ -321,7 +323,7 @@
   ],
   "Michigan": [
    3,
-   1,
+   2,
    0
   ],
   "Michigan St.": [
@@ -331,11 +333,11 @@
   ],
   "Middle Tennessee": [
    2,
-   2,
+   3,
    0
   ],
   "Minnesota": [
-   3,
+   4,
    1,
    0
   ],
@@ -356,7 +358,7 @@
   ],
   "Navy": [
    1,
-   2,
+   3,
    0
   ],
   "Nebraska": [
@@ -381,7 +383,7 @@
   ],
   "North Carolina": [
    2,
-   1,
+   2,
    0
   ],
   "North Carolina St.": [
@@ -400,12 +402,12 @@
    0
   ],
   "Northwestern": [
-   2,
+   3,
    1,
    0
   ],
   "Notre Dame": [
-   4,
+   5,
    0,
    0
   ],
@@ -451,11 +453,11 @@
   ],
   "Penn St.": [
    3,
-   1,
+   2,
    0
   ],
   "Pittsburgh": [
-   4,
+   5,
    0,
    0
   ],
@@ -475,7 +477,7 @@
    0
   ],
   "SMU": [
-   3,
+   4,
    1,
    0
   ],
@@ -516,7 +518,7 @@
   ],
   "Stanford": [
    2,
-   2,
+   3,
    0
   ],
   "Syracuse": [
@@ -641,11 +643,11 @@
   ],
   "Virginia Tech": [
    4,
-   0,
+   1,
    0
   ],
   "Wake Forest": [
-   3,
+   4,
    1,
    0
   ],

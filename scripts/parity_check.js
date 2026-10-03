@@ -283,6 +283,27 @@ function checkProgramRecords() {
       p.recordOnField.wins - p.record.wins, (a.vacated | 0) + (a.forfeited | 0) - (a.awarded | 0));
     n++;
   }
+  // Footnotes: the shared js/record-notes.js wording must describe the asterisked on-field
+  // number for every program - "includes" what on-field adds back, "excludes" what the NCAA
+  // awarded by forfeit - with the counts from recordAdjust.
+  const nctx = {}; vm.createContext(nctx);
+  vm.runInContext(read('js/record-notes.js'), nctx);
+  const RN = nctx.FPSRecordNote;
+  for (const t of teams) {
+    const p = ps[t], a = p.recordAdjust, f = RN.onField(p);
+    const differs = JSON.stringify(p.record) !== JSON.stringify(p.recordOnField);
+    eq(`${t}: on-field line shown exactly when official and on-field differ`, differs, !!f);
+    if (!f) continue;
+    const lost = a.vacated + a.forfeited;
+    const want = [];
+    if (lost) want.push(`includes ${lost.toLocaleString('en-US')} win${lost === 1 ? '' : 's'} later ` +
+      (a.vacated && a.forfeited ? 'vacated or forfeited' : a.vacated ? 'vacated' : 'forfeited'));
+    if (a.awarded) want.push(`excludes ${a.awarded} win${a.awarded === 1 ? '' : 's'} awarded by forfeit`);
+    eq(`${t}: footnote wording`, ('*' + want.join('; ')).toLowerCase(), f.note.toLowerCase());
+    if (p.recordOnField.wins < p.record.wins) eq(`${t}: lower on-field total says "excludes ... awarded by forfeit"`, true, /excludes \d+ wins? awarded by forfeit/i.test(f.note));
+  }
+  eq('as-of date formatting (no UTC day shift)', 'Oct. 3, 2026', RN.formatDate('2026-10-03'));
+
   eq('Oklahoma St. claimed national titles', 1, ps['Oklahoma St.'].claimedNatChamps);
   eq('Oklahoma St. recognized national titles (1945 AFCA)', 1, ps['Oklahoma St.'].recognizedNatChamps);
   eq('Ohio St. claimed national titles (adds 2024)', 9, ps['Ohio St.'].claimedNatChamps);

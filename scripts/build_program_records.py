@@ -274,7 +274,9 @@ def build(check_only=False):
                 errors.append("%s %s record went negative: %s" % (t, label, r))
 
     last = max(seasons)
-    as_of = {"season": last, "inProgress": not seasons[last]["final"], "date": seasons[last]["fetched"]}
+    # date = last completed game (America/Chicago), recorded by --fetch-current
+    as_of = {"season": last, "inProgress": not seasons[last]["final"],
+             "date": seasons[last].get("lastGame") or seasons[last]["fetched"]}
 
     # --- program_stats.json
     counts = adjust_counts(teams, adj)
@@ -397,6 +399,24 @@ def build(check_only=False):
 
 
 # ------------------------------------------------------------------ network modes
+def chicago_date(utc_iso):
+    """CFBD kickoff (UTC ISO 8601) -> calendar date in America/Chicago.
+
+    US Central: CDT (UTC-5) from 2:00 local on the second Sunday of March to 2:00 local
+    on the first Sunday of November, CST (UTC-6) otherwise. Done by hand so the build needs
+    no tz database (Windows Python ships without one). A Saturday-night kickoff at
+    01:30Z on Sunday is still Saturday in Chicago - the date the label must show."""
+    t = dt.datetime.strptime(utc_iso[:19], "%Y-%m-%dT%H:%M:%S")
+
+    def nth_sunday(year, month, n):
+        d = dt.datetime(year, month, 1)
+        return d + dt.timedelta(days=(6 - d.weekday()) % 7 + 7 * (n - 1))
+    dst_start = nth_sunday(t.year, 3, 2) + dt.timedelta(hours=8)   # 02:00 CST = 08:00Z
+    dst_end = nth_sunday(t.year, 11, 1) + dt.timedelta(hours=7)    # 02:00 CDT = 07:00Z
+    offset = 5 if dst_start <= t < dst_end else 6
+    return (t - dt.timedelta(hours=offset)).strftime("%Y-%m-%d")
+
+
 def fetch_current():
     sys.path.insert(0, os.path.join(ROOT, "scripts"))
     from refresh_games import current_season, normalize
@@ -434,8 +454,22 @@ def fetch_current():
         if lost or len(recs) < len(teams) - 5:
             die("CFBD /records %d covered %d of %d programs (missing vs committed file: %s) - season file left unchanged"
                 % (y, len(recs), len(teams), ", ".join(lost) or "-"))
+        # Date of the last completed game involving one of our programs, in America/Chicago:
+        # this is what the pages' "Records through games of ..." label shows.
+        kickoffs = []
+        for st in ("regular", "postseason"):
+            games = api_get("/games", {"year": y, "seasonType": st}, key)
+            if games is None:
+                die("CFBD /games %d %s failed - season file left unchanged" % (y, st))
+            for g in games:
+                if g.get("completed") and g.get("startDate") and \
+                        (fold(g.get("homeTeam", "")) in key_of or fold(g.get("awayTeam", "")) in key_of):
+                    kickoffs.append(g["startDate"])
+        last_kick = max(kickoffs) if kickoffs else None
         doc = {"season": y, "source": "CollegeFootballData /records (total: all games incl. non-FBS opponents)",
                "fetched": dt.datetime.utcnow().strftime("%Y-%m-%d"), "final": y < season,
+               "lastGame": chicago_date(last_kick) if last_kick else None,
+               "lastGameKickoffUtc": last_kick,
                "records": dict(sorted(recs.items()))}
         with io.open(path(os.path.join(CFBD_DIR, "records_%d.json" % y)), "w", encoding="utf-8", newline="\n") as f:
             f.write(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")

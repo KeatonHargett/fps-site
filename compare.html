@@ -1192,6 +1192,7 @@
 <script src="js/range-filter.js"></script>
 <!-- Slim per-team data (data/derived/); falls back to front_porch_games.json. -->
 <script src="js/derived-data.js"></script>
+<script src="js/record-notes.js"></script>
 <!-- Shared location filter, filter pipeline and URL contract; defines window.FPSMatchupFilter. -->
 <script src="js/matchup-filter.js"></script>
 <script>
@@ -3223,18 +3224,8 @@
 
     // Official NCAA record is the main figure; when vacated wins or NCAA forfeits make the
     // on-field record differ it rides along as a second, asterisked line + footnote.
-    const onField = ps => {
-      if (!ps || !ps.recordOnField || !ps.record) return null;
-      const o = ps.record, f = ps.recordOnField;
-      if (o.wins === f.wins && o.losses === f.losses && o.ties === f.ties) return null;
-      // recordAdjust (build_program_records.py): vacated / forfeited / awarded-by-forfeit wins
-      const a = ps.recordAdjust || { vacated: 0, forfeited: 0, awarded: 0 };
-      const parts = [], x = a.vacated + a.forfeited, pl = n => n === 1 ? '' : 's';
-      if (x) parts.push(`Includes ${x.toLocaleString()} win${pl(x)} later vacated or forfeited`);
-      if (a.awarded) parts.push(`${parts.length ? 'counts' : 'Counts'} ${a.awarded} game${pl(a.awarded)} awarded by NCAA forfeit as played`);
-      const note = parts.join('; ') || 'Includes games later vacated by NCAA ruling';
-      return { rec: f, pct: ps.winPctOnField, note };
-    };
+    // shared wording: js/record-notes.js (note starts with "*")
+    const onField = ps => (window.FPSRecordNote ? FPSRecordNote.onField(ps) : null);
     const of1 = onField(ps1), of2 = onField(ps2);
     const winsOf = (team, ps) => {
       if (ps) {
@@ -3434,7 +3425,7 @@
         <div class="scc-side">${head('b')}${rows.map(r => card(r, 'b')).join('')}</div>
       </div>
       <p class="stat-comparison-footnote">All-time records are official NCAA totals (vacated wins and NCAA forfeits applied).${
-        [[t1, of1], [t2, of2]].filter(x => x[1]).map(([t, f]) => ` *${t} on field: ${f.note}.`).join('')}</p>
+        [[t1, of1], [t2, of2]].filter(x => x[1]).map(([t, f]) => ` *${t} on field: ${f.note.slice(1)}.`).join('')}</p>
     </div>`;
   }
 

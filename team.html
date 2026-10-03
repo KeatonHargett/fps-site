@@ -581,6 +581,7 @@
 
 <!-- Slim derived data (data/derived/); falls back to front_porch_games.json. -->
 <script src="js/derived-data.js"></script>
+<script src="js/record-notes.js"></script>
 <script>
   const TEAM_META = {
   'Air Force': {id:'2005',color:'#003594',alt:'#ffffff',abbr:'AF'},
@@ -1017,20 +1018,10 @@
   }
 
   // Official NCAA record is the main figure. When vacated wins or NCAA forfeits make the
-  // on-field record differ, it is shown as a second, asterisked line with this footnote.
+  // on-field record differ, it is shown as a second, asterisked line with a footnote
+  // (shared wording: js/record-notes.js).
   function onFieldInfo(ps) {
-    if (!ps || !ps.recordOnField || !ps.record) return null;
-    const o = ps.record, f = ps.recordOnField;
-    if (o.wins === f.wins && o.losses === f.losses && o.ties === f.ties) return null;
-    return { rec: f, pct: ps.winPctOnField, note: '*' + onFieldNote(ps) };
-  }
-  // recordAdjust (build_program_records.py): vacated / forfeited wins and wins awarded by forfeit
-  function onFieldNote(ps) {
-    const a = ps.recordAdjust || { vacated: 0, forfeited: 0, awarded: 0 };
-    const parts = [], x = a.vacated + a.forfeited, pl = n => n === 1 ? '' : 's';
-    if (x) parts.push(`Includes ${x.toLocaleString()} win${pl(x)} later vacated or forfeited`);
-    if (a.awarded) parts.push(`${parts.length ? 'counts' : 'Counts'} ${a.awarded} game${pl(a.awarded)} awarded by NCAA forfeit as played`);
-    return parts.join('; ') || 'Includes games later vacated by NCAA ruling';
+    return window.FPSRecordNote ? FPSRecordNote.onField(ps) : null;
   }
 
   function renderNationalStatCards(tColor) {

@@ -411,6 +411,7 @@
 
 <!-- Slim derived data (data/derived/); falls back to front_porch_games.json. -->
 <script src="js/derived-data.js"></script>
+<script src="js/record-notes.js"></script>
 <script>
 /* Legacy fallback only - superseded by program_stats.json, and rendered solely
    if that fetch fails. These are a pre-program_stats snapshot over a different
@@ -936,7 +937,9 @@ const TEAM_STATS = {
     const foot = document.getElementById('rk-foot');
     if (!on) { foot.hidden = true; return; }
     const asOf = (Object.values(PROGRAM_STATS).find(p => p && p.recordAsOf) || {}).recordAsOf;
-    const when = asOf ? ` Records through ${asOf.inProgress ? 'games of ' + asOf.date + ' (' + asOf.season + ' season in progress)' : 'the ' + asOf.season + ' season'}.` : '';
+    // asOf.date = date of the last completed game, America/Chicago (build_program_records.py)
+    const day = d => (window.FPSRecordNote ? FPSRecordNote.formatDate(d) : d);
+    const when = asOf ? ` Records through ${asOf.inProgress ? 'games of ' + day(asOf.date) + ' (' + asOf.season + ' season in progress)' : 'the ' + asOf.season + ' season'}.` : '';
     const starred = rows.some(r => r.alt != null);
     foot.textContent = (starred
       ? (basis === 'onfield'
