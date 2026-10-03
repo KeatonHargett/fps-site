@@ -833,5 +833,62 @@
     42
    ]
   }
+ },
+ "weeksAtNo1": {
+  "page": 142,
+  "title": "Most Weeks At No. 1 - All-Time",
+  "note": "Complete list; does not count preseason polls. Through the 2025 season (AP poll). Programs not listed have 0.",
+  "rows": {
+   "Alabama": 141,
+   "Ohio St.": 120,
+   "Oklahoma": 101,
+   "Notre Dame": 98,
+   "USC": 91,
+   "Florida St.": 72,
+   "Nebraska": 70,
+   "Miami": 68,
+   "Georgia": 55,
+   "Texas": 49,
+   "Florida": 41,
+   "LSU": 38,
+   "Michigan": 36,
+   "Michigan St.": 29,
+   "Army": 27,
+   "Clemson": 25,
+   "Penn St.": 21,
+   "Pittsburgh": 21,
+   "Minnesota": 18,
+   "Tennessee": 18,
+   "Oregon": 16,
+   "Washington": 15,
+   "Iowa": 11,
+   "Auburn": 9,
+   "Colorado": 7,
+   "Syracuse": 7,
+   "Texas A&M": 7,
+   "UCLA": 7,
+   "Maryland": 6,
+   "Mississippi St.": 5,
+   "Northwestern": 5,
+   "Ole Miss": 5,
+   "Purdue": 5,
+   "BYU": 4,
+   "California": 4,
+   "Virginia": 3,
+   "Indiana": 2,
+   "Missouri": 2,
+   "SMU": 2,
+   "TCU": 2,
+   "Arkansas": 1,
+   "Boston College": 1,
+   "North Carolina": 1,
+   "Wisconsin": 1
+  },
+  "excluded": {
+   "Cornell": {
+    "weeks": 4,
+    "note": "No longer FBS (# in the Book)"
+   }
+  }
  }
 }

@@ -1,8 +1,8 @@
 {
  "_doc": "Written by scripts/build_program_records.py - do not hand-edit.",
  "inputs": {
-  "data/sources/records/record_adjustments.json": "e770197e00588d8f6162de480f94fc544b96722a02915fd5be91b3bfd7f1876d",
-  "data/sources/records/ncaa_records_book_2026.json": "85e243467630236ce3edac309c87ca2a733966a2d6711ade2c2f152ba713b68f",
+  "data/sources/records/record_adjustments.json": "f663a4b0cadb1ff9e8bbcb6fd34d2bd052441700f9f728b9374193a4d4c2c271",
+  "data/sources/records/ncaa_records_book_2026.json": "9e541b6ca6f07189fcf951b3eec3be1797b15e3de377ae0652677f763135b081",
   "data/sources/records/wiki_fbs_wl_rev1271870786.json": "d5f70e5e87337534d88ecb0e092958227b87d8244bef35569de22e4319967796",
   "data/sources/records/cfbd/records_2019.json": "d2288c768b9c3e3169c712413414abf3102afecce6e4fd4ee170cb769b5a68ad",
   "data/sources/records/cfbd/records_2020.json": "673757bccd25d45941a1c1dfb8e4a1beb7590850e17a93831e4a49ed988b5ed7",

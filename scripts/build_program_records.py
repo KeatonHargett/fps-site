@@ -22,10 +22,11 @@ Inputs (data/sources/records/, every entry sourced):
   record_adjustments.json         vacated wins, forfeits, overrides, decisions, title fixes
 
 Outputs (only these keys change; anything else changing aborts the build):
-  program_stats.json  record, winPct, recordOnField, winPctOnField, recordAdjust, recordAsOf,
+  program_stats.json  record, winPct, recordOnField, winPctOnField, recordAdjust, recordSeasons,
+                      recordAsOf, weeksAtOne (NCAA Records Book p.142),
                       ranks.wins, ranks.winPct, plus the fields named in fieldCorrections
                       and their ranks
-  rankings.html       cats[0] (Win %) and cats[5] (Wins) of the RANKINGS literal
+  rankings.html       cats[0] (Win %), cats[5] (Wins) and cats[12] (Weeks at #1) of the RANKINGS literal
   data/sources/records/build_manifest.json  input hashes + per-team totals (drop guard)
 
 Checks (any failure exits non-zero and writes nothing):
@@ -56,7 +57,7 @@ BOOK_FILE = os.path.join(SRC, "ncaa_records_book_2026.json")
 MANIFEST = os.path.join(SRC, "build_manifest.json")
 CFBD_DIR = os.path.join(SRC, "cfbd")
 RANKINGS_RE = re.compile(r"(const RANKINGS = )(\[.*?\])(;)", re.S)
-WINPCT_CAT, WINS_CAT = 0, 5
+WINPCT_CAT, WINS_CAT, WEEKS1_CAT = 0, 5, 12
 BOOK_SEASON = 2025
 WIKI_ROW = re.compile(r'!\s*scope="row"\s*\|\s*(.+?)\n\|\s*([\d,]+)\s*\|\|\s*([\d,]+)\s*\|\|\s*([\d,]+)\s*\|\|')
 
@@ -97,6 +98,40 @@ def wiki_rows(doc):
         name = re.sub(r"<ref.*", "", name).strip()
         rows[name] = [int(m.group(i).replace(",", "")) for i in (2, 3, 4)]
     return rows
+
+
+WIKI_YEARS = re.compile(r'!\s*scope="row"\s*\|\s*(.+?)\n\|\s*[\d,]+\s*\|\|\s*[\d,]+\s*\|\|\s*[\d,]+\s*\|\|'
+                        r'\s*\{\{Winning percentage[^}]*\}\}\s*\|\|\s*(\d+)\s*\|\|')
+
+
+def wiki_years(doc):
+    """The table's Years column: NCAA seasons played through the baseline season."""
+    out = {}
+    for m in WIKI_YEARS.finditer(doc["wikitext"]):
+        link = re.search(r"\[\[([^|\]]+)\|?([^\]]*)\]\]", m.group(1))
+        name = (link.group(2) or link.group(1)) if link else m.group(1)
+        out[re.sub(r"<ref.*", "", name).strip()] = int(m.group(2))
+    return out
+
+
+def season_counts(teams, adj, years, seasons, cap=None):
+    """NCAA seasons: Years through the baseline (or the override's own count) plus every
+    later season in which the program played, optionally only through season `cap`."""
+    overrides = {o["team"]: o for o in adj["baselineOverrides"]}
+    out = {}
+    for t in teams:
+        if t in overrides:
+            n, through = overrides[t]["years"], overrides[t]["throughSeason"]
+        else:
+            n, through = years.get(wiki_name(t, adj["nameMap"])), adj["baseline"]["throughSeason"]
+            if n is None:
+                die("%s: no Years value in the pinned Wikipedia revision" % t)
+        for y, doc in seasons.items():
+            r = doc["records"].get(t)
+            if y > through and (cap is None or y <= cap) and r and sum(r):
+                n += 1
+        out[t] = n
+    return out
 
 
 def wiki_name(team, name_map):
@@ -220,7 +255,7 @@ def _forfeit(recs, team, game, sign):
         r[0] += sign
 
 
-def cross_check(teams, adj, wiki, seasons, book):
+def cross_check(teams, adj, wiki, years, seasons, book):
     errors = []
     exc = adj["bookExceptions"]
     official25, _, _ = compute(teams, adj, wiki, seasons, cap=BOOK_SEASON)
@@ -252,6 +287,15 @@ def cross_check(teams, adj, wiki, seasons, book):
     for t, e in exc.items():
         if "allTime" in e and official25.get(t) == e["allTime"]["book"]:
             errors.append("bookExceptions[%s] is stale: build now matches the Records Book" % t)
+    # NCAA season count through 2025 == the Records Book "Yrs" column
+    yrs25 = season_counts(teams, adj, years, seasons, cap=BOOK_SEASON)
+    for t, row in book["allTime"]["rows"].items():
+        if yrs25[t] != row["years"]:
+            errors.append("Records Book p.110 %s seasons: built %d, book %d" % (t, yrs25[t], row["years"]))
+    # weeks at AP No. 1 comes straight from the Book's complete list; every row must be ours
+    for t in book["weeksAtNo1"]["rows"]:
+        if t not in teams:
+            errors.append("Records Book p.142 weeks at No. 1: unknown program %s" % t)
     return errors
 
 
@@ -261,12 +305,13 @@ def build(check_only=False):
     teams = [k for k in data if k != "_meta"]
     adj = load(ADJ_FILE)
     book = load(BOOK_FILE)
-    wiki = wiki_rows(load(os.path.join(SRC, adj["baseline"]["file"])))
+    wiki_doc = load(os.path.join(SRC, adj["baseline"]["file"]))
+    wiki, years = wiki_rows(wiki_doc), wiki_years(wiki_doc)
     seasons = cfbd_seasons()
     if not seasons:
         die("no CFBD season files in %s" % CFBD_DIR)
 
-    errors = cross_check(teams, adj, wiki, seasons, book)
+    errors = cross_check(teams, adj, wiki, years, seasons, book)
     official, onfield, base_info = compute(teams, adj, wiki, seasons)
     for t in teams:
         for label, r in (("official", official[t]), ("on-field", onfield[t])):
@@ -285,6 +330,9 @@ def build(check_only=False):
         if onfield[t][0] - official[t][0] != c["vacated"] + c["forfeited"] - c["awarded"]:
             errors.append("%s: on-field minus official wins (%d) does not equal the adjustment counts %s"
                           % (t, onfield[t][0] - official[t][0], c))
+    n_seasons = season_counts(teams, adj, years, seasons)
+    wk1 = book["weeksAtNo1"]["rows"]
+    wk1_rank = competition_ranks([wk1.get(t, 0) for t in teams])
     win_rank = competition_ranks([official[t][0] for t in teams])
     pct_rank = competition_ranks([pct(official[t]) for t in teams])
     out = {}
@@ -297,6 +345,7 @@ def build(check_only=False):
                "recordOnField": {"wins": onfield[k][0], "losses": onfield[k][1], "ties": onfield[k][2]},
                "winPctOnField": pct(onfield[k]),
                "recordAdjust": dict(counts[k]),
+               "recordSeasons": n_seasons[k],
                "recordAsOf": dict(as_of)}
         for f, v in row.items():
             if f not in new:
@@ -304,6 +353,10 @@ def build(check_only=False):
         new["ranks"] = dict(row["ranks"])
         new["ranks"]["wins"] = win_rank[official[k][0]]
         new["ranks"]["winPct"] = pct_rank[pct(official[k])]
+        # weeks ranked No. 1 in the weekly AP poll (preseason not counted), through the
+        # Book's season: NCAA Records Book p.142, a complete list - absent means 0
+        new["weeksAtOne"] = wk1.get(k, 0)
+        new["ranks"]["weeksAtOne"] = wk1_rank[new["weeksAtOne"]]
         out[k] = new
     corrected = set()
     for c in adj["fieldCorrections"]:
@@ -317,8 +370,9 @@ def build(check_only=False):
         for t in teams:
             out[t]["ranks"][f] = rk[out[t][f]]
 
-    allowed = {"record", "winPct", "recordOnField", "winPctOnField", "recordAdjust", "recordAsOf"} | corrected
-    allowed_ranks = {"wins", "winPct"} | corrected
+    allowed = {"record", "winPct", "recordOnField", "winPctOnField", "recordAdjust", "recordSeasons",
+               "recordAsOf", "weeksAtOne"} | corrected
+    allowed_ranks = {"wins", "winPct", "weeksAtOne"} | corrected
 
     def stripped(doc):
         doc = json.loads(json.dumps(doc))
@@ -349,6 +403,7 @@ def build(check_only=False):
             continue
         r["cats"][WINPCT_CAT] = out[r["name"]]["ranks"]["winPct"]
         r["cats"][WINS_CAT] = out[r["name"]]["ranks"]["wins"]
+        r["cats"][WEEKS1_CAT] = out[r["name"]]["ranks"]["weeksAtOne"]
     body = ",".join(
         '{"rank":%d,"name":%s,"display":%s,"avg":%s,"cats":[%s]}' % (
             r["rank"], json.dumps(r["name"]), json.dumps(r["display"]),

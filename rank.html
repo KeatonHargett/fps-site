@@ -475,17 +475,18 @@ const TEAM_STATS = {
 
   // Category catalog. Each maps a URL slug to a stat extractor and presentation hints.
   const CATEGORIES = {
-    'all-time-record':                   { label: 'All-Time Record',                     short: 'Win %',                source: 'winPct',     fmt: 'pct3', live: true,  basis: true, desc: 'Official NCAA winning percentage including ties (.500 weight), with vacated wins and NCAA forfeits applied. Minimum 50 games.' },
+    'all-time-record':                   { label: 'All-Time Record',                     short: 'Win %',                source: 'winPct',     fmt: 'pct3', live: true,  basis: true, desc: 'Official NCAA winning percentage including ties (.500 weight), with vacated wins and NCAA forfeits applied. Minimum 50 games.',
+                                           descOnField: 'On-field winning percentage including ties (.500 weight): wins later vacated or forfeited by NCAA ruling still count, and games the NCAA awarded by forfeit count as played. Minimum 50 games.' },
     'claimed-national-championships':    { label: 'Claimed National Championships',      short: 'Claimed NC',           source: 'ncClaimed',                              desc: 'National championships claimed by each program.' },
-    'recognized-national-championships': { label: 'Recognized National Championships',   short: 'Recognized NC',        source: 'ncRecognized',                           desc: 'National championships recognized by the NCAA or major selectors.' },
-    'all-time-wins':                     { label: 'All-Time Wins',                       short: 'Wins',                 source: 'wins',       live: true,  basis: true, desc: 'Official NCAA all-time wins, every division included, with vacated wins and NCAA forfeits applied.' },
+    'all-time-wins':                     { label: 'All-Time Wins',                       short: 'Wins',                 source: 'wins',       live: true,  basis: true, desc: 'Official NCAA all-time wins, every division included, with vacated wins and NCAA forfeits applied.',
+                                           descOnField: 'On-field all-time wins, every division included: wins later vacated or forfeited by NCAA ruling still count, and wins the NCAA awarded by forfeit do not.' },
     'heisman-winners':                   { label: 'Heisman Winners',                     short: 'Heismans',             source: 'heismans',                               desc: 'Heisman Trophy winners by program.' },
     'weeks-in-poll':                     { label: 'Weeks in AP Poll (as of 2025)',       short: 'AP Weeks',             source: 'weeksInAP',                              desc: 'Total weeks ranked in the Associated Press top 25, through the 2025 season.' },
-    'weeks-at-ap-number-one':            { label: 'Weeks at AP #1',                      short: 'Weeks at #1',          source: 'weeksAtNo1',                             desc: 'Total weeks ranked #1 in the AP poll.' }
+    'weeks-at-ap-number-one':            { label: 'Weeks at AP #1 (as of 2025)',         short: 'Weeks at #1',          source: 'weeksAtNo1',                             desc: 'Weeks ranked No. 1 in the weekly AP poll, preseason polls not counted, through the 2025 season (NCAA Records Book).' }
   };
   // Temporarily hidden until each is rebuilt from verified sources (records audit, Oct 2026).
   // Old links land on the default category with a short note instead of unverified numbers.
-  const HIDDEN_CATEGORIES = ['conference-championships', 'bowl-games', 'all-americans', 'nfl-draft-picks', 'first-round-nfl-draft-picks'];
+  const HIDDEN_CATEGORIES = ['recognized-national-championships', 'conference-championships', 'bowl-games', 'all-americans', 'nfl-draft-picks', 'first-round-nfl-draft-picks'];
 
 
   const LOGO_URL = id => id ? `https://a.espncdn.com/i/teamlogos/ncaa/500/${id}.png` : '';
@@ -708,9 +709,13 @@ const TEAM_STATS = {
       description: `Every major college football program ranked by ${cat.label.toLowerCase()}. ${cat.desc}`,
       path: '/rank?cat=' + encodeURIComponent(currentCatSlug)
     });
-    document.getElementById('hero-title').innerHTML = `${cat.label.split(' ').slice(0,-1).join(' ')} <span class="accent">${cat.label.split(' ').slice(-1)[0]}</span>`;
-    document.getElementById('hero-sub').textContent = cat.desc;
-    document.getElementById('cat-blurb').textContent = cat.desc;
+    // "(as of 2025)" stays in the dropdown label; the hero accent goes on the last real word
+    const heroLabel = cat.label.replace(/\s*\([^)]*\)$/, '');
+    document.getElementById('hero-title').innerHTML = `${heroLabel.split(' ').slice(0,-1).join(' ')} <span class="accent">${heroLabel.split(' ').slice(-1)[0]}</span>`;
+    // On-field mode (?basis=onfield) describes the on-field figure, not the official one
+    const desc = (cat.basis && basis === 'onfield' && cat.descOnField) || cat.desc;
+    document.getElementById('hero-sub').textContent = desc;
+    document.getElementById('cat-blurb').textContent = desc;
   }
 
   // v35: Team abbreviations + override map (Oklahoma St -> OSU, Ohio St -> OHST)
@@ -939,7 +944,7 @@ const TEAM_STATS = {
     const asOf = (Object.values(PROGRAM_STATS).find(p => p && p.recordAsOf) || {}).recordAsOf;
     // asOf.date = date of the last completed game, America/Chicago (build_program_records.py)
     const day = d => (window.FPSRecordNote ? FPSRecordNote.formatDate(d) : d);
-    const when = asOf ? ` Records through ${asOf.inProgress ? 'games of ' + day(asOf.date) + ' (' + asOf.season + ' season in progress)' : 'the ' + asOf.season + ' season'}.` : '';
+    const when = asOf ? (asOf.inProgress ? ` Records through completed games as of ${day(asOf.date)}.` : ` Records through the ${asOf.season} season.`) : '';
     const starred = rows.some(r => r.alt != null);
     foot.textContent = (starred
       ? (basis === 'onfield'

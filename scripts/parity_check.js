@@ -216,9 +216,9 @@ function checkRankCategories(OLD, league) {
   const ps = readJSON('program_stats.json');
   const fbs = (readJSON('fbs_teams.json').teams || []).map(t => t.name);
   let rows = 0;
-  // 7 visible categories; the 5 unverified ones stay hidden until rebuilt from sources.
-  const HIDDEN = ['conference-championships', 'bowl-games', 'all-americans', 'nfl-draft-picks', 'first-round-nfl-draft-picks'];
-  eq('rank.html visible categories', ['all-time-record', 'claimed-national-championships', 'recognized-national-championships',
+  // 6 visible categories; the 6 unverified ones stay hidden until rebuilt from sources.
+  const HIDDEN = ['recognized-national-championships', 'conference-championships', 'bowl-games', 'all-americans', 'nfl-draft-picks', 'first-round-nfl-draft-picks'];
+  eq('rank.html visible categories', ['all-time-record', 'claimed-national-championships',
     'all-time-wins', 'heisman-winners', 'weeks-in-poll', 'weeks-at-ap-number-one'], ctx.__cats);
   eq('rank.html hidden categories (not in navigation)', HIDDEN, ctx.__hidden.filter(s => !ctx.__cats.includes(s)));
   eq('rank.html official/on-field toggle categories', ['all-time-record', 'all-time-wins'], ctx.__basisCats);
@@ -306,6 +306,14 @@ function checkProgramRecords() {
 
   eq('Oklahoma St. claimed national titles', 1, ps['Oklahoma St.'].claimedNatChamps);
   eq('Oklahoma St. recognized national titles (1945 AFCA)', 1, ps['Oklahoma St.'].recognizedNatChamps);
+  // Weeks at AP No. 1 = NCAA Records Book p.142 (complete list, 0 when absent); seasons = NCAA count
+  const book = readJSON('data/sources/records/ncaa_records_book_2026.json');
+  const wk1 = book.weeksAtNo1.rows, rankWk1 = comp(teams.map(t => wk1[t] || 0));
+  for (const t of teams) {
+    eq(`${t}: weeksAtOne == Records Book p.142`, wk1[t] || 0, ps[t].weeksAtOne);
+    eq(`${t}: ranks.weeksAtOne == competition rank`, rankWk1(wk1[t] || 0), ps[t].ranks.weeksAtOne);
+    eq(`${t}: recordSeasons is a season count`, true, Number.isInteger(ps[t].recordSeasons) && ps[t].recordSeasons > 0);
+  }
   eq('Ohio St. claimed national titles (adds 2024)', 9, ps['Ohio St.'].claimedNatChamps);
   return n;
 }

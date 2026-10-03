@@ -464,10 +464,10 @@
       alt:s => differs(s) ? recStr(s.recordOnField) : null },
     { key:'winPct',     label:'Win %',           get:s => pct3(s.winPct),                                     val:s => s.winPct,
       alt:s => differs(s) ? pct3(s.winPctOnField) : null },
-    // Bowl record, conference titles, consensus All-Americans and NFL draft picks are hidden
+    // Recognized national titles, bowl record, conference titles, consensus All-Americans and
+    // NFL draft picks are hidden
     // until rebuilt from verified sources (records audit, Oct 2026) - same as /rank, /team, /compare.
     { key:'claimedNatChamps',    label:'Claimed NC',     get:s => s.claimedNatChamps,    val:s => s.claimedNatChamps },
-    { key:'recognizedNatChamps', label:'Recognized NC',  get:s => s.recognizedNatChamps, val:s => s.recognizedNatChamps },
     { key:'heismanWinners',      label:'Heismans',       get:s => s.heismanWinners,      val:s => s.heismanWinners }
   ];
 

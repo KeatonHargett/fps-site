@@ -586,6 +586,8 @@
 <!-- Slim derived data (data/derived/); falls back to front_porch_games.json. -->
 <script src="js/derived-data.js"></script>
 <script src="js/record-notes.js"></script>
+<!-- team-name aliases (?team=osu / Oklahoma State) - same resolver as compare.html and games.html -->
+<script src="js/matchup-filter.js"></script>
 <script>
   const TEAM_META = {
   'Air Force': {id:'2005',color:'#003594',alt:'#ffffff',abbr:'AF'},
@@ -1068,17 +1070,16 @@
     if (ps) { wpVal = fmtPct(ps.winPct); wpRank = ps.ranks.winPct; wpTotal = TOTAL; }
     else { const e = pr.rank[TEAM]; wpVal = e?fmtPct(e.value):null; wpRank = e?e.rank:null; wpTotal = pr.total; }
     const nc1 = get('claimedNatChamps', 'ncClaimed', 'ncClaimedRank');
-    const nc2 = get('recognizedNatChamps', 'ncRecognized', 'ncRecognizedRank');
     const hw  = get('heismanWinners', 'heismans', 'heismansRank');
     const wip = get('weeksInPoll', 'weeksInAP', 'weeksInAPRank');
-    // Conference titles, bowl games, consensus All-Americans and NFL draft picks are hidden
+    // Recognized national championships, conference titles, bowl games, consensus
+    // All-Americans and NFL draft picks are hidden
     // until they are rebuilt from verified sources (records audit, Oct 2026).
     const wpSub = ofi ? `${fmtPct(ofi.pct)}* on field` : '';
     const winsSub = ofi ? `${ofi.rec.wins.toLocaleString()}* on field` : '';
     const rows = [
       card('All-Time Win %',                      wpVal,     wpSub, wpRank,    wpTotal),
       card('National Championships (Claimed)',    nc1.value, '', nc1.rank,  nc1.total),
-      card('National Championships (Recognized)', nc2.value, '', nc2.rank,  nc2.total),
       card('Total Wins',                          winsVal != null ? winsVal.toLocaleString() : winsVal, winsSub, winsRank, winsTotal),
       card('Heisman Winners',                     hw.value,  '', hw.rank,   hw.total),
       card('Weeks in AP Poll',                    wip.value, ps ? 'as of 2025' : '', wip.rank,  wip.total)
@@ -1129,7 +1130,23 @@
       set('meta[property="og:url"]', 'content', B + o.path);
     }
   }
-  const TEAM = params.get('team') || 'Oklahoma';
+  // Same alias rules as compare.html and games.html (js/matchup-filter.js): the site's own
+  // abbreviations first (OSU = Oklahoma St., OHST = Ohio St.), then every TEAM_META
+  // abbreviation; "Oklahoma State" -> "Oklahoma St." is handled by the resolver. The URL is
+  // rewritten to the canonical name so links and the canonical tag agree.
+  const TEAM = (() => {
+    const raw = params.get('team') || 'Oklahoma';
+    if (!window.FPSMatchupFilter) return raw;
+    const aliases = { 'OSU': 'Oklahoma St.', 'OHST': 'Ohio St.' };
+    for (const [team, m] of Object.entries(TEAM_META)) if (m && m.abbr && !(m.abbr in aliases)) aliases[m.abbr] = team;
+    const name = FPSMatchupFilter.teamResolver(Object.keys(TEAM_META), aliases)(raw) || raw;
+    if (name !== raw) {
+      const url = new URL(location.href);
+      url.searchParams.set('team', name);
+      history.replaceState(null, '', url);
+    }
+    return name;
+  })();
 
   // With derived data GAMES holds only this team's games (data/derived/teams/<slug>.json)
   // and LEAGUE the league-wide tallies (league.json) the two all-time ranks need; both
@@ -1228,6 +1245,8 @@
     const wpct = total ? ((w + t*0.5) / total).toFixed(3).replace(/^0/,'') : '.000';
     const ofi = onFieldInfo(PROGRAM_STATS && PROGRAM_STATS[TEAM]);
     const fmtRec = r => `${r.wins.toLocaleString()}-${r.losses.toLocaleString()}${r.ties ? '-' + r.ties : ''}`;
+    // Snapshot "Seasons" uses the NCAA season count from the records build (recordSeasons),
+    // the same population as the all-time record beside it; the game file is the fallback.
     const seasons = [...new Set(teamGames.map(g=>g.season))];
     let biggestWin = {margin:0};
     teamGames.forEach(g => {
@@ -1310,8 +1329,8 @@
       <div class="card">
         <h2>Program Snapshot</h2>
         <div class="quick-stats">
-          <div class="qs-card"><div class="qs-value">${total}</div><div class="qs-label">Games Played</div></div>
-          <div class="qs-card"><div class="qs-value">${seasons.length}</div><div class="qs-label">Seasons</div></div>
+          <div class="qs-card"><div class="qs-value">${total.toLocaleString()}</div><div class="qs-label">Games Played</div></div>
+          <div class="qs-card"><div class="qs-value">${(PROGRAM_STATS && PROGRAM_STATS[TEAM] && PROGRAM_STATS[TEAM].recordSeasons) || seasons.length}</div><div class="qs-label">Seasons</div></div>
           <div class="qs-card"><div class="qs-value">${best}</div><div class="qs-label">Longest Win Streak</div></div>
           <div class="qs-card"><div class="qs-value">${biggestWin.margin}</div><div class="qs-label">Biggest Win Margin</div></div>
           <div class="qs-card"><div class="qs-value">${Object.keys(oppRecords).length}</div><div class="qs-label">Opponents Faced</div></div>

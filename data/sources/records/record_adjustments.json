@@ -34,7 +34,9 @@
    "basis": "official",
    "source": "NCAA 2026 FBS Records Book p.110 (http://fs.ncaa.org.s3.amazonaws.com/Docs/stats/football_records/FBS.pdf)",
    "reason": "FCS through 2024, so no row in the pinned FBS table. The 2026 Delaware record book prints 796-491-43 (.600), but .600 only fits 746 wins (746 + 21.5) / 1,280 = .600 - the guide is internally inconsistent, so the Records Book is used.",
-   "guide": "https://bluehens.com/documents/2026/7/28/Delaware_Football_Record_Book.pdf"
+   "guide": "https://bluehens.com/documents/2026/7/28/Delaware_Football_Record_Book.pdf",
+   "years": 134,
+   "yearsSource": "NCAA Records Book p.110 (Yrs)"
   },
   {
    "team": "Georgia Southern",
@@ -47,7 +49,9 @@
    "basis": "official",
    "source": "NCAA 2026 FBS Records Book p.110 (http://fs.ncaa.org.s3.amazonaws.com/Docs/stats/football_records/FBS.pdf)",
    "reason": "Pinned Wikipedia (2024) + CFBD 2025 gives 433-264-10; the Records Book prints 432-264-10. The 2026 Georgia Southern guide prints only a \"Modern Era Record\" (1982-) of 370-187-1, so it cannot break the tie - the NCAA Records Book is used.",
-   "guide": "https://gseagles.com/documents/2026/8/10/FB_1_General_Info_2026.pdf"
+   "guide": "https://gseagles.com/documents/2026/8/10/FB_1_General_Info_2026.pdf",
+   "years": 62,
+   "yearsSource": "NCAA Records Book p.110 (Yrs)"
   },
   {
    "team": "Ball St.",
@@ -59,7 +63,9 @@
    ],
    "basis": "official",
    "source": "https://ballstatesports.com/documents/download/2026/4/18/FootballRecordBook_ADA_Accessible.pdf",
-   "reason": "2026 Ball State Historical Guide & Record Book, p.6: \"All-Time Record (988 games): 483 473 32\". Internally consistent: the season-by-season table (101 seasons, 1924-2025, no team in 1943), the home/away/neutral split and the coaching records all sum to 483-473-32. Replaces the pinned Wikipedia row + CFBD 2025 (484-475-32), whose later Wikipedia revision carries an unexplained +1W/-1L edit."
+   "reason": "2026 Ball State Historical Guide & Record Book, p.6: \"All-Time Record (988 games): 483 473 32\". Internally consistent: the season-by-season table (101 seasons, 1924-2025, no team in 1943), the home/away/neutral split and the coaching records all sum to 483-473-32. Replaces the pinned Wikipedia row + CFBD 2025 (484-475-32), whose later Wikipedia revision carries an unexplained +1W/-1L edit.",
+   "years": 101,
+   "yearsSource": "2026 Ball State record book: \"101 seasons\" (1924-2025, no team in 1943)"
   },
   {
    "team": "Western Kentucky",
@@ -71,7 +77,9 @@
    ],
    "basis": "official",
    "source": "https://wkusports.com/documents/2026/9/3/WKU_FB_26___Record_Book.pdf",
-   "reason": "2026 WKU Record Book, p.3: 630-437-31 (.573). Internally consistent: the season table (107 seasons, 1913-2025; no team 1917-19 and 1943-45) and the coaching table both sum to 630-437-31. Replaces the pinned Wikipedia row + CFBD 2025 (632-436-30)."
+   "reason": "2026 WKU Record Book, p.3: 630-437-31 (.573). Internally consistent: the season table (107 seasons, 1913-2025; no team 1917-19 and 1943-45) and the coaching table both sum to 630-437-31. Replaces the pinned Wikipedia row + CFBD 2025 (632-436-30).",
+   "years": 107,
+   "yearsSource": "2026 WKU Record Book: \"Seasons of Football 107 Completed\""
   },
   {
    "team": "Missouri St.",
@@ -83,7 +91,9 @@
    ],
    "basis": "official",
    "source": "https://missouristatebears.com/documents/2026/8/21/2026_MOST_MEDIAGUIDE_V1.pdf",
-   "reason": "FCS through 2024, so no row in the pinned FBS table, and no row in the NCAA Records Book. The 2026 guide is not fully consistent: Quick Facts prints 507-542-39, but the year-by-year Totals row (p.103), the sum of every season (114 seasons, 1909-2025; no team 1913, 1943, 1944), the game-by-game season totals and the coaching records all give 507-551-39. The Quick Facts figure is 9 losses short (typo). Documented exception: neither a consistent guide nor a Records Book row exists, so the figure every internal table agrees on is used."
+   "reason": "FCS through 2024, so no row in the pinned FBS table, and no row in the NCAA Records Book. The 2026 guide is not fully consistent: Quick Facts prints 507-542-39, but the year-by-year Totals row (p.103), the sum of every season (114 seasons, 1909-2025; no team 1913, 1943, 1944), the game-by-game season totals and the coaching records all give 507-551-39. The Quick Facts figure is 9 losses short (typo). Documented exception: neither a consistent guide nor a Records Book row exists, so the figure every internal table agrees on is used.",
+   "years": 114,
+   "yearsSource": "2026 Missouri State guide: 114 seasons, 1909-2025 (no team 1913, 1943, 1944)"
   }
  ],
  "vacated": [
