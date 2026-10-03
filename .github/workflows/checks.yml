@@ -1,4 +1,4 @@
-name: Checks (records build + parity)
+name: Checks (records build + parity + rivalries)
 
 # Runs on every pull request and on pushes to branches other than main (main runs the
 # same two checks inside weekly_refresh.yml before it deploys). Offline: no secrets,
@@ -39,3 +39,9 @@ jobs:
       - name: Parity check (derived data, rank categories, record fields)
         run: |
           node scripts/parity_check.js
+
+      # rivalries.json last_meeting / status must equal a fresh build from
+      # front_porch_games.json + schedules_data.json (plus sourced status_override).
+      - name: Rivalry derived fields reproducible
+        run: |
+          python scripts/build_rivalries.py --check

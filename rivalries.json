@@ -3,7 +3,7 @@
   "usage": "Rivalry logos are for display on frontporchsports.com only. They must never be used on FrontPorchSports.shop merchandise or any other product. Most are non-free (fair use) marks; see each entry's license.",
   "source": "Extracted from the RIVALRIES literal previously inlined in index.html and compare.html; extended 2026-10 from Wikipedia 'List of NCAA college football rivalry games' and each rivalry article (MediaWiki API).",
   "keyFormat": "The two dataset team names (data/derived/manifest.json 'names'), alphabetically sorted, joined by '|'. Lookups still accent-fold both sides.",
-  "fields": "name (display), also_known_as, team1/team2 (dataset names), trophy, logo (path or null), wikipedia_url, wikimedia_file_url, license (as listed on the file page), sponsor_branded, sponsor, status (active = met 2024 or later), last_meeting, logo_light (true = mostly white/light, rendered on a gray backing circle). tier: 1 = the 64 rivalries the site featured before the 2026-10 expansion (full +35 featured-matchup bonus), 2 = every other named rivalry (+10). source: only where the logo has no Wikipedia/Wikimedia file page (\"owner supplied\" = provided by the site owner, origin not documented). trophy_source: official page naming the FOOTBALL trophy (school athletics site / media guide / university; Wikipedia only as a fallback), or confirming there is none. trophy_verified: true = checked against that source (2026-10 audit of tier 1); false = unchecked (tier 2) or the schools disagree (see trophy_note). A null trophy means no football trophy: all-sports series trophies and retired trophies are not shown.",
+  "fields": "name (display), also_known_as, team1/team2 (dataset names), trophy, logo (path or null), wikipedia_url, wikimedia_file_url, license (as listed on the file page), sponsor_branded, sponsor, status and last_meeting (DERIVED - scripts/build_rivalries.py writes them from front_porch_games.json and schedules_data.json; never edit by hand), status_override ({status, reason, source} for known cases the data cannot see, e.g. a formally paused series), logo_light (true = mostly white/light, rendered on a gray backing circle). tier: 1 = the 64 rivalries the site featured before the 2026-10 expansion (full +35 featured-matchup bonus), 2 = every other named rivalry (+10). source: only where the logo has no Wikipedia/Wikimedia file page (\"owner supplied\" = provided by the site owner, origin not documented). trophy_source: official page naming the FOOTBALL trophy (school athletics site / media guide / university; Wikipedia only as a fallback), or confirming there is none. trophy_verified: true = checked against that source (2026-10 audit of tier 1); false = unchecked (tier 2) or the schools disagree (see trophy_note). A null trophy means no football trophy: all-sports series trophies and retired trophies are not shown. trophy_source_2: a second official source where the schools name the trophy differently.",
   "count": 242,
   "with_logo": 22
  },
@@ -91,7 +91,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "dormant",
-   "last_meeting": 2019
+   "last_meeting": 2018
   },
   "Alabama|Florida": {
    "name": "Alabama–Florida",
@@ -304,7 +304,7 @@
    "also_known_as": null,
    "team1": "Army",
    "team2": "Navy",
-   "trophy": "Commander-in-Chief’s Trophy",
+   "trophy": "Commander-in-Chief’s Trophy (three-way)",
    "trophy_source": "https://navysports.com/news/2025/12/8/football-army-and-navy-to-meet-saturday-in-baltimore-for-the-commander-in-chiefs-trophy.aspx",
    "trophy_verified": true,
    "logo": "rivalry-logos/army-navy-game.svg",
@@ -398,7 +398,7 @@
    "license": null,
    "sponsor_branded": null,
    "sponsor": null,
-   "status": "dormant",
+   "status": "active",
    "last_meeting": 2023
   },
   "Auburn|Ole Miss": {
@@ -415,7 +415,7 @@
    "license": null,
    "sponsor_branded": null,
    "sponsor": null,
-   "status": "dormant",
+   "status": "active",
    "last_meeting": 2023
   },
   "Auburn|Tennessee": {
@@ -432,7 +432,7 @@
    "license": null,
    "sponsor_branded": null,
    "sponsor": null,
-   "status": "dormant",
+   "status": "active",
    "last_meeting": 2020
   },
   "Auburn|Tulane": {
@@ -501,7 +501,7 @@
    "license": null,
    "sponsor_branded": null,
    "sponsor": null,
-   "status": "dormant",
+   "status": "active",
    "last_meeting": 2023
   },
   "Nevada|UNLV": {
@@ -588,7 +588,12 @@
    "license": null,
    "sponsor_branded": null,
    "sponsor": null,
-   "status": "active",
+   "status": "dormant",
+   "status_override": {
+    "status": "dormant",
+    "reason": "TCU paused the series after 2025; the 2025 game was \"the last scheduled meeting for the foreseeable future\".",
+    "source": "https://www.tcu.edu/news/2025/a-trip-down-rivalry-lane-before-the-last-scheduled-iron-skillet.php"
+   },
    "last_meeting": 2025
   },
   "Michigan St.|Penn St.": {
@@ -729,7 +734,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2026
+   "last_meeting": null
   },
   "James Madison|Liberty": {
    "name": "Battle of the Blue Ridge",
@@ -918,7 +923,12 @@
    "license": null,
    "sponsor_branded": null,
    "sponsor": null,
-   "status": "active",
+   "status": "dormant",
+   "status_override": {
+    "status": "dormant",
+    "reason": "The 2025 game was \"the last scheduled meeting between the two long-time rivals\"; no future games scheduled.",
+    "source": "https://uhcougars.com/news/2025/9/4/football-preview-battle-for-the-bayou-bucket"
+   },
    "last_meeting": 2025
   },
   "Oklahoma|Oklahoma St.": {
@@ -927,9 +937,10 @@
    "also_known_as": "Bedlam Series",
    "team1": "Oklahoma",
    "team2": "Oklahoma St.",
-   "trophy": "Bell Clapper",
+   "trophy": "Bell Clapper / Crystal Bell",
    "trophy_source": "https://go.okstate.edu/about-osu/traditions/bedlam",
    "trophy_verified": true,
+   "trophy_note": "Bell clapper from Old Central was the football trophy starting in 1966; the tradition continues as the crystal bell awarded to the winner of every Bedlam sport.",
    "logo": "rivalry-logos/bedlam.svg",
    "wikipedia_url": "https://en.wikipedia.org/wiki/Bedlam_Series",
    "wikimedia_file_url": "https://en.wikipedia.org/wiki/File:Bedlam_Series_logo.svg",
@@ -1479,7 +1490,7 @@
    "also_known_as": "Air Force–Army",
    "team1": "Air Force",
    "team2": "Army",
-   "trophy": "Commander-in-Chief’s Trophy",
+   "trophy": "Commander-in-Chief’s Trophy (three-way)",
    "trophy_source": "https://goairforcefalcons.com/news/2026/9/28/football-game-4-air-force-vs-navy",
    "trophy_verified": true,
    "logo": null,
@@ -1497,7 +1508,7 @@
    "also_known_as": "Air Force–Navy",
    "team1": "Air Force",
    "team2": "Navy",
-   "trophy": "Commander-in-Chief’s Trophy",
+   "trophy": "Commander-in-Chief’s Trophy (three-way)",
    "trophy_source": "https://navysports.com/news/2026/9/28/football-navy-travels-to-air-force-for-opening-leg-of-commander-in-chiefs-trophy.aspx",
    "trophy_verified": true,
    "logo": null,
@@ -1825,9 +1836,10 @@
    "also_known_as": "Florida–Florida State / Sunshine Showdown",
    "team1": "Florida",
    "team2": "Florida St.",
-   "trophy": "Florida Cup",
+   "trophy": null,
    "trophy_source": "https://en.wikipedia.org/wiki/Florida_Cup",
    "trophy_verified": true,
+   "trophy_note": "No head-to-head trophy. The Florida Cup is a three-way round-robin award among Florida, Florida State and Miami with no official source (no school athletics page or game notes name it), so it is not shown.",
    "logo": "rivalry-logos/sunshine-showdown.svg",
    "wikipedia_url": "https://en.wikipedia.org/wiki/Florida%E2%80%93Florida_State_football_rivalry",
    "wikimedia_file_url": "https://en.wikipedia.org/wiki/File:Sunshine_Showdown_logo.svg",
@@ -1877,9 +1889,10 @@
    "also_known_as": "Florida–Miami",
    "team1": "Florida",
    "team2": "Miami",
-   "trophy": "Florida Cup",
+   "trophy": null,
    "trophy_source": "https://en.wikipedia.org/wiki/Florida%E2%80%93Miami_football_rivalry",
    "trophy_verified": true,
+   "trophy_note": "No head-to-head trophy. The Florida Cup is a three-way round-robin award among Florida, Florida State and Miami with no official source (no school athletics page or game notes name it), so it is not shown. The Seminole War Canoe trophy was retired in the 1970s.",
    "logo": null,
    "wikipedia_url": "https://en.wikipedia.org/wiki/Florida%E2%80%93Miami_football_rivalry",
    "wikimedia_file_url": null,
@@ -2041,7 +2054,7 @@
    "license": null,
    "sponsor_branded": null,
    "sponsor": null,
-   "status": "dormant",
+   "status": "active",
    "last_meeting": 2023
   },
   "Georgia|Tennessee": {
@@ -2075,7 +2088,7 @@
    "license": null,
    "sponsor_branded": null,
    "sponsor": null,
-   "status": "dormant",
+   "status": "active",
    "last_meeting": 2023
   },
   "Kentucky|Louisville": {
@@ -2267,7 +2280,7 @@
    "license": null,
    "sponsor_branded": null,
    "sponsor": null,
-   "status": "dormant",
+   "status": "active",
    "last_meeting": 2023
   },
   "Illinois|Michigan": {
@@ -2579,7 +2592,7 @@
    "license": null,
    "sponsor_branded": null,
    "sponsor": null,
-   "status": "dormant",
+   "status": "active",
    "last_meeting": 2000
   },
   "Louisiana Lafayette|Louisiana Tech": {
@@ -2596,7 +2609,7 @@
    "license": null,
    "sponsor_branded": null,
    "sponsor": null,
-   "status": "dormant",
+   "status": "active",
    "last_meeting": 2015
   },
   "Louisville|Memphis": {
@@ -2647,7 +2660,7 @@
    "license": null,
    "sponsor_branded": null,
    "sponsor": null,
-   "status": "dormant",
+   "status": "active",
    "last_meeting": 2023
   },
   "LSU|Ole Miss": {
@@ -2870,7 +2883,7 @@
    "license": null,
    "sponsor_branded": null,
    "sponsor": null,
-   "status": "dormant",
+   "status": "active",
    "last_meeting": 2023
   },
   "Memphis|Ole Miss": {
@@ -3059,7 +3072,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "dormant",
-   "last_meeting": 2023
+   "last_meeting": 2022
   },
   "North Carolina|Wake Forest": {
    "name": "North Carolina–Wake Forest",
@@ -3246,7 +3259,7 @@
    "license": null,
    "sponsor_branded": null,
    "sponsor": null,
-   "status": "dormant",
+   "status": "active",
    "last_meeting": 2023
   },
   "Oregon|Stanford": {
@@ -3431,8 +3444,9 @@
    "team2": "Purdue",
    "trophy": "Purdue Cannon",
    "trophy_source": "https://fightingillini.com/sports/2016/8/16/football-rivalry-trophies",
-   "trophy_verified": false,
-   "trophy_note": "Same object, different official naming. Illinois: 'play each year for the coveted \"Cannon.\" ... more accurately known as the Purdue Cannon' (trophy since 1943). Purdue: 'with the Cannon Trophy up for grabs... Purdue holds a 40-31-2 advantage in Cannon Trophy games'. Kept current per rule d. 'Cannon Trophy' is Purdue's wording.",
+   "trophy_source_2": "https://purduesports.com/news/2025/10/1/game-5-prep-purdue-hosts-22-illinois-for-cannon-trophy-game",
+   "trophy_verified": true,
+   "trophy_note": "Same trophy, two official names: Illinois calls it the \"Purdue Cannon\" (fightingillini.com), Purdue the \"Cannon Trophy\" (purduesports.com). Displayed as \"Purdue Cannon\".",
    "logo": null,
    "wikipedia_url": "https://en.wikipedia.org/wiki/Illinois%E2%80%93Purdue_football_rivalry",
    "wikimedia_file_url": null,
@@ -3543,7 +3557,12 @@
    "license": null,
    "sponsor_branded": null,
    "sponsor": null,
-   "status": "active",
+   "status": "dormant",
+   "status_override": {
+    "status": "dormant",
+    "reason": "Series paused 2025-2028; next game Sept. 15, 2029 (extension through 2038 announced April 2021).",
+    "source": "https://csurams.com/news/2021/4/13/football-rocky-mountain-showdown-extended-through-2038-all-games-on-campus"
+   },
    "last_meeting": 2024
   },
   "James Madison|Old Dominion": {
@@ -4046,7 +4065,7 @@
    "license": null,
    "sponsor_branded": null,
    "sponsor": null,
-   "status": "dormant",
+   "status": "active",
    "last_meeting": 2023
   },
   "Connecticut|UMass": {

@@ -555,7 +555,11 @@
   .rivalry-badge .rb-trophy {
     display: block; font-family: 'Inter', sans-serif; font-size: 0.78rem;
     color: var(--gray); margin-top: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em;
+    /* A long name wraps to two even, centered lines instead of leaving one word behind. */
+    text-wrap: balance; padding: 0 0.5rem;
   }
+  /* "Bell Clapper / Crystal Bell": each side stays whole, so a wrap can only break at the slash. */
+  .rivalry-badge .rb-trophy .rb-tseg { white-space: nowrap; }
   @media (max-width: 700px) {
     .selectors { grid-template-columns: 1fr auto 1fr; gap: 0.5rem; }
     .vs { font-size: 1.5rem; padding: 0 0.25rem; padding-bottom: 0.5rem; }
@@ -980,10 +984,13 @@
     .rivalry-badge .rb-logo { width: 132px; height: 56px; margin-bottom: 0.25rem; }
     .rivalry-badge .rb-logo.rb-light { width: 62px; height: 62px; padding: 7px; }
     .rivalry-badge .rb-pill { font-size: 1.15rem; padding: 0.25rem 1rem; }
-    .rivalry-badge .rb-trophy { margin-top: 0.2rem; font-size: 0.7rem; }
+    .rivalry-badge .rb-trophy { margin-top: 0.2rem; font-size: 0.7rem; line-height: 1.25; letter-spacing: 0.03em; }
     .hero-bar { margin: 0.6rem 0 1rem; }
     .hero-bar-row { row-gap: 0.6rem; }
   }
+  /* Smallest phones (after the 700px block so it wins): just enough tighter that "Trophy: Commander-in-Chief's" holds one line, so the
+     longest caption still wraps to two lines, never three. */
+  @media (max-width: 360px) { .rivalry-badge .rb-trophy { font-size: 0.66rem; letter-spacing: 0.01em; padding: 0 0.25rem; } }
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
      crossorigin="anonymous"></script><script type="application/ld+json">
@@ -3078,7 +3085,15 @@
           ${hasLogo ? `<img class="rb-logo${riv.logo_light ? ' rb-light' : ''}" src="${h(riv.logo)}" alt="${h(riv.name)} logo" decoding="async"
             onerror="this.style.display='none';var p=this.parentElement.querySelector('.rb-pill');if(p)p.classList.remove('rb-hidden');">` : ''}
           <span class="rb-pill${hasLogo ? ' rb-hidden' : ''}"><span class="rb-star">&#9733;</span>${h(riv.name)}<span class="rb-star">&#9733;</span></span>
-          ${riv.trophy ? `<span class="rb-trophy">Trophy: ${h(riv.trophy)}</span>` : ''}
+          ${riv.trophy ? (() => {
+            // Non-breaking hyphens keep "Commander-in-Chief's" and "three-way" whole; a " / " label
+            // wraps only at the slash.
+            const t = s => h(s).replace(/-/g, '‑');
+            const parts = String(riv.trophy).split(' / ');
+            return `<span class="rb-trophy">Trophy: ${parts.length > 1
+              ? parts.map((p, i) => `<span class="rb-tseg">${t(p)}${i < parts.length - 1 ? ' /' : ''}</span>`).join(' ')
+              : t(riv.trophy)}</span>`;
+          })() : ''}
         </div>`;
       })()}
       <!-- v29 Tweak 1B: hero bar with logos on opposite ends, big WINS numbers next to logos -->

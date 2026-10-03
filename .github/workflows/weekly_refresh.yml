@@ -145,6 +145,13 @@ jobs:
         run: |
           python scripts/build_derived_data.py
 
+      # rivalries.json last_meeting / status, derived from the refreshed games and schedules
+      # (read only). Curated fields are never touched.
+      - name: Build rivalry derived fields
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          python scripts/build_rivalries.py
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -160,6 +167,10 @@ jobs:
         run: |
           node scripts/parity_check.js
 
+      - name: Rivalry derived fields reproducible
+        run: |
+          python3 scripts/build_rivalries.py --check
+
       - name: Commit refreshed data
         if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.event.inputs.dry_run != 'true'
         run: |
@@ -168,7 +179,7 @@ jobs:
           if [ -n "$(git status --porcelain fbs_teams.json)"        ]; then CHANGED="$CHANGED fbs_teams.json"; fi
           if [ -n "$(git status --porcelain schedules_data.json)"   ]; then CHANGED="$CHANGED schedules_data.json"; fi
           if [ -n "$(git status --porcelain featured_matchups.json)" ]; then CHANGED="$CHANGED featured_matchups.json"; fi
-          for f in game_sites.json game_venues.json coaches_data.json data/derived program_stats.json rankings.html data/sources/records; do
+          for f in game_sites.json game_venues.json coaches_data.json data/derived program_stats.json rankings.html data/sources/records rivalries.json; do
             if [ -n "$(git status --porcelain $f)" ]; then CHANGED="$CHANGED $f"; fi
           done
           if [ -n "$CHANGED" ]; then
