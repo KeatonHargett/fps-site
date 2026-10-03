@@ -1,0 +1,2892 @@
+[
+ {
+  "team": "Appalachian St.",
+  "status": "DISAGREES",
+  "guide": [
+   673,
+   370,
+   28
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   674,
+   368,
+   29
+  ],
+  "onField": [
+   674,
+   368,
+   29
+  ],
+  "url": "https://appstatesports.com/documents/2026/7/17/FB_2026_MediaGuide.pdf",
+  "basis": "unclear",
+  "notes": "Prints 'All-Time Record ....673-370-28 (96 seasons completed)', First Year 1928. No year-by-year total row found in the text. No vacated/forfeit footnote. 96 seasons since 1928 necessarily include the North State/small-c"
+ },
+ {
+  "team": "Auburn",
+  "status": "match official",
+  "guide": [
+   809,
+   485,
+   47
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   809,
+   485,
+   47
+  ],
+  "onField": [
+   806,
+   487,
+   48
+  ],
+  "url": "https://auburntigers.com/documents/6c709707-809f-4961-a836-97d80a9279e8.pdf",
+  "basis": "official",
+  "notes": "Quick Facts 'All-Time Overall Record 809-485-47' and the Yearly Records total '133 Seasons 809-485-47 341-286-18 33 Coaches' agree. Forfeits are applied: 1975 results note '# - Auburn awarded victory by forfeit' and 1977"
+ },
+ {
+  "team": "California",
+  "status": "DISAGREES",
+  "guide": [
+   707,
+   578,
+   51
+  ],
+  "guide_alt": [
+   793,
+   606,
+   62
+  ],
+  "through": 2025,
+  "official": [
+   705,
+   582,
+   51
+  ],
+  "onField": [
+   709,
+   582,
+   51
+  ],
+  "url": "https://calbears.com/documents/download/2026/8/7/2026_Cal_Football_Info_Guide.pdf",
+  "basis": "official",
+  "notes": "OVERALL RECORDS table: 'NCAA Recognized 707 578 51 .548'; 'Rugby 86 22 11'; 'All-Time 793 606 62 .564' (the All-Time line adds the 1906-14 rugby seasons). Footnote under the year-by-year table: '*Records include win UCLA"
+ },
+ {
+  "team": "Colorado St.",
+  "status": "within 3 games",
+  "guide": [
+   548,
+   621,
+   33
+  ],
+  "guide_alt": null,
+  "through": 2024,
+  "official": [
+   547,
+   621,
+   33
+  ],
+  "onField": [
+   547,
+   621,
+   33
+  ],
+  "url": "https://csurams.com/documents/2025/8/25/2025_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "FALLBACK EDITION through the 2024 season. It prints 'All-Time Record 548-621-33 (.470)'. The 2026 publication is only the 2026 Colorado State Football Yearbook, a publogix.com flipbook (publogix.com/e/26-COSTFBYB/) linke"
+ },
+ {
+  "team": "Florida St.",
+  "status": "within 3 games",
+  "guide": [
+   600,
+   298,
+   17
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   588,
+   298,
+   17
+  ],
+  "onField": [
+   599,
+   299,
+   17
+  ],
+  "url": "https://seminoles.com/documents/2026/7/13/8_-_Records.pdf",
+  "basis": "unclear",
+  "notes": "The two printed totals agree. Footnote: '^win total includes 12 victories vacated by the NCAA in 2006 & 2007; +includes forfeit win from Tulane'. So it counts vacated wins (on-field) and also the Tulane forfeit win, a mi"
+ },
+ {
+  "team": "Illinois",
+  "status": "within 3 games",
+  "guide": [
+   651,
+   632,
+   51
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   651,
+   632,
+   50
+  ],
+  "onField": [
+   651,
+   632,
+   50
+  ],
+  "url": "https://fightingillini.com/documents/2026/8/28/4-Record_Book-2026.pdf",
+  "basis": "unclear",
+  "notes": "The year-by-year total and the quick facts agree. The 1890s game-by-game listings show forfeit wins counted as W, e.g. '1892 Nov. 1 Wisconsin (Forfeited) W' and '1894 Nov. 21 at Chicago (Forfeited) W'. There is no vacate"
+ },
+ {
+  "team": "Kansas",
+  "status": "within 3 games",
+  "guide": [
+   616,
+   693,
+   58
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   615,
+   693,
+   58
+  ],
+  "onField": [
+   615,
+   693,
+   58
+  ],
+  "url": "https://kuathletics.com/documents/2026/7/31/07312026_Kansas_Football_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "Prints 'All-Time Football Record 616-693-58', First Year of Football 1890. No year-by-year total table and no vacated/forfeit note found in the extracted text."
+ },
+ {
+  "team": "Louisiana Monroe",
+  "status": "within 3 games",
+  "guide": [
+   335,
+   480,
+   8
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   333,
+   480,
+   8
+  ],
+  "onField": [
+   333,
+   480,
+   8
+  ],
+  "url": "https://ulmwarhawks.com/documents/2026/9/5/2026_ULM_Football_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "Prints 'All-Time Record .... 335-480-8' and 'All-Time Sun Belt Record 74-116'. No year-by-year total table and no vacated/forfeit note found. Internal inconsistency elsewhere in the guide: p.4 heads the 2025 results '(5-"
+ },
+ {
+  "team": "Miami",
+  "status": "not found",
+  "url": null,
+  "notes": "NOT FOUND. No 2026 media guide is linked on miamihurricanes.com/sports/football; only the 2025 guide is, at https://storage.googleapis.com/hurricanesports-com/2"
+ },
+ {
+  "team": "Navy",
+  "status": "not found",
+  "url": "https://navysports.com/documents/2026/8/3/FB_Guide_-_Full_Guide.pdf",
+  "notes": "NOT FOUND in the extractable text. Searched All-Time Coaching Records (printed p.160, no total row), All-Time Scores (pp.170-179, season lines only) and the sch"
+ },
+ {
+  "team": "North Carolina St.",
+  "status": "DISAGREES",
+  "guide": [
+   656,
+   614,
+   55
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   652,
+   611,
+   55
+  ],
+  "onField": [
+   652,
+   611,
+   55
+  ],
+  "url": "https://gopack.com/documents/2026/7/14/2026NCStateFootball.pdf",
+  "basis": "unclear",
+  "notes": "The two printed figures agree. No vacated or forfeit footnote attached to the total."
+ },
+ {
+  "team": "Ohio St.",
+  "status": "match official",
+  "guide": [
+   990,
+   337,
+   53
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   990,
+   337,
+   53
+  ],
+  "onField": [
+   1002,
+   337,
+   53
+  ],
+  "url": "https://ohiostatebuckeyes.com/documents/2026/9/4/2026_FB_Media_Guide_All-Time_Results_FINAL.pdf",
+  "basis": "official",
+  "notes": "Footnote: '>Wins from the 2010 season were vacated.' The Year-by-Year Coaching Records table (printed p.284) carries the same footnote but prints no total row. The section's running header reads '2025 Ohio State Football"
+ },
+ {
+  "team": "Penn St.",
+  "status": "within 3 games",
+  "guide": [
+   950,
+   418,
+   42
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   950,
+   418,
+   41
+  ],
+  "onField": [
+   950,
+   418,
+   41
+  ],
+  "url": "https://gopsusports.com/documents/4d144510-9ba5-4b25-bed1-35711e8d460e.pdf",
+  "basis": "unclear",
+  "notes": "Quick facts and the year-by-year total agree. The history section (p.282) describes the 2012 sanctions 'vacating of all 112 victories from 1998-2011' (later restored), but the total carries no footnote. Real file: storag"
+ },
+ {
+  "team": "San Diego St.",
+  "status": "match official",
+  "guide": [
+   604,
+   460,
+   32
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   604,
+   460,
+   32
+  ],
+  "onField": [
+   602,
+   462,
+   32
+  ],
+  "url": "https://goaztecs.com/documents/900a0ce2-27c4-442a-a492-f670e8cee1e4.pdf",
+  "basis": "unclear",
+  "notes": "Program total from the coaching ledger (19 head coaches, 1921-2025). No vacated or forfeit note found anywhere in the text. Covers the pre-Division I era: the bowl page separates a 'Division I Era' subset, so the total i"
+ },
+ {
+  "team": "Stanford",
+  "status": "DISAGREES",
+  "guide": [
+   771,
+   533,
+   52
+  ],
+  "guide_alt": [
+   767,
+   525,
+   52
+  ],
+  "through": 2025,
+  "official": [
+   677,
+   513,
+   49
+  ],
+  "onField": [
+   677,
+   513,
+   49
+  ],
+  "url": "https://gostanford.com/documents/0d8ced6e-145f-4cd0-84af-1ef0c7902e4b.pdf",
+  "basis": "unclear",
+  "notes": "CONFLICT INSIDE GUIDE. The year-by-year table runs through 2025 (Frank Reich 4-8) and totals 771-533-52 over 131 seasons. The coaching-records table ends with 'Troy Taylor 2023-24' and totals 767-525-52 over 129 seasons,"
+ },
+ {
+  "team": "Texas St.",
+  "status": "DISAGREES",
+  "guide": [
+   579,
+   534,
+   33
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   548,
+   511,
+   25
+  ],
+  "onField": [
+   548,
+   511,
+   25
+  ],
+  "url": "https://txst.com/documents/2026/2/1/2026_Record_Book.pdf",
+  "basis": "unclear",
+  "notes": "Totals begin with 1904 (5-1, including games vs. high schools and academies) and 1908-21 independent seasons. Section headers note 'NAIA (1932-1957); NCAA COLLEGE DIVISION (1958-72); NCAA DIVISION II (1973-1983)', and I-"
+ },
+ {
+  "team": "UAB",
+  "status": "within 3 games",
+  "guide": [
+   180,
+   204,
+   2
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   179,
+   204,
+   2
+  ],
+  "onField": [
+   179,
+   204,
+   2
+  ],
+  "url": "https://uabsports.com/documents/2026/7/16/2026_UAB_Football_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "Prints 'Overall Record 180-204-2 (.469)', broken out as 'Division III Record (2 years) 12-6-2', 'FCS (DIV I-AA) Record (3 years) 21-12', 'FBS Record (33 years) 147-186', 'Since the Return (9 years) 61-51'. The 2026 Recor"
+ },
+ {
+  "team": "UTEP",
+  "status": "DISAGREES",
+  "guide": [
+   419,
+   655,
+   28
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   415,
+   653,
+   30
+  ],
+  "onField": [
+   415,
+   653,
+   30
+  ],
+  "url": "https://utepminers.com/documents/2026/8/4/2026_UTEP_FB_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "Year-by-year totals from 1914. No quick-facts all-time line was found (team information gives only the 2025 record). No vacated or forfeit footnote."
+ },
+ {
+  "team": "Wake Forest",
+  "status": "match official",
+  "guide": [
+   496,
+   693,
+   33
+  ],
+  "guide_alt": null,
+  "through": 2024,
+  "official": [
+   496,
+   693,
+   33
+  ],
+  "onField": [
+   496,
+   693,
+   33
+  ],
+  "url": "https://godeacs.com/documents/2025/6/26/History-2025.pdf",
+  "basis": "unclear",
+  "notes": "FALLBACK EDITION through 2024. The godeacs record-book page (godeacs.com/sports/2026/7/2/2025-football-record-book) still links the 2025 History/Records PDFs plus series-2026.pdf. That series file was downloaded but is a"
+ },
+ {
+  "team": "Wyoming",
+  "status": "within 3 games",
+  "guide": [
+   574,
+   615,
+   28
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   572,
+   616,
+   28
+  ],
+  "onField": [
+   572,
+   616,
+   28
+  ],
+  "url": "https://gowyo.com/documents/2026/7/9/2026_Wyoming_Football_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "No year-by-year total row found. The guide counts forfeit wins in game listings ('#Win by forfeit' in series pages; 'N24 at New Mexico* W +3-17 | + Forfeit win for Wyoming' in all-time results). No vacated note."
+ },
+ {
+  "team": "Arizona",
+  "status": "match official",
+  "guide": [
+   646,
+   511,
+   33
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   646,
+   511,
+   33
+  ],
+  "onField": [
+   646,
+   511,
+   33
+  ],
+  "url": "https://arizonawildcats.com/documents/download/2026/8/27/2026_Football_Record_Book.pdf",
+  "basis": "both",
+  "notes": "Quick Facts 'All-Time Record 646-511-33'; opponents table 'Totals* 646 511 33 1899 2025' (footnote '*Includes results against defunct programs not listed above'); coaching table 'Totals 1899-2023 646 511 33 .555' (year-s"
+ },
+ {
+  "team": "Baylor",
+  "status": "DISAGREES",
+  "guide": [
+   643,
+   614,
+   44
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   638,
+   614,
+   44
+  ],
+  "onField": [
+   638,
+   614,
+   44
+  ],
+  "url": "https://baylorbears.com/documents/2026/8/19/BU_FB_2026_Media_Almanac_081926_web_version.pdf",
+  "basis": "unclear",
+  "notes": "Quick Facts 'All-Time Football Record: 643-614-44 (.511)'; decade table '125-YEAR TOTALS 1,301 643 614 44 .511' (2010-2019 decade printed 83-47-0). No vacated/forfeit footnote on the total. Printed wins (643) differ from"
+ },
+ {
+  "team": "Central Michigan",
+  "status": "match official",
+  "guide": [
+   658,
+   464,
+   36
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   658,
+   464,
+   36
+  ],
+  "onField": [
+   658,
+   464,
+   36
+  ],
+  "url": "https://cmuchippewas.com/documents/2026/7/17/2026_CMU_Football_Record_Book.pdf",
+  "basis": "both",
+  "notes": "Coaching table 'Totals 30 coaches 125 1158 658-464-36 .584'; Quick Facts 'All-Time Record: 658-464-36 (.584)'. Totals include college-division/D-II years (1974 D-II national title season). No basis footnote; matches both"
+ },
+ {
+  "team": "Connecticut",
+  "status": "DISAGREES",
+  "guide": [
+   536,
+   608,
+   38
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   539,
+   617,
+   38
+  ],
+  "onField": [
+   539,
+   617,
+   38
+  ],
+  "url": "https://uconnhuskies.com/documents/2026/9/5/2026_UConn_Football_History___Record_Book.pdf",
+  "basis": "unclear",
+  "notes": "Only total printed is the unlabeled bottom row of the All-Time Coaching Records table: '1182 536 608 38 .453' (games, W, L, T, pct), covering 1896-2025 incl. Gordon Sammis (interim) 2025. Year-by-year table (PDF p.33) ha"
+ },
+ {
+  "team": "Fresno St.",
+  "status": "within 3 games",
+  "guide": [
+   660,
+   460,
+   27
+  ],
+  "guide_alt": [
+   661,
+   460,
+   27
+  ],
+  "through": 2025,
+  "official": [
+   660,
+   457,
+   27
+  ],
+  "onField": [
+   658,
+   459,
+   27
+  ],
+  "url": "https://gobulldogs.com/documents/2026/8/17/1._2026_Intro.pdf",
+  "basis": "on-field",
+  "notes": "TWO DISAGREEING FIGURES IN THE SAME GUIDE: Intro quick facts 'All-Time Record 660-460-27'; Record Book coaching results 'ALL-TIME RECORD: 104 Seasons 661-460-27 (.576)'. Year-by-year/series pages footnote: '+ Indicates f"
+ },
+ {
+  "team": "Indiana",
+  "status": "DISAGREES",
+  "guide": [
+   536,
+   716,
+   45
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   534,
+   715,
+   44
+  ],
+  "onField": [
+   533,
+   716,
+   44
+  ],
+  "url": "https://static.iuhoosiers.com/custompages/PDF/FB/2026/26-FB-Record_Book.pdf",
+  "basis": "unclear",
+  "notes": "'OVERALL RECORD 536-716-45 - 139 Years (1885-)' printed after the 2025 (16-0) season. Results pages mark games 'Game later forfeited to IU' (PDF pp.5, 18) and '# - later forfeited to IU' (PDF p.10), but no explicit basis"
+ },
+ {
+  "team": "Kansas St.",
+  "status": "within 3 games",
+  "guide": [
+   585,
+   681,
+   41
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   585,
+   680,
+   42
+  ],
+  "onField": [
+   584,
+   681,
+   42
+  ],
+  "url": "https://www.kstatesports.com/documents/2026/7/7/2026_K-State_Football_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "'Overall Record (Years) 585-681-41 (130)'; 'YEARS: 130 | ALL-TIME RECORD: 585-681-41 (.463)'; coaching 'Totals 130 years 585-681-41 .463'. KU series footnote: '*KU forfeited its 20-18 win over K-State in 1980.' Printed W"
+ },
+ {
+  "team": "Louisiana Tech",
+  "status": "not found",
+  "url": null,
+  "notes": "NOT FOUND. Tried: latechsports.com football page and Media Center; the 'Football Record Book' page (latechsports.com/sports/2018/7/20/_m_footbl_media_guides_htm"
+ },
+ {
+  "team": "Miami (OH)",
+  "status": "match official",
+  "guide": [
+   740,
+   496,
+   44
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   740,
+   496,
+   44
+  ],
+  "onField": [
+   739,
+   497,
+   44
+  ],
+  "url": "https://miamiredhawks.com/documents/2026/6/17/2026_FB_Record_Book.pdf",
+  "basis": "official",
+  "notes": "Opponents 'Totals 740 496 44 .595'; coaching 'Totals 133 1,280 740 496 44 .595' (seasons, games). Note on p.58: 'Miami's win against Michigan State in 1994 came via a forfeit by the Spartans.' (forfeit applied). Matches "
+ },
+ {
+  "team": "Nebraska",
+  "status": "match official",
+  "guide": [
+   931,
+   436,
+   40
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   931,
+   436,
+   40
+  ],
+  "onField": [
+   931,
+   436,
+   40
+  ],
+  "url": "https://storage.googleapis.com/huskers-com-prod/2026/09/10/0blb1r4VnLMZY9Rye1ViMJjrwZ78KLrfIeMwoWf6.pdf",
+  "basis": "both",
+  "notes": "'All-Time Record 931-436-40 (.676)' / 'All-Time Games Played 1,407'; year-by-year 'TOTAL 931-436-40 (.676)'. No basis footnote; matches both supplied values."
+ },
+ {
+  "team": "North Texas",
+  "status": "within 3 games",
+  "guide": [
+   561,
+   550,
+   34
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   560,
+   550,
+   33
+  ],
+  "onField": [
+   558,
+   552,
+   33
+  ],
+  "url": "https://meangreensports.com/documents/2026/8/26/UNT_FB_2026_Media_Almanac.pdf",
+  "basis": "unclear",
+  "notes": "'All-Time Football Record: 561-550-34 (.505)'; '110-YEAR TOTALS 1,145 561 550 34 .505'. Results/series pages note '+ game forfeited to North Texas' (forfeits applied); no vacated footnote. Differs from both supplied valu"
+ },
+ {
+  "team": "Oklahoma",
+  "status": "match official",
+  "guide": [
+   960,
+   351,
+   53
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   960,
+   351,
+   53
+  ],
+  "onField": [
+   960,
+   351,
+   53
+  ],
+  "url": "https://soonersports.com/documents/2026/8/28/2026_OU_Football_Media_Guide.pdf",
+  "basis": "both",
+  "notes": "'All-Time Record 960-351-53 (.723)'; coaches page 'Overall 960-351-53 (.723)'; year-by-year 'Totals Record 960-351-53'. No vacated/forfeit footnote. Matches both supplied values. (soonersports.com/documents/2026/1/10/Med"
+ },
+ {
+  "team": "Pittsburgh",
+  "status": "match official",
+  "guide": [
+   776,
+   571,
+   42
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   776,
+   571,
+   42
+  ],
+  "onField": [
+   776,
+   571,
+   42
+  ],
+  "url": "https://pittsburghpanthers.com/documents/2026/7/1/_5_Record_Book_Section_2026.pdf",
+  "basis": "both",
+  "notes": "Coaching 'Totals 776 571 42 .574'; series 'TOTAL 776 571 42'; year-by-year 'Total 776 571 42' (through 2025, 8-5). History section (_6_History_Section_2026.pdf) also checked; it prints no total. No basis footnote; matche"
+ },
+ {
+  "team": "San José St.",
+  "status": "DISAGREES",
+  "guide": [
+   523,
+   547,
+   38
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   527,
+   554,
+   38
+  ],
+  "onField": [
+   526,
+   555,
+   38
+  ],
+  "url": "https://storage.googleapis.com/san-jose-state-prod/2026/06/03/fqCR7BEO62BBaTnXaRSJBXZehhE8QNKaixN6l7ju.pdf",
+  "basis": "on-field",
+  "notes": "Series 'Totals 1893 2025 ... 523-547-38+' with footnotes '* - record later changed by action of the conference. Only on-the-field results are counted.' and '+ - includes on-the-field results against all opponents'; coach"
+ },
+ {
+  "team": "Syracuse",
+  "status": "match official",
+  "guide": [
+   756,
+   589,
+   49
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   756,
+   589,
+   49
+  ],
+  "onField": [
+   767,
+   589,
+   49
+  ],
+  "url": "https://cuse.com/documents/2026/9/28/2026_Football_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "Quick Facts 'All-Time Record * 756-589-49 (136 seasons)' with '* - Includes 11 wins from 2004-06 vacated by NCAA'; coaching ledger 'Totals * 136 seasons 756-589-49 .561' with '* - Overall record includes 11 wins from 200"
+ },
+ {
+  "team": "Texas Tech",
+  "status": "match official",
+  "guide": [
+   617,
+   488,
+   32
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   617,
+   488,
+   32
+  ],
+  "onField": [
+   617,
+   488,
+   32
+  ],
+  "url": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/texastech.com/documents/2026/8/17/5_-_History__2026_.pdf",
+  "basis": "both",
+  "notes": "'All-Time Record 617-488-32 (.557)'; coaching 'Totals 1925-2025 617 488 32 .557' (league games 307-268-11). No basis footnote; matches both supplied values."
+ },
+ {
+  "team": "UCF",
+  "status": "within 3 games",
+  "guide": [
+   304,
+   248,
+   1
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   302,
+   249,
+   1
+  ],
+  "onField": [
+   302,
+   249,
+   1
+  ],
+  "url": "https://storage.googleapis.com/ucfknights-com-prod/2026/09/10/p5MTXAzi7KjOpmNotvRy3Yib0KERZ9TbJdNa9eYN.pdf",
+  "basis": "unclear",
+  "notes": "Quick Facts 'All-Time Record 304-248-1'; year-by-year 'Totals 47 Seasons 304-248-1'; p.116 'Totals 47 seasons; 553 games / Overall: 304-248-1 (.551)'. 1980 results list 'Carson-Newman $ FW 30-21' with '$ - Later forfeite"
+ },
+ {
+  "team": "Utah",
+  "status": "match official",
+  "guide": [
+   735,
+   491,
+   31
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   735,
+   491,
+   31
+  ],
+  "onField": [
+   735,
+   491,
+   31
+  ],
+  "url": "https://utahutes.com/documents/2026/7/6/2026_Utah_Football_Media_Guide_COMPRESSED.pdf",
+  "basis": "both",
+  "notes": "Category table row 'Overall 735 491 31 .597' (PDF text extraction splits the digits; read as 735-491-31, pct .597). No vacated/forfeit footnote. Matches both supplied values."
+ },
+ {
+  "team": "Washington",
+  "status": "not found",
+  "url": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/washington.sidearmsports.com/documents/2026/7/21/2026_Washington_FB_Media_Guide.pdf",
+  "notes": "NOT FOUND IN DOCUMENT: the 180-page 2026 guide prints no all-time W-L-T total (Quick Facts gives only 2025 record and coach records; year-by-year pages give per"
+ },
+ {
+  "team": "Arizona St.",
+  "status": "within 3 games",
+  "guide": [
+   636,
+   427,
+   24
+  ],
+  "guide_alt": null,
+  "through": 2024,
+  "official": [
+   639,
+   427,
+   24
+  ],
+  "onField": [
+   649,
+   427,
+   24
+  ],
+  "url": "https://thesundevils.com/documents/a9c21c74-aed0-4b03-a61f-829b03c288e3.pdf",
+  "basis": "official",
+  "notes": "No 2026 media guide located (searched thesundevils.com football, stats and roster pages plus 4 web searches; only game-day programs exist for 2026). The only all-time figure is the series-standings total in the 2025 guid"
+ },
+ {
+  "team": "Boise St.",
+  "status": "within 3 games",
+  "guide": [
+   713,
+   255,
+   12
+  ],
+  "guide_alt": [
+   512,
+   193,
+   2
+  ],
+  "through": 2025,
+  "official": [
+   511,
+   194,
+   2
+  ],
+  "onField": [
+   511,
+   194,
+   2
+  ],
+  "url": "https://broncosports.com/documents/2026/7/22/2026_Boise_State_Football_Record_Book.pdf",
+  "basis": "official",
+  "notes": "'All-Time Record 713-255-12 (.734), 980 games over 89 seasons' includes the 1933-67 junior-college era; same total on the year-by-year page. Separately prints 'Four-Year School Record (Since 1968) 512-193-2 (.726), 707 g"
+ },
+ {
+  "team": "Cincinnati",
+  "status": "within 3 games",
+  "guide": [
+   674,
+   620,
+   51
+  ],
+  "guide_alt": [
+   674,
+   621,
+   50
+  ],
+  "through": 2025,
+  "official": [
+   671,
+   620,
+   51
+  ],
+  "onField": [
+   671,
+   620,
+   51
+  ],
+  "url": "https://gobearcats.com/documents/1f5f8e61-50ca-4a12-8fb5-efb36af00905.pdf",
+  "basis": "official",
+  "notes": "Quick facts and year-by-year totals agree at 674-620-51. History narrative on PDF p.72 says UC 'holds an all-time mark of 674-621-50 entering its 139th season' (disagrees by one L/T). Year-by-year footnote: '*Includes vi"
+ },
+ {
+  "team": "Duke",
+  "status": "match official",
+  "guide": [
+   556,
+   565,
+   31
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   556,
+   565,
+   31
+  ],
+  "onField": [
+   556,
+   565,
+   31
+  ],
+  "url": "https://goduke.com/documents/download/2026/6/25/2026_Duke_Football_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "Quick facts and year-by-year agree. No vacated-game or Duke forfeit footnote (the only forfeit note concerns South Carolina's 1965 conference forfeits). Duke has no vacated wins, so official = on-field here."
+ },
+ {
+  "team": "Georgia",
+  "status": "match official",
+  "guide": [
+   904,
+   434,
+   54
+  ],
+  "guide_alt": [
+   902,
+   434,
+   54
+  ],
+  "through": 2025,
+  "official": [
+   904,
+   434,
+   54
+  ],
+  "onField": [
+   904,
+   434,
+   54
+  ],
+  "url": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/georgiadogs.com/documents/2026/8/11/26FB_MediaGuide.pdf",
+  "basis": "unclear",
+  "notes": "Two printed totals disagree: coaching-records total 904-434-54 vs record-by-decade total 902-434-54. No quick-facts all-time line found. A 2025 game recap (PDF p.94) also says 'The Bulldogs' all-time record is 900-433-54"
+ },
+ {
+  "team": "Iowa",
+  "status": "within 3 games",
+  "guide": [
+   707,
+   584,
+   39
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   706,
+   585,
+   39
+  ],
+  "onField": [
+   710,
+   585,
+   39
+  ],
+  "url": "https://storage.googleapis.com/hawkeyesports-prod/2026/08/17/mY7U4aafGvGu5XNBhXGcYoKBH4pSLg0EkwJW4nkj.pdf",
+  "basis": "official",
+  "notes": "Quick facts and year-by-year agree. Footnote: '^ - Iowa vacated four wins in 2023'. Game lists also note '#awarded forfeit by NCAA' (1977)."
+ },
+ {
+  "team": "Kent St.",
+  "status": "match official",
+  "guide": [
+   371,
+   614,
+   28
+  ],
+  "guide_alt": [
+   370,
+   615,
+   28
+  ],
+  "through": 2025,
+  "official": [
+   371,
+   614,
+   28
+  ],
+  "onField": [
+   371,
+   614,
+   28
+  ],
+  "url": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/kentstatesports.com/documents/2026/7/19/2026_Kent_State_Football_Media_Guide__July_2026_.pdf",
+  "basis": "unclear",
+  "notes": "Totals disagree: coaching summary 371-614-28 vs quick facts 370-615-28. Year-by-year results (PDF p.71-76) list forfeits: 1920 St. Ignatius 'Won by forfeit'; 1967 '%Forfeit (regular score 21-14)'. No year-by-year grand t"
+ },
+ {
+  "team": "Louisville",
+  "status": "within 3 games",
+  "guide": [
+   568,
+   505,
+   17
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   568,
+   504,
+   17
+  ],
+  "onField": [
+   566,
+   506,
+   17
+  ],
+  "url": "https://files.provationsgroupcdn.com/publications/Louisville-Football-Guide-2026/docs/Louisville-Football-Guide-2026.pdf",
+  "basis": "unclear",
+  "notes": "Only one all-time total printed. The year-by-year (PDF p.202) and coaching records (PDF p.203) pages print no grand total. All-time scores mark forfeits as counted: 1921 '*won by forfeit', 1931 '* lost by forfeit', 1975 "
+ },
+ {
+  "team": "Michigan St.",
+  "status": "match official",
+  "guide": [
+   725,
+   502,
+   44
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   725,
+   502,
+   44
+  ],
+  "onField": [
+   744,
+   497,
+   44
+  ],
+  "url": "https://msuspartans.com/documents/download/2026/7/29/2026_Michigan_State_Football_Media_Guide.pdf",
+  "basis": "official",
+  "notes": "All totals agree (quick facts gives .593 pct vs .588 elsewhere; W-L-T identical). Footnote: '*MSU vacated 14 wins from the 2022 (five), 2023 (four) and 2024 (five) seasons as part of a negotiated resolution with NCAA due"
+ },
+ {
+  "team": "Nevada",
+  "status": "match official",
+  "guide": [
+   583,
+   540,
+   33
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   583,
+   540,
+   33
+  ],
+  "onField": [
+   582,
+   541,
+   33
+  ],
+  "url": "https://nevadawolfpack.com/documents/2026/9/4/2026_Nevada_Football_Record_Book.pdf",
+  "basis": "unclear",
+  "notes": "Historical-record box and running year-by-year total agree. Also prints 'ALL-TIME FBS RECORD (1992) 204-204'. No forfeit/vacated footnote found. Linked from nevadawolfpack.com football roster page."
+ },
+ {
+  "team": "Northern Illinois",
+  "status": "match official",
+  "guide": [
+   622,
+   541,
+   51
+  ],
+  "guide_alt": [
+   607,
+   530,
+   51
+  ],
+  "through": 2025,
+  "official": [
+   622,
+   541,
+   51
+  ],
+  "onField": [
+   622,
+   541,
+   51
+  ],
+  "url": "https://niuhuskies.com/documents/2026/9/9/FB26_Full_Record_Book.pdf",
+  "basis": "unclear",
+  "notes": "Two printed totals disagree: year-by-year 622-541-51 vs the 'All-Time Won-Loss Record' box 607-530-51. Also prints '56-Year (FBS) Totals 322-339-4'. Note '*Indicates College Division'; 1942 Eastern Illinois forfeit count"
+ },
+ {
+  "team": "Oklahoma St.",
+  "status": "DISAGREES",
+  "guide": [
+   643,
+   595,
+   48
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   641,
+   592,
+   48
+  ],
+  "onField": [
+   641,
+   592,
+   48
+  ],
+  "url": "https://okstate.com/documents/2026/7/6/2026_Oklahoma_State_Football_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "All printed totals agree. No quick-facts all-time line found. Forfeits counted as OSU wins: 1922 Tulsa '(win by forfeit) W 1-0'; 1972 at Oklahoma '^ Oklahoma later forfeited, handing OSU the win'; 1980 '^ Kansas later fo"
+ },
+ {
+  "team": "Purdue",
+  "status": "match official",
+  "guide": [
+   644,
+   618,
+   48
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   644,
+   618,
+   48
+  ],
+  "onField": [
+   643,
+   619,
+   48
+  ],
+  "url": "https://storage.googleapis.com/purduesports-com-prod/2026/08/24/jmcgY6q9niPq9UHF1gjHxBMSvEZTCJZ2Ko5Qb2dg.pdf",
+  "basis": "official",
+  "notes": "All totals agree. Forfeits counted: 1894-95 forfeit wins (Wisconsin, Indiana, Iowa State) and 1994 at Michigan State '* Denotes win by forfeit'. No vacated footnote."
+ },
+ {
+  "team": "South Alabama",
+  "status": "not found",
+  "url": "https://usajaguars.com/documents/2026/7/15/South_Alabama_Football_Media_Guide.pdf",
+  "notes": "NOT FOUND as a printed total. The 2026 guide prints season records 2009-2025 and each coach's W-L (Jones 52-50, Wommack 22-16, Applewhite 11-14, Campbell 9-26) "
+ },
+ {
+  "team": "TCU",
+  "status": "within 3 games",
+  "guide": [
+   705,
+   582,
+   56
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   703,
+   582,
+   57
+  ],
+  "onField": [
+   703,
+   582,
+   57
+  ],
+  "url": "https://gofrogs.com/documents/2026/7/31/2026_TCU_Football_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "Only the quick-facts total is printed; the year-by-year records (PDF p.190-191) and coaching records (PDF p.166) print no grand total. All-time results show forfeits counted (1918 'at SMU (forfeit) L 0-1'; 1922 'at Arkan"
+ },
+ {
+  "team": "Toledo",
+  "status": "within 3 games",
+  "guide": [
+   597,
+   461,
+   24
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   596,
+   462,
+   24
+  ],
+  "onField": [
+   595,
+   463,
+   24
+  ],
+  "url": "https://utrockets.com/documents/2026/8/20/2026_Toledo_football_media_guide.pdf",
+  "basis": "unclear",
+  "notes": "Both totals agree. Counts the 1984 California Bowl vs UNLV as a win: '*Game forfeited to UT because of the use of ineligible players by UNLV' (bowl recap adds 'UNLV has never accepted the ruling'). Also 1921 forfeits (Ad"
+ },
+ {
+  "team": "UCLA",
+  "status": "match official",
+  "guide": [
+   645,
+   462,
+   37
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   645,
+   462,
+   37
+  ],
+  "onField": [
+   645,
+   462,
+   37
+  ],
+  "url": "https://uclabruins.com/documents/fda665d3-acf8-4202-b9e9-fdb32b8cc183.pdf",
+  "basis": "on-field",
+  "notes": "Quick facts and coaching totals agree. 1977 note: 'NOTE: The games declared forfeit by the Pac-8 Conference do not affect the program's overall and all-time conference records.' (conference forfeits not applied; no NCAA "
+ },
+ {
+  "team": "Utah St.",
+  "status": "DISAGREES",
+  "guide": [
+   592,
+   585,
+   31
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   583,
+   582,
+   31
+  ],
+  "onField": [
+   581,
+   584,
+   31
+  ],
+  "url": "https://utahstateaggies.com/documents/2026/8/25/2026_USU_FB_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "Both totals agree; no quick-facts all-time line found. Counts the 1972 Oklahoma game as a 2-0 win: '*Game forfeited by Oklahoma (L 0-49)'. No vacated footnote."
+ },
+ {
+  "team": "Washington St.",
+  "status": "DISAGREES",
+  "guide": [
+   591,
+   593,
+   45
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   587,
+   597,
+   45
+  ],
+  "onField": [
+   587,
+   597,
+   45
+  ],
+  "url": "https://wsucougars.com/documents/b976304f-b243-40e2-b8b7-56baae1fcaa4.pdf",
+  "basis": "unclear",
+  "notes": "One total printed. Year-by-year results note Pac-10-ordered forfeits counted as WSU wins: '* = Game later forfeited to WSU by order of Pacific-10 Conference' (late 1970s). No vacated footnote."
+ },
+ {
+  "team": "Arkansas",
+  "status": "match official",
+  "guide": [
+   749,
+   555,
+   40
+  ],
+  "guide_alt": [
+   749,
+   554,
+   40
+  ],
+  "through": 2025,
+  "official": [
+   749,
+   555,
+   40
+  ],
+  "onField": [
+   748,
+   556,
+   40
+  ],
+  "url": "https://arkansasrazorbacks.com/pdf/mediaguide/football/2026/Razorback_Football.pdf",
+  "basis": "unclear",
+  "notes": "Two sections of the same 2026 guide disagree by one loss. The quick facts also print 'ALL-TIME CONFERENCE RECORD: 354-362-18', while the coaching table prints conference 354-364-18. The year-by-year table (History PDF p."
+ },
+ {
+  "team": "Boston College",
+  "status": "within 3 games",
+  "guide": [
+   703,
+   540,
+   37
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   703,
+   541,
+   37
+  ],
+  "onField": [
+   703,
+   541,
+   37
+  ],
+  "url": "https://bceagles.com/documents/download/2026/8/14/2026_BCFB_MEDIA_GUIDE.pdf",
+  "basis": "unclear",
+  "notes": "Both places print 703-540-37. No vacated/forfeit footnote found. Linked from bceagles.com/sports/2026/7/27/2026-bc-football-media-center. Differs by one loss from the batch list (703-541-37)."
+ },
+ {
+  "team": "Clemson",
+  "status": "match official",
+  "guide": [
+   815,
+   482,
+   45
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   815,
+   482,
+   45
+  ],
+  "onField": [
+   815,
+   482,
+   45
+  ],
+  "url": "https://data.clemsontigers.com/pdf/football/2026-27/MediaGuide.pdf",
+  "basis": "unclear",
+  "notes": "Same 815-482-45 printed in four tables; no vacated/forfeit footnote found. Text: \"Clemson's 815th all-time win came in the Tigers' 28-14 victory at South Carolina on Nov. 29, 2025.\""
+ },
+ {
+  "team": "East Carolina",
+  "status": "DISAGREES",
+  "guide": [
+   481,
+   463,
+   11
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   477,
+   463,
+   12
+  ],
+  "onField": [
+   477,
+   463,
+   12
+  ],
+  "url": "https://ecupirates.com/documents/download/2026/8/14/2026_ECU_Football_Record_Book.pdf",
+  "basis": "official",
+  "notes": "Footnote: \"1986 Temple game and 1989 Louisiana Tech game were forfeited to ECU due to use of an ineligible player. The school and coaching records reflect this change.\" Totals cover 1932-2025 (includes pre-Division I yea"
+ },
+ {
+  "team": "Georgia Tech",
+  "status": "not found",
+  "url": "https://ramblinwreck.com/2026-georgia-tech-football-information-guide/",
+  "notes": "Not found. The '2026 GT Football Info Guide' link on ramblinwreck.com game previews returns HTTP 404, and guessed storage URLs failed. Checked the 2025 GT FB In"
+ },
+ {
+  "team": "Iowa St.",
+  "status": "match official",
+  "guide": [
+   585,
+   685,
+   46
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   585,
+   685,
+   46
+  ],
+  "onField": [
+   585,
+   685,
+   46
+  ],
+  "url": "https://cyclones.com/documents/download/2026/7/7/2026_FB_MediaGuide.pdf",
+  "basis": "unclear",
+  "notes": "Both tables print 585-685-46 (.462). No vacated/forfeit footnote found."
+ },
+ {
+  "team": "Kentucky",
+  "status": "match official",
+  "guide": [
+   652,
+   662,
+   44
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   652,
+   662,
+   44
+  ],
+  "onField": [
+   661,
+   663,
+   44
+  ],
+  "url": "https://storage.googleapis.com/ukathletics-com/2026/08/f83e3785-2026-kentucky-fact-book.pdf",
+  "basis": "official",
+  "notes": "'#All-Time Overall Record: 652-662-44 (.496)'; footnote '# record does not include wins from the 2021 season, vacated by the NCAA'. Fact book TOC references year-by-year pages 176-177, which are not in this 51-page docum"
+ },
+ {
+  "team": "Marshall",
+  "status": "DISAGREES",
+  "guide": [
+   620,
+   556,
+   35
+  ],
+  "guide_alt": [
+   620,
+   566,
+   35
+  ],
+  "through": 2025,
+  "official": [
+   643,
+   581,
+   47
+  ],
+  "onField": [
+   643,
+   581,
+   47
+  ],
+  "url": "https://herdzone.com/documents/download/2026/7/31/2026_Marshall_Football_Record_Book.pdf",
+  "basis": "unclear",
+  "notes": "Book states: 'The records listed herein are only from games against college competition.' The year-by-year table (PDF p.2, 1895-2025, includes I-AA/Southern Conference years) has no totals row. The two printed totals dis"
+ },
+ {
+  "team": "Middle Tennessee",
+  "status": "within 3 games",
+  "guide": [
+   611,
+   472,
+   28
+  ],
+  "guide_alt": null,
+  "through": 2024,
+  "official": [
+   610,
+   472,
+   28
+  ],
+  "onField": [
+   610,
+   472,
+   28
+  ],
+  "url": "https://goblueraiders.com/documents/download/2025/7/18/2025_Record_Book.pdf",
+  "basis": "unclear",
+  "notes": "Through the 2024 season only (110 years). The note says 'MTSU football began in 1911 but there are only records of two games in 1911 and one in 1912.' The total includes pre-FBS years (first FBS year 1999). No 2026 media"
+ },
+ {
+  "team": "New Mexico",
+  "status": "within 3 games",
+  "guide": [
+   513,
+   650,
+   31
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   513,
+   651,
+   31
+  ],
+  "onField": [
+   513,
+   651,
+   31
+  ],
+  "url": "https://storage.googleapis.com/golobos-prod/2026/09/02/s7lwwTTGa3LwemXXxQOxiCwr83MuBRrTrDcv4RRa.pdf",
+  "basis": "unclear",
+  "notes": "'Overall All-Time Record ... 513-650-31'. Linked as '2026 Media Guide' from golobos.com/lobo-fb-media-center. No year-by-year totals row found."
+ },
+ {
+  "team": "Northwestern",
+  "status": "within 3 games",
+  "guide": [
+   579,
+   717,
+   44
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   577,
+   716,
+   44
+  ],
+  "onField": [
+   576,
+   717,
+   44
+  ],
+  "url": "https://storage.googleapis.com/nusports-com-prod/2026/08/24/wQKYqLO9F7myWi7owtyqW1GXeTnSwW9aTSyM6XND.pdf",
+  "basis": "official",
+  "notes": "Season results (PDF p.131) footnote '* Denotes game later forfeited to Northwestern' on the 1994 Michigan State game, so the total counts the forfeit. Linked as 'Media Guide' from nusports.com/sports/football (sidearm /d"
+ },
+ {
+  "team": "Old Dominion",
+  "status": "not found",
+  "url": "https://storage.googleapis.com/odu-prod/2026/09/04/dgrTZzZjW8VmpouuMbEtn7AkRwaD5evnnOZ5mx42.pdf",
+  "notes": "Not found. The 2026 ODU media guide (linked as 'Media Guide' from odusports.com/sports/football) prints season-by-season results 2009-2025 (PDF pp.131-133) and "
+ },
+ {
+  "team": "Rice",
+  "status": "DISAGREES",
+  "guide": [
+   490,
+   635,
+   32
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   501,
+   668,
+   32
+  ],
+  "onField": [
+   500,
+   669,
+   32
+  ],
+  "url": "https://riceowls.com/documents/download/2026/8/22/2026_Factbook_work_copy.pdf",
+  "basis": "unclear",
+  "notes": "The only all-time total printed is in the series-records table: 'College Opponents 482-628-31 / Other Opponents 8-7-1 / All Opponents 490-635-32'. The year-by-year All-Time Record table (PDF pp.80-81) and All-Time Coache"
+ },
+ {
+  "team": "South Carolina",
+  "status": "match on-field",
+  "guide": [
+   647,
+   625,
+   44
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   648,
+   624,
+   44
+  ],
+  "onField": [
+   647,
+   625,
+   44
+  ],
+  "url": "https://storage.googleapis.com/gamecocksonline-com/2026/07/021d9bb1-2026fbmediaguide.pdf",
+  "basis": "unclear",
+  "notes": "Consistent 647-625-44 in quick facts, narrative ('a .508 winning percentage'), records by decade and year-by-year table. No vacated/forfeit footnote found."
+ },
+ {
+  "team": "Temple",
+  "status": "DISAGREES",
+  "guide": [
+   495,
+   639,
+   52
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   502,
+   633,
+   52
+  ],
+  "onField": [
+   502,
+   633,
+   52
+  ],
+  "url": "https://owlsports.com/documents/download/2026/7/16/2026_R_F_Book.pdf",
+  "basis": "unclear",
+  "notes": "Printed total is well below the batch list (502-633-52). No vacated/forfeit footnote found."
+ },
+ {
+  "team": "Troy",
+  "status": "within 3 games",
+  "guide": [
+   588,
+   444,
+   28
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   587,
+   445,
+   28
+  ],
+  "onField": [
+   587,
+   445,
+   28
+  ],
+  "url": "https://troytrojans.com/documents/download/2026/7/14/2026_Troy_Football_Record_Book_R.pdf",
+  "basis": "unclear",
+  "notes": "Quick facts 'All-Time Record: 588-444-28', 'Number of Seasons: 105'; coach year-by-year TOTALS 588-444-28 (.568), conf 269-156-5. Covers 1909-2025, including NAIA/D-II/I-AA years. Differs by 1 W/1 L from both figures in "
+ },
+ {
+  "team": "UMass",
+  "status": "within 3 games",
+  "guide": [
+   582,
+   661,
+   51
+  ],
+  "guide_alt": [
+   584,
+   672,
+   51
+  ],
+  "through": 2025,
+  "official": [
+   582,
+   661,
+   50
+  ],
+  "onField": [
+   582,
+   661,
+   50
+  ],
+  "url": "https://umassathletics.com/documents/download/2026/6/18/2026_Football_RecordBook.pdf",
+  "basis": "unclear",
+  "notes": "Quick facts and year-by-year both print 582-661-51 (.450); the head coaching history total prints 584-672-51 over 1322 games. Covers 1879-2025, including Yankee Conference/I-AA/FCS years."
+ },
+ {
+  "team": "Vanderbilt",
+  "status": "match official",
+  "guide": [
+   635,
+   674,
+   50
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   635,
+   674,
+   50
+  ],
+  "onField": [
+   634,
+   675,
+   50
+  ],
+  "url": "https://storage.googleapis.com/vucommodores-prod/2026/08/06/dikWglrBsRyw0hQYk2L00JftvTKyUyYPKHpW0F96.pdf",
+  "basis": "official",
+  "notes": "Both tables print 635-674-50. The milestone wins list (PDF p.41) counts 'Vanderbilt 6, Alabama 17 [forfeit] Sept. 11, 1993' as win No. 500 and lists win No. 635 on Nov. 29, 2025, so the total counts the NCAA-imposed 1993"
+ },
+ {
+  "team": "West Virginia",
+  "status": "match official",
+  "guide": [
+   791,
+   541,
+   45
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   791,
+   541,
+   45
+  ],
+  "onField": [
+   791,
+   541,
+   45
+  ],
+  "url": "https://wvusports.com/documents/download/2026/7/2/2026_WVU_Football_Quick_Facts.pdf",
+  "basis": "unclear",
+  "notes": "'All-Time Record: 791-541-45 (.591)', 'Seasons Played: 133'. The full 2026 guide and record book are hosted only on issuu (linked from wvusports.com) and were not scraped."
+ },
+ {
+  "team": "Arkansas St.",
+  "status": "within 3 games",
+  "guide": [
+   511,
+   537,
+   37
+  ],
+  "guide_alt": [
+   519,
+   535,
+   37
+  ],
+  "through": 2025,
+  "official": [
+   511,
+   536,
+   37
+  ],
+  "onField": [
+   521,
+   536,
+   37
+  ],
+  "url": "https://astateredwolves.com/documents/2026/8/10/2026_Arkansas_State_Football_Media_Guide_Reduced_Size.pdf",
+  "basis": "both",
+  "notes": "Official total printed 3 times as 511-537-37. Footnote p.171: '* 4 wins in 2005 and 6 wins in 2006 later vacated due to NCAA sanctions.' Coaching records p.212: 'Totals 111 1085 511-537-37^ .488 ... ^- Actual on-field re"
+ },
+ {
+  "team": "Bowling Green",
+  "status": "match official",
+  "guide": [
+   574,
+   440,
+   52
+  ],
+  "guide_alt": [
+   573,
+   440,
+   52
+  ],
+  "through": 2025,
+  "official": [
+   573,
+   440,
+   52
+  ],
+  "onField": [
+   573,
+   440,
+   52
+  ],
+  "url": "https://bgsufalcons.com/documents/2026/7/20/2026_BGSU_Football_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "Quick Facts: 'All-Time Record ....574-440-52 (.56285)', 'Total Number of Games 1,066', 'First Year of Football 1919'. Coaching Line total row: '107 573 440 52 .562'. These disagree by one win. No vacated or forfeit footn"
+ },
+ {
+  "team": "Coastal Carolina",
+  "status": "match official",
+  "guide": [
+   178,
+   103,
+   0
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   178,
+   103,
+   0
+  ],
+  "onField": [
+   178,
+   103,
+   0
+  ],
+  "url": "https://goccusports.com/documents/2026/9/3/26_FB_Guide___Records.pdf",
+  "basis": "both",
+  "notes": "Quick Facts: 'All-Time Record 178-103 (.633)', 'FCS Record (2003-15) 104-52 (.667)', 'FBS Record (2016-pr.) 74-51 (.592)'. Series page: 'Totals 178-103' and 'OVERALL 281 games 178-103 (.634)'. No ties column is printed, "
+ },
+ {
+  "team": "Eastern Michigan",
+  "status": "match official",
+  "guide": [
+   499,
+   638,
+   47
+  ],
+  "guide_alt": [
+   499,
+   636,
+   47
+  ],
+  "through": 2025,
+  "official": [
+   499,
+   638,
+   47
+  ],
+  "onField": [
+   499,
+   638,
+   47
+  ],
+  "url": "https://emueagles.com/documents/2026/7/21/2026_EMU_FB_Guide_small.pdf",
+  "basis": "unclear",
+  "notes": "Year-by-year and coaching totals both print 499-638-47. The all-time series records total prints 499-636-47, two fewer losses, and includes a 'Non-Collegiate 38-21-8' line. No vacated or forfeit footnote. Covers every se"
+ },
+ {
+  "team": "Hawaii",
+  "status": "within 3 games",
+  "guide": [
+   598,
+   503,
+   25
+  ],
+  "guide_alt": [
+   434,
+   446,
+   9
+  ],
+  "through": 2025,
+  "official": [
+   597,
+   503,
+   25
+  ],
+  "onField": [
+   597,
+   503,
+   25
+  ],
+  "url": "https://hawaiiathletics.com/documents/2026/8/24/2026_FB_Media_Guide_Web.pdf",
+  "basis": "unclear",
+  "notes": "Quick Facts: 'All-Time Record 598-503-25 (.542)' and 'All-Time Collegiate Record 434-446-9 (.493)'. Coaching table: 'Totals 109 25 coaches 598 503 25 .542 434 446 9 .493'. The overall total includes games against non-col"
+ },
+ {
+  "team": "Jacksonville St.",
+  "status": "DISAGREES",
+  "guide": [
+   632,
+   407,
+   40
+  ],
+  "guide_alt": [
+   631,
+   408,
+   40
+  ],
+  "through": 2025,
+  "official": [
+   630,
+   432,
+   39
+  ],
+  "onField": [
+   630,
+   432,
+   39
+  ],
+  "url": "https://jaxstatesports.com/documents/2026/8/24/2026FootballMediaGuide.pdf",
+  "basis": "unclear",
+  "notes": "Quick Facts: 'All-Time Record: 632-407-40', 'Modern Era (Since 1947): 526-296-17'. Coaching records: 'OVERALL 631 408 40 .607'. These disagree with each other, and both differ a lot from the batch list (630-432-39), espe"
+ },
+ {
+  "team": "Liberty",
+  "status": "not found",
+  "url": "https://libertyflames.com/sports/2024/8/21/football-media-guides",
+  "notes": "NOT FOUND. Tried: (1) the football media-guides page, which lists guides only through 2021 and says full guides were discontinued; (2) the 'History and Records'"
+ },
+ {
+  "team": "Maryland",
+  "status": "match official",
+  "guide": [
+   685,
+   640,
+   43
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   685,
+   640,
+   43
+  ],
+  "onField": [
+   685,
+   640,
+   43
+  ],
+  "url": "https://umterps.com/documents/2026/8/11/Record_Book_Thru_2025_datedADDED.pdf",
+  "basis": "both",
+  "notes": "Quick Facts: 'All-Time Record 685-640-43 (.518/1,368 games)'. That block is headed 'HISTORY (THROUGH 2023)', a stale label: the document title is 'Thru 2025' and the annual-records total runs through the 2025 row. The fi"
+ },
+ {
+  "team": "Minnesota",
+  "status": "match official",
+  "guide": [
+   749,
+   553,
+   44
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   749,
+   553,
+   44
+  ],
+  "onField": [
+   749,
+   553,
+   44
+  ],
+  "url": "https://gophersports.com/documents/2026/8/24/2026_FB_MediaGuide.pdf",
+  "basis": "both",
+  "notes": "Quick Facts: 'All-Time Record: 749-553-44 (.573)', 'First Year of Competition: 1882'. Matches the series-records total. The only vacated footnote ('* win vacated by NCAA', PDF p.129) is about an Ohio State game, not a Mi"
+ },
+ {
+  "team": "New Mexico St.",
+  "status": "within 3 games",
+  "guide": [
+   463,
+   687,
+   30
+  ],
+  "guide_alt": [
+   459,
+   679,
+   30
+  ],
+  "through": 2025,
+  "official": [
+   462,
+   688,
+   30
+  ],
+  "onField": [
+   461,
+   689,
+   30
+  ],
+  "url": "https://nmstatesports.com/documents/2026/8/14/2026_Football_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "Three different all-time figures are printed: Quick Facts 463-687-30; coaching records 459-679-30; all-time series records 'Totals 459-623-30', which looks like a misprint and is noted only. The year-by-year results (pri"
+ },
+ {
+  "team": "Notre Dame",
+  "status": "match on-field",
+  "guide": [
+   993,
+   342,
+   42
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   972,
+   341,
+   42
+  ],
+  "onField": [
+   993,
+   342,
+   42
+  ],
+  "url": "https://storage.googleapis.com/fightingirish-com/2026/07/2026-NDFB-History-And-Records.pdf",
+  "basis": "on-field",
+  "notes": "The year-by-year total counts the vacated 2012 and 2013 games, which are starred. Footnote (PDF pp.177-178, 320): 'Includes 21 victories and one loss from 2012 (12 wins, one loss) and 2013 (nine wins) seasons later vacat"
+ },
+ {
+  "team": "Oregon",
+  "status": "match official",
+  "guide": [
+   731,
+   514,
+   46
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   731,
+   514,
+   46
+  ],
+  "onField": [
+   731,
+   514,
+   46
+  ],
+  "url": "https://goducks.com/documents/2026/8/20/2026_Oregon_Football_Record_Book.pdf",
+  "basis": "official",
+  "notes": "Consistent everywhere. Series-records footnote (PDF p.65): 'All-time record reflects forfeits to Washington State in 1978 and 1979'. A note on PDF p.80 says Oregon won those games in 1978 and 1979 'but later was forced t"
+ },
+ {
+  "team": "Rutgers",
+  "status": "not found",
+  "url": "https://scarletknights.com/documents/2026/8/17/26RUFB_MediaGuide1.pdf",
+  "notes": "NOT FOUND. The 2026 guide (121 PDF spreads) prints 'First Year of Football 1869', the 'All-Time Bowl Record 7-6', season-by-season All-Time Results (printed pp."
+ },
+ {
+  "team": "South Florida",
+  "status": "match official",
+  "guide": [
+   184,
+   164,
+   0
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   184,
+   164,
+   0
+  ],
+  "onField": [
+   184,
+   164,
+   0
+  ],
+  "url": "https://gousfbulls.com/documents/2026/8/25/2026_USF_Football_MG_RECORD_BOOK__WEB_Large_.pdf",
+  "basis": "both",
+  "notes": "'All-Time Games Played 348, in 29 seasons'; 'Overall Record 184-164 (.529)'; 'As FCS Member (1997-99 - 3 seasons) 20-13'; 'As FBS Member (2000-Pres.) 164-151'. No ties column is printed, so ties are recorded as 0. No vac"
+ },
+ {
+  "team": "Tennessee",
+  "status": "within 3 games",
+  "guide": [
+   883,
+   423,
+   54
+  ],
+  "guide_alt": [
+   894,
+   423,
+   54
+  ],
+  "through": 2025,
+  "official": [
+   883,
+   422,
+   53
+  ],
+  "onField": [
+   893,
+   422,
+   54
+  ],
+  "url": "https://utsports.com/documents/2026/7/24/Volmanac_Section__Web_.pdf",
+  "basis": "both",
+  "notes": "'All-time NCAA Record: 883-423-54*' and 'All-time On-Field Record: 894-423-54'. Footnote: '* - Eight wins from the 2019 season and three wins from the 2020 season were vacated by ruling of the NCAA Committee on Infractio"
+ },
+ {
+  "team": "Tulane",
+  "status": "DISAGREES",
+  "guide": [
+   583,
+   684,
+   38
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   585,
+   680,
+   38
+  ],
+  "onField": [
+   586,
+   679,
+   38
+  ],
+  "url": "https://tulanegreenwave.com/documents/2026/8/26/Complete.pdf",
+  "basis": "official",
+  "notes": "'132 Years, 42 Coaches Overall Record: 583-684-38 ... *includes one or more NCAA-mandated forfeits'. The series page carries the same footnote, and the coaching page says '*includes forfeit'. This matches neither batch f"
+ },
+ {
+  "team": "UNLV",
+  "status": "within 3 games",
+  "guide": [
+   291,
+   376,
+   4
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   273,
+   393,
+   4
+  ],
+  "onField": [
+   291,
+   375,
+   4
+  ],
+  "url": "https://s3.us-east-2.amazonaws.com/sidearm.nextgen.sites/unlvrebels.com/documents/2026/7/14/2026_UNLV_Football_Record_Book__ONLINE_.pdf",
+  "basis": "on-field",
+  "notes": "Consistent across three places. There is no vacated or forfeit footnote anywhere in the book. The total equals the batch list's on-field figure, not the official 273-393-4, so 'on-field' is inferred from the numbers, not"
+ },
+ {
+  "team": "Virginia",
+  "status": "match official",
+  "guide": [
+   699,
+   652,
+   48
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   699,
+   652,
+   48
+  ],
+  "onField": [
+   699,
+   652,
+   48
+  ],
+  "url": "https://static.virginiasports.com/custompages/sports/m-footbl/factbook/2026/2026_Virginia_Football_Record_Book_web.pdf",
+  "basis": "both",
+  "notes": "'First Year of Football 1888', 'Total Number of Games 1,399', 'All-Time Record 699-652-48'. Results pages mark '+UVA win by forfeit' and '* Forfeit' games. No vacated footnote. Matches the batch list."
+ },
+ {
+  "team": "Western Michigan",
+  "status": "not found",
+  "url": null,
+  "notes": "NOT FOUND. Tried: (1) the wmubroncos.com football page, whose only football PDFs are 2026 game notes, programs and stats; (2) the athletic media-relations page "
+ },
+ {
+  "team": "Army",
+  "status": "match official",
+  "guide": [
+   746,
+   553,
+   51
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   746,
+   553,
+   51
+  ],
+  "onField": [
+   746,
+   553,
+   51
+  ],
+  "url": "https://goarmywestpoint.com/documents/2026/8/17/2026_Army_Football_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "Both totals agree (pct printed .571 vs .572). No program-level vacated/forfeit footnote on the totals. Program has no lower-division seasons."
+ },
+ {
+  "team": "Buffalo",
+  "status": "not found",
+  "url": "https://ubbulls.com/documents/2026/8/14/2026_football_infoguide.pdf",
+  "notes": "NOT FOUND: the 2026 Info Guide prints year-by-year records through 2025, coaches ranked by wins and all-time series records, but no all-time W-L-T total anywher"
+ },
+ {
+  "team": "Colorado",
+  "status": "match official",
+  "guide": [
+   732,
+   548,
+   36
+  ],
+  "guide_alt": null,
+  "through": 2024,
+  "official": [
+   732,
+   548,
+   36
+  ],
+  "onField": [
+   732,
+   548,
+   36
+  ],
+  "url": "https://static.cubuffs.com/custompages/football/2025_Record_Book/3-148_results.pdf",
+  "basis": "unclear",
+  "notes": "No 2026 PDF found. CU's site now links its 'Record Book' to cubuffs.statsgeek.com (third-party StatsGeek database, not used). Season-by-season table ends with 2024 (Deion Sanders 9-4), so this total runs through 2024."
+ },
+ {
+  "team": "Florida",
+  "status": "match official",
+  "guide": [
+   770,
+   458,
+   40
+  ],
+  "guide_alt": [
+   772,
+   458,
+   40
+  ],
+  "through": 2025,
+  "official": [
+   770,
+   458,
+   40
+  ],
+  "onField": [
+   770,
+   458,
+   40
+  ],
+  "url": "https://floridagators.com/documents/2026/8/12/2026_Football_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "Quick facts and Records-by-Coach totals disagree by 2 wins; no footnote explains the gap. Year-by-Year Records (PDF p.142-143) have no total row; their key includes '# Title Vacated'."
+ },
+ {
+  "team": "Houston",
+  "status": "match official",
+  "guide": [
+   473,
+   401,
+   15
+  ],
+  "guide_alt": [
+   476,
+   402,
+   15
+  ],
+  "through": 2024,
+  "official": [
+   476,
+   402,
+   15
+  ],
+  "onField": [
+   476,
+   402,
+   15
+  ],
+  "url": "https://uhcougars.com/documents/2025/8/6/2025_UH_Football_Media_Guide_FINAL.pdf",
+  "basis": "both",
+  "notes": "Quick-facts footnote: '*Not including three overall wins vacated due to NCAA penalty during the 2018 season'. Coaches/series totals print 476-402-15, which also differs by 1 loss. No 2026 guide is posted: the football pa"
+ },
+ {
+  "team": "James Madison",
+  "status": "DISAGREES",
+  "guide": [
+   390,
+   231,
+   4
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   390,
+   227,
+   4
+  ],
+  "onField": [
+   390,
+   227,
+   4
+  ],
+  "url": "https://jmusports.com/documents/2026/7/8/2026_Football_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "Both totals agree. Covers all seasons since 1972, including D-III, D-II, I-AA and FCS years. Losses differ from the batch-list NCAA figure (227)."
+ },
+ {
+  "team": "Louisiana Lafayette",
+  "status": "not found",
+  "url": null,
+  "notes": "NOT FOUND: the ragincajuns.com football schedule and football pages link no media guide or record book. Searches (4) returned only weekly game notes and old gui"
+ },
+ {
+  "team": "Memphis",
+  "status": "within 3 games",
+  "guide": [
+   543,
+   541,
+   33
+  ],
+  "guide_alt": [
+   501,
+   521,
+   33
+  ],
+  "through": 2024,
+  "official": [
+   544,
+   539,
+   33
+  ],
+  "onField": [
+   543,
+   540,
+   33
+  ],
+  "url": "https://gotigersgo.com/documents/2025/9/6/25_Football_Record_Book.pdf",
+  "basis": "unclear",
+  "notes": "No 2026 edition found; the media guide archive page ends at the 2022 Record Book, and the 2025 Record Book is the latest. The 2020s row is 42-20, so the total runs through 2024. The 501-521-33 figure is labeled 'ALL-TIME"
+ },
+ {
+  "team": "Missouri",
+  "status": "DISAGREES",
+  "guide": [
+   722,
+   596,
+   52
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   729,
+   598,
+   52
+  ],
+  "onField": [
+   738,
+   598,
+   52
+  ],
+  "url": "https://mutigers.com/documents/c5eb61c5-88b5-4fd8-89e0-fbbb14e2d4fd.pdf",
+  "basis": "official",
+  "notes": "Footnote p.93: '&Wins vacated by NCAA; on field record in 2015 and 2016 was 5-7 and 4-8, respectively' (the ledger lists 2015 as 0-7-0 and 2016 as 0-8-0). p.94: 'MU vacated five wins from the 2015 season and four wins fr"
+ },
+ {
+  "team": "North Carolina",
+  "status": "match official",
+  "guide": [
+   755,
+   584,
+   54
+  ],
+  "guide_alt": [
+   739,
+   584,
+   54
+  ],
+  "through": 2025,
+  "official": [
+   739,
+   584,
+   54
+  ],
+  "onField": [
+   755,
+   584,
+   54
+  ],
+  "url": "https://goheels.com/documents/2026/9/22/CarolinaFootballMediaGuide_2026.pdf",
+  "basis": "both",
+  "notes": "Footnote p.195: '*8 wins vacated in 2008 and 8 wins vacated in 2009 (official record of 37-68 in 2000-09; overall record 739-584-54)'. p.157: '^16 wins later vacated due to NCAA penalty'. 755 is the on-field total and 73"
+ },
+ {
+  "team": "Ohio",
+  "status": "not found",
+  "url": "https://ohiobobcats.com/documents/2026/7/9/2025_Ohio_FB_Record_Book_-_UPDATED_5.13.26.pdf",
+  "notes": "NOT FOUND in a guide: the record book runs through 2025 ('2025 (9-4 ...)', Hauser 1-0 in the bowl) but prints no all-time W-L-T total. No 2026 media guide is po"
+ },
+ {
+  "team": "Oregon St.",
+  "status": "DISAGREES",
+  "guide": [
+   576,
+   646,
+   50
+  ],
+  "guide_alt": [
+   574,
+   636,
+   50
+  ],
+  "through": 2025,
+  "official": [
+   571,
+   646,
+   50
+  ],
+  "onField": [
+   570,
+   647,
+   50
+  ],
+  "url": "https://osubeavers.com/documents/2026/8/23/Section_1_-_Rosters.pdf",
+  "basis": "unclear",
+  "notes": "Quick facts and the coaching-records total agree (576-646-50). The year-by-year table total in the same Section 7 PDF prints 574-636-50, a gap of 2 W and 10 L. Section 7 URL: https://osubeavers.com/documents/2025/12/8/Se"
+ },
+ {
+  "team": "Sam Houston St.",
+  "status": "DISAGREES",
+  "guide": [
+   576,
+   500,
+   36
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   583,
+   501,
+   34
+  ],
+  "onField": [
+   583,
+   501,
+   34
+  ],
+  "url": "https://gobearkats.com/documents/2022/11/21/records_football.pdf",
+  "basis": "unclear",
+  "notes": "The file path is dated 2022, but the cover reads 'UPDATED JANUARY 2026' and the book includes Phil Longo 2025 (2-10). Covers all 110 seasons, including NAIA, D-II, I-AA and FCS years. No 2026 media guide found. The print"
+ },
+ {
+  "team": "Southern Miss",
+  "status": "DISAGREES",
+  "guide": [
+   625,
+   479,
+   27
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   621,
+   477,
+   26
+  ],
+  "onField": [
+   618,
+   480,
+   26
+  ],
+  "url": "https://southernmiss.com/documents/2026/7/15/2026_Southern_Miss_Football_Record_Book.pdf",
+  "basis": "unclear",
+  "notes": "All three totals agree; covers 109 seasons back to 1912. Series footnote: '*Includes one forfeit | **Includes two forfeits'. Series pages note '# Mississippi State forfeited the game' and '# Alabama forfeited the game'. "
+ },
+ {
+  "team": "Texas A&M",
+  "status": "match official",
+  "guide": [
+   797,
+   511,
+   48
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   797,
+   511,
+   48
+  ],
+  "onField": [
+   797,
+   511,
+   48
+  ],
+  "url": "https://12thman.com/documents/1e5fa003-faaa-46ca-895a-03559fca17f2.pdf",
+  "basis": "unclear",
+  "notes": "The separate Texas A&M Football Record Book linked from 12thman.com/sports/football/history (https://12thman.com/documents/d930c484-85d7-4353-8430-9f5156670e85.pdf; 2025 opponents highlighted, runs through 2024) prints '"
+ },
+ {
+  "team": "Tulsa",
+  "status": "DISAGREES",
+  "guide": [
+   666,
+   560,
+   32
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   654,
+   551,
+   27
+  ],
+  "onField": [
+   654,
+   551,
+   27
+  ],
+  "url": "https://tulsahurricane.com/documents/2026/8/28/2026_Football_MG.pdf",
+  "basis": "unclear",
+  "notes": "Totals agree. The results pages count forfeits as wins ('Claremore High (forfeit) W 1-0'; '†Kansas later forfeited game to Tulsa') and include games against non-collegiate opponents. The printed total differs from the ba"
+ },
+ {
+  "team": "USC",
+  "status": "match official",
+  "guide": [
+   891,
+   378,
+   54
+  ],
+  "guide_alt": [
+   905,
+   379,
+   54
+  ],
+  "through": 2025,
+  "official": [
+   891,
+   378,
+   54
+  ],
+  "onField": [
+   905,
+   379,
+   54
+  ],
+  "url": "https://usctrojans.com/documents/2026/9/9/2026-usc-trojans-football-media-guide-v6-compressed.pdf",
+  "basis": "both",
+  "notes": "Footnote: '*Not including 14 wins and 1 loss vacated due to NCAA penalty (original record: 905-379-54, 69.7%)'. p.109: 'Not including 2 wins in 2004, 12 wins and 1 loss in 2005 ... (original ... 1,338 games, 905-379-54 o"
+ },
+ {
+  "team": "Virginia Tech",
+  "status": "not found",
+  "url": null,
+  "notes": "NOT FOUND: the hokiesports.com 'Media Guides' page (football-media-guides-in-pdf-format) only goes up to the 2022 guide. The 'Record Book' link points to the st"
+ },
+ {
+  "team": "Wisconsin",
+  "status": "match official",
+  "guide": [
+   751,
+   533,
+   53
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   751,
+   533,
+   53
+  ],
+  "onField": [
+   750,
+   534,
+   53
+  ],
+  "url": "https://uwbadgers.com/documents/2026/8/24/2026_FB_RecordBook_Final.pdf",
+  "basis": "unclear",
+  "notes": "Totals agree. The results pages list forfeit outcomes as W/L (e.g. 1994 Michigan State 'W forfeit', 1894 'L (Forfeit)'), which suggests forfeits are applied, but no footnote states a basis."
+ },
+ {
+  "team": "Michigan",
+  "status": "match official",
+  "guide": [
+   1021,
+   362,
+   36
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   1021,
+   362,
+   36
+  ],
+  "onField": [
+   1021,
+   362,
+   36
+  ],
+  "url": "https://mgoblue.com/documents/2026/9/18/2026-fbl-media-guide-victors-valiant.pdf",
+  "basis": "unclear",
+  "notes": "Year-by-Year 'TOTALS 1,021-362-36' (conf 557-221-18). No vacated or forfeit footnote anywhere in the section; no vacated games are noted, so the printed total is both on-field and official. The same section's 'All-Time F"
+ },
+ {
+  "team": "Georgia Southern",
+  "status": "DISAGREES",
+  "guide": [
+   370,
+   187,
+   1
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   432,
+   264,
+   10
+  ],
+  "onField": [
+   432,
+   264,
+   10
+  ],
+  "url": "https://gseagles.com/documents/2026/8/10/FB_1_General_Info_2026.pdf",
+  "basis": "official",
+  "notes": "Prints ONLY 'Modern Era Record: 370-187-1 (.665) ^' (^ = 'three wins vacated by NCAA'). Quick Facts: 'First Year of Football: 1924 (no football from 1942-1981)'. The guide does NOT print a combined 1924-present total; 19"
+ },
+ {
+  "team": "Ball St.",
+  "status": "match official",
+  "guide": [
+   483,
+   473,
+   32
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   483,
+   473,
+   32
+  ],
+  "onField": [
+   483,
+   473,
+   32
+  ],
+  "url": "https://ballstatesports.com/documents/download/2026/4/18/FootballRecordBook_ADA_Accessible.pdf",
+  "basis": "unclear",
+  "notes": "'All-Time Record (988 games): 483 473 32 .505' at the foot of Year-by-Year Won/Loss Records. 'Through 101 years (since 1924) and 101 seasons (no team in 1943 due to Word War II)'. Includes small-college ('now recognized "
+ },
+ {
+  "team": "Missouri St.",
+  "status": "match official",
+  "guide": [
+   507,
+   542,
+   39
+  ],
+  "guide_alt": [
+   507,
+   551,
+   39
+  ],
+  "through": 2025,
+  "official": [
+   507,
+   551,
+   39
+  ],
+  "onField": [
+   507,
+   551,
+   39
+  ],
+  "url": "https://missouristatebears.com/documents/2026/8/21/2026_MOST_MEDIAGUIDE_V1.pdf",
+  "basis": "unclear",
+  "notes": "CONFLICT INSIDE GUIDE: Quick Facts p.2 prints 'All-Time Record 507-542-39, 114 yrs.' (FBS Record 7-6, 1 yr.), but the Year-by-Year W-L Summary 'Totals' row (p.103) prints '507-551-39'. Year-by-year page: 'Missouri State "
+ },
+ {
+  "team": "Texas",
+  "status": "match official",
+  "guide": [
+   971,
+   398,
+   33
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   971,
+   398,
+   33
+  ],
+  "onField": [
+   971,
+   398,
+   33
+  ],
+  "url": "https://texaslonghorns.com/documents/download/2026/9/22/Football_Record_Book_-_2026.pdf",
+  "basis": "unclear",
+  "notes": "'All-time record 971 398 33 .704' on the All-Time Records vs. Opponent page. Year-by-Year Results begin '1893 (4-0)'. Includes 'Nov. 5 @ Baylor (forfeit) W 1-0' (1910). No vacated wins noted."
+ },
+ {
+  "team": "Delaware",
+  "status": "DISAGREES",
+  "guide": [
+   796,
+   491,
+   43
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   746,
+   491,
+   43
+  ],
+  "onField": [
+   746,
+   491,
+   43
+  ],
+  "url": "https://bluehens.com/documents/2026/7/28/Delaware_Football_Record_Book.pdf",
+  "basis": "unclear",
+  "notes": "Program History p.2: 'All-Time Record (PCT) 796-491-43 (.600)'; All-Time Head Coaches p.3: 'Total ... 133 Seasons (Three Years Lost for WWII) ... 796-491-43 (.600)'. Divisions listed: Division II 1972-79, I-AA/FCS 1980-2"
+ },
+ {
+  "team": "Western Kentucky",
+  "status": "match official",
+  "guide": [
+   630,
+   437,
+   31
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   630,
+   437,
+   31
+  ],
+  "onField": [
+   630,
+   437,
+   31
+  ],
+  "url": "https://wkusports.com/documents/2026/9/3/WKU_FB_26___Record_Book.pdf",
+  "basis": "unclear",
+  "notes": "Quick Facts: 'All-Time Record 630-437-31 (.573)', 'Seasons of Football 107 Completed', 'First Year of Football 1913', 'First Year in FBS 2009'. Year-by-year lists '1943-1945 No Team - World War II' and I-AA years (1982 o"
+ },
+ {
+  "team": "Mississippi St.",
+  "status": "within 3 games",
+  "guide": [
+   617,
+   610,
+   40
+  ],
+  "guide_alt": [
+   593,
+   627,
+   40
+  ],
+  "through": 2025,
+  "official": [
+   593,
+   627,
+   39
+  ],
+  "onField": [
+   618,
+   609,
+   40
+  ],
+  "url": "https://static.hailstate.com/custompages/pdf/fb/2026/fb_26mg.pdf",
+  "basis": "on-field",
+  "notes": "Prints both. On-field: 'All-Time Overall Record 617-610-40 (.503) (127th football season in 2026)^' with '^ Wins/Losses above reflect State's on-field record | Adjusted record with forfeits & vacated wins can be found on"
+ },
+ {
+  "team": "Alabama",
+  "status": "match official",
+  "guide": [
+   985,
+   345,
+   43
+  ],
+  "guide_alt": [
+   1014,
+   336,
+   44
+  ],
+  "through": 2025,
+  "official": [
+   985,
+   345,
+   43
+  ],
+  "onField": [
+   1014,
+   336,
+   44
+  ],
+  "url": "https://rolltide.com/documents/2026/8/5/2026_Alabama_Football_Media_Guide.pdf",
+  "basis": "official",
+  "notes": "Prints both. Official (Quick Facts p.3 and coaches TOTALS p.177): 'Overall Football Record 985-345-43 (.733) 1,373 games over 131 seasons'. On-field: 'Actual program record is 1,014-336-44 (.743) (1,394 games played)'. F"
+ },
+ {
+  "team": "LSU",
+  "status": "match official",
+  "guide": [
+   859,
+   444,
+   47
+  ],
+  "guide_alt": [
+   822,
+   444,
+   47
+  ],
+  "through": 2025,
+  "official": [
+   822,
+   444,
+   47
+  ],
+  "onField": [
+   857,
+   446,
+   47
+  ],
+  "url": "http://static.lsusports.net/assets/docs/fb/pdf/26guide.pdf",
+  "basis": "on-field",
+  "notes": "Prints both. 'LSU's all-time on field- record is 859-444-47. LSU's NCAA record is 822-444-47 after 37 wins were vacated from 2012-15 after an NCAA ruling in June 2023.' Year-by-Year: 'Overall Totals 859-444-47 .654 / ^82"
+ },
+ {
+  "team": "Akron",
+  "status": "not found",
+  "url": null,
+  "notes": "Tried: WebSearch x3 (2026 media guide gozips; gozips.com-restricted record book/media guide 2025/2026; '2025/2026 Media Guide' Akron), the gozips.com/sports/foo"
+ },
+ {
+  "team": "Air Force",
+  "status": "DISAGREES",
+  "guide": [
+   436,
+   349,
+   13
+  ],
+  "guide_alt": null,
+  "through": 2025,
+  "official": [
+   442,
+   357,
+   13
+  ],
+  "onField": [
+   442,
+   357,
+   13
+  ],
+  "url": "https://goairforcefalcons.com/documents/2026/7/9/2026_Air_Force_Football_Media_Guide.pdf",
+  "basis": "unclear",
+  "notes": "Quick Facts 'Air Force History': 'First Year: 1956', 'All-Time Record: 436-349-13 (70 years)'. The all-time coaches list (p.44) still shows '1955 4-4 Robert Whitlow (1 yr/4-4)', but the 70-year figure starting in 1956 ex"
+ }
+]
