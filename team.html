@@ -226,11 +226,14 @@
   .team-hero .th-record .rec-pct { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; line-height: 1; color: var(--orange); }
   .team-hero .th-record .rec-label { font-size: 0.72rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
   .team-hero .th-record .rec-onfield { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; line-height: 1; color: var(--dark); opacity: 0.75; }
-  .team-hero .th-record .rec-foot { font-size: 0.72rem; color: var(--gray); max-width: 22rem; text-align: right; }
+  .team-hero .th-record .rec-foot { font-size: 0.72rem; color: var(--gray); max-width: 28rem; text-align: right; }
   .nsc-foot { font-size: 0.78rem; color: var(--gray); margin: 0.6rem 0 0; }
   @media (max-width: 880px) {
     .team-hero { grid-template-columns: auto 1fr; }
-    .team-hero .th-record { grid-column: 1 / -1; flex-direction: row; align-items: baseline; justify-content: space-between; padding-top: 0.75rem; border-top: 1px solid var(--border); }
+    .team-hero .th-record { grid-column: 1 / -1; flex-direction: row; align-items: baseline; justify-content: space-between; padding-top: 0.75rem; border-top: 1px solid var(--border); flex-wrap: wrap; column-gap: 1rem; }
+    .team-hero .th-record .rec-big { white-space: nowrap; }
+    /* the official/on-field pair: on-field + its footnote get their own full-width line */
+    .team-hero .th-record .rec-onfield, .team-hero .th-record .rec-foot { flex-basis: 100%; text-align: left; max-width: none; }
   }
   .card { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 2rem; }
   .card h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; margin-bottom: 1.25rem; }
@@ -445,6 +448,7 @@
     .team-hero .th-name { font-size: 2.5rem; }
     .team-hero .th-record .rec-big { font-size: 2.5rem; }
     .team-hero .th-record .rec-pct { font-size: 1.65rem; }
+    .team-hero .th-record .rec-foot { text-align: center; }
     .h2h-conf-title .ct-record { font-size: 1.1rem; }
     /* H2H table becomes stacked cards on mobile — no fixed columns */
     .h2h-table, .h2h-table tbody, .h2h-table tr, .h2h-table td { display: block; width: auto; }
