@@ -192,6 +192,9 @@ jobs:
             echo "No data changes to commit."
           fi
 
+      # Only the staged public folder is uploaded (scripts/stage_public.py): docs, scripts,
+      # audits, CI config and build-only inputs never ship, so they 404 in any letter case.
+      # The script fails - and the deploy with it - if a tracked folder is unclassified.
       - name: Deploy to Netlify
         # Production only from main, and never on a manual dry run.
         if: github.ref == 'refs/heads/main' && github.event.inputs.dry_run != 'true'
@@ -199,6 +202,9 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         run: |
+          STAGE="$RUNNER_TEMP/fps-public"
+          python3 scripts/stage_public.py "$STAGE"
+          cd "$STAGE"
           npx -y netlify-cli@latest deploy \
             --prod \
             --dir . \

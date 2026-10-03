@@ -46,3 +46,4 @@ Rebuild order: weeks in AP poll, conference titles, bowls, recognized titles, Al
 - Team name aliases (osu, Oklahoma State, ohst, etc.) resolve through one shared resolver on every page.
 - Mobile layout: the compare header must end above the 667px fold at 375px wide.
 - Internal files (docs, scripts, audits, build inputs, CLAUDE.md, README.md) must return 404 on production; new internal folders get added to the netlify.toml block list.
+- Deploys upload only the staged public folder; internal files never ship.
