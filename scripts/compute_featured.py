@@ -16,7 +16,8 @@ step has no secret to skip on, unlike the CFBD schedules refresh.
 Scoring, per matchup:
     40  both teams in the AP Top 25   (20 if exactly one)
   + 25  an AP top-10 team is involved
-  + 35  a named rivalry (rivalries.json)
+  + 35  a tier-1 rivalry (rivalries.json "tier": 1, the 64 headline rivalries)
+  + 10  any other named rivalry (tier 2)
   +0-20 all-time meetings, scaled
   +0-10 recency of the series
 
@@ -70,7 +71,8 @@ MAX_WEEK = 16
 W_BOTH_RANKED = 40
 W_ONE_RANKED = 20
 W_TOP10_BONUS = 25
-W_RIVALRY = 35
+W_RIVALRY = 35          # tier 1
+W_RIVALRY_TIER2 = 10    # tier 2: named, but not one of the headline 64
 W_MEETINGS_MAX = 20
 W_RECENCY_MAX = 10
 MEETINGS_FULL_CREDIT = 100  # a 100-meeting series earns the full meetings weight
@@ -264,7 +266,8 @@ def score_matchup(m: dict, ranks: dict, rivalry, meetings: int, last_season: int
     if (ra and ra <= 10) or (rb and rb <= 10):
         score += W_TOP10_BONUS
     if rivalry:
-        score += W_RIVALRY
+        # A missing tier counts as tier 2, so a new entry never gets the full bonus by accident.
+        score += W_RIVALRY if rivalry.get("tier") == 1 else W_RIVALRY_TIER2
     score += int(round(W_MEETINGS_MAX * min(meetings, MEETINGS_FULL_CREDIT) / MEETINGS_FULL_CREDIT))
     if last_season:
         gap = max(0, season - last_season)
@@ -360,7 +363,10 @@ def main() -> int:
             "tieWidth": round(ties / denom * 100, 2),
             "bWidth": round(bw / denom * 100, 2),
             "streak": streak,
-            "rivalry": m["_rivalry"] or None,
+            # Only the display fields: rivalries.json also carries source/license metadata
+            # that index.html never reads.
+            "rivalry": ({k: m["_rivalry"].get(k) for k in ("name", "trophy", "logo")}
+                        if m["_rivalry"] else None),
             "url": "compare.html?team1=%s&team2=%s" % (
                 requests.utils.quote(a, safe=""), requests.utils.quote(b, safe="")),
             "score": m["_score"],

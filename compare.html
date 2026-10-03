@@ -538,7 +538,11 @@
 
   /* Rivalry badge */
   .rivalry-badge { text-align: center; margin: 0 0 1.5rem; }
-  .rivalry-badge .rb-logo { height: 96px; width: auto; margin: 0 auto 0.5rem; display: block; }
+  /* Fixed box + contain, so a wide wordmark and a tall shield read as the same size. */
+  .rivalry-badge .rb-logo { width: 168px; height: 72px; object-fit: contain; margin: 0 auto 0.5rem; display: block; }
+  /* Logos whose outer edge is white (rivalries.json logo_light) vanish on the white card,
+     so they sit on a subtle gray disc instead. */
+  .rivalry-badge .rb-logo.rb-light { width: 80px; height: 80px; padding: 9px; box-sizing: border-box; border-radius: 50%; background: #e9ebef; }
   .rivalry-badge .rb-pill {
     display: inline-flex; align-items: center; gap: 0.5rem;
     background: var(--dark); color: white;
@@ -802,6 +806,9 @@
   /* very narrow phones: let the two short lines wrap between words instead of widening the bar */
   @media (max-width: 360px) { .hb-end .hb-games .hb-nowrap, .hb-end .hb-games .hb-onfield { white-space: normal; } }
   .hero-bar .hb-foot { font-family: 'Inter', sans-serif; font-size: 0.72rem; color: var(--gray); text-align: center; margin: 0.5rem 0 0; }
+  .hero-bar .hb-foot-short { display: none; color: var(--gray); }
+  /* phones: one line that points to the full footnotes, so the header stays above the fold */
+  @media (max-width: 480px) { .hero-bar .hb-foot { margin-top: 0.3rem; line-height: 1.2; } .hero-bar .hb-foot-full { display: none; } .hero-bar .hb-foot-short { display: inline; } }
   .hb-bar-wrap { display: flex; flex-direction: column; align-items: stretch; gap: 0.45rem; }
   .hb-bar { position: relative; height: 56px; background: var(--light); border-radius: 8px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
   .hb-seg { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; color: white; font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; text-shadow: 0 1px 2px rgba(0,0,0,0.3); transition: width 1s cubic-bezier(0.42,0,0.58,1), left 1s cubic-bezier(0.42,0,0.58,1); white-space: nowrap; overflow: hidden; }
@@ -970,7 +977,8 @@
     .record-line { font-size: 1.45rem; margin-top: 0.2rem; }
     .streak-line { font-size: 1.05rem; margin-top: 0.15rem; }
     .rivalry-badge { margin-bottom: 0.4rem; }
-    .rivalry-badge .rb-logo { height: 60px; margin-bottom: 0.25rem; }
+    .rivalry-badge .rb-logo { width: 132px; height: 56px; margin-bottom: 0.25rem; }
+    .rivalry-badge .rb-logo.rb-light { width: 62px; height: 62px; padding: 7px; }
     .rivalry-badge .rb-pill { font-size: 1.15rem; padding: 0.25rem 1rem; }
     .rivalry-badge .rb-trophy { margin-top: 0.2rem; font-size: 0.7rem; }
     .hero-bar { margin: 0.6rem 0 1rem; }
@@ -3006,9 +3014,14 @@
 
     const isLastN = !!state.lastN;
     const isPastPreset = ['past5','past10','past20'].includes(state.activePreset);
+    // The series' own first and last meeting in the games shown (so the filtered range when
+    // filters are on), not the dataset bounds the year-range slider uses.
+    let firstMet = Infinity, lastMet = -Infinity;
+    for (const g of games) { if (g.season < firstMet) firstMet = g.season; if (g.season > lastMet) lastMet = g.season; }
+    const metRange = firstMet === lastMet ? `${firstMet}` : `${firstMet}-${lastMet}`;
     const totalLabel = isLastN
-      ? `Last ${state.lastN} Matchups &middot; ${state.startYear}-${state.endYear}`
-      : `Total Meetings &middot; ${state.startYear}-${state.endYear}`;
+      ? `Last ${state.lastN} Matchups &middot; ${metRange}`
+      : `Total Meetings &middot; ${metRange}`;
 
     const t1Margin = largestMargin(games, state.team1);
     const t2Margin = largestMargin(games, state.team2);
@@ -3058,12 +3071,14 @@
       ${(() => {
         const riv = getRivalry();
         if (!riv) return '';
+        // Names and trophies now come from Wikipedia ("Texas A&M", "Commander-in-Chief's"), so escape them.
+        const h = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         const hasLogo = !!riv.logo;
         return `<div class="rivalry-badge">
-          ${hasLogo ? `<img class="rb-logo" src="${riv.logo}" alt="${riv.name}"
+          ${hasLogo ? `<img class="rb-logo${riv.logo_light ? ' rb-light' : ''}" src="${h(riv.logo)}" alt="${h(riv.name)} logo" decoding="async"
             onerror="this.style.display='none';var p=this.parentElement.querySelector('.rb-pill');if(p)p.classList.remove('rb-hidden');">` : ''}
-          <span class="rb-pill${hasLogo ? ' rb-hidden' : ''}"><span class="rb-star">&#9733;</span>${riv.name}<span class="rb-star">&#9733;</span></span>
-          ${riv.trophy ? `<span class="rb-trophy">Trophy: ${riv.trophy}</span>` : ''}
+          <span class="rb-pill${hasLogo ? ' rb-hidden' : ''}"><span class="rb-star">&#9733;</span>${h(riv.name)}<span class="rb-star">&#9733;</span></span>
+          ${riv.trophy ? `<span class="rb-trophy">Trophy: ${h(riv.trophy)}</span>` : ''}
         </div>`;
       })()}
       <!-- v29 Tweak 1B: hero bar with logos on opposite ends, big WINS numbers next to logos -->
@@ -3094,7 +3109,7 @@
             ${allTimeHtml(at2)}
           </div>
         </div>
-        ${atFoot ? `<p class="hb-foot">${atFoot}</p>` : ''}
+        ${atFoot ? `<p class="hb-foot"><span class="hb-foot-full">${atFoot}</span><a class="hb-foot-short" href="#program-comparison">*On-field totals explained below</a></p>` : ''}
       </div>
     `;
 
@@ -3420,7 +3435,7 @@
         <span class="scc-col-name">${side === 'a' ? t1 : t2}</span>
       </div>`;
 
-    return `<div class="stat-comparison-section">
+    return `<div class="stat-comparison-section" id="program-comparison">
       <div class="chart-title">Program Comparison</div>
       <p class="stat-comparison-sub">All-time program totals with national rank</p>
       <div class="scc-columns">
