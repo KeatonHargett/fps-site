@@ -22,7 +22,7 @@ Inputs (data/sources/records/, every entry sourced):
   record_adjustments.json         vacated wins, forfeits, overrides, decisions, title fixes
 
 Outputs (only these keys change; anything else changing aborts the build):
-  program_stats.json  record, winPct, recordOnField, winPctOnField, recordAsOf,
+  program_stats.json  record, winPct, recordOnField, winPctOnField, recordAdjust, recordAsOf,
                       ranks.wins, ranks.winPct, plus the fields named in fieldCorrections
                       and their ranks
   rankings.html       cats[0] (Win %) and cats[5] (Wins) of the RANKINGS literal
@@ -189,6 +189,23 @@ def compute(teams, adj, wiki, seasons, cap=None):
     return official, onf, base_info
 
 
+def adjust_counts(teams, adj):
+    """Wins behind the official / on-field difference, for the pages' footnotes:
+    vacated (wins removed), forfeited (on-field wins the NCAA turned into losses),
+    awarded (on-field losses/ties the NCAA turned into wins for this team)."""
+    out = {t: {"vacated": 0, "forfeited": 0, "awarded": 0} for t in teams}
+    for e in adj["vacated"]:
+        if e["team"] in out:
+            out[e["team"]]["vacated"] += e["wins"]
+    for e in adj["forfeits"]:
+        for g in e["games"]:
+            if e["team"] in out and g["onField"] == "W":
+                out[e["team"]]["forfeited"] += 1
+            if g["opponent"] in out:
+                out[g["opponent"]]["awarded"] += 1
+    return out
+
+
 def _forfeit(recs, team, game, sign):
     """sign=+1 applies an NCAA forfeit to on-field results; sign=-1 reverses it."""
     res = game["onField"]  # penalized team's on-field result: W or T
@@ -260,6 +277,12 @@ def build(check_only=False):
     as_of = {"season": last, "inProgress": not seasons[last]["final"], "date": seasons[last]["fetched"]}
 
     # --- program_stats.json
+    counts = adjust_counts(teams, adj)
+    for t in teams:
+        c = counts[t]
+        if onfield[t][0] - official[t][0] != c["vacated"] + c["forfeited"] - c["awarded"]:
+            errors.append("%s: on-field minus official wins (%d) does not equal the adjustment counts %s"
+                          % (t, onfield[t][0] - official[t][0], c))
     win_rank = competition_ranks([official[t][0] for t in teams])
     pct_rank = competition_ranks([pct(official[t]) for t in teams])
     out = {}
@@ -271,6 +294,7 @@ def build(check_only=False):
                "winPct": pct(official[k]),
                "recordOnField": {"wins": onfield[k][0], "losses": onfield[k][1], "ties": onfield[k][2]},
                "winPctOnField": pct(onfield[k]),
+               "recordAdjust": dict(counts[k]),
                "recordAsOf": dict(as_of)}
         for f, v in row.items():
             if f not in new:
@@ -291,7 +315,7 @@ def build(check_only=False):
         for t in teams:
             out[t]["ranks"][f] = rk[out[t][f]]
 
-    allowed = {"record", "winPct", "recordOnField", "winPctOnField", "recordAsOf"} | corrected
+    allowed = {"record", "winPct", "recordOnField", "winPctOnField", "recordAdjust", "recordAsOf"} | corrected
     allowed_ranks = {"wins", "winPct"} | corrected
 
     def stripped(doc):

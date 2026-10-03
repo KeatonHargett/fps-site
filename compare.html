@@ -3227,10 +3227,12 @@
       if (!ps || !ps.recordOnField || !ps.record) return null;
       const o = ps.record, f = ps.recordOnField;
       if (o.wins === f.wins && o.losses === f.losses && o.ties === f.ties) return null;
-      const d = f.wins - o.wins, n = Math.abs(d), s = n === 1 ? '' : 's';
-      const note = d > 0 ? `Includes ${n.toLocaleString()} win${s} later vacated or forfeited`
-        : d < 0 ? `Counts ${n} game${s} awarded by NCAA forfeit as played`
-        : 'Includes games later vacated by NCAA ruling';
+      // recordAdjust (build_program_records.py): vacated / forfeited / awarded-by-forfeit wins
+      const a = ps.recordAdjust || { vacated: 0, forfeited: 0, awarded: 0 };
+      const parts = [], x = a.vacated + a.forfeited, pl = n => n === 1 ? '' : 's';
+      if (x) parts.push(`Includes ${x.toLocaleString()} win${pl(x)} later vacated or forfeited`);
+      if (a.awarded) parts.push(`${parts.length ? 'counts' : 'Counts'} ${a.awarded} game${pl(a.awarded)} awarded by NCAA forfeit as played`);
+      const note = parts.join('; ') || 'Includes games later vacated by NCAA ruling';
       return { rec: f, pct: ps.winPctOnField, note };
     };
     const of1 = onField(ps1), of2 = onField(ps2);
@@ -3281,6 +3283,16 @@
         a: pick(ps1, s1, 'weeksAtOne', 'weeksAtNo1', 'weeksAtNo1Rank'),
         b: pick(ps2, s2, 'weeksAtOne', 'weeksAtNo1', 'weeksAtNo1Rank') }
     ];
+
+    // The two columns are laid out independently, so when only one team has an on-field
+    // line, reserve the same line (blank, hidden from screen readers) on the other card to
+    // keep every row aligned.
+    rows.forEach(r => {
+      if (r.a && r.b && (r.a.alt || r.b.alt)) {
+        if (!r.a.alt) r.a.altBlank = true;
+        if (!r.b.alt) r.b.altBlank = true;
+      }
+    });
 
     // v37: Vs Ranked Opponents rows (AP poll era, since 1936) - hidden for now, see above.
     const recRow = (label, key) => {
@@ -3388,7 +3400,8 @@
       } else {
         body = `<div class="scc-card-value">${d.v}</div>` +
                (d.sub ? `<div class="scc-card-sub">${d.sub}</div>` : '') +
-               (d.alt ? `<div class="scc-card-sub scc-card-alt">${d.alt}</div>` : '') +
+               (d.alt ? `<div class="scc-card-sub scc-card-alt">${d.alt}</div>`
+                      : d.altBlank ? '<div class="scc-card-sub scc-card-alt" aria-hidden="true">&nbsp;</div>' : '') +
                label +
                (d.r == null || d.r === 0
                  ? ''

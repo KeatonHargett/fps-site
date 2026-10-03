@@ -546,10 +546,12 @@
       </table></div>
       <p class="cf-note">All-time records are official NCAA totals (vacated wins and NCAA forfeits applied).${starred.size
         ? ' *On field: ' + [...starred].map(n => {
-            const s = STATS[n], d = s.recordOnField.wins - s.record.wins;
-            return `${esc(n)} ${d > 0 ? 'includes ' + d + ' win' + (d === 1 ? '' : 's') + ' later vacated or forfeited'
-                                 : d < 0 ? 'counts ' + (-d) + ' game' + (d === -1 ? '' : 's') + ' awarded by NCAA forfeit as played'
-                                         : 'includes games later vacated'}`;
+            // recordAdjust (build_program_records.py): vacated / forfeited / awarded-by-forfeit wins
+            const a = STATS[n].recordAdjust || { vacated: 0, forfeited: 0, awarded: 0 };
+            const parts = [], x = a.vacated + a.forfeited, pl = k => k === 1 ? '' : 's';
+            if (x) parts.push(`includes ${x} win${pl(x)} later vacated or forfeited`);
+            if (a.awarded) parts.push(`counts ${a.awarded} game${pl(a.awarded)} awarded by NCAA forfeit as played`);
+            return `${esc(n)} ${parts.join(' and ') || 'includes games later vacated'}`;
           }).join('; ') + '.' : ''}</p>
       ${missing.length ? `<p class="cf-note"><strong>Not yet available:</strong> ${missing.map(esc).join(', ')} ${missing.length === 1 ? 'has' : 'have'} no row in the program stats dataset yet, so ${missing.length === 1 ? 'its' : 'their'} cells are blank rather than zero.</p>` : ''}
     `;

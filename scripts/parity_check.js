@@ -278,6 +278,9 @@ function checkProgramRecords() {
     eq(`${t}: winPctOnField == on-field W-L-T`, pct(p.recordOnField), p.winPctOnField);
     eq(`${t}: ranks.wins == competition rank of record.wins`, rankWins(p.record.wins), p.ranks.wins);
     eq(`${t}: ranks.winPct == competition rank of winPct`, rankPct(p.winPct), p.ranks.winPct);
+    const a = p.recordAdjust || {};
+    eq(`${t}: on-field minus official wins == vacated + forfeited - awarded (footnote counts)`,
+      p.recordOnField.wins - p.record.wins, (a.vacated | 0) + (a.forfeited | 0) - (a.awarded | 0));
     n++;
   }
   eq('Oklahoma St. claimed national titles', 1, ps['Oklahoma St.'].claimedNatChamps);

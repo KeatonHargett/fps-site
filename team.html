@@ -1022,11 +1022,15 @@
     if (!ps || !ps.recordOnField || !ps.record) return null;
     const o = ps.record, f = ps.recordOnField;
     if (o.wins === f.wins && o.losses === f.losses && o.ties === f.ties) return null;
-    const d = f.wins - o.wins, n = Math.abs(d), s = n === 1 ? '' : 's';
-    const note = d > 0 ? `*Includes ${n.toLocaleString()} win${s} later vacated or forfeited`
-      : d < 0 ? `*Counts ${n} game${s} awarded by NCAA forfeit as played`
-      : '*Includes games later vacated by NCAA ruling';
-    return { rec: f, pct: ps.winPctOnField, note };
+    return { rec: f, pct: ps.winPctOnField, note: '*' + onFieldNote(ps) };
+  }
+  // recordAdjust (build_program_records.py): vacated / forfeited wins and wins awarded by forfeit
+  function onFieldNote(ps) {
+    const a = ps.recordAdjust || { vacated: 0, forfeited: 0, awarded: 0 };
+    const parts = [], x = a.vacated + a.forfeited, pl = n => n === 1 ? '' : 's';
+    if (x) parts.push(`Includes ${x.toLocaleString()} win${pl(x)} later vacated or forfeited`);
+    if (a.awarded) parts.push(`${parts.length ? 'counts' : 'Counts'} ${a.awarded} game${pl(a.awarded)} awarded by NCAA forfeit as played`);
+    return parts.join('; ') || 'Includes games later vacated by NCAA ruling';
   }
 
   function renderNationalStatCards(tColor) {
@@ -1086,7 +1090,7 @@
     ];
     return `<div class="nat-stats-section">
       <div class="nat-stats-grid">${rows.join('')}</div>
-      ${ofi ? `<p class="nsc-foot">${ofi.note}. Official NCAA totals exclude them.</p>` : ''}
+      ${ofi ? `<p class="nsc-foot">${ofi.note}. Official NCAA totals apply those rulings.</p>` : ''}
     </div>`;
   }
 
