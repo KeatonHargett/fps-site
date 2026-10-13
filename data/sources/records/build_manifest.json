@@ -11,17 +11,17 @@
   "data/sources/records/cfbd/records_2023.json": "e3f42e9308b8fc924907fbc36a16c49b8f7a7180a7f3610f01d6bd6e124c4584",
   "data/sources/records/cfbd/records_2024.json": "9bc71da07009f6f8dec199f8e3beafb375e726cef9ddd7b3d563f1f9aeadbe43",
   "data/sources/records/cfbd/records_2025.json": "5f6a13eb243cfa08be89f7d06491fa45307a92f7e5985cff058dec82b84095b5",
-  "data/sources/records/cfbd/records_2026.json": "5e9509e28a3ae52f38e78e3c7e548cddc32538e93dca6b8710acb7c54422c5a3"
+  "data/sources/records/cfbd/records_2026.json": "0f2b9c667cfe65e803687e513a672fec11e6df1171f6ab126a927174dcd76b46"
  },
  "teams": {
   "Air Force": {
    "official": [
-    445,
+    446,
     358,
     13
    ],
    "onField": [
-    445,
+    446,
     358,
     13
    ],
@@ -30,25 +30,25 @@
   "Akron": {
    "official": [
     535,
-    611,
+    613,
     36
    ],
    "onField": [
     535,
-    611,
+    613,
     36
    ],
    "baseline": "wikipedia"
   },
   "Alabama": {
    "official": [
-    989,
-    345,
+    990,
+    346,
     43
    ],
    "onField": [
-    1018,
-    336,
+    1019,
+    337,
     44
    ],
    "baseline": "wikipedia"
@@ -56,24 +56,24 @@
   "Appalachian St.": {
    "official": [
     677,
-    369,
+    370,
     29
    ],
    "onField": [
     677,
-    369,
+    370,
     29
    ],
    "baseline": "wikipedia"
   },
   "Arizona": {
    "official": [
-    649,
+    651,
     512,
     33
    ],
    "onField": [
-    649,
+    651,
     512,
     33
    ],
@@ -81,13 +81,13 @@
   },
   "Arizona St.": {
    "official": [
-    649,
-    433,
+    650,
+    434,
     24
    ],
    "onField": [
-    659,
-    433,
+    660,
+    434,
     24
    ],
    "baseline": "wikipedia"
@@ -95,12 +95,12 @@
   "Arkansas": {
    "official": [
     751,
-    557,
+    559,
     40
    ],
    "onField": [
     750,
-    558,
+    560,
     40
    ],
    "baseline": "wikipedia"
@@ -108,25 +108,25 @@
   "Arkansas St.": {
    "official": [
     513,
-    538,
+    540,
     37
    ],
    "onField": [
     523,
-    538,
+    540,
     37
    ],
    "baseline": "wikipedia"
   },
   "Army": {
    "official": [
-    748,
-    554,
+    749,
+    555,
     51
    ],
    "onField": [
-    748,
-    554,
+    749,
+    555,
     51
    ],
    "baseline": "wikipedia"
@@ -134,12 +134,12 @@
   "Auburn": {
    "official": [
     812,
-    486,
+    487,
     47
    ],
    "onField": [
     809,
-    488,
+    489,
     48
    ],
    "baseline": "wikipedia"
@@ -147,24 +147,24 @@
   "Ball St.": {
    "official": [
     484,
-    476,
+    478,
     32
    ],
    "onField": [
     484,
-    476,
+    478,
     32
    ],
    "baseline": "override"
   },
   "Baylor": {
    "official": [
-    641,
+    642,
     615,
     44
    ],
    "onField": [
-    641,
+    642,
     615,
     44
    ],
@@ -172,12 +172,12 @@
   },
   "Boise St.": {
    "official": [
-    514,
+    516,
     195,
     2
    ],
    "onField": [
-    514,
+    516,
     195,
     2
    ],
@@ -198,12 +198,12 @@
   },
   "Bowling Green": {
    "official": [
-    573,
+    575,
     444,
     52
    ],
    "onField": [
-    573,
+    575,
     444,
     52
    ],
@@ -211,25 +211,25 @@
   },
   "Buffalo": {
    "official": [
-    424,
-    570,
+    425,
+    571,
     28
    ],
    "onField": [
-    424,
-    570,
+    425,
+    571,
     28
    ],
    "baseline": "wikipedia"
   },
   "BYU": {
    "official": [
-    642,
+    644,
     447,
     26
    ],
    "onField": [
-    642,
+    644,
     447,
     26
    ],
@@ -237,26 +237,26 @@
   },
   "California": {
    "official": [
-    707,
-    584,
+    708,
+    585,
     51
    ],
    "onField": [
-    711,
-    584,
+    712,
+    585,
     51
    ],
    "baseline": "wikipedia"
   },
   "Central Michigan": {
    "official": [
-    660,
-    466,
+    661,
+    467,
     36
    ],
    "onField": [
-    660,
-    466,
+    661,
+    467,
     36
    ],
    "baseline": "wikipedia"
@@ -264,12 +264,12 @@
   "Charlotte": {
    "official": [
     51,
-    110,
+    111,
     0
    ],
    "onField": [
     51,
-    110,
+    111,
     0
    ],
    "baseline": "wikipedia"
@@ -277,12 +277,12 @@
   "Cincinnati": {
    "official": [
     675,
-    620,
+    621,
     51
    ],
    "onField": [
     675,
-    620,
+    621,
     51
    ],
    "baseline": "wikipedia"
@@ -290,25 +290,25 @@
   "Clemson": {
    "official": [
     818,
-    483,
+    484,
     45
    ],
    "onField": [
     818,
-    483,
+    484,
     45
    ],
    "baseline": "wikipedia"
   },
   "Coastal Carolina": {
    "official": [
-    179,
-    106,
+    180,
+    107,
     0
    ],
    "onField": [
-    179,
-    106,
+    180,
+    107,
     0
    ],
    "baseline": "wikipedia"
@@ -316,12 +316,12 @@
   "Colorado": {
    "official": [
     737,
-    559,
+    560,
     36
    ],
    "onField": [
     737,
-    559,
+    560,
     36
    ],
    "baseline": "wikipedia"
@@ -329,25 +329,25 @@
   "Colorado St.": {
    "official": [
     551,
-    633,
+    634,
     33
    ],
    "onField": [
     551,
-    633,
+    634,
     33
    ],
    "baseline": "wikipedia"
   },
   "Connecticut": {
    "official": [
-    541,
-    619,
+    542,
+    620,
     38
    ],
    "onField": [
-    541,
-    619,
+    542,
+    620,
     38
    ],
    "baseline": "wikipedia"
@@ -368,24 +368,24 @@
   "Duke": {
    "official": [
     560,
-    565,
+    566,
     31
    ],
    "onField": [
     560,
-    565,
+    566,
     31
    ],
    "baseline": "wikipedia"
   },
   "East Carolina": {
    "official": [
-    479,
+    480,
     465,
     12
    ],
    "onField": [
-    479,
+    480,
     465,
     12
    ],
@@ -393,12 +393,12 @@
   },
   "Eastern Michigan": {
    "official": [
-    501,
+    503,
     641,
     47
    ],
    "onField": [
-    501,
+    503,
     641,
     47
    ],
@@ -406,12 +406,12 @@
   },
   "FAU": {
    "official": [
-    132,
+    133,
     173,
     0
    ],
    "onField": [
-    132,
+    133,
     173,
     0
    ],
@@ -419,12 +419,12 @@
   },
   "FIU": {
    "official": [
-    101,
+    102,
     186,
     0
    ],
    "onField": [
-    106,
+    107,
     186,
     0
    ],
@@ -433,50 +433,50 @@
   "Florida": {
    "official": [
     774,
-    458,
+    460,
     40
    ],
    "onField": [
     774,
-    458,
+    460,
     40
    ],
    "baseline": "wikipedia"
   },
   "Florida St.": {
    "official": [
-    590,
-    300,
+    591,
+    301,
     17
    ],
    "onField": [
-    601,
-    301,
+    602,
+    302,
     17
    ],
    "baseline": "wikipedia"
   },
   "Fresno St.": {
    "official": [
-    663,
-    458,
+    664,
+    459,
     27
    ],
    "onField": [
-    661,
-    460,
+    662,
+    461,
     27
    ],
    "baseline": "wikipedia"
   },
   "Georgia": {
    "official": [
-    908,
+    910,
     434,
     54
    ],
    "onField": [
-    908,
+    910,
     434,
     54
    ],
@@ -484,25 +484,25 @@
   },
   "Georgia Southern": {
    "official": [
-    433,
-    267,
+    434,
+    268,
     10
    ],
    "onField": [
-    433,
-    267,
+    434,
+    268,
     10
    ],
    "baseline": "override"
   },
   "Georgia St.": {
    "official": [
-    68,
+    69,
     127,
     0
    ],
    "onField": [
-    68,
+    69,
     127,
     0
    ],
@@ -510,12 +510,12 @@
   },
   "Georgia Tech": {
    "official": [
-    773,
+    774,
     553,
     43
    ],
    "onField": [
-    774,
+    775,
     553,
     43
    ],
@@ -524,24 +524,24 @@
   "Hawaii": {
    "official": [
     598,
-    506,
+    508,
     25
    ],
    "onField": [
     598,
-    506,
+    508,
     25
    ],
    "baseline": "wikipedia"
   },
   "Houston": {
    "official": [
-    489,
+    491,
     406,
     15
    ],
    "onField": [
-    489,
+    491,
     406,
     15
    ],
@@ -549,25 +549,25 @@
   },
   "Illinois": {
    "official": [
-    653,
-    634,
+    654,
+    635,
     50
    ],
    "onField": [
-    653,
-    634,
+    654,
+    635,
     50
    ],
    "baseline": "wikipedia"
   },
   "Indiana": {
    "official": [
-    538,
+    540,
     715,
     44
    ],
    "onField": [
-    537,
+    539,
     716,
     44
    ],
@@ -575,38 +575,38 @@
   },
   "Iowa": {
    "official": [
-    710,
-    585,
+    711,
+    586,
     39
    ],
    "onField": [
-    714,
-    585,
+    715,
+    586,
     39
    ],
    "baseline": "wikipedia"
   },
   "Iowa St.": {
    "official": [
-    587,
-    687,
+    588,
+    688,
     46
    ],
    "onField": [
-    587,
-    687,
+    588,
+    688,
     46
    ],
    "baseline": "wikipedia"
   },
   "Jacksonville St.": {
    "official": [
-    633,
+    634,
     434,
     39
    ],
    "onField": [
-    633,
+    634,
     434,
     39
    ],
@@ -614,12 +614,12 @@
   },
   "James Madison": {
    "official": [
-    394,
+    396,
     227,
     4
    ],
    "onField": [
-    394,
+    396,
     227,
     4
    ],
@@ -628,12 +628,12 @@
   "Kansas": {
    "official": [
     617,
-    695,
+    696,
     58
    ],
    "onField": [
     617,
-    695,
+    696,
     58
    ],
    "baseline": "wikipedia"
@@ -641,12 +641,12 @@
   "Kansas St.": {
    "official": [
     588,
-    681,
+    682,
     42
    ],
    "onField": [
     587,
-    682,
+    683,
     42
    ],
    "baseline": "wikipedia"
@@ -654,12 +654,12 @@
   "Kennesaw St.": {
    "official": [
     84,
-    47,
+    48,
     0
    ],
    "onField": [
     84,
-    47,
+    48,
     0
    ],
    "baseline": "wikipedia"
@@ -667,24 +667,24 @@
   "Kent St.": {
    "official": [
     373,
-    616,
+    618,
     28
    ],
    "onField": [
     373,
-    616,
+    618,
     28
    ],
    "baseline": "wikipedia"
   },
   "Kentucky": {
    "official": [
-    655,
+    657,
     663,
     44
    ],
    "onField": [
-    664,
+    666,
     664,
     44
    ],
@@ -692,12 +692,12 @@
   },
   "Liberty": {
    "official": [
-    315,
+    316,
     267,
     4
    ],
    "onField": [
-    315,
+    316,
     267,
     4
    ],
@@ -705,13 +705,13 @@
   },
   "Louisiana Lafayette": {
    "official": [
-    584,
-    592,
+    585,
+    593,
     34
    ],
    "onField": [
-    606,
-    592,
+    607,
+    593,
     34
    ],
    "baseline": "wikipedia"
@@ -719,24 +719,24 @@
   "Louisiana Monroe": {
    "official": [
     333,
-    484,
+    485,
     8
    ],
    "onField": [
     333,
-    484,
+    485,
     8
    ],
    "baseline": "wikipedia"
   },
   "Louisiana Tech": {
    "official": [
-    654,
+    656,
     511,
     37
    ],
    "onField": [
-    653,
+    655,
     512,
     37
    ],
@@ -744,26 +744,26 @@
   },
   "Louisville": {
    "official": [
-    570,
-    506,
+    571,
+    507,
     17
    ],
    "onField": [
-    568,
-    508,
+    569,
+    509,
     17
    ],
    "baseline": "wikipedia"
   },
   "LSU": {
    "official": [
-    825,
-    445,
+    826,
+    446,
     47
    ],
    "onField": [
-    860,
-    447,
+    861,
+    448,
     47
    ],
    "baseline": "wikipedia"
@@ -771,12 +771,12 @@
   "Marshall": {
    "official": [
     646,
-    582,
+    584,
     47
    ],
    "onField": [
     646,
-    582,
+    584,
     47
    ],
    "baseline": "wikipedia"
@@ -784,24 +784,24 @@
   "Maryland": {
    "official": [
     687,
-    642,
+    644,
     43
    ],
    "onField": [
     687,
-    642,
+    644,
     43
    ],
    "baseline": "wikipedia"
   },
   "Memphis": {
    "official": [
-    556,
+    557,
     545,
     33
    ],
    "onField": [
-    555,
+    556,
     546,
     33
    ],
@@ -809,12 +809,12 @@
   },
   "Miami": {
    "official": [
-    690,
+    691,
     394,
     19
    ],
    "onField": [
-    690,
+    691,
     394,
     19
    ],
@@ -822,13 +822,13 @@
   },
   "Miami (OH)": {
    "official": [
-    742,
-    498,
+    743,
+    499,
     44
    ],
    "onField": [
-    741,
-    499,
+    742,
+    500,
     44
    ],
    "baseline": "wikipedia"
@@ -849,12 +849,12 @@
   "Michigan St.": {
    "official": [
     727,
-    504,
+    506,
     44
    ],
    "onField": [
     746,
-    499,
+    501,
     44
    ],
    "baseline": "wikipedia"
@@ -875,24 +875,24 @@
   "Minnesota": {
    "official": [
     753,
-    554,
+    555,
     44
    ],
    "onField": [
     753,
-    554,
+    555,
     44
    ],
    "baseline": "wikipedia"
   },
   "Ole Miss": {
    "official": [
-    701,
+    702,
     553,
     35
    ],
    "onField": [
-    730,
+    731,
     557,
     35
    ],
@@ -901,24 +901,24 @@
   "Mississippi St.": {
    "official": [
     597,
-    627,
+    628,
     39
    ],
    "onField": [
     622,
-    609,
+    610,
     40
    ],
    "baseline": "wikipedia"
   },
   "Missouri": {
    "official": [
-    732,
+    734,
     599,
     52
    ],
    "onField": [
-    741,
+    743,
     599,
     52
    ],
@@ -927,24 +927,24 @@
   "Missouri St.": {
    "official": [
     508,
-    554,
+    555,
     39
    ],
    "onField": [
     508,
-    554,
+    555,
     39
    ],
    "baseline": "override"
   },
   "Navy": {
    "official": [
-    760,
+    761,
     608,
     57
    ],
    "onField": [
-    760,
+    761,
     608,
     57
    ],
@@ -952,25 +952,25 @@
   },
   "Nebraska": {
    "official": [
-    935,
-    436,
+    936,
+    437,
     40
    ],
    "onField": [
-    935,
-    436,
+    936,
+    437,
     40
    ],
    "baseline": "wikipedia"
   },
   "Nevada": {
    "official": [
-    584,
+    585,
     543,
     33
    ],
    "onField": [
-    583,
+    584,
     544,
     33
    ],
@@ -978,12 +978,12 @@
   },
   "New Mexico": {
    "official": [
-    516,
+    517,
     652,
     31
    ],
    "onField": [
-    516,
+    517,
     652,
     31
    ],
@@ -992,24 +992,24 @@
   "New Mexico St.": {
    "official": [
     464,
-    691,
+    692,
     30
    ],
    "onField": [
     463,
-    692,
+    693,
     30
    ],
    "baseline": "wikipedia"
   },
   "North Carolina": {
    "official": [
-    741,
+    742,
     586,
     54
    ],
    "onField": [
-    757,
+    758,
     586,
     54
    ],
@@ -1017,25 +1017,25 @@
   },
   "North Carolina St.": {
    "official": [
-    654,
-    613,
+    655,
+    614,
     55
    ],
    "onField": [
-    654,
-    613,
+    655,
+    614,
     55
    ],
    "baseline": "wikipedia"
   },
   "North Texas": {
    "official": [
-    563,
+    564,
     552,
     33
    ],
    "onField": [
-    561,
+    562,
     554,
     33
    ],
@@ -1044,24 +1044,24 @@
   "Northern Illinois": {
    "official": [
     622,
-    545,
+    546,
     51
    ],
    "onField": [
     622,
-    545,
+    546,
     51
    ],
    "baseline": "wikipedia"
   },
   "Northwestern": {
    "official": [
-    580,
+    581,
     717,
     44
    ],
    "onField": [
-    579,
+    580,
     718,
     44
    ],
@@ -1069,12 +1069,12 @@
   },
   "Notre Dame": {
    "official": [
-    977,
+    978,
     341,
     42
    ],
    "onField": [
-    998,
+    999,
     342,
     42
    ],
@@ -1082,12 +1082,12 @@
   },
   "Ohio": {
    "official": [
-    625,
+    627,
     593,
     48
    ],
    "onField": [
-    625,
+    627,
     593,
     48
    ],
@@ -1095,12 +1095,12 @@
   },
   "Ohio St.": {
    "official": [
-    993,
+    995,
     338,
     53
    ],
    "onField": [
-    1005,
+    1007,
     338,
     53
    ],
@@ -1108,12 +1108,12 @@
   },
   "Oklahoma": {
    "official": [
-    962,
+    963,
     353,
     53
    ],
    "onField": [
-    962,
+    963,
     353,
     53
    ],
@@ -1121,12 +1121,12 @@
   },
   "Oklahoma St.": {
    "official": [
-    644,
+    645,
     593,
     48
    ],
    "onField": [
-    644,
+    645,
     593,
     48
    ],
@@ -1134,13 +1134,13 @@
   },
   "Old Dominion": {
    "official": [
-    108,
-    92,
+    109,
+    93,
     0
    ],
    "onField": [
-    108,
-    92,
+    109,
+    93,
     0
    ],
    "baseline": "wikipedia"
@@ -1148,24 +1148,24 @@
   "Oregon": {
    "official": [
     734,
-    515,
+    516,
     46
    ],
    "onField": [
     734,
-    515,
+    516,
     46
    ],
    "baseline": "wikipedia"
   },
   "Oregon St.": {
    "official": [
-    573,
+    575,
     648,
     50
    ],
    "onField": [
-    572,
+    574,
     649,
     50
    ],
@@ -1174,12 +1174,12 @@
   "Penn St.": {
    "official": [
     953,
-    420,
+    421,
     41
    ],
    "onField": [
     953,
-    420,
+    421,
     41
    ],
    "baseline": "wikipedia"
@@ -1187,24 +1187,24 @@
   "Pittsburgh": {
    "official": [
     781,
-    571,
+    572,
     42
    ],
    "onField": [
     781,
-    571,
+    572,
     42
    ],
    "baseline": "wikipedia"
   },
   "Purdue": {
    "official": [
-    645,
+    647,
     621,
     48
    ],
    "onField": [
-    644,
+    646,
     622,
     48
    ],
@@ -1213,12 +1213,12 @@
   "Rice": {
    "official": [
     502,
-    671,
+    673,
     32
    ],
    "onField": [
     501,
-    672,
+    674,
     32
    ],
    "baseline": "wikipedia"
@@ -1226,12 +1226,12 @@
   "Rutgers": {
    "official": [
     684,
-    711,
+    712,
     42
    ],
    "onField": [
     684,
-    711,
+    712,
     42
    ],
    "baseline": "wikipedia"
@@ -1239,38 +1239,38 @@
   "Sam Houston St.": {
    "official": [
     584,
-    504,
+    505,
     34
    ],
    "onField": [
     584,
-    504,
+    505,
     34
    ],
    "baseline": "wikipedia"
   },
   "San Diego St.": {
    "official": [
-    605,
-    463,
+    606,
+    464,
     32
    ],
    "onField": [
-    603,
-    465,
+    604,
+    466,
     32
    ],
    "baseline": "wikipedia"
   },
   "San José St.": {
    "official": [
-    529,
-    556,
+    530,
+    557,
     38
    ],
    "onField": [
-    528,
-    557,
+    529,
+    558,
     38
    ],
    "baseline": "wikipedia"
@@ -1290,12 +1290,12 @@
   },
   "South Alabama": {
    "official": [
-    96,
+    98,
     108,
     0
    ],
    "onField": [
-    96,
+    98,
     108,
     0
    ],
@@ -1303,13 +1303,13 @@
   },
   "South Carolina": {
    "official": [
-    650,
-    626,
+    651,
+    627,
     44
    ],
    "onField": [
-    649,
-    627,
+    650,
+    628,
     44
    ],
    "baseline": "wikipedia"
@@ -1317,12 +1317,12 @@
   "South Florida": {
    "official": [
     188,
-    164,
+    166,
     0
    ],
    "onField": [
     188,
-    164,
+    166,
     0
    ],
    "baseline": "wikipedia"
@@ -1330,12 +1330,12 @@
   "Southern Miss": {
    "official": [
     622,
-    480,
+    481,
     26
    ],
    "onField": [
     619,
-    483,
+    484,
     26
    ],
    "baseline": "wikipedia"
@@ -1343,25 +1343,25 @@
   "Stanford": {
    "official": [
     679,
-    516,
+    517,
     49
    ],
    "onField": [
     679,
-    516,
+    517,
     49
    ],
    "baseline": "wikipedia"
   },
   "Syracuse": {
    "official": [
-    757,
-    591,
+    758,
+    592,
     49
    ],
    "onField": [
-    768,
-    591,
+    769,
+    592,
     49
    ],
    "baseline": "wikipedia"
@@ -1369,37 +1369,37 @@
   "TCU": {
    "official": [
     705,
-    584,
+    585,
     57
    ],
    "onField": [
     705,
-    584,
+    585,
     57
    ],
    "baseline": "wikipedia"
   },
   "Temple": {
    "official": [
-    503,
-    636,
+    504,
+    637,
     52
    ],
    "onField": [
-    503,
-    636,
+    504,
+    637,
     52
    ],
    "baseline": "wikipedia"
   },
   "Tennessee": {
    "official": [
-    886,
+    888,
     423,
     53
    ],
    "onField": [
-    896,
+    898,
     423,
     54
    ],
@@ -1408,25 +1408,25 @@
   "Texas": {
    "official": [
     975,
-    398,
+    399,
     33
    ],
    "onField": [
     975,
-    398,
+    399,
     33
    ],
    "baseline": "wikipedia"
   },
   "Texas A&M": {
    "official": [
-    799,
-    513,
+    800,
+    514,
     48
    ],
    "onField": [
-    799,
-    513,
+    800,
+    514,
     48
    ],
    "baseline": "wikipedia"
@@ -1434,24 +1434,24 @@
   "Texas St.": {
    "official": [
     550,
-    513,
+    514,
     25
    ],
    "onField": [
     550,
-    513,
+    514,
     25
    ],
    "baseline": "wikipedia"
   },
   "Texas Tech": {
    "official": [
-    621,
+    622,
     488,
     32
    ],
    "onField": [
-    621,
+    622,
     488,
     32
    ],
@@ -1459,25 +1459,25 @@
   },
   "Toledo": {
    "official": [
-    599,
-    463,
+    600,
+    464,
     24
    ],
    "onField": [
-    598,
-    464,
+    599,
+    465,
     24
    ],
    "baseline": "wikipedia"
   },
   "Troy": {
    "official": [
-    589,
+    590,
     447,
     28
    ],
    "onField": [
-    589,
+    590,
     447,
     28
    ],
@@ -1486,12 +1486,12 @@
   "Tulane": {
    "official": [
     587,
-    682,
+    683,
     38
    ],
    "onField": [
     588,
-    681,
+    682,
     38
    ],
    "baseline": "wikipedia"
@@ -1499,25 +1499,25 @@
   "Tulsa": {
    "official": [
     657,
-    553,
+    554,
     27
    ],
    "onField": [
     657,
-    553,
+    554,
     27
    ],
    "baseline": "wikipedia"
   },
   "UAB": {
    "official": [
-    181,
-    206,
+    182,
+    207,
     2
    ],
    "onField": [
-    181,
-    206,
+    182,
+    207,
     2
    ],
    "baseline": "wikipedia"
@@ -1525,24 +1525,24 @@
   "UCF": {
    "official": [
     305,
-    250,
+    252,
     1
    ],
    "onField": [
     305,
-    250,
+    252,
     1
    ],
    "baseline": "wikipedia"
   },
   "UCLA": {
    "official": [
-    649,
+    650,
     462,
     37
    ],
    "onField": [
-    649,
+    650,
     462,
     37
    ],
@@ -1551,24 +1551,24 @@
   "UMass": {
    "official": [
     586,
-    661,
+    663,
     50
    ],
    "onField": [
     586,
-    661,
+    663,
     50
    ],
    "baseline": "wikipedia"
   },
   "UNLV": {
    "official": [
-    275,
+    277,
     395,
     4
    ],
    "onField": [
-    293,
+    295,
     377,
     4
    ],
@@ -1576,12 +1576,12 @@
   },
   "USC": {
    "official": [
-    895,
+    897,
     379,
     54
    ],
    "onField": [
-    909,
+    911,
     380,
     54
    ],
@@ -1589,12 +1589,12 @@
   },
   "Utah": {
    "official": [
-    739,
+    740,
     491,
     31
    ],
    "onField": [
-    739,
+    740,
     491,
     31
    ],
@@ -1602,13 +1602,13 @@
   },
   "Utah St.": {
    "official": [
-    584,
     585,
+    586,
     31
    ],
    "onField": [
-    582,
-    587,
+    583,
+    588,
     31
    ],
    "baseline": "wikipedia"
@@ -1616,24 +1616,24 @@
   "UTEP": {
    "official": [
     416,
-    656,
+    658,
     30
    ],
    "onField": [
     416,
-    656,
+    658,
     30
    ],
    "baseline": "wikipedia"
   },
   "UTSA": {
    "official": [
-    101,
+    103,
     88,
     0
    ],
    "onField": [
-    101,
+    103,
     88,
     0
    ],
@@ -1642,25 +1642,25 @@
   "Vanderbilt": {
    "official": [
     638,
-    675,
+    677,
     50
    ],
    "onField": [
     637,
-    676,
+    678,
     50
    ],
    "baseline": "wikipedia"
   },
   "Virginia": {
    "official": [
-    702,
-    653,
+    703,
+    654,
     48
    ],
    "onField": [
-    702,
-    653,
+    703,
+    654,
     48
    ],
    "baseline": "wikipedia"
@@ -1668,24 +1668,24 @@
   "Virginia Tech": {
    "official": [
     785,
-    522,
+    523,
     46
    ],
    "onField": [
     785,
-    522,
+    523,
     46
    ],
    "baseline": "wikipedia"
   },
   "Wake Forest": {
    "official": [
-    509,
+    510,
     698,
     33
    ],
    "onField": [
-    509,
+    510,
     698,
     33
    ],
@@ -1694,12 +1694,12 @@
   "Washington": {
    "official": [
     793,
-    478,
+    480,
     50
    ],
    "onField": [
     792,
-    479,
+    481,
     50
    ],
    "baseline": "wikipedia"
@@ -1707,12 +1707,12 @@
   "Washington St.": {
    "official": [
     588,
-    600,
+    602,
     45
    ],
    "onField": [
     588,
-    600,
+    602,
     45
    ],
    "baseline": "wikipedia"
@@ -1720,24 +1720,24 @@
   "West Virginia": {
    "official": [
     794,
-    542,
+    544,
     45
    ],
    "onField": [
     794,
-    542,
+    544,
     45
    ],
    "baseline": "wikipedia"
   },
   "Western Kentucky": {
    "official": [
-    631,
+    632,
     441,
     31
    ],
    "onField": [
-    631,
+    632,
     441,
     31
    ],
@@ -1745,12 +1745,12 @@
   },
   "Western Michigan": {
    "official": [
-    615,
+    617,
     494,
     24
    ],
    "onField": [
-    615,
+    617,
     494,
     24
    ],
@@ -1758,12 +1758,12 @@
   },
   "Wisconsin": {
    "official": [
-    754,
+    755,
     534,
     53
    ],
    "onField": [
-    753,
+    754,
     535,
     53
    ],
@@ -1771,13 +1771,13 @@
   },
   "Wyoming": {
    "official": [
-    574,
-    618,
+    575,
+    619,
     28
    ],
    "onField": [
-    574,
-    618,
+    575,
+    619,
     28
    ],
    "baseline": "wikipedia"

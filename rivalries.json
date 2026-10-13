@@ -125,7 +125,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2025
+   "last_meeting": 2026
   },
   "Alabama|Georgia Tech": {
    "name": "Alabama–Georgia Tech",
@@ -279,7 +279,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2025
+   "last_meeting": 2026
   },
   "Arkansas|Texas Tech": {
    "name": "Arkansas–Texas Tech",
@@ -433,7 +433,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2020
+   "last_meeting": 2026
   },
   "Auburn|Tulane": {
    "name": "Auburn–Tulane",
@@ -502,7 +502,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2023
+   "last_meeting": 2026
   },
   "Nevada|UNLV": {
    "name": "Battle for Nevada",
@@ -571,7 +571,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2025
+   "last_meeting": 2026
   },
   "SMU|TCU": {
    "name": "Battle for the Iron Skillet",
@@ -734,7 +734,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": null
+   "last_meeting": 2026
   },
   "James Madison|Liberty": {
    "name": "Battle of the Blue Ridge",
@@ -1018,7 +1018,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2025
+   "last_meeting": 2026
   },
   "Boise St.|Nevada": {
    "name": "Boise State–Nevada",
@@ -1518,7 +1518,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2025
+   "last_meeting": 2026
   },
   "Virginia|Virginia Tech": {
    "name": "Commonwealth Cup",
@@ -1623,7 +1623,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2025
+   "last_meeting": 2026
   },
   "Duke|Georgia Tech": {
    "name": "Duke–Georgia Tech",
@@ -1640,7 +1640,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2025
+   "last_meeting": 2026
   },
   "Duke|North Carolina St.": {
    "name": "Duke–NC State",
@@ -1828,7 +1828,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2025
+   "last_meeting": 2026
   },
   "Florida|Florida St.": {
    "name": "Florida–Florida State Rivalry",
@@ -2089,7 +2089,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2023
+   "last_meeting": 2026
   },
   "Kentucky|Louisville": {
    "name": "Governor’s Cup",
@@ -2558,7 +2558,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2024
+   "last_meeting": 2026
   },
   "Texas|Texas A&M": {
    "name": "Lone Star Showdown",
@@ -2610,7 +2610,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2015
+   "last_meeting": 2026
   },
   "Louisville|Memphis": {
    "name": "Louisville–Memphis",
@@ -3054,7 +3054,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2025
+   "last_meeting": 2026
   },
   "Nebraska|Oklahoma": {
    "name": "Nebraska–Oklahoma Rivalry",
@@ -3157,7 +3157,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2025
+   "last_meeting": 2026
   },
   "Ohio St.|Penn St.": {
    "name": "Ohio State–Penn State",
@@ -3260,7 +3260,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2023
+   "last_meeting": 2026
   },
   "Oregon|Stanford": {
    "name": "Oregon–Stanford",
@@ -3454,7 +3454,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2025
+   "last_meeting": 2026
   },
   "Oklahoma|Texas": {
    "name": "Red River Rivalry",
@@ -3472,7 +3472,7 @@
    "sponsor_branded": true,
    "sponsor": "Allstate",
    "status": "active",
-   "last_meeting": 2025
+   "last_meeting": 2026
   },
   "Rice|SMU": {
    "name": "Rice–SMU",
@@ -3734,7 +3734,7 @@
    "sponsor_branded": null,
    "sponsor": null,
    "status": "active",
-   "last_meeting": 2025
+   "last_meeting": 2026
   },
   "Syracuse|West Virginia": {
    "name": "Syracuse–West Virginia",
