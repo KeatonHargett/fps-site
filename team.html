@@ -450,21 +450,30 @@
     .team-hero .th-record .rec-pct { font-size: 1.65rem; }
     .team-hero .th-record .rec-foot { text-align: center; }
     .h2h-conf-title .ct-record { font-size: 1.1rem; }
-    /* H2H table becomes stacked cards on mobile — no fixed columns */
-    .h2h-table, .h2h-table tbody, .h2h-table tr, .h2h-table td { display: block; width: auto; }
+    /* Phones: 56px of gutter per side left only 263px for content. Trim to about 30px. */
+    main { padding-left: 0.75rem; padding-right: 0.75rem; }
+    .card { padding: 1.25rem 1rem; }
+    /* H2H on mobile: one compact row per opponent. Name left, record pinned right,
+       a 40px compare arrow at the edge. Roughly 4x the opponents per screen vs the old stacked cards. */
+    .h2h-table, .h2h-table tbody { display: block; width: auto; }
     .h2h-table colgroup { display: none; }
     .h2h-table tr {
-      border: 1px solid var(--border); border-radius: 8px;
-      padding: 0.65rem 0.85rem; margin-bottom: 0.6rem;
+      display: grid; grid-template-columns: minmax(0, 1fr) auto 40px;
+      align-items: center; column-gap: 0.6rem;
+      border-bottom: 1px solid var(--border); padding: 0.15rem 0;
     }
-    .h2h-table tr:hover { background: white; }
-    .h2h-table td { border-bottom: none; padding: 0.15rem 0; }
-    .h2h-table .col-opp { margin-bottom: 0.35rem; }
-    .h2h-table .col-record { width: auto; }
+    .h2h-table tr:hover { background: transparent; }
+    .h2h-table td { display: block; width: auto; border-bottom: none; padding: 0.35rem 0; min-width: 0; }
+    .h2h-table .col-record { width: auto; text-align: right; }
     .h2h-table .col-compare { width: auto; }
-    .h2h-opp a { font-size: 1rem; }
-    .h2h-compare-link { text-align: left; }
-    .h2h-compare-link a { font-size: 0.78rem; }
+    .h2h-opp { gap: 0.5rem; min-width: 0; }
+    .h2h-opp img { width: 24px; height: 24px; flex-shrink: 0; }
+    .h2h-opp a { font-size: 0.95rem; line-height: 1.2; overflow-wrap: anywhere; }
+    .h2h-record { font-size: 1.15rem; }
+    .h2h-record .wpct { font-size: 0.8rem; }
+    .h2h-compare-link { text-align: right; }
+    .h2h-compare-link a { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; font-size: 1.15rem; }
+    .h2h-compare-link .cmp-word { display: none; }
   }
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7228719161723253"
@@ -1483,7 +1492,7 @@
         return `<tr>
           <td class="col-opp"><div class="h2h-opp">${teamLogo(opp, '', '')}<a href="team.html?team=${encodeURIComponent(opp)}">${opp}</a></div></td>
           <td class="col-record"><span class="h2h-record ${cls}">${recStr} <span class="wpct">(${wpctStr})</span></span></td>
-          <td class="col-compare h2h-compare-link"><a href="${cmpUrl}">Compare &rarr;</a></td>
+          <td class="col-compare h2h-compare-link"><a href="${cmpUrl}" aria-label="Compare ${esc(TEAM)} vs ${esc(opp)}"><span class="cmp-word">Compare </span>&rarr;</a></td>
         </tr>`;
       }).join('');
 
